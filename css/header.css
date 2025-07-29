@@ -1,0 +1,90 @@
+header{
+    display: flex;
+    flex-direction: column;
+}
+.menu-secundario{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 20px;
+    background-color: #5f7396;
+    gap: 10px;
+    height: 27px;
+    color:#4b4b4b;
+    font-weight: bold;
+}
+
+
+span{
+    position: relative;
+    left: 360px;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    padding: 5px;
+    gap: 10px;
+    
+}
+
+.menu-primaria{
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 20px;
+    height: 80px;
+    color: #5f7396;
+    font-weight: bold;
+    
+}
+
+.menu-navegacao{
+    position: relative;
+    right: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap:20px;
+    font-size: 16px;
+    
+}
+
+.icon{
+    width: 22px;
+    height: 22px;
+    display: flex;
+    flex-direction: row;
+}
+
+.redes{
+    position: relative;
+    left: 360px;
+    display: flex;;
+    width: 22px;
+    height: 22px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo{
+    position: relative;
+    top: 5px;
+    right: 290px;
+    width: 160px;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+

@@ -1,0 +1,14 @@
+:root{
+    --cor-de-fundo-primaria: #5f7396;
+    --cor-de-fundo-secundaria: #ffffff;
+    --cor-de-fundo-terciaria: #4b4b4b;
+    --cor-de-fundo-quaternaria: #2b2b2b;
+    --cor-fonte-hero-primaria: #fefefe;
+    --cor-fonte-hero-secundaria: #868585;
+    --cor-fonte-primaria: #a7a7a7;
+    --cor-fonte-secundaria: #5f7396;
+    --cor-fonte-terciaria: #1487df;
+    --cor-fonte-destaque-primaria: #474a4f;
+    --cor-fonte-destaque-secundaria: #474a4f;
+}
+ 
