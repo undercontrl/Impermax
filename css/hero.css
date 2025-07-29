@@ -1,37 +1,46 @@
 .hero{
     position: relative;
     width: 100%;
-    height: 700px;
+    height: 600px;
     background-image: url('../img/Banner\ 1.png');
     background-size: cover;
     background-position: center;
 }
 
 .hero-titulo{
-    position: absolute;
-    top: 0;
-    right: 250px;
+    right: 19%;
     width: 100%;
     height: 100%;
     color: white;
     justify-content: center;
-    display: flex;
-    margin-top: 355px;
     font-size: 22px;
     font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-hero{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    margin-top: 355px ;
+    position: absolute;
+    bottom: -250px;
+    gap: 20px;
+    
 }
 
 .hero-texto{
-    position: absolute;
-    bottom: -50px;
-    left: 0;
+    position: relative;
+    left:2%;
     width: 100%;
     height: 100%;
     color: #868585;
     justify-content: center;
-    display: flex;
-    margin-top: 355px ;
     font-size: 18px;
     font-weight: bold;
-    flex-wrap: wrap;
+    text-align: center;
+    max-width: 400px;
 }
+
