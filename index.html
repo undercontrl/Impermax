@@ -34,8 +34,45 @@
         <section class="hero">
             <h3 class="titulo-hero">SEJA BEM-VINDO À IMPERMAX!</h3>
             <p class="texto-hero">Especialistas em Impermeabilização Residencial e Comercial</p>
-            <div class="caixa-orcamento"></div>
+            <div id="caixa-orcamento">
+                <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
+                <form>
+                    <input type="text" name="nome" placeholder="Nome" required>
+                    <input type="tel" name="telefone" placeholder="Telefone" required>
+                    <input type="email" name="email" placeholder="E-mail" required>
+                    <select name="servico" required>
+                        <option value="">Escolha o tipo de serviço solicitado</option>
+                        <option value="residencial">Impermeabilização Residencial</option>
+                        <option value="comercial">Impermeabilização Comercial</option>
+                        <option value="telhado">Impermeabilização de Telhado</option>
+                        <option value="laje">Impermeabilização de Laje</option>
+                    </select>
+                    <button type="submit">Enviar solicitação de orçamento</button>
+                </form>
+            </div>
         </section>
+        <section class="servicos">
+            <h2>Nossos Serviços</h2>
+            <div class="servico-item">
+                <img src="assets/images/impermeabilizacao-residencial.jpg" alt="Impermeabilização Residencial">
+                <h3>Impermeabilização Residencial</h3>
+                <p>Proteção completa para sua casa contra infiltrações e umidade.</p>
+            </div>
+            <div class="servico-item">
+                <img src="assets/images/impermeabilizacao-comercial.jpg" alt="Impermeabilização Comercial">
+                <h3>Impermeabilização Comercial</h3>
+                <p>Soluções eficazes para empresas, garantindo ambientes secos e seguros.</p>
+            </div>
+            <div class="servico-item">
+                <img src="assets/images/impermeabilizacao-telhado.jpg" alt="Impermeabilização de Telhado">
+                <h3>Impermeabilização de Telhado</h3>
+                <p>Proteção duradoura para telhados, evitando vazamentos e danos estruturais.</p>
+            </div>
+            <div class="servico-item">
+                <img src="assets/images/impermeabilizacao-laje.jpg" alt="Impermeabilização de Laje">
+                <h3>Impermeabilização de Laje</h3>
+                <p>Impedindo infiltrações e garantindo a integridade da sua laje.</p>
+            </div>
    </main>
    <footer></footer>
 </body>
