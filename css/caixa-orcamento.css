@@ -1,21 +1,23 @@
 #caixa-orcamento {
-  background-color: #2e2e2e;
+  background-color: #2e2e2ebb;
   color: white;
   padding: 25px 30px;
   border-radius: 10px;
-  width: 330px; 
+  width: 400px;
+  height: 470px;
   font-family: Arial, sans-serif;
   position: absolute;
   top: 50%;
-  right: 8%;
+  right: 10%;
   transform: translateY(-50%);
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
 #caixa-orcamento h3 {
-  font-size: 15px;
+  font-size: 18px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 25px;
+  margin-bottom: 35px;
   font-weight: bold;
   line-height: 1.4;
 }
@@ -28,7 +30,7 @@
 #caixa-orcamento input,
 #caixa-orcamento select {
   padding: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   border: none;
   border-radius: 5px;
   font-size: 14px;
