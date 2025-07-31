@@ -40,7 +40,7 @@ function initComparisons() {
         window.addEventListener("touchmove", slideMove);
       }
       function slideFinish() {
-        /* The slider is no longer clicked: */
+        /* The slider is no longer clicked: */  
         clicked = 0;
       }
       function slideMove(e) {
