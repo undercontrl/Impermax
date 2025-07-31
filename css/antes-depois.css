@@ -14,7 +14,6 @@
 
 .img-comp-img img {
   display: block;
-  vertical-align: middle;
 }
 
 .img-comp-slider {
@@ -61,7 +60,7 @@
     font-size: 18px;
     margin-right: 55%;
     margin-top: 20px;
-    margin-bottom: 250px;
+    margin-bottom: 300px;
     max-width: 30%;
     font-weight: 700;
     text-align: center;

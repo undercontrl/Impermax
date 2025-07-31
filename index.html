@@ -9,12 +9,12 @@
 <body>
    <header>
     <div class="header-secundario">
-            <span><img src="assets/icons/telefone-icon.svg" alt="Icone Telefone" class="icon">(11) 9 4396-1031</span>
-            <span><img src="assets/icons/email-icon.svg" alt="Icone Email" class="icon">aleimpermax@gmail.com</span>
+            <span class="span-header"><img src="assets/icons/telefone-icon.svg" alt="Icone Telefone" class="icon">(11) 9 4396-1031</span>
+            <span class="span-header"><img src="assets/icons/email-icon.svg" alt="Icone Email" class="icon">aleimpermax@gmail.com</span>
         <div class="container-header-secundario">
-            <a href="http://facebook.com" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/facebook.svg" alt="Facebook" class="icon-redes"></a>
-            <a href="https://www.instagram.com/_impermax" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/instagram.svg" alt="Instagram" class="icon-redes"></a>
-            <a href="" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/whatsapp.svg" alt="WhatsApp" class="icon-redes"></a>
+            <a href="https://www.facebook.com/aleimpermax" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/facebook.svg" alt="Facebook" class="icon-redes"></a>
+            <a href="https://www.instagram.com/impermax_servicos?igsh=cHM2MW82a3lqOHNl" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/instagram.svg" alt="Instagram" class="icon-redes"></a>
+            <a href="https://wa.me/+551199973497" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/whatsapp.svg" alt="WhatsApp" class="icon-redes"></a>
         </div>
     </div>
     <nav class="header-primario">
@@ -91,9 +91,9 @@
                        </div>
                    </div>
                    <div class="titulo-externo">
-                       <h3>Impermeabilização de Lajes</h3>
-                       <h3>Vedação de Piscinas e Reservatórios</h3>
-                       <h3>Impermeabilização de Banheiros</h3>
+                       <h3 id="titulo-externo1">Impermeabilização de Lajes</h3>
+                       <h3 id="titulo-externo2">Vedação de Piscinas e Reservatórios</h3>
+                       <h3 id="titulo-externo3">Impermeabilização de Banheiros</h3>
                    </div>
    
                </div>
@@ -115,25 +115,47 @@
         <script src="js/javascript.js"></script>
         <script>initComparisons();</script>
         <section class="parallax">
-            <div id="caixa-orcamento2">
-                <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                <form>
-                    <input type="text" name="nome" placeholder="Nome" required>
-                    <input type="tel" name="telefone" placeholder="Telefone" required>
-                    <input type="email" name="email" placeholder="E-mail" required>
-                    <select name="servico" required>
-                        <option value="">Escolha o tipo de serviço solicitado</option>
-                        <option value="residencial">Impermeabilização Residencial</option>
-                        <option value="comercial">Impermeabilização Comercial</option>
-                        <option value="telhado">Impermeabilização de Telhado</option>
-                        <option value="laje">Impermeabilização de Laje</option>
-                    </select>
-                    <button type="submit">Enviar solicitação de orçamento</button>
-                </form>
+            <div class="bloco-contato">
+                <div id="caixa-orcamento2">
+                    <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
+                    <form>
+                        <input type="text" name="nome" placeholder="Nome" required>
+                        <input type="tel" name="telefone" placeholder="Telefone" required>
+                        <input type="email" name="email" placeholder="E-mail" required>
+                        <select name="servico" required>
+                            <option value="">Escolha o tipo de serviço solicitado</option>
+                            <option value="residencial">Impermeabilização Residencial</option>
+                            <option value="comercial">Impermeabilização Comercial</option>
+                            <option value="telhado">Impermeabilização de Telhado</option>
+                            <option value="laje">Impermeabilização de Laje</option>
+                        </select>
+                        <button type="submit">Enviar solicitação de orçamento</button>
+                    </form>
+                </div>
+                <div class="whatsapp-contato">
+                    <h2>Prefere falar direto pelo WhatsApp?</h2>
+                    <p>Se preferir um contato direto e imediato, fale com um dos nossos especialistas pelo WhatsApp. Estamos prontos para esclarecer dúvidas, apresentar soluções e enviar orçamentos sob medida.</p>
+                    <p>📞 <strong>Alessandro Custódio</strong><br>+55 11 99973-4979</p>
+                    <p>📞 <strong>Lucas Guimarães</strong><br>+55 11 99380-5951</p>
+                    <p>Entre em contato e tenha um atendimento ágil, profissional e sem compromisso!</p>
+                </div>
             </div>
         </section>
    </main>
-   <footer></footer>
+   <footer id="footer-impermax">
+    <div class="footer-conteudo">
+        <div class="logo-footer">
+            <img src="assets/icons/impermax-LOGO.svg" alt="Logo Impermax">
+        </div>
+        <div class="redes-sociais">
+            <a href="https://www.facebook.com/aleimpermax" target="_blank"><img src="assets/icons/facebook.svg" alt="Facebook"></a>
+            <a href="https://www.instagram.com/impermax_servicos?igsh=cHM2MW82a3lqOHNl" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+            <a href="https://wa.me/+551199973497" target="_blank"><img src="assets/icons/whatsapp.svg" alt="WhatsApp"></a>
+        </div>
+    </div>
+    <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
+    <div class="rodape-final">Impermax | Todos os Direitos Reservados | © 2025</div>
+</footer>
 </body>
 </html>
 
