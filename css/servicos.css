@@ -52,14 +52,15 @@
     height: 100%;
     padding: 10px;
     background-color: #44494ea4;
-    color: var(--cor-de-fundo);
+    color: #ffffff;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 16px;
+    font-weight: bold;
     transform: translateY(100%);
-    transition: transform 0.6s ease-in-out;
+    
 }
     
 
@@ -67,14 +68,16 @@
     transform: translateY(0%);
 }
 .titulo-externo{
-    font-size: 30px;
+    font-size: 16px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    width: 100%;
     padding: 20px;
-    position: relative;
-    top: 20px;
-    color: var(--cor-fonte-destaque-primaria);
+    color: white;
     font-weight: bold;
+    position: relative;
+    top: 50px;
+    gap: 190px;
+    right: 25px;
+    flex-wrap: nowrap;
+    flex-direction: row-reverse;
 }

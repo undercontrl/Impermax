@@ -13,3 +13,7 @@ a{
 ul, ol{
     list-style: none;
 }
+
+main {
+  margin-top: 100px; /* Ajuste para não cobrir o conteúdo */
+}
