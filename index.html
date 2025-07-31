@@ -19,7 +19,9 @@
 
 
     <nav class="menu-primaria">
-        <a href="index.html" class="logo"><img src="assets/logo/impermax-LOGO.svg" alt="logo impermax" ></a>
+        <a href="index.html" class="logo">
+            <img src="assets/logo/impermax-LOGO.svg" alt="logo impermax" >
+        </a>
         <ul class="menu-navegacao">
             <li><a href="index.html" class="texto-menu">INÍCIO</a></li>
             <li><a href="sobre.html">SOBRE</a></li>
@@ -37,7 +39,7 @@
             <p class="hero-texto">Especialista em Impermeabilização Residencial e Comercial</p>
         </div>
         <div>
-            <form > 
+            <form class="form" > 
                 <h2 class="titulo-orcamento">ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h2>
                     <label for="nome">Nome</label>
                     <input type="text" id="nome" name="nome" placeholder="Digite o seu nome">
@@ -113,30 +115,73 @@
 
             </div>
     </section>
-
-    <section class="projetos">
-
-
+    <section class="antes-depois">
+        <div class="img-comp-container">
+          <div class="img-comp-img">
+            <img src="assets/antes e depois/dpois.png" width="500" height="350">
+          </div>
+         <div class="img-comp-img img-comp-overlay">
+            <img src="assets/antes e depois/antes.png" width="500" height="350">
+         </div>
+        </div>
+         <h1 class="titulo-antes-depois">Confira Nossos Resultados</h1>
+            <h2 class="subtitulo-antes-depois">Impermeabilização de Piscina</h2>
+            <p class="texto-antes-depois">Nesta etapa da obra, executamos a <a class="destaque-azul">impermeabilização completa da estrutura da piscina</a>, aplicando técnicas especializadas para garantir máxima proteção contra infiltrações e vazamentos. O serviço foi realizado sobre base de concreto, preparando a área para receber o acabamento final com total segurança e durabilidade.
+                A impermeabilização é fundamental para preservar a integridade da piscina e evitar futuros problemas com umidade.</p>
     </section>
 
-    <section class="contato">
+    <script src="js/javascrip.js"></script>
+    <script>initComparisons();</script>
 
-    </section>
+        <section class="parallax">
+           <div>
+                <form class="form2" > 
+                    <h2 class="titulo-orcamento">ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h2>
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite o seu nome">
+                        <label for="telefone">Telefone</label>
+                        <input type="text" id="telefone" name="telefone" placeholder="Digite o seu telefone">
+                        <label for="email">E-mail</label>
+                        <input type="text" id="email" name="email" placeholder="Digite o seu E-mail">
+                        <label for="">Escolha o tipo de serviço solicitado</label>
+                            <select name="servico" id="servico">
+                                <option value="servico">Selecione um serviço</option>
+                                <option value="servico">servico</option>
+                                <option value="servico">servico2</option>
+                                <option value="servico">servico3</option>
+                            </select>
+                    <button type="submit">Enviar solicitação de orçamento</button>
+                </form>
+            </div>
 
+           
+        </section>
 </main>
 
 <footer class="footer">
     <section class="container-footer">
         <div class="icons">
-            <span><img src="assets/icons/facebook 1.svg" alt="Facebook" class="redes2"></span>
-            <span><img src="assets/icons/instagram 1.svg" alt="Instagram" class="redes2"></span>
-            <span><img src="assets/icons/whatsapp 1.svg" alt="Whatsapp" class="redes2"></span>
-            <img src="assets/logo/impermax-LOGO.svg" alt="logo" class="logo-footer">
+           <div>
+              <a href="index.html" class="logo-footer">
+               <img src="assets/logo/impermax-LOGO.svg" alt="logo">
+              </a>
+            </div>
+            <img src="assets/icons/facebook 1.svg" alt="Facebook" class="redes2">
+            <img src="assets/icons/instagram 1.svg" alt="Instagram" class="redes2">
+            <img src="assets/icons/whatsapp 1.svg" alt="Whatsapp" class="redes2">
         </div>
 
+        <div class="texto-footer">
+           <a href="servicos.html"><p>Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</p>
+            </a> 
+        </div>
+      
     </section>
 
     <section class="footer-secundario">
+        <div class="texto-footer-secundario">
+            <p>Impermax | Todos os Direitos Reservados | © 2025</p>
+        </div>
     </section>
    
 
