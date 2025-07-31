@@ -1,0 +1,42 @@
+.quem-somos{
+    height: 330px;
+    text-align: center;
+    top: 80px;
+    background-color: var(--cor-fonte-hero-primaria);
+}
+.titulo-quem-somos{
+    margin-top: 80px;
+    font-size: 30px;
+    color: var(--cor-fonte-destaque-primaria);
+    font-weight: bold;
+}
+.subtitulo-quem-somos{
+    margin-top: 25px;
+    font-size: 25px;
+    color: var(--cor-fonte-terciaria);
+}
+.texto-quem-somos{
+    font-size: 18px;
+    margin-right: 29%;
+    margin-left: 29%;
+    margin-top: 20px;
+    margin-bottom: 35px;
+    max-width: 800px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.botao-saiba-mais{
+    padding: 10px;
+    max-width: 200px;
+    font-size: 20px;
+    border-radius: 15px;
+    background-color: var(--cor-de-fundo-primaria);
+    color: var(--cor-fonte-hero-primaria);
+}
+.botao-saiba-mais:hover{
+    background-color: var(--cor-fonte-terciaria);
+    color: var(--cor-fonte-hero-primaria);
+}
