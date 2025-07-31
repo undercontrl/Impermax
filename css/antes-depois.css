@@ -28,7 +28,8 @@
   border-radius: 50%;
 }
 .antes-depois{
-    padding-left: 12%;
+    padding-right: 12%;
+    padding-left: 15%;
     margin-top: 250px;
     position: relative;
     max-width: 1920px;
