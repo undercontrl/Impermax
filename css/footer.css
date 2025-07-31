@@ -1,0 +1,12 @@
+.footer{
+    display: flex;
+}
+.footer-primario{
+    height: 250px;
+    background-color: #e3e3e3;
+}
+
+.footer-secundario{
+    height: 50px;
+    background-color: #2b2b2b;
+}
