@@ -14,7 +14,7 @@ header{
     background-color:var(--cor-de-fundo-primaria);
     gap: 10px;
     height: 27px;
-    color: var(--cor-de-fundo-terciaria);
+    color: #2b2b2b;
     font-weight: bold;
     z-index: 11;
 }
@@ -52,6 +52,7 @@ span{
     height: 127px;
     color: var(--cor-fonte-secundaria);
     font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     
 }
 

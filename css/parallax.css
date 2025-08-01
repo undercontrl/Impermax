@@ -14,3 +14,41 @@
     background-size: cover;
 }
 
+
+.bloco-contato {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    max-width: 1200px;
+    margin-left: 500px;
+    flex-wrap: wrap;
+    padding: 0 0px;
+    text-align: center;
+    align-content: center;
+  }
+   
+  .whatsapp-contato {
+    color: white;
+    max-width: 800px;
+    font-family: Arial, sans-serif;
+    padding-left: 25%;
+  }
+   
+  .whatsapp-contato h2 {
+    color: #4db8ff;
+    font-size: 22px;
+    margin-bottom: 15px;
+    margin-top: 150px;
+  }
+   
+  .whatsapp-contato p {
+    font-size: 16px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+   
+  .whatsapp-contato strong {
+    color: #4db8ff;
+  }
+

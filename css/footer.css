@@ -1,10 +1,9 @@
 .footer{
-    height: 300px;
     width: 100%;
 }
 
 .container-footer{
-    height: 250px;
+    height: 150px;
     background-color: #e3e3e3;
     width: 100%;
     display: flex;
@@ -16,12 +15,9 @@
     
     
 }
-
-
-
 .redes2{
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 }
 
@@ -33,6 +29,7 @@
     justify-content: center;
     align-items: center;
     gap: 38px;
+    bottom: 10px;
     
 }
 
@@ -41,20 +38,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 260px;
-    height: 110px;
-    margin-right: 150px;
+    width: 200px;
+    height: 50px;
+    margin-right: 100px;
 }
 
 
 .texto-footer{
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 0;
     right: 0;
     text-align: center;
     color: #2b2b2b;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
     color:  #0f6cb4;
@@ -68,7 +65,7 @@
 .texto-footer-secundario{
     color: rgb(255, 255, 255);
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     position: relative;
     top: 20px;
     left: 0;
