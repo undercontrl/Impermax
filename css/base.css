@@ -12,3 +12,6 @@ a{
 ul, ol{
     list-style: none;
 }
+.texto-destaque{
+    color: var(--cor-fonte-terciaria);
+}
