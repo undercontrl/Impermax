@@ -25,7 +25,7 @@ header{
 .header-secundario{
     height: 27px;
     background-color: var(--cor-de-fundo-primaria);
-    color: var(--cor-de-fundo-terciaria);
+    color: var(--cor-de-fundo-quaternaria);
     position: relative;
     display: flex;
     flex-direction: row;
