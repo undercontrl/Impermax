@@ -1,89 +1,188 @@
-.sobre{
-    margin-top: 100px;
-    position: relative;
-    width: 100%;
-    height: 350px;
-    background-size: cover;
-    background-position: center;
+
+.quem-somos{
+    height: 320px;
+    text-align: center;
+    top: 80px;
+    background-color: var(--cor-fonte-hero-primaria);
+}
+.titulo-quem-somos{
+    margin-top: 200px;
+    font-size: 30px;
+    color: var(--cor-fonte-destaque-primaria);
+    font-weight: bold;
+}
+.subtitulo-quem-somos{
+    margin-top: 10px;
+    font-size: 25px;
+    color: var(--cor-fonte-terciaria);
+}
+.texto-quem-somos{
+    color: var(--cor-fonte-hero-secundaria);
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 29%;
+    margin-left: 29%;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    max-width: 1900px;
+    text-align: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.botao-saiba-mais{
+    padding: 10px;
+    max-width: 200px;
+    font-size: 20px;
+    border-radius: 15px;
+    background-color: var(--cor-de-fundo-primaria);
+    color: var(--cor-fonte-hero-primaria);
+}
+.botao-saiba-mais:hover{
+    background-color: var(--cor-fonte-terciaria);
+    color: var(--cor-fonte-hero-primaria);
 }
 
-.container-sobre{
+
+
+.parallax-sobre{
+    position: relative;
     width: 100%;
-    max-width: 1030px;
-    margin: 0 auto;
-    padding: 20px;
+    height: 600px;
+    top: 120px;
+    background-image: url("../assets/banner/banner\ 6.png");
+    background-size: cover;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 .titulo-sobre{
-    font-size: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 40px;
+    font-size: 100px;
+    color: white;
     position: relative;
-    bottom: 0;
-    color: var(--cor-fonte-destaque-secundaria);
-    font-weight: bold;
+    top: 40%;
+    justify-content: center;
+    display: flex;
+
 }
 
-.titulo-secundario{
-    font-size: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
+.historia{
     position: relative;
-    bottom: 40px;
-    color: var(--cor-fonte-secundaria);
-    font-weight: bold;
+    width: 100%;
+    height: 500px;
+    top: 120px;
+    
 }
 
-.texto-sobre{
+.container-sobre{
+    width: 20%;
+    top: 20%;
     position: relative;
-    bottom: 55px;
+    align-items: center;
+    text-align: justify;
+}
+
+.titulo-historia{
+    display: flex;
+    justify-content: center;
     font-size: 22px;
-    color: var(--cor-fonte-primaria);
-    margin: 20px 0;
-    text-align: center;
+    color: var( --cor-fonte-secundaria);
+    position: relative;
+    bottom: 20px;
+}
+
+.texto-historia{
+    color: var(--cor-fonte-hero-secundaria);
     font-weight: bold;
+    line-height: 1.5;
 }
 
-.destaque {
-  color: var(--cor-fonte-terciaria);
+.container-historia {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
   position: relative;
+  top: 20%;
+
 }
 
-.container-botao-sobre{
-    display: flex;
+.logo-historia {
+    height:100px;
+}
+
+.icones{
+    height: 200px;
+    top: 120px;
+    background-color: var( --cor-de-fundo-primaria);
+}
+
+.container-icones{
+    display:flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    bottom: 80px;
+    gap: 100px;
+    bottom: 40px;
 }
 
-.botao-sobre{
-    background-color: var(--cor-de-fundo-primaria);
-    color: var( --cor-de-fundo-secundaria);
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: bold;
+.icons-sobre{
+    height: 60px;
+    width: 60px;
+    position: relative;
+    bottom: 20px;
+    
 }
 
-.botao-sobre:hover{
-    background-color: var(--cor-fonte-terciaria);
-    color: var(--cor-de-fundo-secundaria);
-    transition: 0.3s;
+.titulo-missao{
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+    bottom: 10px;
+    font-weight:bold;
+    
+
+    }
+
+.texto-missao{
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    position: relative;
+    text-align: center;
+    line-height: 1.5;
+    font-weight:bold;
+}
+
+.card-sobre{
+    height: 300px;
+    position: relative;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }
 
 
-
-.pagina-sobre{
-    margin-top: 100px;
+.historia2{
     position: relative;
     width: 100%;
-    height: 350px;
-    background-size: cover;
-    background-position: center;
+    height: 400px;
+    
+}
+
+.container-historia2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  position: relative;
+  top: 20%;
 }

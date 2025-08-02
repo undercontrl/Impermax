@@ -60,6 +60,8 @@
   
   /* A BAIXO:CAIXA ORÇAMENTO - CONTATO */
   
+  
+  
   #caixa-orcamento2 {
     background-color: #2e2e2ebb;
     color: white;
@@ -69,7 +71,7 @@
     height: 470px;
     font-family: Arial, sans-serif;
     position: absolute;
-    top: 264%;
+    top: 284%;
     left: 15%;
     transform: translateY(-50%);
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
@@ -117,3 +119,66 @@
   #caixa-orcamento2 button:hover {
     background-color: #365bb5;
   }
+  
+
+
+  /* caixa de orçamento da pagina sobre  */
+
+    #caixa-orcamento3 {
+    background-color: #2e2e2ebb;
+    color: white;
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 470px;
+    height: 470px;
+    font-family: Arial, sans-serif;
+    position: absolute;
+    top: 224%;
+    left: 15%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  
+  #caixa-orcamento3 h3 {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 35px;
+    font-weight: bold;
+    line-height: 1.4;
+  }
+  
+  #caixa-orcamento3 form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #caixa-orcamento3 input,
+  #caixa-orcamento3 select {
+    width: 80%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    align-self: center;
+  }
+  
+  #caixa-orcamento3 button {
+    background-color: var(--cor-de-fundo-primaria);
+    box-shadow: 0 2px 2px #0e456e;
+    width: 80%;
+    align-self: center;
+    color: white;
+    padding: 12px;
+    border: none;
+    font-size: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #caixa-orcamento3 button:hover {
+    background-color: #365bb5;
+  }
+  
