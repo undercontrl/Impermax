@@ -134,6 +134,7 @@
     width: 60px;
     position: relative;
     bottom: 20px;
+    cursor: pointer;
     
 }
 
@@ -185,4 +186,10 @@
   gap: 80px;
   position: relative;
   top: 20%;
+}
+
+.icons-sobre:hover{
+  transform: scale(1.2);
+  transition: transform 0.3s;
+
 }
