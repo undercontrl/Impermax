@@ -193,3 +193,29 @@
   transition: transform 0.3s;
 
 }
+
+
+
+/* colocado um id missao no primeiro card para alterar o tamanho dele, 
+pois o icone era menor que os outros e estava desalinhado */
+
+#missao{
+    position: relative;
+    bottom: 10px;
+}
+
+#missao img{
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+
+#missao h2{
+    position: relative;
+    bottom: 16px;
+}
+
+#missao p{
+    position: relative;
+    bottom: 6px;
+}
