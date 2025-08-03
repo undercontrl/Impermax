@@ -30,9 +30,139 @@
         </ul>
     </nav>
    </header>
+
+
    <main>
+        <section class="parallax-projetos">
+            <h1 class="titulo-projetos">Projetos</h1>
+        </section>
+
+        <section class="projetos">
+
+            <div class="container-projetos">
+                <div class="cards-projetos">
+
+                    <div class="linha-projetos">
+                        <div class="card-projeto">
+                            <figure>
+                                <img src="assets/img/projeto1.jpg" alt="projeto 1 " class="projeto-imagem">
+                                <figcaption class="figcaption-projeto">
+                                    <h3 class="titulo-interno-projeto">projeto 1</h3>
+                                    <p>Descrição do projeto 1</p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <div class="card-projeto">
+                            <figure>
+                                <img src="assets/img/projeto2.webp" alt="projeto 2 " class="projeto-imagem">
+                                <figcaption class="figcaption-projeto">
+                                    <h3 class="titulo-interno-projeto">projeto 1</h3>
+                                    <p>Descrição do projeto 1</p>
+                                </figcaption>
+                            </figure>
+                        </div>   
+
+                        <div class="card-projeto">
+                            <figure>
+                                <img src="assets/img/projeto3.jpg" alt="projeto 1 " class="projeto-imagem">
+                                <figcaption class="figcaption-projeto">
+                                    <h3 class="titulo-interno-projeto">projeto 1</h3>
+                                    <p>Descrição do projeto 1</p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    
+                    </div>
+
+                    <div class="linha-projetos">
+                        <div class="card-projeto">
+                        <figure>
+                            <img src="assets/img/projeto4.jpg" alt="projeto 1 " class="projeto-imagem">
+                            <figcaption class="figcaption-projeto">
+                                <h3 class="titulo-interno-projeto">projeto 1</h3>
+                                <p>Descrição do projeto 1</p>
+                            </figcaption>
+                        </figure>
+                      </div> 
+
+
+                        <div class="card-projeto">
+                        <figure>
+                            <img src="assets/img/projeto5.jpg" alt="projeto 1 " class="projeto-imagem">
+                            <figcaption class="figcaption-projeto">
+                                <h3 class="titulo-interno-projeto">projeto 1</h3>
+                                <p>Descrição do projeto 1</p>
+                            </figcaption>
+                        </figure>
+                        </div> 
+
+
+                       <div class="card-projeto">
+                        <figure>
+                            <img src="assets/img/projeto6.jpg" alt="projeto 1 " class="projeto-imagem">
+                            <figcaption class="figcaption-projeto">
+                                <h3 class="titulo-interno-projeto">projeto 1</h3>
+                                <p>Descrição do projeto 1</p>
+                            </figcaption>
+                        </figure>
+                       </div> 
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+    <section class="depoimentos">
+        <div id="titulo-depoimento">
+        <h2 >algum titulo aqui </h2></div>
+
+            <div class="container-depoimentos">
+                <div class="carrossel-wrapper">
+                    <button class="btn-esquerda">&#9664;</button>
+                    <div class="carrossel">
+                        <article class="card-depoimento card-depoimento1">
+                        <div class="texto-depoimento">
+                            <h2>Nome do individuo</h2>
+                            <p>texto do individuo</p>
+                        </div>
+                        </article>
+
+                        <article class="card-depoimento card-depoimento2">
+                        <div class="texto-depoimento"> 
+                            <h2>Nome do individuo</h2>
+                            <p>texto do individuo</p>
+                        </div>
+                        </article>
+
+                        <article class="card-depoimento card-depoimento3">
+                        <div class="texto-depoimento"> 
+                            <h2>Nome do individuo</h2>
+                            <p>texto do individuo</p>
+                        </div>
+                        </article>
+
+                     </div>
+                </div>
+                    <button class="btn-direita">&#9654;</button>
+            </div>
+                    
+            </div>
+
+
+    </section>
+
+
+
+
+
 
    </main>
+
+
     <footer id="footer-impermax">
         <div class="footer-conteudo">
             <div class="logo-footer">
@@ -49,5 +179,29 @@
         <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
         <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
     </footer>
+
+
+
+
+<script>
+  const carrossel = document.querySelector('.carrossel');
+  const btnDireita = document.querySelector('.btn-direita');
+  const btnEsquerda = document.querySelector('.btn-esquerda');
+  const cardWidth = 450; // mesmo valor do min-width do card
+
+  btnDireita.onclick = () => {
+    // Se estiver no final, volta para o início
+    if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
+      carrossel.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      carrossel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  btnEsquerda.onclick = () => {
+    carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+  };
+</script>
+
 </body>
 </html>

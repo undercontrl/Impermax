@@ -1,0 +1,104 @@
+.parallax-projetos{
+    position: relative;
+    width: 100%;
+    height: 600px;
+    top: 120px;
+    background-image: url("../assets/banner/banner\ 6.png");
+    background-size: cover;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+
+.titulo-projetos{
+    font-size: 100px;
+    color: white;
+    position: relative;
+    top: 40%;
+    justify-content: center;
+    display: flex;
+
+}
+
+.projetos{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+    width: 100%;
+    height: 600px;
+    top: 120px;
+    
+}
+
+
+
+
+
+.container-projetos{
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.cards-projetos{
+    position: relative;
+    width: 700px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.card-projeto{
+    flex-basis: calc(50% - 10px);
+    height: 200px;
+    width: 700px;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;    
+    display: flex;
+    flex-direction: column;
+}
+.projeto-imagem{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: transform 0.4s ease-in-out;
+    
+}
+.figcaption-projeto{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: #44494ea4;
+    color: var(--cor-de-fundo);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    font-size: 1rem;
+    transform: translateY(100%);
+}
+.card-projeto:hover .figcaption-projeto{
+    transform: translateY(0%);
+   
+}
+
+.linha-projetos {
+    width: 1200px;
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+
+
+
+
+

@@ -1,0 +1,107 @@
+.depoimentos{
+    height: 500px;
+    background-color: var( --cor-de-fundo-primaria);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#titulo-depoimento {
+    margin-bottom: 400px;
+    align-items: center;
+    color: white;
+    position: relative;
+    justify-content: center;
+    display: flex;
+    left: 850px;
+    bottom: 10px;
+    font-size: 20px;
+ 
+}
+
+
+.container-depoimentos{
+    max-width: 550px;
+    min-width: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+
+.carrossel{
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1.2rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+}
+
+.card-depoimento{
+  background-size: cover;
+  background-position: center;
+  min-height: 350px;
+  min-width: 450px;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+.card-depoimento1 {
+  background-image: url('../assets/img/projeto7.jpg');
+}
+.card-depoimento2 {
+  background-image: url('../assets/img/projeto8.jpg');
+}
+.card-depoimento3 {
+  background-image: url('../assets/img/projeto9.jpg');
+}
+
+
+
+
+.texto-depoimento {
+  position: relative;
+  top: 100px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 24px;
+  max-width: 80%;
+}
+
+
+
+.carrossel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  right: 80px;
+}
+
+.btn-esquerda, .btn-direita {
+  background: var(--cor-de-fundo-primaria);
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 20px;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 20px 20px rgba(0,0,0,0.1);
+  margin: 0 12px;
+  
+}
+.btn-esquerda:hover, .btn-direita:hover {
+  background:var(--cor-fonte-terciaria);
+}
