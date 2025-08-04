@@ -1,5 +1,6 @@
+
 .quem-somos{
-    height: 300px;
+    height: 320px;
     text-align: center;
     top: 80px;
     background-color: var(--cor-fonte-hero-primaria);
@@ -39,4 +40,188 @@
 .botao-saiba-mais:hover{
     background-color: var(--cor-fonte-terciaria);
     color: var(--cor-fonte-hero-primaria);
+}
+
+
+
+.parallax-sobre{
+    position: relative;
+    width: 100%;
+    height: 600px;
+    top: 120px;
+    background-image: url("../assets/banner/banner\ 6.png");
+    background-size: cover;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+.titulo-sobre{
+    font-size: 100px;
+    color: white;
+    position: relative;
+    top: 40%;
+    justify-content: center;
+    display: flex;
+
+}
+
+.historia{
+    position: relative;
+    width: 100%;
+    height: 600px;
+    top: 70px;
+   
+    
+}
+
+.container-sobre{
+    width: 20%;
+    top: 20%;
+    position: relative;
+    align-items: center;
+    text-align: justify;
+}
+
+.titulo-historia{
+    display: flex;
+    justify-content: center;
+    font-size: 22px;
+    color: var( --cor-fonte-secundaria);
+    position: relative;
+    bottom: 20px;
+}
+
+.texto-historia{
+    color: var(--cor-fonte-hero-secundaria);
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.container-historia {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  position: relative;
+  top: 20%;
+
+}
+
+.logo-historia {
+    height:100px;
+}
+
+.icones{
+    height: 300px;
+    top: 120px;
+    background-color: var( --cor-de-fundo-primaria);
+}
+
+.container-icones{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    gap: 100px;
+    top: 10px;
+}
+
+.icons-sobre{
+    height: 60px;
+    width: 60px;
+    position: relative;
+    bottom: 20px;
+    cursor: pointer;
+    
+}
+
+.titulo-missao{
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+    bottom: 10px;
+    font-weight:bold;
+    
+
+    }
+
+.texto-missao{
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    position: relative;
+    text-align: center;
+    line-height: 1.5;
+    font-weight:bold;
+}
+
+.card-sobre{
+    height: 300px;
+    position: relative;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.historia2{
+    position: relative;
+    width: 100%;
+    height: 400px;
+    
+}
+
+.container-historia2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  position: relative;
+  top: 20%;
+}
+
+.icons-sobre:hover{
+  transform: scale(1.2);
+  transition: transform 0.3s;
+
+}
+
+
+.logo-historia2 {
+    height:250px;
+}
+
+
+
+/* colocado um id missao no primeiro card para alterar o tamanho dele, 
+pois o icone era menor que os outros e estava desalinhado */
+
+#missao{
+    position: relative;
+    bottom: 10px;
+}
+
+#missao img{
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+
+#missao h2{
+    position: relative;
+    bottom: 16px;
+}
+
+#missao p{
+    position: relative;
+    bottom: 6px;
 }
