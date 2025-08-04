@@ -138,15 +138,15 @@
 
                         <article class="card-depoimento card-depoimento2">
                         <div class="texto-depoimento"> 
-                            <h2>Nome do individuo</h2>
-                            <p>texto do individuo</p>
+                            <h2 class="titulo-interno-depo">Rodrigo Antunes</h2>
+                            <p class="texto-interno-depo">“Sou engenheiro e já trabalhei com diversas empresas de impermeabilização, mas a Impermax se destaca pelo cuidado, capricho e cumprimento de prazos.”</p>
                         </div>
                         </article>
 
                         <article class="card-depoimento card-depoimento3">
                         <div class="texto-depoimento"> 
-                            <h2>Nome do individuo</h2>
-                            <p>texto do individuo</p>
+                            <h2 class="titulo-interno-depo">Sílvio Rocha</h2>
+                            <p class="texto-interno-depo">“Contratamos a Impermax para impermeabilizar a laje do prédio e ficamos muito satisfeitos. Equipe organizada, pontual e com excelente custo-benefício. Resultado profissional e duradouro.”</p>
                         </div>
                         </article>
 
@@ -188,25 +188,30 @@
 
 
 
-<script>
-  const carrossel = document.querySelector('.carrossel');
-  const btnDireita = document.querySelector('.btn-direita');
-  const btnEsquerda = document.querySelector('.btn-esquerda');
-  const cardWidth = 450; // mesmo valor do min-width do card
-
-  btnDireita.onclick = () => {
-    // Se estiver no final, volta para o início
-    if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
-      carrossel.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      carrossel.scrollBy({ left: cardWidth, behavior: 'smooth' });
-    }
-  };
-
-  btnEsquerda.onclick = () => {
-    carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-  };
-</script>
+    <script>
+        const carrossel = document.querySelector('.carrossel');
+        const btnDireita = document.querySelector('.btn-direita');
+        const btnEsquerda = document.querySelector('.btn-esquerda');
+        const cardWidth = 450; // mesmo valor do min-width do card
+         
+        // Ajusta o carrossel para começar no depoimento 2
+        document.addEventListener('DOMContentLoaded', () => {
+            carrossel.scrollLeft = cardWidth; // Move para o início do card2
+        });
+         
+        btnDireita.onclick = () => {
+            // Se estiver no final, volta para o início
+            if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
+                carrossel.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                carrossel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            }
+        };
+         
+        btnEsquerda.onclick = () => {
+              carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+        };
+    </script>
 
 
 </body>
