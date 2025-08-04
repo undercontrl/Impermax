@@ -1,4 +1,17 @@
-.contato{
-    height: 600px;
+.parallax-contato{
+    height: 660px;
+    padding: 80px 0;
     background-color: var(--cor-de-fundo-primaria);
+    /* The image used */
+    background-image: url("../assets/banner/parallax\ 2.png");
+
+    /* Set a specific height */
+    min-height: 500px;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
