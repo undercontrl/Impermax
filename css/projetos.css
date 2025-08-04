@@ -75,8 +75,7 @@
     width: 100%;
     height: 100%;
     padding: 10px;
-    background-color: #44494ea4;
-    color: var(--cor-de-fundo);
+    background-color: #44494edc;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -95,6 +94,21 @@
     justify-content: center;
     gap: 32px;
     margin-bottom: 32px;
+}
+
+
+.titulo-projeto{
+    color: var(--cor-fonte-terciaria);
+    position: relative;
+    bottom: 10px;
+    font-weight: 700;
+}
+
+.texto-interno-projeto{
+    color: white;
+    line-height: 1.2;
+    text-align:center;
+    padding: 0px 20px 0px 20px;
 }
 
 
