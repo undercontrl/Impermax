@@ -71,7 +71,7 @@
     height: 470px;
     font-family: Arial, sans-serif;
     position: absolute;
-    top: 274%;
+    margin-top: 550px;
     left: 15%;
     transform: translateY(-50%);
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
