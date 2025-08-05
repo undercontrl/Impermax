@@ -91,11 +91,11 @@
             <div class="bloco-contato">
                 <div id="caixa-orcamento2">
                     <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                    <form>
-                        <input type="text" name="nome" placeholder="Nome" required>
-                        <input type="tel" name="telefone" placeholder="Telefone" required>
-                        <input type="email" name="email" placeholder="E-mail" required>
-                        <select name="servico" required>
+                    <form id="form-contato3">
+                        <input type="text" name="nome" placeholder="Nome" required id="nome3">
+                        <input type="tel" name="telefone" placeholder="Telefone" required id="telefone3">
+                        <input type="email" name="email" placeholder="E-mail" required id="email3">
+                        <select name="servico" required id="servico3">
                             <option value="">Escolha o tipo de serviço solicitado</option>
                             <option value="residencial">Impermeabilização Residencial</option>
                             <option value="comercial">Impermeabilização Comercial</option>
@@ -104,6 +104,8 @@
                         </select>
                         <button type="submit">Enviar solicitação de orçamento</button>
                     </form>
+                     <div id="status-mensagem3">
+                </div>
                 </div>
                 <div class="whatsapp-contato">
                     <h2>Prefere falar direto pelo WhatsApp?</h2>
@@ -133,5 +135,8 @@
         <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
         <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
     </footer>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/script-form.js"></script>
 </body>
 </html>

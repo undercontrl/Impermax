@@ -127,11 +127,11 @@
             <div class="bloco-contato">
                 <div id="caixa-orcamento2">
                     <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                    <form>
-                        <input type="text" name="nome" placeholder="Nome" required>
-                        <input type="tel" name="telefone" placeholder="Telefone" required>
-                        <input type="email" name="email" placeholder="E-mail" required>
-                        <select name="servico" required>
+                    <form id="form-contato2">
+                        <input type="text" name="nome" placeholder="Nome" required id="nome2">
+                        <input type="tel" name="telefone" placeholder="Telefone" required id="telefone2">
+                        <input type="email" name="email" placeholder="E-mail" required id="email2">
+                        <select name="servico" required  id="servico2">
                             <option value="">Escolha o tipo de serviço solicitado</option>
                             <option value="residencial">Impermeabilização Residencial</option>
                             <option value="comercial">Impermeabilização Comercial</option>
@@ -140,6 +140,9 @@
                         </select>
                         <button type="submit">Enviar solicitação de orçamento</button>
                     </form>
+                    <div id="status-mensagem2">
+
+                </div>
                 </div>
                 <div class="whatsapp-contato">
                     <h2>Prefere falar direto pelo WhatsApp?</h2>
