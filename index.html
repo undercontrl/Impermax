@@ -36,11 +36,11 @@
             <p class="texto-hero">Especialistas em Impermeabilização Residencial e Comercial</p>
             <div id="caixa-orcamento">
                 <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                <form>
-                    <input type="text" name="nome" placeholder="Nome" required>
-                    <input type="tel" name="telefone" placeholder="Telefone" required>
-                    <input type="email" name="email" placeholder="E-mail" required>
-                    <select name="servico" required>
+                <form id="form-contato">
+                    <input type="text" name="nome" placeholder="Nome" required id="nome">
+                    <input type="tel" name="telefone" placeholder="Telefone" required id="telefone">
+                    <input type="email" name="email" placeholder="E-mail" required id="email">
+                    <select name="servico" required id="servico">
                         <option value="">Escolha o tipo de serviço solicitado</option>
                         <option value="residencial">Impermeabilização Residencial</option>
                         <option value="comercial">Impermeabilização Comercial</option>
@@ -49,6 +49,9 @@
                     </select>
                     <button type="submit">Enviar solicitação de orçamento</button>
                 </form>
+                <div id="status-mensagem">
+
+                </div>
             </div>
         </section>
         <section class="quem-somos">
@@ -164,5 +167,7 @@
     <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
     <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
 </footer>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/script-form.js"></script>
 </body>
 </html>
