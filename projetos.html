@@ -189,25 +189,28 @@
 
 
 <script>
-  const carrossel = document.querySelector('.carrossel');
-  const btnDireita = document.querySelector('.btn-direita');
-  const btnEsquerda = document.querySelector('.btn-esquerda');
-  const cardWidth = 450; // mesmo valor do min-width do card
-
-  btnDireita.onclick = () => {
-    // Se estiver no final, volta para o início
-    if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
-      carrossel.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      carrossel.scrollBy({ left: cardWidth, behavior: 'smooth' });
-    }
-  };
-
-  btnEsquerda.onclick = () => {
-    carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-  };
+    const carrossel = document.querySelector('.carrossel');
+    const btnDireita = document.querySelector('.btn-direita');
+    const btnEsquerda = document.querySelector('.btn-esquerda');
+    const cardWidth = 450; // mesmo valor do min-width do card
+      
+    // Ajusta o carrossel para começar no depoimento 2
+    document.addEventListener('DOMContentLoaded', () => {
+        carrossel.scrollLeft = cardWidth; // Move para o início do card2
+    });
+      
+    btnDireita.onclick = () => {
+        // Se estiver no final, volta para o início
+        if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
+            carrossel.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            carrossel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        }
+    };
+      
+    btnEsquerda.onclick = () => {
+          carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    };
 </script>
-
-
 </body>
 </html>
