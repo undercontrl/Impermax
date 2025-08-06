@@ -1,5 +1,5 @@
 .depoimentos{
-    height: 500px;
+    height: 600px;
     background-color: var( --cor-de-fundo-primaria);
     display: flex;
     justify-content: center;
@@ -7,7 +7,7 @@
 }
 
 #titulo-depoimento {
-    margin-bottom: 400px;
+    margin-bottom: 500px;
     align-items: center;
     color: white;
     position: relative;
