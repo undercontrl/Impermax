@@ -1,5 +1,5 @@
 <?php
-class usuario{
+class Usuario{
     private $id_usuario;
     private $nome_usuario;
     private $email_usuario;
@@ -32,6 +32,24 @@ class usuario{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function buscarUsuariosPorTipo($tipo){
+        $sql = 'SELECT * FROM tbl_usuario where tipo_usuario = :tipo and excluido_em IS NULL';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':tipo', $tipo);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    function buscarUsuariosPorStatus($status){
+        $sql = 'SELECT * FROM tbl_usuario where status_usuarios = :status and excluido_em IS NULL';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':status', $status);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     // metodo de inserir usuario
     function inserirUsuario($nome, $email, $senha, $tipo, $status){
         $senha = password_hash($senha, PASSWORD_DEFAULT);
@@ -41,7 +59,7 @@ class usuario{
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $email);
+        $stmt->bindParam(':senha', $senha);
         $stmt->bindParam(':tipo', $tipo);
         $stmt->bindParam(':status', $status);
         if($stmt->execute()){
@@ -81,7 +99,7 @@ class usuario{
     function excluirUsuario($id){
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_usuario SET 
-        excluido_em = :atual
+        excluido_em = :atual 
         Where id_usuario = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);

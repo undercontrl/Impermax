@@ -1,5 +1,5 @@
 <?php
-class projeto{
+class Projeto{
     private $id_projeto;
     private $foto_antes_projeto;
     private $foto_depois_projeto;
@@ -22,36 +22,26 @@ class projeto{
     }
 
     //metodo de buscar todos usuario por email
-    function buscarUsuariosPorDescricao($descricao){
-        $sql = 'SELECT * FROM tbl_projeto where descricao_projeto = :projeto and excluido_em IS NULL';
+    function buscarProjetosPorDescricao($descricao){
+        $sql = 'SELECT * FROM tbl_projeto where descricao_projeto = :descricao and excluido_em IS NULL';
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    function buscarProjetosPorData($data_solicitada){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE data_solicitada = :data_solicitada AND excluido_em IS NULL';
-        $statement = $this->db->prepare($sql);
-        $statement->bindParam(':data_solicitada', $data_solicitada);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
  
 
     // metodo de inserir usuario
-    function inserirUsuario($nome, $email, $senha, $tipo, $status){
+    function inserirProjeto($foto_antes, $foto_depois, $descricao){
         $senha = password_hash($senha, PASSWORD_DEFAULT);
-        $sql = 'INSERT INTO tbl_usuario (nome_usuario, email_usuario, 
-        senha_usuario, tipo_usuario, status_usuario )
-             VALUES (:nome, :email, :senha, :tipo, :status)';
+        $sql = 'INSERT INTO tbl_projeto (foto_antes_projeto, foto_depois_projeto,
+         descricao_projeto)
+             VALUES (:foto_antes, :foto_depois, :descricao';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':nome', $nome);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $email);
-        $stmt->bindParam(':tipo', $tipo);
-        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':foto_antes', $foto_antes);
+        $stmt->bindParam(':foto_depois', $foto_depois);
+        $stmt->bindParam(':descricao', $descricao);
         if($stmt->execute()){
             return $this->db->lastInsertId();
         }else{
@@ -60,24 +50,19 @@ class projeto{
     }
 
     // metodo de atualizar o usuario
-    function atualizarUsuario($nome, $email, $senha, $tipo, $status){
+    function atualizarProjeto($foto_antes, $foto_depois, $descricao){
         $senha = password_hash($senha, PASSWORD_DEFAULT);
         $dataatual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_usuario SET nome_usuario = :nome,
-        email_usuario = :email,
-        senha_usuario = :senha,
-        tipo_usuario = :tipo,
-        staus_usuario = :status,
+        $sql = "UPDATE tbl_projeto SET foto_antes_projeto = :foto_antes,
+        foto_depois_projeto = :foto_depois,
+        descricao_projeto = :descricao
         atualizado_em = :atual
-        Where id_usuario = :id";
+        Where id_projeto = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':nome', $nome);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $email);
-        $stmt->bindParam(':tipo', $tipo);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':atual', $dataatual);
+        $stmt->bindParam(':foto_antes', $foto_antes);
+        $stmt->bindParam(':foto_depois', $foto_depois);
+        $stmt->bindParam(':descricao', $descricao);
         if($stmt->execute()){
             return $this->db->lastInsertId();
         }else{
@@ -86,11 +71,11 @@ class projeto{
     }
 
     // metodo de deletar o usuario 
-    function excluirUsuario($id){
+    function excluirProjeto($id){
         $dataatual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_usuario SET 
+        $sql = "UPDATE tbl_projeto SET 
         excluido_em = :atual
-        Where id_usuario = :id";
+        Where id_projeto = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':atual', $dataatual);
