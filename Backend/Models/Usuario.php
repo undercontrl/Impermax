@@ -84,7 +84,7 @@ class Usuario{
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $email);
+        $stmt->bindParam(':senha', $senha);
         $stmt->bindParam(':tipo', $tipo);
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':atual', $dataatual);
