@@ -44,10 +44,10 @@ class agendamento{
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     //método de buscar agendamento por id
-    function buscarAgendamentoPorId($id){
+    function buscarAgendamentoPorId($id_agendamento){
         $sql = 'SELECT * FROM tbl_agendamento WHERE id_agendamento = :id AND excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
-        $statement->bindParam(':id', $id);
+        $statement->bindParam(':id', $id_agendamento);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
@@ -73,7 +73,7 @@ class agendamento{
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_agendamento SET id_cliente = :id_cliente, data_solicitada = :data_solicitada, 
         total_agendamento = :total_agendamento, status_agendamento = :status_agendamento, atualizado_em = :atualizado 
-        WHERE id_agendamento = :id';
+        WHERE id_agendamento = :id_agendamento';
         $statement = $this->db->prepare($sql);
         $statement->bindParam(':id_cliente', $id_cliente);
         $statement->bindParam(':data_solicitada', $data_solicitada);
@@ -87,11 +87,11 @@ class agendamento{
         }
     }
     //método de deletar o agendamento
-    function excluirAgendamento($id){
+    function excluirAgendamento($id_agendamento){
         $dataAtual = date('Y-m-d H:i:s');
-        $sql = 'UPDATE tbl_agendamento SET excluido_em = :excluido WHERE id_agendamento = :id';
+        $sql = 'UPDATE tbl_agendamento SET excluido_em = :excluido WHERE id_agendamento = :id_agendamento';
         $statement = $this->db->prepare($sql);
-        $statement->bindParam(':id', $id);
+        $statement->bindParam(':id_agendamento', $id_agendamento);
         $statement->bindParam(':excluido', $dataAtual);
         if($statement->execute()){
             return true;
