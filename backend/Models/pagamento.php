@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class Pagamento{
     private $id_pagamento;
     private $id_cliente;
@@ -69,7 +71,7 @@ class Pagamento{
         atualizado_em = :atual
         Where id_pagamento = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $id_cliente);
         $stmt->bindParam(':id_cliente', $id_cliente);
         $stmt->bindParam(':total_devedor', $total_devedor);
         $stmt->bindParam(':dinheiro', $dinheiro);

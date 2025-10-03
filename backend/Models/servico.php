@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class Servicos{
     private $id_servico;
     private $nome_servico;
@@ -69,7 +71,6 @@ class Servicos{
         atualizado_em = :atual
         Where id_servico = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);

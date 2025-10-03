@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class Material{
     private $id_material;
     private $nome_material;
@@ -66,7 +68,6 @@ class Material{
         atualizado_em = :atual
         Where id_material = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome_material', $nome_material);
         $stmt->bindParam(':qtd_material', $qtd_material);
         $stmt->bindParam(':descricao_material', $descricao_material);

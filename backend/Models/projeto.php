@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class Projeto{
     private $id_projeto;
     private $foto_antes_projeto;
@@ -34,7 +36,6 @@ class Projeto{
 
     // metodo de inserir usuario
     function inserirProjeto($foto_antes, $foto_depois, $descricao){
-        $senha = password_hash($senha, PASSWORD_DEFAULT);
         $sql = 'INSERT INTO tbl_projeto (foto_antes_projeto, foto_depois_projeto,
          descricao_projeto)
              VALUES (:foto_antes, :foto_depois, :descricao';
@@ -51,7 +52,6 @@ class Projeto{
 
     // metodo de atualizar o usuario
     function atualizarProjeto($foto_antes, $foto_depois, $descricao){
-        $senha = password_hash($senha, PASSWORD_DEFAULT);
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_projeto SET foto_antes_projeto = :foto_antes,
         foto_depois_projeto = :foto_depois,
@@ -59,7 +59,6 @@ class Projeto{
         atualizado_em = :atual
         Where id_projeto = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':foto_antes', $foto_antes);
         $stmt->bindParam(':foto_depois', $foto_depois);
         $stmt->bindParam(':descricao', $descricao);
