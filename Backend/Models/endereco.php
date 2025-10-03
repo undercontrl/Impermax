@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class endereco{
     private $id_endereco;
     private $id_usuario;

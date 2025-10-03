@@ -28,7 +28,16 @@ class UsuarioController{
         View::render("usuario/create");
     }
     public function viewEditarUsuarios(){
-        View::render("usuario/edit");
+        $id=$_GET['id'] ?? null;
+        var_dump($_POST);exit;
+        if(!$id){
+            Redirect::redirecionarComMensagem("usuario/listar", "error", "ID do usuário não fornecido.");
+        }
+        $usuario = $this->usuario->buscarUsuariosPorTipo($id);
+        if(!$usuario){
+            Redirect::redirecionarComMensagem("usuario/listar", "error", "Usuário não encontrado.");
+        }
+        View::render("usuario/edit", ["usuario" => $usuario]);
     }
     public function viewExcluirUsuarios(){
         View::render("usuario/delete");

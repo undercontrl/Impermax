@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-use App\Kipedreiro\Core\Flash;
+use App\Impermax\Core\Flash;
 $mensagem = Flash::get();
 if(isset($mensagem)){
     foreach($mensagem as $key => $value){

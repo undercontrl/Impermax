@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class Projeto{
     private $id_projeto;
     private $foto_antes_projeto;

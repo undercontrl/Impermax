@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class agendamento{
     private $id_agendamento;
     private $id_cliente;

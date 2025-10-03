@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class contato{
     private $id_contato;
     private $nome_contato;

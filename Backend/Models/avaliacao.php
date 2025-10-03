@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class avaliacao{
     private $id_avaliacao;
     private $id_cliente;

@@ -1,5 +1,5 @@
 <?php
-use App\Kipedreiro\Core\Flash;
+use App\Impermax\Core\Flash;
 $mensagem = Flash::get();
 if(isset($mensagem)){
 var_dump($mensagem);

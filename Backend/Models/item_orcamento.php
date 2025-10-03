@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class item_orcamento{
     private $id_item_orcamento;
     private $id_orcamento;

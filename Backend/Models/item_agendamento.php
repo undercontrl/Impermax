@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class item_agendamento{
     private $id_item_agendamento;
     private $id_agendamento;
