@@ -69,7 +69,6 @@ class Servicos{
         atualizado_em = :atual
         Where id_servico = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);

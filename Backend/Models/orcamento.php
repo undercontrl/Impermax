@@ -72,7 +72,7 @@ class Orcamento{
         atualizado_em = :atual
         Where id_orcamento = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $id_cliente);
         $stmt->bindParam(':id_cliente', $id_cliente);
         $stmt->bindParam(':descricao_orcamento', $descricao_orcamento);
         $stmt->bindParam(':status_orcamento', $status_orcamento);

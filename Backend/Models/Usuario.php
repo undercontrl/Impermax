@@ -1,4 +1,6 @@
 <?php
+namespace App\Impermax\Models;
+use PDO;
 class Usuario{
     private $id_usuario;
     private $nome_usuario;
@@ -81,7 +83,6 @@ class Usuario{
         atualizado_em = :atual
         Where id_usuario = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':senha', $senha);

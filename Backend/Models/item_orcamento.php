@@ -9,6 +9,7 @@ class item_orcamento{
     private $criado_em;
     private $atualizado_em;
     private $excluido_em;
+    private $db;
     // O construtor inicializa a classe e/ou atributos
     public function __construct($db){
         $this->db = $db;
