@@ -33,7 +33,7 @@ class ProjetoController{
         if(!$id){
             Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do projeto não fornecido.");
         }
-        $projeto = $this->projeto->buscarprojetosPorTipo($id);
+        $projeto = $this->projeto->buscarProjetosPorDescricao($descricao);
         if(!$projeto){
             Redirect::redirecionarComMensagem("projeto/listar", "error", "Projeto não encontrado.");
         }
@@ -48,7 +48,7 @@ class ProjetoController{
         if(!empty($erros)){
             Redirect::redirecionarComMensagem("projeto/criar", "error", implode("<br>", $erros));
         }
-        if($this->projeto->inserirProjeto($_POST["nome_projeto"], $_POST["foto_antes_projeto"], $_POST["foto_depois_projeto"], $_POST["descricao_projeto"])){
+        if($this->projeto->inserirProjeto($_POST["foto_antes_projeto"], $_POST["foto_depois_projeto"], $_POST["descricao_projeto"])){
             Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto cadastrado com sucesso!");
         }else{
             Redirect::redirecionarComMensagem("projeto/criar", "error", "Erro ao cadastrar projeto!");

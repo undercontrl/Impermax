@@ -26,6 +26,18 @@ class Rotas
        "/backend/projeto/listar" => "projetoController@viewListarProjetos",
         "/backend/projeto/editar" => "projetoController@viewEditarProjetos",
         "/backend/projeto/excluir" => "projetoController@viewExcluirProjetos",
+
+        "/backend/pagamento" => "pagamentoController@index",
+       "/backend/pagamento/criar" => "pagamentoController@viewCriarPagamentos",
+       "/backend/pagamento/listar" => "pagamentoController@viewListarPagamentos",
+        "/backend/pagamento/editar" => "pagamentoController@viewEditarPagamentos",
+        "/backend/pagamento/excluir" => "pagamentoController@viewExcluirPagamentos",
+
+        "/backend/material" => "materialController@index",
+       "/backend/material/criar" => "materialController@viewCriarMateriais",
+       "/backend/material/listar" => "materialController@viewListarMateriais",
+        "/backend/material/editar" => "materialController@viewEditarMateriais",
+        "/backend/material/excluir" => "materialController@viewExcluirMateriais",
         
     ],
     "POST" => [
@@ -40,6 +52,14 @@ class Rotas
         "/backend/projeto/salvar" => "projetoController@salvarProjeto",
         "/backend/projeto/atualizar" => "projetoController@atualizarProjeto",
         "/backend/projeto/deletar" => "projetoController@deletarProjeto",
+        
+        "/backend/pagamento/salvar" => "pagamentoController@salvarPagamento",
+        "/backend/pagamento/atualizar" => "pagamentoController@atualizarPagamento",
+        "/backend/pagamento/deletar" => "pagamentoController@deletarPagamento",
+
+        "/backend/material/salvar" => "materialController@salvarMaterial",
+        "/backend/material/atualizar" => "materialController@atualizarMaterial",
+        "/backend/material/deletar" => "materialController@deletarMaterial",
         
     ]
         ];

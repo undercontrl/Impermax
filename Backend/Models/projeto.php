@@ -25,9 +25,9 @@ class Projeto{
 
     //metodo de buscar todos usuario por email
     function buscarProjetosPorDescricao($descricao){
-        $sql = 'SELECT * FROM tbl_projeto where descricao_projeto = :descricao and excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_projeto where descricao_projeto = :descricao_projeto and excluido_em IS NULL';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':descricao_projeto', $descricao);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -35,14 +35,14 @@ class Projeto{
  
 
     // metodo de inserir usuario
-    function inserirProjeto($foto_antes, $foto_depois, $descricao){
+    function inserirProjeto($foto_antes_projeto, $foto_depois_projeto, $descricao){
         $sql = 'INSERT INTO tbl_projeto (foto_antes_projeto, foto_depois_projeto,
          descricao_projeto)
-             VALUES (:foto_antes, :foto_depois, :descricao';
+             VALUES (:foto_antes, :foto_depois, :descricao_projeto)';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':foto_antes', $foto_antes);
-        $stmt->bindParam(':foto_depois', $foto_depois);
-        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':foto_antes', $foto_antes_projeto);
+        $stmt->bindParam(':foto_depois', $foto_depois_projeto);
+        $stmt->bindParam(':descricao_projeto', $descricao);
         if($stmt->execute()){
             return $this->db->lastInsertId();
         }else{
@@ -55,13 +55,13 @@ class Projeto{
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_projeto SET foto_antes_projeto = :foto_antes,
         foto_depois_projeto = :foto_depois,
-        descricao_projeto = :descricao
+        descricao_projeto = :descricao_projeto,
         atualizado_em = :atual
         Where id_projeto = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':foto_antes', $foto_antes);
         $stmt->bindParam(':foto_depois', $foto_depois);
-        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':descricao_projeto', $descricao);
         if($stmt->execute()){
             return $this->db->lastInsertId();
         }else{
