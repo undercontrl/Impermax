@@ -10,7 +10,7 @@ header{
     align-content: center;
     align-items: center;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     padding: 10px;
     gap: 10px;
@@ -31,7 +31,7 @@ header{
     flex-direction: row;
     justify-content: center;
     font-weight: bold;
-    display: flex;
+
 }
 .icon{
     width: 22px;
@@ -110,7 +110,7 @@ header{
     padding: 20px 0;
     gap: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 999;
+    z-index: 1000;
   }
 
 
@@ -126,6 +126,7 @@ header{
     max-width: 768px;
     width: 100%;
     margin: 0 auto;
+    
 }
      .header-primario {
     display: flex;
@@ -133,11 +134,15 @@ header{
     justify-content: space-between;
     padding: 10px 20px;
     position: relative;
+    height: 70px;
+    
   }
 
   /* mostra hamburguer */
   .hamburguer {
     display: flex;
+    position: relative;
+    right: 15%;
     flex-direction: column;
     justify-content: space-between;
     width: 30px;
@@ -145,6 +150,11 @@ header{
     cursor: pointer;
     z-index: 1001;
   }
+  .logo{
+    height: 58px;
+    position: relative;
+    left: 80%;
+}
 
   .hamburguer span {
     display: block;
@@ -154,38 +164,61 @@ header{
     border-radius: 3px;
     transition: 0.4s;
   }
-
   /* esconde menu no mobile */
-  .header-primario .menu-nav {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    background: #5f7396;
-    position: absolute;
-    top: 90px;
-    left: 0;
-    width: 100%;
-    padding: 20px 0;
-    gap: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 999;
+    .header-primario .menu-nav {
+  position: absolute;   /* fica em cima, não empurra nada */
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  background: #5f7396;     /* cor do menu */
+  transition: max-height 0.4s ease;
+  z-index: 99;
   }
 
-  /* abre menu quando toggle marcado */
+  /* quando abrir, usar toda a altura disponível da viewport abaixo do header */
+  /* calc(100vh - 100%) = viewport height menos a altura do header (100% = altura do header) */
   .menu-toggle:checked ~ .menu-nav {
-    display: flex;
+     max-height: 500px; 
+    opacity: 1;
+    visibility: visible;
   }
 
-  /* animação do X */
-  .menu-toggle:checked + .hamburguer span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-
-  .menu-toggle:checked + .hamburguer span:nth-child(2) {
+  /* estilo dos itens e animação individual */
+  .header-primario .menu-nav li {
+    list-style: none;
     opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    text-align: center;
   }
 
-  .menu-toggle:checked + .hamburguer span:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
+  /* quando aberto, os itens aparecem suavemente */
+  .menu-toggle:checked ~ .menu-nav li {
+    opacity: 1;
+    transform: translateY(0);
   }
+
+  /* se quiser espaçamento entre os links */
+  .header-primario .menu-nav li + li { margin-top: 6px; }
+
+  /* ocultar menu desktop (garante que não apareça em mobile) */
+  .header-primario .menu-nav.desktop-only { display: none; }
+
+  /* hamburguer visível apenas no mobile */
+  .hamburguer { display: flex; }
+/* animação do ícone hambúrguer -> X */
+.menu-toggle:checked + .hamburguer span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle:checked + .hamburguer span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle:checked + .hamburguer span:nth-child(3) {
+  transform: rotate(-45deg) translate(8px, -8px);
+}
+
 }
