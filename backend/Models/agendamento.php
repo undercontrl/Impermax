@@ -17,7 +17,7 @@ class agendamento{
     }
     //método de buscar todos os agendamentos não excluídos
     function buscarAgendamentos(){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_agendamento as ag INNER JOIN tbl_usuario as usu ON ag.id_cliente = usu.id_usuario WHERE ag.excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);

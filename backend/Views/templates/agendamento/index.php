@@ -4,7 +4,7 @@
     <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">ID CLIENTE</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Data</th>
             <th scope="col">Status</th>
             <th scope="col">Ações</th>
@@ -14,7 +14,7 @@
         <?php foreach($agendamentos as $agendamento): ?>
         <tr>
             <th scope="row"><?php echo htmlspecialchars($agendamento['id_agendamento']); ?></th>
-            <td><?php echo htmlspecialchars($agendamento['id_cliente']); ?></td>
+            <td><?php echo htmlspecialchars($agendamento['nome_usuario']); ?></td>
             <td><?php echo htmlspecialchars($agendamento['data_solicitada']); ?></td>
             <td><?php echo htmlspecialchars($agendamento['status_agendamento']); ?></td>
             <td>
