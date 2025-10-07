@@ -5,13 +5,16 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\MaterialValidador;
+use App\Impermax\Models\Servico;
 
 class MaterialController{
     public $material;
+    public $servico;
     public $db;
     public function __construct() {
         $this->db = Database::getInstance();
        $this->material = new Material($this->db);
+         $this->servico = new Servico($this->db);
     }
     // index
     public function index(){
@@ -25,6 +28,7 @@ class MaterialController{
     }
 
     public function viewCriarMateriais(){
+        $servicos = $this->servico->buscarServicos();
         View::render("material/create");
     }
     public function viewEditarMateriais(){
