@@ -22,7 +22,7 @@
     });
 </script>
 <form action="/backend/agendamento/salvar" method="POST">
-        <script>
+    <script>
         document.getElementById('id_agendamento').value = <?= $id_agendamento ?>;
     </script>
     <div>

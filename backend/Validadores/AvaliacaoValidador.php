@@ -16,5 +16,6 @@ class AvaliacaoValidador{
         if(isset($dados['status_avaliacao']) && empty($dados["status_avaliacao"])){
             $erros[] = "O campo status da avaliação é obrigatório.";
         }
+        return $erros;
     }
 }

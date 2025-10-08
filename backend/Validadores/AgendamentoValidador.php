@@ -16,5 +16,6 @@ class AgendamentoValidador{
         if(isset($dados['status_agendamento']) && empty($dados["status_agendamento"])){
             $erros[] = "O campo status do agendamento é obrigatório.";
         }
+        return $erros;
     }
 }

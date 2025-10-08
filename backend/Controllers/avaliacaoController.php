@@ -24,7 +24,8 @@ class AvaliacaoController{
         View::render("avaliacao/index", ["avaliacao" => $dados]);
     }
     public function viewCriarAvaliacao(){
-        View::render("avaliacao/create");
+        $cliente = $this->avaliacao->buscarAvaliacao();
+        View::render("avaliacao/create", ["usuarios" => $cliente]);
     }
     public function viewEditarAvaliacao(){
         View::render("avaliacao/edit");

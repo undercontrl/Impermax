@@ -17,7 +17,7 @@ class avaliacao{
     }
     //método de buscar todos as avaliações não excluídos
     function buscarAvaliacao(){
-        $sql = 'SELECT * FROM tbl_avaliacao WHERE excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_avaliacao as av INNER JOIN tbl_usuario as usu ON av.id_cliente = usu.id_usuario WHERE av.excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
