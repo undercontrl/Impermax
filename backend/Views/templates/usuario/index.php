@@ -22,7 +22,7 @@
             <td><?php echo htmlspecialchars($usuario['status_usuario']); ?></td>
             <td>
                
-                <a href="/backend/usuario/editar?id=<?php echo $usuario['id_usuario']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                <a href="/backend/usuario/editar/{id}=<?php echo $usuario['id_usuario']; ?>" class="btn btn-primary btn-sm">Editar</a>
  
                 <a href="/usuario/excluir/<?php echo $usuario['id_usuario']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este usuário?');">Excluir</a>
             </td>

@@ -29,11 +29,15 @@ class AgendamentoController{
         $usuarios = $this->usuario->buscarUsuarios();
         View::render("agendamento/create", ["usuarios" => $usuarios]);
     }
-    public function viewEditarAgendamentos(){
+    public function viewEditarAgendamentos($id){
+        $dados = $this->agendamento->buscarAgendamentoPorId($id);
+        foreach($dados as $agendamento){
+            $dados = $agendamento;
+        }
         View::render("agendamento/edit");
     }
-    public function viewExcluiragendamentos(){
-        View::render("agendamento/delete");
+    public function viewExcluiragendamentos($id){
+        View::render("agendamento/delete", ["id_agendamento"=>$id]);
     }
     public function salvarAgendamento(){
         $erros = agendamentoValidador::ValidarEntradas($_POST);
@@ -45,6 +49,10 @@ class AgendamentoController{
         }else{
             Redirect::redirecionarComMensagem("agendamento/criar", "error", "Erro ao realizar agendamento!");
         }       
+    }
+    public function relatorioAgendamento($id, $dataInicial, $dataFinal){ 
+        View::render("agendamento/relatorio", 
+            ["id"=>$id, "dataInicial"=>$dataInicial, "dataFinal"=>$dataFinal]);
     }
     public function atualizarAgendamento(){
         echo "Atualizar agendamento";

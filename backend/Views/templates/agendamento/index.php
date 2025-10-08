@@ -19,7 +19,7 @@
             <td><?php echo htmlspecialchars($agendamento['status_agendamento']); ?></td>
             <td>
                
-                <a href="/backend/agendamento/editar?id=<?php echo $agendamento['id_agendamento']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                <a href="/backend/agendamento/editar/{id}=<?php echo $agendamento['id_agendamento']; ?>" class="btn btn-primary btn-sm">Editar</a>
  
                 <a href="/agendamento/excluir/<?php echo $agendamento['id_agendamento']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este agendamento?');">Excluir</a>
             </td>
