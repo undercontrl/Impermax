@@ -33,6 +33,12 @@ class Rotas
         "/backend/pagamento/editar" => "pagamentoController@viewEditarPagamentos",
         "/backend/pagamento/excluir" => "pagamentoController@viewExcluirPagamentos",
 
+        "/backend/orcamento" => "orcamentoController@index",
+       "/backend/orcamento/criar" => "orcamentoController@viewCriarOrcamentos",
+       "/backend/orcamento/listar" => "orcamentoController@viewListarOrcamentos",
+        "/backend/orcamento/editar" => "orcamentoController@viewEditarOrcamentos",
+        "/backend/orcamento/excluir" => "orcamentoController@viewExcluirOrcamentos",
+
         "/backend/material" => "materialController@index",
        "/backend/material/criar" => "materialController@viewCriarMateriais",
        "/backend/material/listar" => "materialController@viewListarMateriais",
@@ -56,6 +62,10 @@ class Rotas
         "/backend/pagamento/salvar" => "pagamentoController@salvarPagamento",
         "/backend/pagamento/atualizar" => "pagamentoController@atualizarPagamento",
         "/backend/pagamento/deletar" => "pagamentoController@deletarPagamento",
+
+        "/backend/orcamento/salvar" => "orcamentoController@salvarOrcamento",
+        "/backend/orcamento/atualizar" => "orcamentoController@atualizarOrcamento",
+        "/backend/orcamento/deletar" => "orcamentoController@deletarOrcamento",
 
         "/backend/material/salvar" => "materialController@salvarMaterial",
         "/backend/material/atualizar" => "materialController@atualizarMaterial",

@@ -5,9 +5,11 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\PagamentoValidador;
+use App\Impermax\Models\usuario;
 
 class PagamentoController{
     public $pagamento;
+    public $usuario;
     public $db;
     public function __construct() {
         $this->db = Database::getInstance();

@@ -14,7 +14,7 @@ class MaterialController{
     public function __construct() {
         $this->db = Database::getInstance();
        $this->material = new Material($this->db);
-         $this->servico = new Servico($this->db);
+        $this->servico = new Servico($this->db);
     }
     // index
     public function index(){
@@ -29,7 +29,8 @@ class MaterialController{
 
     public function viewCriarMateriais(){
         $servicos = $this->servico->buscarServicos();
-        View::render("material/create");
+        // View::render("material/create");
+        View::render("material/create", ["servicos" => $servicos]);
     }
     public function viewEditarMateriais(){
         $id=$_GET['id'] ?? null;
