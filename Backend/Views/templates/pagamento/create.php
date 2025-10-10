@@ -1,45 +1,19 @@
 <div>Sou o create</div>
 <form action="/backend/pagamento/salvar" method="post">
 
-<?php
-// Verifica se $servicos é um array de serviços
-if (is_array($servicos) && !empty($servicos) && isset($servicos[0]['id_servico']) && isset($servicos[0]['nome_servico'])) {
-    // $servicos está correto
-} else {
-    echo "<div style='color:red'>Erro: variável \$servicos não está formatada corretamente.</div>";
-}
-?>
 <div>
-    <label for="id_servico">Selecione o Serviço</label>
-    <select name="id_servico" id="id_servico" required>
+    <label for="id_cliente">Selecione o Cliente</label>
+    <select name="id_cliente" id="id_cliente" required>
         <option value="">Selecione...</option>
-        <?php foreach ($servicos as $servico): ?>
-            <option value="<?= htmlspecialchars($servico['id_servico']) ?>">
-                <?= htmlspecialchars($servico['nome_servico']) ?>
+        <?php foreach ($usuarios as $cliente): ?>
+            <option value="<?= htmlspecialchars($cliente['id_usuario']) ?>">
+                <?= htmlspecialchars($cliente['nome_usuario']) ?>
             </option>
         <?php endforeach; ?>
     </select>
 </div>
-
-
-
-
-
-
-
-
 <label for="total">Total</label>
 <input type="decimal" name="total_devedor" id="total_devedor" require>
-<br>
-<label for="forma_pagamento">Forma de Pagamento</label>
-<select name="id_cliente" id="id_cliente" required>
-    <option value="">Selecione o Cliente</option>
-    <?php foreach ($clientes as $cliente): ?>
-        <option value="<?= htmlspecialchars($cliente['id']) ?>">
-            <?= htmlspecialchars($cliente['nome_usuario']) ?>
-        </option>
-    <?php endforeach; ?>
-</select>
 <br>
 <label for="total_devedor">Total da Dívida</label>
 <input type="number" step="0.01" name="total_devedor" id="total_devedor" required>
@@ -47,10 +21,10 @@ if (is_array($servicos) && !empty($servicos) && isset($servicos[0]['id_servico']
 <label for="forma_pagamento">Forma de Pagamento</label>
 <select name="forma_pagamento" id="forma_pagamento" required>
     <option value="">Selecione</option>
-    <option value="dinheiro">Dinheiro</option>
-    <option value="debito">Débito</option>
-    <option value="credito">Crédito</option>
-    <option value="pix">Pix</option>
+    <option value="dinheiro" name="dinheiro" id="dinheiro">Dinheiro</option>
+    <option value="debito"  name="debito" id="debito">Débito</option>
+    <option value="credito"  name="credito" id="credito">Crédito</option>
+    <option value="pix"  name="pix" id="pix">Pix</option>
 </select>
 <br>
 <label for="valor_pago">Valor Pago</label>

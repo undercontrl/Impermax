@@ -14,6 +14,7 @@ class PagamentoController{
     public function __construct() {
         $this->db = Database::getInstance();
        $this->pagamento = new pagamento($this->db);
+       $this->usuario = new usuario($this->db);
     }
     // index
     public function index(){
@@ -27,7 +28,9 @@ class PagamentoController{
     }
 
     public function viewCriarPagamentos(){
-        View::render("pagamento/create");
+        $cliente = $this->usuario->buscarUsuarios();
+        // View::render("pagamento/create");
+        View::render("pagamento/create", ["usuarios" => $cliente]);
     }
     public function viewEditarPagamentos(){
         $id=$_GET['id'] ?? null;
