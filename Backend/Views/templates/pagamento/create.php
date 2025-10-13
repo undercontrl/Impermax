@@ -12,9 +12,6 @@
         <?php endforeach; ?>
     </select>
 </div>
-<label for="total">Total</label>
-<input type="decimal" name="total_devedor" id="total_devedor" require>
-<br>
 <label for="total_devedor">Total da Dívida</label>
 <input type="number" step="0.01" name="total_devedor" id="total_devedor" required>
 <br>
@@ -38,5 +35,13 @@
     <option value="aberto">Aberto</option>
 </select>
 <br>
+    <label for="data_pagamento">Data Do Pagamento:</label>
+    <input type="date" id="data_pagamento" name="data_pagamento" required>
+<br>
 <button type="submit">Salvar</button>
 </form>
+
+
+<p style="color:gray; font-size:small;">
+    O valor pago será registrado na coluna correspondente à forma de pagamento escolhida. As demais formas receberão 0,00 automaticamente.
+</p>

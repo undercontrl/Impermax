@@ -14,13 +14,13 @@ class orcamentoValidador{
             $erros[] = "O campo descrição é obrigatório.";
         } 
         if(isset($dados['data_orcamento']) && empty($dados['data_orcamento'])){
-            $erros[] = "O campo serviço é obrigatório.";
+            $erros[] = "O campo data é obrigatório.";
         } 
         if(isset($dados['valor_orcamento']) && empty($dados['data_orcamento'])){
-            $erros[] = "O campo serviço é obrigatório.";
+            $erros[] = "O campo valr é obrigatório.";
         } 
         if(isset($dados['total_item_orcamento']) && empty($dados['total_item_orcamento'])){
-            $erros[] = "O campo serviço é obrigatório.";
+            $erros[] = "O campo é obrigatório.";
         } 
         return $erros;
     }

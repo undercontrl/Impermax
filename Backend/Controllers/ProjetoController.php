@@ -5,13 +5,16 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\projetoValidador;
+use App\Impermax\Core\FileManager;
 
 class ProjetoController{
     public $projeto;
     public $db;
+    public $gerenciarImagem;
     public function __construct() {
         $this->db = Database::getInstance();
        $this->projeto = new Projeto($this->db);
+       $this->gerenciarImagem = new FileManager('upload');
     }
     // index
     public function index(){
@@ -48,7 +51,15 @@ class ProjetoController{
         if(!empty($erros)){
             Redirect::redirecionarComMensagem("projeto/criar", "error", implode("<br>", $erros));
         }
-        if($this->projeto->inserirProjeto($_POST["foto_antes_projeto"], $_POST["foto_depois_projeto"], $_POST["descricao_projeto"])){
+        $foto_antes_projeto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_antes_projeto'], 'projeto');
+        $foto_depois_projeto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_depois_projeto'], 'projeto');
+        if($this->projeto->inserirProjeto(
+            $_POST["foto_antes_projeto"], 
+            $_POST["foto_depois_projeto"], 
+            $_POST["descricao_projeto"],
+            $foto_antes_projeto,
+            $foto_depois_projeto
+            )){
             Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto cadastrado com sucesso!");
         }else{
             Redirect::redirecionarComMensagem("projeto/criar", "error", "Erro ao cadastrar projeto!");

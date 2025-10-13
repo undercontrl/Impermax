@@ -25,6 +25,9 @@ class PagamentoValidador{
         if(isset($dados['status_pagamento']) && empty($dados['status_pagamento'])){
             $erros[] = "O campo status é obrigatório.";
         }
+        if(isset($dados['data_pagamento']) && empty($dados['data_pagamento'])){
+            $erros[] = "O campo data é obrigatório.";
+        }
         return $erros;
     }
 }

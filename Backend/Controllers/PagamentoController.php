@@ -24,7 +24,7 @@ class PagamentoController{
 
     public function viewListarPagamentos(){
         $dados = $this->pagamento->buscarPagamentos();
-        View::render("pagamento/index", ["pagamentos" => $dados]);
+        View::render("pagamento/index", ["Pagamentos" => $dados]);
     }
 
     public function viewCriarPagamentos(){
@@ -53,11 +53,48 @@ class PagamentoController{
         if(!empty($erros)){
             Redirect::redirecionarComMensagem("pagamento/criar", "error", implode("<br>", $erros));
         }
-        if($this->pagamento->inserirpagamento($_POST["id_cliente"], $_POST["total_devedor"], $_POST["dinheiro"],$_POST["credito"], $_POST["debito"],$_POST["pix"], $_POST["status_pagamento"],$_POST["data_pagamento"] )){
-            Redirect::redirecionarComMensagem("pagamento/listar", "success", "Usuário cadastrado com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("pagamento/criar", "error", "Erro ao cadastrar usuário!");
-        }
+    //     if($this->pagamento->inserirpagamento($_POST["id_cliente"], $_POST["total_devedor"], $_POST["dinheiro"] = 0.00,$_POST["credito"] = 0.00, $_POST["debito"] = 0.00,$_POST["pix"] = 00, $_POST["status_pagamento"],$_POST["data_pagamento"]  )){
+    //         Redirect::redirecionarComMensagem("pagamento/listar", "success", "Usuário cadastrado com sucesso!");
+    //     }else{
+    //         Redirect::redirecionarComMensagem("pagamento/criar", "error", "Erro ao cadastrar usuário!");
+    // }
+
+    // Defina os valores das formas de pagamento com base na seleção do usuário
+    $dinheiro = 0.00;
+    $debito = 0.00;
+    $credito = 0.00;
+    $pix = 0.00;
+
+    switch ($_POST['forma_pagamento']) {
+        case 'dinheiro':
+            $dinheiro = $_POST['valor_pago'];
+            break;
+        case 'debito':
+            $debito = $_POST['valor_pago'];
+            break;
+        case 'credito':
+            $credito = $_POST['valor_pago'];
+            break;
+        case 'pix':
+            $pix = $_POST['valor_pago'];
+            break;
+    }
+
+    // Agora use as variáveis ao inserir o pagamento
+    if($this->pagamento->inserirpagamento(
+        $_POST["id_cliente"],
+        $_POST["total_devedor"],
+        $dinheiro,
+        $credito,
+        $debito,
+        $pix,
+        $_POST["status_pagamento"],
+        $_POST["data_pagamento"]
+    )){
+        Redirect::redirecionarComMensagem("pagamento/listar", "success", "Usuário cadastrado com sucesso!");
+    }else{
+        Redirect::redirecionarComMensagem("pagamento/criar", "error", "Erro ao cadastrar usuário!");
+    }
     }
  
     public function atualizarPagamento(){
