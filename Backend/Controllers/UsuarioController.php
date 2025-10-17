@@ -40,16 +40,16 @@ class UsuarioController{
     public function viewCriarUsuarios(){
         View::render("usuario/create");
     }
-    public function viewEditarUsuarios(int $tipo){
-        $dados = $this->usuario->buscarUsuariosPorTipo($tipo);
+    public function viewEditarUsuarios(int $id){
+        $dados = $this->usuario->buscarUsuariosPorID($id);
         foreach($dados as $usuario){
             $dados = $usuario;
+
 
         }
         View::render("usuario/edit", ["usuario"=>$dados]);
     }
-
-
+    
     public function viewExcluirUsuarios(){
         View::render("usuario/delete");
     }

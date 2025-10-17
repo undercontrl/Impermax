@@ -33,6 +33,13 @@ class Usuario{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+      function buscarUsuariosPorID(int $id){
+        $sql = 'SELECT * FROM tbl_usuario where id_usuario = :id_usuario and excluido_em IS NULL';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_usuario', $id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     function buscarUsuariosPorTipo($tipo){
         $sql = 'SELECT * FROM tbl_usuario where tipo_usuario = :tipo and excluido_em IS NULL';
