@@ -1,7 +1,7 @@
 <?php
 namespace App\Impermax\Models;
 use PDO;
-class Servicos{
+class Servico{
     private $id_servico;
     private $nome_servico;
     private $descricao_servico;

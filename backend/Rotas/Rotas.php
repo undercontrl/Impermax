@@ -43,6 +43,13 @@ class Rotas
         "/endereco/criar" => "EnderecoController@viewCriarEndereco",
         "/endereco/editar/{id}" => "EnderecoController@viewEditarEndereco",
         "/endereco/excluir/{id}" => "EnderecoController@viewExcluirEndereco",
+        // itens de agendamento
+        "/item_agendamento" => "ItemAgendamentoController@index",
+        "/item_agendamento/listar" => "ItemAgendamentoController@viewListarItemAgendamento",
+        "/item_agendamento/criar" => "ItemAgendamentoController@viewCriarItemAgendamento",
+        "/item_agendamento/editar/{id}" => "ItemAgendamentoController@viewEditarItemAgendamento",
+        "/item_agendamento/excluir/{id}" => "ItemAgendamentoController@viewExcluirItemAgendamento",
+        "/item_agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "ItemAgendamentoController@relatorioItemAgendamento",        
     ],
     "POST" => [
         //usuarios
@@ -59,12 +66,17 @@ class Rotas
         "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
         // contatos
         "/contato/salvar" => "ContatoController@salvarContato",
-        "contato/atualizar/{id}" => "ContatoController@atualizarContato",
+        "/contato/atualizar/{id}" => "ContatoController@atualizarContato",
         "/contato/deletar/{id}" => "ContatoController@deletarContato",
         // endereços
-        "endereco/salvar" => "EnderecoController@salvarEndereco",
-        "endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",
-        "endereco/deletar/{id}" => "EnderecoController@deletarEndereco",
+        "/endereco/salvar" => "EnderecoController@salvarEndereco",
+        "/endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",
+        "/endereco/deletar/{id}" => "EnderecoController@deletarEndereco",
+        // itens de agendamento
+        "/tem_agendamento/salvar" => "ItemAgendamentoController@salvarItemAgendamento",
+        "/item_agendamento/atualizar/{id}" => "ItemAgendamentoController@atualizarItemAgendamento",
+        "/item_agendamento/deletar/{id}" => "ItemAgendamentoController@deletarItemAgendamento",
+
 
     ]
         ];
