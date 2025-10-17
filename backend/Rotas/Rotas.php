@@ -37,6 +37,12 @@ class Rotas
         "/contato/editar/{id}" => "ContatoController@viewEditarContato",
         "/contato/excluir/{id}" => "ContatoController@viewExcluirContato",
         "/contato/{id}/relatorio/{dataInicial}/{dataFinal}" => "ContatoController@relatorioContato",
+        // enderecos
+        "/enderecos" => "EnderecoController@index",
+        "/endereco/listar" => "EnderecoController@viewListarEnderecos",
+        "/endereco/criar" => "EnderecoController@viewCriarEndereco",
+        "/endereco/editar/{id}" => "EnderecoController@viewEditarEndereco",
+        "/endereco/excluir/{id}" => "EnderecoController@viewExcluirEndereco",
     ],
     "POST" => [
         //usuarios
@@ -55,6 +61,10 @@ class Rotas
         "/contato/salvar" => "ContatoController@salvarContato",
         "contato/atualizar/{id}" => "ContatoController@atualizarContato",
         "/contato/deletar/{id}" => "ContatoController@deletarContato",
+        // endereços
+        "endereco/salvar" => "EnderecoController@salvarEndereco",
+        "endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",
+        "endereco/deletar/{id}" => "EnderecoController@deletarEndereco",
 
     ]
         ];
