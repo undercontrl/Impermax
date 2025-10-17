@@ -56,9 +56,9 @@ class ServicoController{
             $_POST["nome_servico"], 
             $_POST["descricao_servico"], 
             $_POST["valor_base_servico"], 
-            $_POST["foto_servico"],  
-            "ativo",
-            $foto_servico
+            $foto_servico,  
+            "ativo"
+            
             )){
             Redirect::redirecionarComMensagem("servico/listar", "success", "Usuário cadastrado com sucesso!");
         }else{

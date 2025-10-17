@@ -15,8 +15,8 @@
         <?php foreach($Projetos as $projeto): ?>
         <tr>
             <th scope="row"><?= htmlspecialchars($projeto['id_projeto']) ?></th>
-            <td><?= htmlspecialchars($projeto['foto_antes_projeto']) ?></td>
-            <td><?= htmlspecialchars($projeto['foto_depois_projeto']) ?></td>
+            <td><img src="<?php echo "/backend/upload/". htmlspecialchars($projeto['foto_antes_projeto']); ?>" alt="imagem_antes_projeto" width="100px"></td>
+            <td><img src="<?php echo "/backend/upload/". htmlspecialchars($projeto['foto_depois_projeto']); ?>" alt="imagem_depois_projeto" width="100px"></td>
             <td><?= htmlspecialchars($projeto['descricao_projeto']) ?></td>
             <td>
                 <a href="/backend/projeto/editar?id=<?= htmlspecialchars($projeto['id_projeto']) ?>" class="btn btn-primary btn-sm">Editar</a>

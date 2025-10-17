@@ -1,6 +1,4 @@
-<div>Sou o create</div>
 <form action="/backend/pagamento/salvar" method="post">
-
 <div>
     <label for="id_cliente">Selecione o Cliente</label>
     <select name="id_cliente" id="id_cliente" required>
@@ -11,6 +9,7 @@
             </option>
         <?php endforeach; ?>
     </select>
+
 </div>
 <label for="total_devedor">Total da Dívida</label>
 <input type="number" step="0.01" name="total_devedor" id="total_devedor" required>

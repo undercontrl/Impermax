@@ -111,4 +111,12 @@ class Usuario{
             return false;
         }
     }
+
+    public function getClientes(): array {
+    $stmt = $this->db->prepare(
+        "SELECT id_usuario, nome_usuario FROM tbl_usuario WHERE tipo_usuario = :tipo AND excluido_em IS NULL ORDER BY nome_usuario"
+    );
+    $stmt->execute([':tipo' => 'cliente']);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }

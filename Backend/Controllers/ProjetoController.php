@@ -54,11 +54,9 @@ class ProjetoController{
         $foto_antes_projeto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_antes_projeto'], 'projeto');
         $foto_depois_projeto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_depois_projeto'], 'projeto');
         if($this->projeto->inserirProjeto(
-            $_POST["foto_antes_projeto"], 
-            $_POST["foto_depois_projeto"], 
-            $_POST["descricao_projeto"],
-            $foto_antes_projeto,
-            $foto_depois_projeto
+            $foto_antes_projeto, 
+            $foto_depois_projeto, 
+            $_POST["descricao_projeto"]
             )){
             Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto cadastrado com sucesso!");
         }else{

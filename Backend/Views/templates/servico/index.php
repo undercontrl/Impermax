@@ -20,7 +20,7 @@
             <td><?php echo htmlspecialchars($servico['nome_servico']); ?></td>
             <td><?php echo htmlspecialchars($servico['descricao_servico']); ?></td>
             <td><?php echo htmlspecialchars($servico['valor_base_servico']); ?></td>
-            <td><?php echo htmlspecialchars($servico['foto_servico']); ?></td>
+            <td><img src="<?php echo "/backend/upload/". htmlspecialchars($servico['foto_servico']); ?>" alt="imagem_servico" width="100px"></td>
             <td><?php echo htmlspecialchars($servico['status_servico']); ?></td>
             <td>
                 

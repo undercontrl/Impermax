@@ -43,15 +43,15 @@ class Servico{
     }
 
     // metodo de inserir usuario
-    function inserirServico($nome, $descricao, $valor, $foto, $status){
+    function inserirServico($nome, $descricao, $valor, $foto_servico, $status){
         $sql = 'INSERT INTO tbl_servico (nome_servico, descricao_servico, 
         valor_base_servico, foto_servico , status_servico )
-             VALUES (:nome, :descricao, :valor, :foto, :status)';
+             VALUES (:nome, :descricao, :valor, :foto_servico, :status)';
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);
-        $stmt->bindParam(':foto', $foto);
+        $stmt->bindParam(':foto_servico', $foto_servico);
         $stmt->bindParam(':status', $status);
         if($stmt->execute()){
             return $this->db->lastInsertId();
@@ -61,12 +61,12 @@ class Servico{
     }
 
     // metodo de atualizar o usuario
-    function atualizaServico($nome, $descricao, $valor, $foto, $status){
+    function atualizaServico($nome, $descricao, $valor, $foto_servico, $status){
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_servico SET nome_servico = :nome,
         descricao_servico = :descricao,
         valor_base_servico = :valor,
-        foto_servico = :foto,
+        foto_servico = :foto_servico,
         staus_servico = :status,
         atualizado_em = :atual
         Where id_servico = :id";
@@ -74,7 +74,7 @@ class Servico{
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);
-        $stmt->bindParam(':foto', $foto);
+        $stmt->bindParam(':foto_servico', $foto_servico);
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':atual', $dataatual);
         if($stmt->execute()){
