@@ -1,7 +1,7 @@
 <?php
 namespace App\Impermax\Models;
 use PDO;
-class avaliacao{
+class Avaliacao{
     private $id_avaliacao;
     private $id_cliente;
     private $descricao_avaliacao;
@@ -39,13 +39,16 @@ class avaliacao{
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     //método de buscar avaliação por id
-    function buscarAvaliacaoPorId($id_cliente){
-        $sql = 'SELECT * FROM tbl_avaliacao WHERE id_avaliacao = :id AND excluido_em IS NULL';
+    function buscarAvaliacaoPorId($id_avaliacao){
+        $sql = 'SELECT av.*, usu.nome_usuario 
+                FROM tbl_avaliacao AS av
+                INNER JOIN tbl_usuario AS usu ON av.id_cliente = usu.id_usuario
+                WHERE av.id_avaliacao = :id AND av.excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
-        $statement->bindParam(':id', $id_cliente);
+        $statement->bindParam(':id', $id_avaliacao);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
-    }
+    }    
     //método de inserir avaliação
     function inserirAvaliacao($id_cliente, $descricao_avaliacao, $nota_avaliacao, $status_avaliacao){
         $dataAtual = date('Y-m-d H:i:s');
@@ -64,12 +67,13 @@ class avaliacao{
         }
     }
     //método de atualizar a avaliação
-    function atualizarAvaliacao($id_cliente, $descricao_avaliacao, $nota_avaliacao, $status_avaliacao){
+    function atualizarAvaliacao($id_avaliacao, $id_cliente, $descricao_avaliacao, $nota_avaliacao, $status_avaliacao){
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_avaliacao SET id_cliente = :id_cliente, descricao_avaliacao = :descricao_avaliacao, 
         nota_avaliacao = :nota_avaliacao, status_avaliacao = :status_avaliacao, atualizado_em = :atualizado 
         WHERE id_avaliacao = :id_avaliacao';
         $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id_avaliacao', $id_avaliacao);
         $statement->bindParam(':id_cliente', $id_cliente);
         $statement->bindParam(':descricao_avaliacao', $descricao_avaliacao);
         $statement->bindParam(':nota_avaliacao', $nota_avaliacao);

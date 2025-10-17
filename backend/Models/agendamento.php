@@ -1,7 +1,7 @@
 <?php
 namespace App\Impermax\Models;
 use PDO;
-class agendamento{
+class Agendamento{
     private $id_agendamento;
     private $id_cliente;
     private $data_solicitada;
@@ -72,12 +72,13 @@ class agendamento{
         }
     }
     //método de atualizar o agendamento
-    function atualizarAgendamento($id_cliente, $data_solicitada, $total_agendamento, $status_agendamento){
+    function atualizarAgendamento($id_agendamento, $id_cliente, $data_solicitada, $total_agendamento, $status_agendamento){
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_agendamento SET id_cliente = :id_cliente, data_solicitada = :data_solicitada, 
         total_agendamento = :total_agendamento, status_agendamento = :status_agendamento, atualizado_em = :atualizado 
         WHERE id_agendamento = :id_agendamento';
         $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id_agendamento', $id_agendamento);
         $statement->bindParam(':id_cliente', $id_cliente);
         $statement->bindParam(':data_solicitada', $data_solicitada);
         $statement->bindParam(':total_agendamento', $total_agendamento);
