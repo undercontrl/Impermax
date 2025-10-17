@@ -20,11 +20,11 @@
             <td><?php echo htmlspecialchars($servico['nome_servico']); ?></td>
             <td><?php echo htmlspecialchars($servico['descricao_servico']); ?></td>
             <td><?php echo htmlspecialchars($servico['valor_base_servico']); ?></td>
-            <td><?php echo htmlspecialchars($servico['foto_servico']); ?></td>
+            <td><img src="<?php echo "/backend/upload/". htmlspecialchars($servico['foto_servico']); ?>" alt="imagem_servico" width="100px"></td>
             <td><?php echo htmlspecialchars($servico['status_servico']); ?></td>
             <td>
                 
-                <a href="/backend/servico/editar?id=<?php echo $servico['id_servico']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                <a href="/backend/servico/editar/<?php echo $servico['id_servico']; ?>" class="btn btn-primary btn-sm">Editar</a>
 
                 <a href="/backend/servico/excluir/<?php echo $servico['id_servico']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este serviço?');">Excluir</a>
             </td>

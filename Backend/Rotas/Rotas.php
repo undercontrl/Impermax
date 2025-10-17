@@ -1,78 +1,74 @@
 <?php
-
 namespace App\Impermax\Rotas;
 
 class Rotas
 {
-    public static function get()
+    public static function get(): array
     {
-    return [
-    "GET" => [
-       // O caminho da url   O nome do controller que e o metodo do controller
-       "/usuario" => "UsuarioController@index",
-       "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
-       "/usuario/listar" => "UsuarioController@viewListarUsuarios",
-        "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
-        "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
-        "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
+        return [
+            "GET" => [
+                "/usuario"                     => "UsuarioController@index",
+                "/usuario/criar"               => "UsuarioController@viewCriarUsuarios",
+                "/usuario/listar"              => "UsuarioController@viewListarUsuarios",
+                "/usuario/editar/{id}"         => "UsuarioController@viewEditarUsuarios",
+                "/usuario/excluir/{id}"        => "UsuarioController@viewExcluirUsuarios",
+                "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
 
-        "/servico" => "ServicoController@index",
-       "/servico/criar" => "servicoController@viewCriarServicos",
-       "/servico/listar" => "servicoController@viewListarServicos",
-        "/servico/editar/{id}" => "servicoController@viewEditarServicos",
-        "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
+                "/servico"                     => "ServicoController@index",
+                "/servico/criar"               => "ServicoController@viewCriarServicos",
+                "/servico/listar"              => "ServicoController@viewListarServicos",
+                "/servico/editar/{id}"         => "ServicoController@viewEditarServicos",
+                "/servico/excluir/{id}"        => "ServicoController@viewExcluirServicos",
 
-        "/projeto" => "projetoController@index",
-       "/projeto/criar" => "projetoController@viewCriarProjetos",
-       "/projeto/listar" => "projetoController@viewListarProjetos",
-        "/projeto/editar" => "projetoController@viewEditarProjetos",
-        "/projeto/excluir" => "projetoController@viewExcluirProjetos",
+                "/projeto"                     => "ProjetoController@index",
+                "/projeto/criar"               => "ProjetoController@viewCriarProjetos",
+                "/projeto/listar"              => "ProjetoController@viewListarProjetos",
+                "/projeto/editar/{id}"         => "ProjetoController@viewEditarProjetos",
+                "/projeto/excluir/{id}"        => "ProjetoController@viewExcluirProjetos",
 
-        "/pagamento" => "pagamentoController@index",
-       "/pagamento/criar" => "pagamentoController@viewCriarPagamentos",
-       "/pagamento/listar" => "pagamentoController@viewListarPagamentos",
-        "/pagamento/editar" => "pagamentoController@viewEditarPagamentos",
-        "/pagamento/excluir" => "pagamentoController@viewExcluirPagamentos",
+                "/pagamento"                   => "PagamentoController@index",
+                "/pagamento/criar"             => "PagamentoController@viewCriarPagamentos",
+                "/pagamento/listar"            => "PagamentoController@viewListarPagamentos",
+                "/pagamento/editar/{id}"       => "PagamentoController@viewEditarPagamentos",
+                "/pagamento/excluir/{id}"      => "PagamentoController@viewExcluirPagamentos",
 
-        "/orcamento" => "orcamentoController@index",
-       "/orcamento/criar" => "orcamentoController@viewCriarOrcamentos",
-       "/orcamento/listar" => "orcamentoController@viewListarOrcamentos",
-        "/orcamento/editar" => "orcamentoController@viewEditarOrcamentos",
-        "/orcamento/excluir" => "orcamentoController@viewExcluirOrcamentos",
+                "/orcamento"                   => "OrcamentoController@index",
+                "/orcamento/criar"             => "OrcamentoController@viewCriarOrcamentos",
+                "/orcamento/listar"            => "OrcamentoController@viewListarOrcamentos",
+                "/orcamento/editar/{id}"       => "OrcamentoController@viewEditarOrcamentos",
+                "/orcamento/excluir/{id}"      => "OrcamentoController@viewExcluirOrcamentos",
 
-        "/material" => "materialController@index",
-       "/material/criar" => "materialController@viewCriarMateriais",
-       "/material/listar" => "materialController@viewListarMateriais",
-        "/material/editar" => "materialController@viewEditarMateriais",
-        "/material/excluir" => "materialController@viewExcluirMateriais",
-        
-    ],
-    "POST" => [
-        "/usuario/salvar" => "UsuarioController@salvarUsuario",
-        "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
-        "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
+                "/material"                    => "MaterialController@index",
+                "/material/criar"              => "MaterialController@viewCriarMateriais",
+                "/material/listar"             => "MaterialController@viewListarMateriais",
+                "/material/editar/{id}"        => "MaterialController@viewEditarMateriais",
+                "/material/excluir/{id}"       => "MaterialController@viewExcluirMateriais",
+            ],
+            "POST" => [
+                "/usuario/salvar"              => "UsuarioController@salvarUsuario",
+                "/usuario/atualizar/{id}"      => "UsuarioController@atualizarUsuario",
+                "/usuario/deletar/{id}"        => "UsuarioController@deletarUsuario",
 
-        "/servico/salvar" => "ServicoController@salvarServico",
-        "/servico/atualizar/{id}" => "ServicoController@atualizarServico",
-        "/servico/deletar/{id}" => "ServicoController@deletarServico",
+                "/servico/salvar"              => "ServicoController@salvarServico",
+                "/servico/atualizar/{id}"      => "ServicoController@atualizarServico",
+                "/servico/deletar/{id}"        => "ServicoController@deletarServico",
 
-        "/projeto/salvar" => "projetoController@salvarProjeto",
-        "/projeto/atualizar" => "projetoController@atualizarProjeto",
-        "/projeto/deletar" => "projetoController@deletarProjeto",
-        
-        "/pagamento/salvar" => "pagamentoController@salvarPagamento",
-        "/pagamento/atualizar" => "pagamentoController@atualizarPagamento",
-        "/pagamento/deletar" => "pagamentoController@deletarPagamento",
+                "/projeto/salvar"              => "ProjetoController@salvarProjeto",
+                "/projeto/atualizar/{id}"      => "ProjetoController@atualizarProjeto",
+                "/projeto/deletar/{id}"        => "ProjetoController@deletarProjeto",
 
-        "/orcamento/salvar" => "orcamentoController@salvarOrcamento",
-        "/orcamento/atualizar" => "orcamentoController@atualizarOrcamento",
-        "/orcamento/deletar" => "orcamentoController@deletarOrcamento",
+                "/pagamento/salvar"            => "PagamentoController@salvarPagamento",
+                "/pagamento/atualizar/{id}"    => "PagamentoController@atualizarPagamento",
+                "/pagamento/deletar/{id}"      => "PagamentoController@deletarPagamento",
 
-        "/material/salvar" => "materialController@salvarMaterial",
-        "/material/atualizar" => "materialController@atualizarMaterial",
-        "/material/deletar" => "materialController@deletarMaterial",
-        
-    ]
+                "/orcamento/salvar"            => "OrcamentoController@salvarOrcamento",
+                "/orcamento/atualizar/{id}"    => "OrcamentoController@atualizarOrcamento",
+                "/orcamento/deletar/{id}"      => "OrcamentoController@deletarOrcamento",
+
+                "/material/salvar"             => "MaterialController@salvarMaterial",
+                "/material/atualizar/{id}"     => "MaterialController@atualizarMaterial",
+                "/material/deletar/{id}"       => "MaterialController@deletarMaterial",
+            ],
         ];
     }
 }
