@@ -30,21 +30,21 @@ class ProjetoController{
     public function viewCriarProjetos(){
         View::render("projeto/create");
     }
-   public function viewEditarProjetos(){
-    $id = $_GET['id'] ?? null;
+  public function viewEditarProjetos($id = null){
 
-    if (!$id) {
+    if(!$id){
         Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do projeto não fornecido.");
     }
 
     $projeto = $this->projeto->buscarProjetoPorId($id);
 
-    if (!$projeto) {
+    if(!$projeto){
         Redirect::redirecionarComMensagem("projeto/listar", "error", "Projeto não encontrado.");
     }
 
     View::render("projeto/edit", ["projeto" => $projeto]);
 }
+
 
 
 public function atualizarProjeto(){
