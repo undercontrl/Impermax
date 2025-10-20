@@ -7,7 +7,6 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ContatoValidador;
 
-
 class ContatoController
 {
     private $contato;

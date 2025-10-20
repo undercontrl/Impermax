@@ -1,25 +1,33 @@
-<h3>Novo Contato</h3>
+<div class="container mt-4">
+    <h2>Novo Contato</h2>
+    <form action="/backend/contato/salvar" method="post" class="mt-3">
 
-<form action="/backend/contato/salvar" method="POST">
-    <label for="nome_contato">Nome:</label>
-    <input type="text" name="nome_contato" id="nome_contato" required>
-    <br>
+        <div class="mb-3">
+            <label for="nome_contato" class="form-label">Nome:</label>
+            <input type="text" id="nome_contato" name="nome_contato" class="form-control" required>
+        </div>
 
-    <label for="telefone_contato">Telefone:</label>
-    <input type="text" name="telefone_contato" id="telefone_contato">
-    <br>
+        <div class="mb-3">
+            <label for="telefone_contato" class="form-label">Telefone:</label>
+            <input type="text" id="telefone_contato" name="telefone_contato" class="form-control" placeholder="(xx) xxxxx-xxxx" required>
+        </div>
 
-    <label for="email_contato">E-mail:</label>
-    <input type="email" name="email_contato" id="email_contato" required>
-    <br>
+        <div class="mb-3">
+            <label for="email_contato" class="form-label">Email:</label>
+            <input type="email" id="email_contato" name="email_contato" class="form-control" required>
+        </div>
 
-    <label for="assunto_contato">Assunto:</label>
-    <textarea name="assunto_contato" id="assunto_contato" required></textarea>
-    <br>
+        <div class="mb-3">
+            <label for="assunto_contato" class="form-label">Assunto:</label>
+            <textarea id="assunto_contato" name="assunto_contato" class="form-control" rows="3" required></textarea>
+        </div>
 
-    <label for="data_envio">Data de Envio:</label>
-    <input type="datetime-local" name="data_envio" id="data_envio" value="<?= date('Y-m-d\TH:i'); ?>">
-    <br>
+        <div class="mb-3">
+            <label for="data_envio" class="form-label">Data de Envio:</label>
+            <input type="datetime-local" id="data_envio" name="data_envio" class="form-control">
+        </div>
 
-    <button type="submit" class="btn btn-primary">Enviar</button>
-</form>
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a href="/backend/contato/listar" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>

@@ -1,28 +1,41 @@
-<a href="/backend/agendamento/criar">Cadastrar Agendamento</a>
-<div>Lista de agendamentos</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Data</th>
-            <th scope="col">Status</th>
-            <th scope="col">Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($agendamentos as $agendamento): ?>
-        <tr>
-            <th scope="row"><?php echo htmlspecialchars($agendamento['id_agendamento']); ?></th>
-            <td><?php echo htmlspecialchars($agendamento['nome_usuario']); ?></td>
-            <td><?php echo htmlspecialchars($agendamento['data_solicitada']); ?></td>
-            <td><?php echo htmlspecialchars($agendamento['status_agendamento']); ?></td>
-            <td>
-               
-                <a href="/backend/agendamento/editar/{id}=<?php echo $agendamento['id_agendamento']; ?>" class="btn btn-primary btn-sm">Editar</a>
- 
-                <a href="/agendamento/excluir/<?php echo $agendamento['id_agendamento']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este agendamento?');">Excluir</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Lista de Agendamentos</h2>
+        <a href="/backend/agendamento/criar" class="btn btn-success">Novo Agendamento</a>
+    </div>
+
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Data Solicitada</th>
+                <th>Total (R$)</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($agendamentos)): ?>
+                <?php foreach ($agendamentos as $agendamento): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($agendamento['id_agendamento']) ?></td>
+                        <td><?= htmlspecialchars($agendamento['nome_cliente'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($agendamento['data_solicitada']) ?></td>
+                        <td><?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?></td>
+                        <td><?= htmlspecialchars($agendamento['status_agendamento']) ?></td>
+                        <td>
+                            <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" class="btn btn-sm btn-primary">Editar</a>
+                            <a href="/backend/agendamento/excluir/<?= $agendamento['id_agendamento'] ?>" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Tem certeza que deseja excluir este agendamento?');">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" class="text-center text-muted">Nenhum agendamento encontrado.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>

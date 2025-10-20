@@ -1,39 +1,53 @@
-<h3>Editar Contato</h3>
+<div class="container mt-4">
+    <h2>Editar Contato</h2>
+    <form action="/backend/contato/atualizar/<?= htmlspecialchars($contato['id_contato']) ?>" method="post" class="mt-3">
+        
+        <input type="hidden" name="id_contato" value="<?= htmlspecialchars($contato['id_contato']) ?>">
 
-<form action="/backend/contato/atualizar/<?= $contato['id_contato']; ?>" method="POST">
-    <input type="hidden" name="id_contato" value="<?= $contato['id_contato']; ?>">
+        <div class="mb-3">
+            <label for="nome_contato" class="form-label">Nome:</label>
+            <input type="text" id="nome_contato" name="nome_contato" class="form-control" 
+                   value="<?= htmlspecialchars($contato['nome_contato']) ?>" required>
+        </div>
 
-    <label for="nome_contato">Nome:</label>
-    <input type="text" name="nome_contato" id="nome_contato"
-           value="<?= htmlspecialchars($contato['nome_contato']); ?>" required>
-    <br>
+        <div class="mb-3">
+            <label for="telefone_contato" class="form-label">Telefone:</label>
+            <input type="text" id="telefone_contato" name="telefone_contato" class="form-control"
+                   value="<?= htmlspecialchars($contato['telefone_contato']) ?>" required>
+        </div>
 
-    <label for="telefone_contato">Telefone:</label>
-    <input type="text" name="telefone_contato" id="telefone_contato"
-           value="<?= htmlspecialchars($contato['telefone_contato']); ?>">
-    <br>
+        <div class="mb-3">
+            <label for="email_contato" class="form-label">Email:</label>
+            <input type="email" id="email_contato" name="email_contato" class="form-control"
+                   value="<?= htmlspecialchars($contato['email_contato']) ?>" required>
+        </div>
 
-    <label for="email_contato">E-mail:</label>
-    <input type="email" name="email_contato" id="email_contato"
-           value="<?= htmlspecialchars($contato['email_contato']); ?>" required>
-    <br>
+        <div class="mb-3">
+            <label for="assunto_contato" class="form-label">Assunto:</label>
+            <textarea id="assunto_contato" name="assunto_contato" class="form-control" rows="3" required><?= htmlspecialchars($contato['assunto_contato']) ?></textarea>
+        </div>
 
-    <label for="assunto_contato">Assunto:</label>
-    <textarea name="assunto_contato" id="assunto_contato" required><?= htmlspecialchars($contato['assunto_contato']); ?></textarea>
-    <br>
+        <div class="mb-3">
+            <label for="status_contato" class="form-label">Status:</label>
+            <select id="status_contato" name="status_contato" class="form-select" required>
+                <?php
+                $status = ["pendente", "respondido", "resolvido"];
+                foreach ($status as $st):
+                ?>
+                    <option value="<?= $st ?>" <?= ($st == $contato['status_contato']) ? 'selected' : '' ?>>
+                        <?= ucfirst($st) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-    <label for="status_contato">Status:</label>
-    <select name="status_contato" id="status_contato" required>
-        <option value="pendente" <?= $contato['status_contato'] == 'pendente' ? 'selected' : ''; ?>>Pendente</option>
-        <option value="respondido" <?= $contato['status_contato'] == 'respondido' ? 'selected' : ''; ?>>Respondido</option>
-    </select>
-    <br>
+        <div class="mb-3">
+            <label for="data_envio" class="form-label">Data de Envio:</label>
+            <input type="datetime-local" id="data_envio" name="data_envio" class="form-control"
+                   value="<?= date('Y-m-d\TH:i', strtotime($contato['data_envio'])) ?>">
+        </div>
 
-    <label for="data_envio">Data de Envio:</label>
-    <input type="datetime-local" name="data_envio" id="data_envio"
-           value="<?= date('Y-m-d\TH:i', strtotime($contato['data_envio'])); ?>">
-    <br>
-
-    <button type="submit" class="btn btn-primary">Atualizar</button>
-    <a href="/backend/contato/listar" class="btn btn-secondary">Cancelar</a>
-</form>
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <a href="/backend/contato/listar" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

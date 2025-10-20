@@ -1,51 +1,48 @@
-<div>Sou o edit</div>
-<form action="/backend/agendamento/atualizar<?php $clientes = $usuarios; echo $agendamento['id_agendamento'];?>" method="post"
-enctype="multipart/form-data">
-<?php ?>
-<div>
-    <label for="nome_cliente">Nome do Cliente:</label>
-    <input type="text" id="nome_cliente" name="nome_cliente" list="clientes" required>
-    <datalist id="clientes">
-        <?php foreach ($clientes as $cliente): ?>
-            <option value="<?= htmlspecialchars($cliente['nome_usuario']) ?>" data-id="<?= $cliente['id_usuario'] ?>"></option>
-        <?php endforeach; ?>
-    </datalist>
-</div>
+<div class="container mt-4">
+    <h2>Editar Agendamento</h2>
+    <form action="/backend/agendamento/atualizar/<?= htmlspecialchars($agendamento['id_agendamento']) ?>" method="post" class="mt-3">
 
-<script>
-    document.getElementById('nome_cliente').addEventListener('change', function () {
-        const selectedOption = Array.from(document.querySelectorAll('#clientes option')).find(option => option.value === this.value);
-        if (selectedOption) {
-            document.getElementById('id_cliente').value = selectedOption.getAttribute('data-id');
-        } else {
-            document.getElementById('id_cliente').value = '';
-        }
-    });
-</script>
-<form action="/backend/agendamento/salvar" method="POST">
-        <script>
-        document.getElementById('id_agendamento').value = <?= $id_agendamento ?>;
-    </script>
-    <div>
-        <label for="id_cliente">Cliente:</label>
-        <input type="number" id="id_cliente" name="id_cliente" required>
-    </div>
-    <div>
-        <label for="data_solicitada">Data Solicitada:</label>
-        <input type="date" id="data_solicitada" name="data_solicitada" required>
-    </div>
-    <div>
-        <label for="total_agendamento">Total do Agendamento:</label>
-        <input type="number" step="0.01" id="total_agendamento" name="total_agendamento" required>
-    </div>
-    <div>
-        <label for="status_agendamento">Status do Agendamento:</label>
-        <select id="status_agendamento" name="status_agendamento" required>
-            <option value="pendente">Pendente</option>
-            <option value="agendada">Agendada</option>
-            <option value="cancelada">Cancelada</option>
-            <option value="realizada">Realizada</option>
-        </select>
-    </div>
-    <button type="submit">Salvar</button>
-</form>
+        <input type="hidden" name="id_agendamento" value="<?= htmlspecialchars($agendamento['id_agendamento']) ?>">
+
+        <div class="mb-3">
+            <label for="id_cliente" class="form-label">Cliente:</label>
+            <select id="id_cliente" name="id_cliente" class="form-select" required>
+                <?php foreach ($usuarios as $usuario): ?>
+                    <option value="<?= htmlspecialchars($usuario['id_usuario']) ?>"
+                        <?= ($usuario['id_usuario'] == $agendamento['id_cliente']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($usuario['nome_usuario']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="data_solicitada" class="form-label">Data Solicitada:</label>
+            <input type="date" id="data_solicitada" name="data_solicitada" class="form-control"
+                   value="<?= htmlspecialchars($agendamento['data_solicitada']) ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="total_agendamento" class="form-label">Total (R$):</label>
+            <input type="number" id="total_agendamento" name="total_agendamento" class="form-control" step="0.01"
+                   value="<?= htmlspecialchars($agendamento['total_agendamento']) ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="status_agendamento" class="form-label">Status:</label>
+            <select id="status_agendamento" name="status_agendamento" class="form-select" required>
+                <?php
+                    $status = ["pendente", "confirmado", "cancelado", "finalizado"];
+                    foreach ($status as $st):
+                ?>
+                    <option value="<?= $st ?>" <?= ($st == $agendamento['status_agendamento']) ? 'selected' : '' ?>>
+                        <?= ucfirst($st) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <a href="/backend/agendamento/listar" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
