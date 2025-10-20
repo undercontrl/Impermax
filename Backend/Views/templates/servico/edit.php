@@ -1,30 +1,30 @@
-<div>Sou o edit</div>
-<form method="POST" action="/backend/usuario/atualizar">
-    <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($usuario['id_usuario']); ?>">
-    <div class="mb-3">
-        <label for="nome_usuario" class="form-label">Nome</label>
-        <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" value="<?php echo htmlspecialchars($usuario['nome_usuario']); ?>" required>
-    </div>
-    <div class="mb-3">
-        <label for="email_usuario" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email_usuario" name="email_usuario" value="<?php echo htmlspecialchars($usuario['email_usuario']); ?>" required>
-    </div>
-    <div class="mb-3">
-        <label for="senha_usuario" class="form-label">Senha</label>
-        <input type="password" class="form-control" id="senha_usuario" name="senha_usuario" required>
-    </div>
-    <div class="mb-3">
-        <label for="tipo_usuario" class="form-label">Tipo</label>
-        <select class="form-select" id="tipo_usuario" name="tipo_usuario" required>
-            <option value="admin" <?php if($usuario['tipo_usuario'] == 'admin') echo 'selected'; ?>>Admin</option>
-            <option value="user" <?php if($usuario['tipo_usuario'] == 'user') echo 'selected'; ?>>User</option>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="status_usuario" class="form-label">Status</label>
-        <select class="form-select" id="status_usuario" name="status_usuario" required>
-            <option value="ativo" <?php if($usuario['status_usuario'] == 'ativo') echo 'selected'; ?>>Ativo</option>
-            <option value="inativo" <?php if($usuario['status_usuario'] == 'inativo') echo 'selected'; ?>>Inativo</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Atualizar</button>
+<h2>Editar Serviço</h2>
+<form action="/backend/servico/atualizar/<?php echo htmlspecialchars($servico['id_servico']); ?>" method="post" enctype="multipart/form-data">
+    <label>Nome:</label>
+    <input type="text" name="nome_servico" value="<?php echo htmlspecialchars($servico['nome_servico']); ?>" required>
+    <br>
+
+    <label>Descrição:</label>
+    <input type="text" name="descricao_servico" value="<?php echo htmlspecialchars($servico['descricao_servico']); ?>" required>
+    <br>
+
+    <label>Valor Base:</label>
+    <input type="number" step="0.01" name="valor_base_servico" value="<?php echo htmlspecialchars($servico['valor_base_servico']); ?>" required>
+    <br>
+
+    <label>Foto Atual:</label><br>
+    <img src="/backend/upload/<?php echo htmlspecialchars($servico['foto_servico']); ?>" width="150"><br>
+    <input type="hidden" name="foto_servico_atual" value="<?php echo htmlspecialchars($servico['foto_servico']); ?>">
+    <label>Nova Foto:</label>
+    <input type="file" name="foto_servico" accept="image/*">
+    <br>
+
+    <label>Status:</label>
+    <select name="status_servico">
+        <option value="ativo" <?php echo ($servico['status_servico'] === 'ativo') ? 'selected' : ''; ?>>Ativo</option>
+        <option value="inativo" <?php echo ($servico['status_servico'] === 'inativo') ? 'selected' : ''; ?>>Inativo</option>
+    </select>
+    <br>
+
+    <button type="submit">Salvar Alterações</button>
+</form>

@@ -24,7 +24,7 @@
             <td><?php echo htmlspecialchars($servico['status_servico']); ?></td>
             <td>
                 
-                <a href="/backend/servico/editar?id=<?php echo $servico['id_servico']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                <a href="/backend/servico/editar/<?php echo $servico['id_servico']; ?>" class="btn btn-primary btn-sm">Editar</a>
 
                 <a href="/backend/servico/excluir/<?php echo $servico['id_servico']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este serviço?');">Excluir</a>
             </td>

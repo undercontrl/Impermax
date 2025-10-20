@@ -32,6 +32,13 @@ class Projeto{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+      public function buscarPorId($id){
+        $stmt = $this->db->prepare("SELECT * FROM tbl_projeto WHERE id_projeto = :id AND excluido_em IS NULL");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
  
 
     // metodo de inserir usuario
@@ -51,7 +58,7 @@ class Projeto{
     }
 
     // metodo de atualizar o usuario
-    function atualizarProjeto($foto_antes, $foto_depois, $descricao){
+    function atualizarProjeto($id, $foto_antes, $foto_depois, $descricao){
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_projeto SET foto_antes_projeto = :foto_antes,
         foto_depois_projeto = :foto_depois,
@@ -59,9 +66,11 @@ class Projeto{
         atualizado_em = :atual
         Where id_projeto = :id";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':foto_antes', $foto_antes);
         $stmt->bindParam(':foto_depois', $foto_depois);
         $stmt->bindParam(':descricao_projeto', $descricao);
+        $stmt->bindParam(':atual', $dataatual);
         if($stmt->execute()){
             return $this->db->lastInsertId();
         }else{
