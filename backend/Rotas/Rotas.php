@@ -50,6 +50,13 @@ class Rotas
         "/item_agendamento/editar/{id}" => "ItemAgendamentoController@viewEditarItemAgendamento",
         "/item_agendamento/excluir/{id}" => "ItemAgendamentoController@viewExcluirItemAgendamento",
         "/item_agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "ItemAgendamentoController@relatorioItemAgendamento",        
+        // item_orcamento
+        "/item_orcamento" => "ItemOrcamentoController@index",
+        "/item_orcamento/listar" => "ItemOrcamentoController@viewListarItemOrcamento",
+        "/item_orcamento/criar" => "ItemOrcamentoController@viewCriarItemOrcamento",
+        "/item_orcamento/editar/{id}" => "ItemOrcamentoController@viewEditarItemOrcamento",
+        "/item_orcamento/excluir/{id}" => "ItemOrcamentoController@viewExcluirItemOrcamento",
+        
     ],
     "POST" => [
         //usuarios
@@ -73,11 +80,13 @@ class Rotas
         "/endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",
         "/endereco/deletar/{id}" => "EnderecoController@deletarEndereco",
         // itens de agendamento
-        "/tem_agendamento/salvar" => "ItemAgendamentoController@salvarItemAgendamento",
+        "/item_agendamento/salvar" => "ItemAgendamentoController@salvarItemAgendamento",
         "/item_agendamento/atualizar/{id}" => "ItemAgendamentoController@atualizarItemAgendamento",
         "/item_agendamento/deletar/{id}" => "ItemAgendamentoController@deletarItemAgendamento",
-
-
+        // item_orcamento
+        "/item_orcamento/salvar" => "ItemOrcamentoController@salvarItemOrcamento",
+        "/item_orcamento/atualizar/{id}" => "ItemOrcamentoController@atualizarItemOrcamento",
+        "/item_orcamento/deletar/{id}" => "ItemOrcamentoController@deletarItemOrcamento",
     ]
         ];
     }

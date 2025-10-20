@@ -43,6 +43,17 @@ class Orcamento{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    public function buscarOrcamentosComCliente() {
+        $sql = "SELECT o.*, u.nome_usuario AS nome_cliente
+            FROM tbl_orcamento AS o
+            INNER JOIN tbl_usuario AS u ON o.id_cliente = u.id_usuario
+            WHERE o.excluido_em IS NULL";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 
     // metodo de inserir pagamento
     function inserirOrcamento($id_cliente, $descricao_orcamento, $status_orcamento, $data_orcamento, $valor_orcamento, $total_item_orcamento){

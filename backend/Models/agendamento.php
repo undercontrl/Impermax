@@ -46,6 +46,23 @@ class Agendamento{
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+    // Método otimizado para trazer o nome do cliente junto ao agendamento
+    function buscarAgendamentosComCliente(){
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    usu.nome_usuario AS nome_cliente,
+                    ag.data_solicitada,
+                    ag.total_agendamento,
+                    ag.status_agendamento
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                WHERE ag.excluido_em IS NULL';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
     //método de buscar agendamento por id
     function buscarAgendamentoPorId($id_agendamento){
         $sql = 'SELECT * FROM tbl_agendamento WHERE id_agendamento = :id AND excluido_em IS NULL';

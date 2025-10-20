@@ -37,29 +37,25 @@ class ItemAgendamentoController
     //  Criar novo item de agendamento
     public function viewCriarItemAgendamento()
     {
-        $agendamentos = $this->agendamento->buscarAgendamentos();
         $servicos = $this->servico->buscarServicos();
-        $usuarios = $this->usuario->buscarUsuarios();
-
+        $agendamentos = $this->agendamento->buscarAgendamentosComCliente();
         View::render("item_agendamento/create", [
-            "agendamentos" => $agendamentos,
             "servicos" => $servicos,
-            "usuarios" => $usuarios
+            "agendamentos" => $agendamentos
         ]);
     }
+
 
     public function viewEditarItemAgendamento($id)
     {
         $item = $this->itemAgendamento->buscarItemAgendamentoPorId($id);
-        $agendamentos = $this->agendamento->buscarAgendamentos();
+        $agendamentos = $this->agendamento->buscarAgendamentosComCliente();
         $servicos = $this->servico->buscarServicos();
-        $usuarios = $this->usuario->buscarUsuarios();
 
         View::render("item_agendamento/edit", [
-            "item" => $item,
+            "item_agendamento" => $item,
             "agendamentos" => $agendamentos,
-            "servicos" => $servicos,
-            "usuarios" => $usuarios
+            "servicos" => $servicos
         ]);
     }
 

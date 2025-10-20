@@ -19,12 +19,13 @@ class Servico{
     }
     // metodo de buscar todos os usuarios
     function buscarServicos(){
-        $sql = 'SELECT * FROM tbl_servico where excluido_em IS NULL';
+        $sql = 'SELECT id_servico, nome_servico, valor_base_servico
+                FROM tbl_servico
+                WHERE excluido_em IS NULL';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
     //metodo de buscar todos servico por nome
     function buscarServicosPorNome($nome){
         $sql = 'SELECT * FROM tbl_servico where nome_servico = :nome and excluido_em IS NULL';
