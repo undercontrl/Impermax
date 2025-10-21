@@ -36,9 +36,7 @@ class ServicoController{
     if(!$id){
         Redirect::redirecionarComMensagem("servico/listar", "error", "ID do serviço não fornecido.");
     }
-
-    $servicoModel = new Servico($this->db);
-    $servico = $servicoModel->buscarPorId($id);
+     $servico = $this->servico->buscarPorId($id);
 
     if(!$servico){
         Redirect::redirecionarComMensagem("servico/listar", "error", "Serviço não encontrado.");
