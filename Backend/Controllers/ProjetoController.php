@@ -31,17 +31,11 @@ class ProjetoController{
         View::render("projeto/create");
     }
 
-
-
-
-
     public function viewEditarProjeto($id = null){
         if(!$id){
         Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do serviço não fornecido.");
     }
-
-    $projetoModel = new Projeto($this->db);
-    $projeto = $projetoModel->buscarPorId($id);
+    $projeto = $this->projeto->buscarPorId($id);
 
     if(!$projeto){
         Redirect::redirecionarComMensagem("projeto/listar", "error", "Serviço não encontrado.");
