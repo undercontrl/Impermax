@@ -1,28 +1,30 @@
-<h2>Editar Projeto</h2>
-<form action="/backend/projeto/atualizar/<?php echo htmlspecialchars($projeto['id_projeto']); ?>" 
-      method="post" 
-      enctype="multipart/form-data">
+<div class="container mt-4">
+    <h2>Editar Projeto</h2>
+    <form action="/backend/projeto/atualizar/<?php echo $projeto['id_projeto']; ?>" method="post" enctype="multipart/form-data">
+        
+        <!-- FOTO ANTES -->
+        <div class="mb-3">
+            <label class="form-label">Foto Antes Atual:</label><br>
+            <img src="/backend/upload/<?php echo htmlspecialchars($projeto['foto_antes_projeto']); ?>" width="150" class="mb-2">
+            <input type="hidden" name="foto_antes_atual" value="<?php echo htmlspecialchars($projeto['foto_antes_projeto']); ?>">
+            <input type="file" class="form-control" name="foto_antes" accept="image/*">
+        </div>
 
-    <!-- FOTO ANTES -->
-    <label>Foto Antes (atual):</label><br>
-    <img src="/backend/upload/<?php echo htmlspecialchars($projeto['foto_antes_projeto']); ?>" width="150"><br>
-    <input type="hidden" name="foto_antes_atual" value="<?php echo htmlspecialchars($projeto['foto_antes_projeto']); ?>">
-    <label>Nova Foto Antes:</label>
-    <input type="file" name="foto_antes" accept="image/*">
-    <br><br>
+        <!-- FOTO DEPOIS -->
+        <div class="mb-3">
+            <label class="form-label">Foto Depois Atual:</label><br>
+            <img src="/backend/upload/<?php echo htmlspecialchars($projeto['foto_depois_projeto']); ?>" width="150" class="mb-2">
+            <input type="hidden" name="foto_depois_atual" value="<?php echo htmlspecialchars($projeto['foto_depois_projeto']); ?>">
+            <input type="file" class="form-control" name="foto_depois" accept="image/*">
+        </div>
 
-    <!-- FOTO DEPOIS -->
-    <label>Foto Depois (atual):</label><br>
-    <img src="/backend/upload/<?php echo htmlspecialchars($projeto['foto_depois_projeto']); ?>" width="150"><br>
-    <input type="hidden" name="foto_depois_atual" value="<?php echo htmlspecialchars($projeto['foto_depois_projeto']); ?>">
-    <label>Nova Foto Depois:</label>
-    <input type="file" name="foto_depois" accept="image/*">
-    <br><br>
+        <!-- DESCRIÇÃO -->
+        <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <textarea class="form-control" name="descricao_projeto" rows="4" required><?php echo htmlspecialchars($projeto['descricao_projeto']); ?></textarea>
+        </div>
 
-    <!-- DESCRIÇÃO -->
-    <label>Descrição:</label><br>
-    <textarea name="descricao_projeto" rows="5" cols="50" required><?php echo htmlspecialchars($projeto['descricao_projeto']); ?></textarea>
-    <br><br>
-
-    <button type="submit">Salvar Alterações</button>
-</form>
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        <a href="/backend/projeto/listar" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

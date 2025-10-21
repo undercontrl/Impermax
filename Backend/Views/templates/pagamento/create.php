@@ -1,46 +1,82 @@
-<form action="/backend/pagamento/salvar" method="post">
-<div>
-    <label for="id_cliente">Selecione o Cliente</label>
-    <select name="id_cliente" id="id_cliente" required>
-        <option value="">Selecione...</option>
-        <?php foreach ($usuarios as $cliente): ?>
-            <option value="<?= htmlspecialchars($cliente['id_usuario']) ?>">
-                <?= htmlspecialchars($cliente['nome_usuario']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+<div class="container mt-4">
+    <h2>Novo Pagamento</h2>
+    <form action="/backend/pagamento/salvar" method="post" id="formPagamento">
+        <div class="mb-3">
+            <label class="form-label">Cliente</label>
+            <select name="id_cliente" class="form-select" required>
+                <option value="">Selecione...</option>
+                <?php foreach ($usuarios as $cliente): ?>
+                <option value="<?= $cliente['id_usuario'] ?>"><?= htmlspecialchars($cliente['nome_usuario']) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
+        <div class="mb-3">
+            <label class="form-label">Total da Dívida (R$)</label>
+            <input type="number" step="0.01" class="form-control" name="total_devedor" id="total_devedor" required>
+        </div>
+
+        <!-- MÚLTIPLAS FORMAS DE PAGAMENTO -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Dinheiro (R$)</label>
+                <input type="number" step="0.01" class="form-control" name="dinheiro" id="dinheiro" value="0.00">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Débito (R$)</label>
+                <input type="number" step="0.01" class="form-control" name="debito" id="debito" value="0.00">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Crédito (R$)</label>
+                <input type="number" step="0.01" class="form-control" name="credito" id="credito" value="0.00">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Pix (R$)</label>
+                <input type="number" step="0.01" class="form-control" name="pix" id="pix" value="0.00">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Data Pagamento</label>
+            <input type="date" class="form-control" name="data_pagamento" value="<?= date('Y-m-d') ?>" required>
+        </div>
+
+        <!-- TOTAL PAGO E STATUS AUTOMÁTICO -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Total Pago (R$)</label>
+                <input type="text" class="form-control" id="total_pago" readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select name="status_pagamento" class="form-select" id="status_auto" disabled>
+                    <option value="aberto">Aberto</option>
+                    <option value="pago">Pago</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
+        <a href="/backend/pagamento/listar" class="btn btn-secondary">Cancelar</a>
+    </form>
 </div>
-<label for="total_devedor">Total da Dívida</label>
-<input type="number" step="0.01" name="total_devedor" id="total_devedor" required>
-<br>
-<label for="forma_pagamento">Forma de Pagamento</label>
-<select name="forma_pagamento" id="forma_pagamento" required>
-    <option value="">Selecione</option>
-    <option value="dinheiro" name="dinheiro" id="dinheiro">Dinheiro</option>
-    <option value="debito"  name="debito" id="debito">Débito</option>
-    <option value="credito"  name="credito" id="credito">Crédito</option>
-    <option value="pix"  name="pix" id="pix">Pix</option>
-</select>
-<br>
-<label for="valor_pago">Valor Pago</label>
-<input type="number" step="0.01" name="valor_pago" id="valor_pago" required>
-<br>
-<label for="status_pagamento">Status do Pagamento</label>
-<select name="status_pagamento" id="status_pagamento" required>
-    <option value="">Selecione</option>
-    <option value="pago">Pago</option>
-    <option value="cancelado">Cancelado</option>
-    <option value="aberto">Aberto</option>
-</select>
-<br>
-    <label for="data_pagamento">Data Do Pagamento:</label>
-    <input type="date" id="data_pagamento" name="data_pagamento" required>
-<br>
-<button type="submit">Salvar</button>
-</form>
 
+<script>
+function calcularTotais() {
+    const dinheiro = parseFloat(document.getElementById('dinheiro').value) || 0;
+    const debito = parseFloat(document.getElementById('debito').value) || 0;
+    const credito = parseFloat(document.getElementById('credito').value) || 0;
+    const pix = parseFloat(document.getElementById('pix').value) || 0;
+    
+    const totalPago = dinheiro + debito + credito + pix;
+    const totalDevedor = parseFloat(document.getElementById('total_devedor').value) || 0;
+    
+    document.getElementById('total_pago').value = totalPago.toFixed(2);
+    document.getElementById('status_auto').value = totalPago >= totalDevedor ? 'pago' : 'aberto';
+}
 
-<p style="color:gray; font-size:small;">
-    O valor pago será registrado na coluna correspondente à forma de pagamento escolhida. As demais formas receberão 0,00 automaticamente.
-</p>
+// CALCULAR A CADA DIGITAÇÃO
+document.querySelectorAll('#dinheiro, #debito, #credito, #pix, #total_devedor').forEach(input => {
+    input.addEventListener('input', calcularTotais);
+});
+</script>

@@ -25,6 +25,14 @@ class Servico{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+        public function buscarServicoPorID(int $id) {
+        $sql = 'SELECT * FROM tbl_servico WHERE id_servico= :id AND excluido_em IS NULL';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // ✅ fetch() - APENAS 1 registro
+    }
+
     //metodo de buscar todos servico por nome
     function buscarServicosPorNome($nome){
         $sql = 'SELECT * FROM tbl_servico where nome_servico = :nome and excluido_em IS NULL';
@@ -61,24 +69,22 @@ class Servico{
     }
 
     // metodo de atualizar o usuario
-public function atualizaServico($id, $nome, $descricao, $valor, $foto_servico, $status){
-    $dataatual = date('Y-m-d H:i:s');
-    $sql = "UPDATE tbl_servico SET 
-        nome_servico = :nome,
+    function atualizaServico($id, $nome, $descricao, $valor, $foto_servico, $status){
+        $dataatual = date('Y-m-d H:i:s');
+        $sql = "UPDATE tbl_servico SET nome_servico = :nome,
         descricao_servico = :descricao,
         valor_base_servico = :valor,
         foto_servico = :foto_servico,
         status_servico = :status,
         atualizado_em = :atual
-        WHERE id_servico = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->bindParam(':nome', $nome);
-    $stmt->bindParam(':descricao', $descricao);
-    $stmt->bindParam(':valor', $valor);
-    $stmt->bindParam(':foto_servico', $foto_servico);
-    $stmt->bindParam(':status', $status);
-    $stmt->bindParam(':atual', $dataatual);
+        Where id_servico = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':valor', $valor);
+        $stmt->bindParam(':foto_servico', $foto_servico);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':atual', $dataatual);
         if($stmt->execute()){
             return $this->db->lastInsertId();
         }else{
@@ -101,14 +107,4 @@ public function atualizaServico($id, $nome, $descricao, $valor, $foto_servico, $
             return false;
         }
     }
-
-    public function buscarPorId($id)
-{
-    $stmt = $this->db->prepare("SELECT * FROM tbl_servico WHERE id_servico = :id AND excluido_em IS NULL");
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
-
-    return $stmt->fetch(\PDO::FETCH_ASSOC);
-}
-
 }

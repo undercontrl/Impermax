@@ -25,26 +25,26 @@ class Rotas
         "/projeto" => "projetoController@index",
        "/projeto/criar" => "projetoController@viewCriarProjetos",
        "/projeto/listar" => "projetoController@viewListarProjetos",
-        "/projeto/editar" => "projetoController@viewEditarProjetos",
-        "/projeto/excluir" => "projetoController@viewExcluirProjetos",
+        "/projeto/editar/{id}" => "projetoController@viewEditarProjetos",
+        "/projeto/excluir/{id} " => "projetoController@viewExcluirProjetos",
 
         "/pagamento" => "pagamentoController@index",
        "/pagamento/criar" => "pagamentoController@viewCriarPagamentos",
        "/pagamento/listar" => "pagamentoController@viewListarPagamentos",
-        "/pagamento/editar" => "pagamentoController@viewEditarPagamentos",
-        "/pagamento/excluir" => "pagamentoController@viewExcluirPagamentos",
+        "/pagamento/editar/{id}" => "pagamentoController@viewEditarPagamentos",
+        "/pagamento/excluir/{id}" => "pagamentoController@viewExcluirPagamentos",
 
         "/orcamento" => "orcamentoController@index",
        "/orcamento/criar" => "orcamentoController@viewCriarOrcamentos",
        "/orcamento/listar" => "orcamentoController@viewListarOrcamentos",
-        "/orcamento/editar" => "orcamentoController@viewEditarOrcamentos",
-        "/orcamento/excluir" => "orcamentoController@viewExcluirOrcamentos",
+        "/orcamento/editar/{id}" => "orcamentoController@viewEditarOrcamentos",
+        "/orcamento/excluir/{id}" => "orcamentoController@viewExcluirOrcamentos",
 
         "/material" => "materialController@index",
        "/material/criar" => "materialController@viewCriarMateriais",
        "/material/listar" => "materialController@viewListarMateriais",
-        "/material/editar" => "materialController@viewEditarMateriais",
-        "/material/excluir" => "materialController@viewExcluirMateriais",
+        "/material/editar/{id}" => "materialController@viewEditarMateriais",
+        "/material/excluir/{id}" => "materialController@viewExcluirMateriais",
         
     ],
     "POST" => [
@@ -57,20 +57,20 @@ class Rotas
         "/servico/deletar/{id}" => "ServicoController@deletarServico",
 
         "/projeto/salvar" => "projetoController@salvarProjeto",
-        "/projeto/atualizar" => "projetoController@atualizarProjeto",
-        "/projeto/deletar" => "projetoController@deletarProjeto",
+        "/projeto/atualizar/{id}" => "projetoController@atualizarProjeto",
+        "/projeto/deletar/{id}" => "projetoController@deletarProjeto",
         
         "/pagamento/salvar" => "pagamentoController@salvarPagamento",
-        "/pagamento/atualizar" => "pagamentoController@atualizarPagamento",
-        "/pagamento/deletar" => "pagamentoController@deletarPagamento",
+        "/pagamento/atualizar/{id}" => "pagamentoController@atualizarPagamento",
+        "/pagamento/deletar/{id}" => "pagamentoController@deletarPagamento",
 
         "/orcamento/salvar" => "orcamentoController@salvarOrcamento",
-        "/orcamento/atualizar" => "orcamentoController@atualizarOrcamento",
-        "/orcamento/deletar" => "orcamentoController@deletarOrcamento",
+        "/orcamento/atualizar/{id}" => "orcamentoController@atualizarOrcamento",
+        "/orcamento/deletar/{id}" => "orcamentoController@deletarOrcamento",
 
         "/material/salvar" => "materialController@salvarMaterial",
-        "/material/atualizar" => "materialController@atualizarMaterial",
-        "/material/deletar" => "materialController@deletarMaterial",
+        "/material/atualizar/{id}" => "materialController@atualizarMaterial",
+        "/material/deletar/{id}" => "materialController@deletarMaterial",
         
     ]
         ];
