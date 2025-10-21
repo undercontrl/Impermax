@@ -1,31 +1,35 @@
-<a href="/backend/material/criar">Cadastrar Materiais</a>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Lista de Materiais</h2>
+        <a href="/backend/material/criar" class="btn btn-success">Cadastrar Material</a>
+    </div>
 
-<div>Lista de Materiais</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Quantidade</th>
-            <th scope="col">Descrição</th>
-            <th scope="col">Id do Serviço</th>
-            <th scope="col">Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($materiais as $material): ?>
-        <tr>
-            <th scope="row"><?php echo htmlspecialchars($material['id_material']); ?></th>
-            <td><?php echo htmlspecialchars($material['nome_material']); ?></td>
-            <td><?php echo htmlspecialchars($material['qtd_material']); ?></td>
-            <td><?php echo htmlspecialchars($material['descricao_material']); ?></td>
-            <td><?php echo htmlspecialchars($material['id_servico']); ?></td>
-            <td>
-                
-                <a href="/backend/material/editar?id=<?php echo $material['id_material']; ?>" class="btn btn-primary btn-sm">Editar</a>
-
-                <a href="/backend/material/excluir/<?php echo $material['id_material']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este serviço?');">Excluir</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Quantidade</th>
+                <th>Descrição</th>
+                <th>Serviço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($materiais as $material): ?>
+            <tr>
+                <th><?= htmlspecialchars($material['id_material']) ?></th>
+                <td><?= htmlspecialchars($material['nome_material']) ?></td>
+                <td><?= htmlspecialchars($material['qtd_material']) ?></td>
+                <td><?= htmlspecialchars($material['descricao_material']) ?></td>
+                <td><?= htmlspecialchars($material['nome_servico']) ?></td> <!-- ✅ NOME DO SERVIÇO -->
+                <td>
+                    <a href="/backend/material/editar/<?= $material['id_material'] ?>" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="/backend/material/excluir/<?= $material['id_material'] ?>" class="btn btn-sm btn-danger" 
+                       onclick="return confirm('Tem certeza?');">Excluir</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

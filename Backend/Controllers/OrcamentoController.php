@@ -4,67 +4,106 @@ use App\Impermax\Models\Orcamento;
 use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
-use App\Impermax\Validadores\orcamentoValidador;
+use App\Impermax\Validadores\OrcamentoValidador;
 use App\Impermax\Models\usuario;
 
-class orcamentoController{
-    public $orcamento;
-    public $usuario;
-    public $db;
+class OrcamentoController {  // ✅ MAIÚSCULA
+    private $orcamento;
+    private $db;
+
     public function __construct() {
         $this->db = Database::getInstance();
-       $this->orcamento = new orcamento($this->db);
-        $this->usuario = new usuario($this->db);
-    }
-    // index
-    public function index(){
-        $resultado = $this->orcamento->buscarOrcamentos();
-        var_dump($resultado);
+        $this->orcamento = new Orcamento($this->db);  // ✅ MAIÚSCULA
     }
 
-    public function viewListarOrcamentos(){
+    public function index() {
+        $this->viewListarOrcamentos();
+    }
+
+    // ✅ SALVAR
+    public function salvarOrcamento() {
+        $erros = OrcamentoValidador::ValidarEntradas($_POST);  // ✅ MAIÚSCULA
+        if (!empty($erros)) {
+            Redirect::redirecionarComMensagem("orcamento/criar", "error", implode("<br>", $erros));
+            return;
+        }
+
+        if ($this->orcamento->inserirOrcamento(
+            $_POST["id_cliente"],
+            $_POST["descricao_orcamento"],
+            $_POST["status_orcamento"],
+            $_POST["data_orcamento"],
+            $_POST["valor_orcamento"],
+            $_POST["total_item_orcamento"]
+        )) {
+            Redirect::redirecionarComMensagem("orcamento/listar", "success", "Orçamento cadastrado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("orcamento/criar", "error", "Erro ao cadastrar orçamento!");
+        }
+    }
+
+    // ✅ ATUALIZAR
+    public function atualizarOrcamento(int $id) {
+        $erros = OrcamentoValidador::ValidarEntradas($_POST);
+        if (!empty($erros)) {
+            Redirect::redirecionarComMensagem("orcamento/editar/{$id}", "error", implode("<br>", $erros));
+            return;
+        }
+
+        if ($this->orcamento->atualizarOrcamento(
+            $id,
+            $_POST["id_cliente"],
+            $_POST["descricao_orcamento"],
+            $_POST["status_orcamento"],
+            $_POST["data_orcamento"],
+            $_POST["valor_orcamento"],
+            $_POST["total_item_orcamento"]
+        )) {
+            Redirect::redirecionarComMensagem("orcamento/listar", "success", "Orçamento atualizado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("orcamento/editar/{$id}", "error", "Erro ao atualizar orçamento!");
+        }
+    }
+
+    public function viewExcluirOrcamentos(int $id) {
+    $orcamento = $this->orcamento->buscarOrcamentoPorID($id);
+    if ($orcamento) {
+        View::render("orcamento/delete", ["orcamento" => $orcamento]);
+    } else {
+        Redirect::redirecionarComMensagem("orcamento/listar", "error", "Orçamento não encontrado!");
+    }
+}
+
+    public function deletarOrcamento(int $id) {
+    if ($this->orcamento->excluirOrcamento($id)) {
+        Redirect::redirecionarComMensagem("orcamento/listar", "success", "Orçamento excluído com sucesso!");
+    } else {
+        Redirect::redirecionarComMensagem("orcamento/listar", "error", "Erro ao excluir orçamento!");
+    }
+}
+
+    public function viewListarOrcamentos() {
         $dados = $this->orcamento->buscarOrcamentos();
         View::render("orcamento/index", ["orcamentos" => $dados]);
     }
 
-    public function viewCriarOrcamentos(){
-        $cliente = $this->usuario->buscarUsuarios();
-        // View::render("orcamento/create");
-        View::render("orcamento/create", ["usuarios" => $cliente]);
-    }
-    public function viewEditarOrcamentos(){
-        $id=$_GET['id'] ?? null;
-        var_dump($_POST);exit;
-        if(!$id){
-            Redirect::redirecionarComMensagem("orcamento/listar", "error", "ID do usuário não fornecido.");
-        }
-        $orcamento = $this->orcamento->buscarorcamentosPorTipo($id);
-        if(!$orcamento){
-            Redirect::redirecionarComMensagem("orcamento/listar", "error", "Usuário não encontrado.");
-        }
-        View::render("orcamento/edit", ["orcamento" => $orcamento]);
-    }
-    public function viewExcluirOrcamento(){
-        View::render("orcamento/delete");
+    public function viewCriarOrcamentos() {
+        $clientes = $this->orcamento->getClientes();
+        View::render("orcamento/create", ["usuarios" => $clientes]);
     }
 
-    public function salvarOrcamento(){
-        $erros = orcamentoValidador::ValidarEntradas($_POST);
-        if(!empty($erros)){
-            Redirect::redirecionarComMensagem("orcamento/criar", "error", implode("<br>", $erros));
+    public function viewEditarOrcamentos(int $id) {
+        $orcamento = $this->orcamento->buscarOrcamentoPorID($id);
+        $clientes = $this->orcamento->getClientes();
+        
+        if ($orcamento) {
+            View::render("orcamento/edit", [
+                "orcamento" => $orcamento,
+                "usuarios" => $clientes
+            ]);
+        } else {
+            Redirect::redirecionarComMensagem("orcamento/listar", "error", "Orçamento não encontrado!");
         }
-        if($this->orcamento->inserirOrcamento($_POST["id_cliente"], $_POST["descricao_orcamento"], $_POST["status_orcamento"],$_POST["data_orcamento"], $_POST["valor_orcamento"], $_POST["total_item_orcamento"])){
-            Redirect::redirecionarComMensagem("orcamento/listar", "success", "Usuário cadastrado com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("orcamento/criar", "error", "Erro ao cadastrar usuário!");
-        }
-    }
- 
-    public function atualizarOrcamento(){
-        echo "atualizar orcamento";
-    }
-    public function deletarOrcamento(){
-        echo "deletar orcamento";
     }
 
 }

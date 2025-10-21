@@ -1,30 +1,53 @@
-<div>Sou o edit</div>
-<form method="POST" action="/backend/usuario/atualizar">
-    <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($usuario['id_usuario']); ?>">
-    <div class="mb-3">
-        <label for="nome_usuario" class="form-label">Nome</label>
-        <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" value="<?php echo htmlspecialchars($usuario['nome_usuario']); ?>" required>
-    </div>
-    <div class="mb-3">
-        <label for="email_usuario" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email_usuario" name="email_usuario" value="<?php echo htmlspecialchars($usuario['email_usuario']); ?>" required>
-    </div>
-    <div class="mb-3">
-        <label for="senha_usuario" class="form-label">Senha</label>
-        <input type="password" class="form-control" id="senha_usuario" name="senha_usuario" required>
-    </div>
-    <div class="mb-3">
-        <label for="tipo_usuario" class="form-label">Tipo</label>
-        <select class="form-select" id="tipo_usuario" name="tipo_usuario" required>
-            <option value="admin" <?php if($usuario['tipo_usuario'] == 'admin') echo 'selected'; ?>>Admin</option>
-            <option value="user" <?php if($usuario['tipo_usuario'] == 'user') echo 'selected'; ?>>User</option>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="status_usuario" class="form-label">Status</label>
-        <select class="form-select" id="status_usuario" name="status_usuario" required>
-            <option value="ativo" <?php if($usuario['status_usuario'] == 'ativo') echo 'selected'; ?>>Ativo</option>
-            <option value="inativo" <?php if($usuario['status_usuario'] == 'inativo') echo 'selected'; ?>>Inativo</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Atualizar</button>
+<div class="container mt-4">
+    <h2>Editar Orçamento</h2>
+    <form action="/backend/orcamento/atualizar/<?= $orcamento['id_orcamento'] ?>" method="POST">
+        <div class="mb-3">
+            <label class="form-label">Cliente</label>
+            <select name="id_cliente" class="form-select" required>
+                <?php foreach ($usuarios as $cliente): ?>
+                <option value="<?= $cliente['id_usuario'] ?>" 
+                    <?= $orcamento['id_cliente'] == $cliente['id_usuario'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($cliente['nome_usuario']) ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <input type="text" class="form-control" name="descricao_orcamento" 
+                   value="<?= htmlspecialchars($orcamento['descricao_orcamento']) ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select name="status_orcamento" class="form-select" required>
+                <option value="aprovado" <?= $orcamento['status_orcamento'] == 'aprovado' ? 'selected' : '' ?>>Aprovado</option>
+                <option value="aguardando" <?= $orcamento['status_orcamento'] == 'aguardando' ? 'selected' : '' ?>>Aguardando</option>
+                <option value="recusado" <?= $orcamento['status_orcamento'] == 'recusado' ? 'selected' : '' ?>>Recusado</option>
+                <option value="em_analise" <?= $orcamento['status_orcamento'] == 'em_analise' ? 'selected' : '' ?>>Em Análise</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Data Solicitada</label>
+            <input type="date" class="form-control" name="data_orcamento" 
+                   value="<?= $orcamento['data_orcamento'] ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Valor (R$)</label>
+            <input type="number" step="0.01" class="form-control" name="valor_orcamento" 
+                   value="<?= htmlspecialchars($orcamento['valor_orcamento']) ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total de Itens</label>
+            <input type="number" class="form-control" name="total_item_orcamento" 
+                   value="<?= htmlspecialchars($orcamento['total_item_orcamento']) ?>" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        <a href="/backend/orcamento/listar" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

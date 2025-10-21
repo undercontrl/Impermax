@@ -15,93 +15,91 @@ class Orcamento{
     private $excluido_em;
     private $db;
     //construtor inicializa a classe e ou atributos 
-    public function __construct($db){
+    
+    public function __construct($db) {
         $this->db = $db;
-      
     }
-    // metodo de buscar todos os Orcamentos
-    function buscarOrcamentos(){
-        $sql = 'SELECT * FROM tbl_orcamento where excluido_em IS NULL';
+
+    // ✅ LISTAR TODOS (COM JOIN CLIENTE)
+    public function buscarOrcamentos() {
+        $sql = 'SELECT o.*, u.nome_usuario as cliente_nome 
+                FROM tbl_orcamento o 
+                LEFT JOIN tbl_usuario u ON o.id_cliente = u.id_usuario 
+                WHERE o.excluido_em IS NULL 
+                ORDER BY o.id_orcamento DESC';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //metodo de buscar todos Orcamentos por status
-    function buscarOrcamentosPorStatus($status_orcamento){
-        $sql = 'SELECT * FROM tbl_orcamento where status_orcamento = :status_orcamento and excluido_em IS NULL';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':status_orcamento', $status_orcamento);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    function buscarOrcamentosPorIdCliente($id_cliente){
-        $sql = 'SELECT * FROM tbl_orcamento where id_cliente = :id_cliente and excluido_em IS NULL';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cliente', $id_cliente);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // metodo de inserir pagamento
-    function inserirOrcamento($id_cliente, $descricao_orcamento, $status_orcamento, $data_orcamento, $valor_orcamento, $total_item_orcamento){
-        $sql = 'INSERT INTO tbl_orcamento (id_cliente, descricao_orcamento, status_orcamento, data_orcamento, valor_orcamento, total_item_orcamento)
-             VALUES (:id_cliente, :descricao_orcamento, :status_orcamento, :data_orcamento, :valor_orcamento, :total_item_orcamento)';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cliente', $id_cliente);
-        $stmt->bindParam(':descricao_orcamento', $descricao_orcamento);
-        $stmt->bindParam(':status_orcamento', $status_orcamento);
-        $stmt->bindParam(':data_orcamento', $data_orcamento);
-        $stmt->bindParam(':valor_orcamento', $valor_orcamento);
-        $stmt->bindParam(':total_item_orcamento', $total_item_orcamento);
-        if($stmt->execute()){
-            return $this->db->lastInsertId();
-        }else{
-            return false;
-        }
-    }
-
-    // metodo de atualizar o Orcamento
-    function atualizarOrcamentos($id_cliente, $descricao_orcamento, $status_orcamento, $data_orcamento, $valor_orcamento, $total_item_orcamento){
-        $dataatual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_orcamento SET id_cliente = :id_cliente,
-        descricao_orcamento = :descricao_orcamento,
-        status_orcamento = :status_orcamento,
-        data_orcamento = :data_orcamento,
-        valor_orcamento = :valor_orcamento,
-        total_item_orcamento = :total_item_orcamento,
-        atualizado_em = :atual
-        Where id_orcamento = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id_cliente);
-        $stmt->bindParam(':id_cliente', $id_cliente);
-        $stmt->bindParam(':descricao_orcamento', $descricao_orcamento);
-        $stmt->bindParam(':status_orcamento', $status_orcamento);
-        $stmt->bindParam(':data_orcamento', $data_orcamento);
-        $stmt->bindParam(':valor_orcamento', $valor_orcamento);
-        $stmt->bindParam(':total_item_orcamento', $total_item_orcamento);
-        $stmt->bindParam(':atual', $dataatual);
-        if($stmt->execute()){
-            return $this->db->lastInsertId();
-        }else{
-            return false;
-        }
-    }
-
-    // metodo de deletar o pagamento
-    function excluirOrcamentos($id){
-        $dataatual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_orcamento SET 
-        excluido_em = :atual
-        Where id_orcamento = :id";
+    // ✅ BUSCAR 1 POR ID
+    public function buscarOrcamentoPorID(int $id) {
+        $sql = 'SELECT o.*, u.nome_usuario as cliente_nome 
+                FROM tbl_orcamento o 
+                LEFT JOIN tbl_usuario u ON o.id_cliente = u.id_usuario 
+                WHERE o.id_orcamento = :id AND o.excluido_em IS NULL';
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':atual', $dataatual);
-        if($stmt->execute()){
-            return true;
-        }else{
-            return false;
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // ✅ INSERIR
+    public function inserirOrcamento($id_cliente, $descricao_orcamento, $status_orcamento, $data_orcamento, $valor_orcamento, $total_item_orcamento) {
+        $sql = 'INSERT INTO tbl_orcamento (id_cliente, descricao_orcamento, status_orcamento, data_orcamento, valor_orcamento, total_item_orcamento) 
+                VALUES (:id_cliente, :descricao_orcamento, :status_orcamento, :data_orcamento, :valor_orcamento, :total_item_orcamento)';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->bindParam(':descricao_orcamento', $descricao_orcamento);
+        $stmt->bindParam(':status_orcamento', $status_orcamento);
+        $stmt->bindParam(':data_orcamento', $data_orcamento);
+        $stmt->bindParam(':valor_orcamento', $valor_orcamento);
+        $stmt->bindParam(':total_item_orcamento', $total_item_orcamento);
+        if ($stmt->execute()) {
+            return $this->db->lastInsertId();
         }
+        return false;
+    }
+
+    // ✅ ATUALIZAR (ERROS CORRIGIDOS)
+    public function atualizarOrcamento(int $id, $id_cliente, $descricao_orcamento, $status_orcamento, $data_orcamento, $valor_orcamento, $total_item_orcamento) {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = "UPDATE tbl_orcamento SET 
+                id_cliente = :id_cliente,
+                descricao_orcamento = :descricao_orcamento,
+                status_orcamento = :status_orcamento,
+                data_orcamento = :data_orcamento,
+                valor_orcamento = :valor_orcamento,
+                total_item_orcamento = :total_item_orcamento,
+                atualizado_em = :atual 
+                WHERE id_orcamento = :id";  // ✅ WHERE CORRIGIDO
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);  // ✅ ID CORRETO
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->bindParam(':descricao_orcamento', $descricao_orcamento);
+        $stmt->bindParam(':status_orcamento', $status_orcamento);
+        $stmt->bindParam(':data_orcamento', $data_orcamento);
+        $stmt->bindParam(':valor_orcamento', $valor_orcamento);
+        $stmt->bindParam(':total_item_orcamento', $total_item_orcamento);
+        $stmt->bindParam(':atual', $dataAtual);
+        return $stmt->execute();
+    }
+
+    // ✅ EXCLUIR
+    public function excluirOrcamento(int $id) {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = "UPDATE tbl_orcamento SET excluido_em = :atual WHERE id_orcamento = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':atual', $dataAtual);
+        return $stmt->execute();
+    }
+
+    // ✅ GET CLIENTES
+    public function getClientes() {
+        $sql = "SELECT id_usuario, nome_usuario FROM tbl_usuario WHERE tipo_usuario = 'cliente' AND excluido_em IS NULL ORDER BY nome_usuario";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
