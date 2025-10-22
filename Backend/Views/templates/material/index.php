@@ -26,7 +26,7 @@
                 <td>
                     <a href="/backend/material/editar/<?= $material['id_material'] ?>" class="btn btn-sm btn-primary">Editar</a>
                     <a href="/backend/material/excluir/<?= $material['id_material'] ?>" class="btn btn-sm btn-danger" 
-                       onclick="return confirm('Tem certeza?');">Excluir</a>
+                       onclick="return confirm('Tem certeza que deseja excluir este material?');">Excluir</a>
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -16,6 +16,12 @@ class Rotas
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
 
+         '/register' => 'AuthController@register',
+        '/login' => 'AuthController@login',
+        '/logout' => 'AuthController@logout',
+        '/admin/dashboard' => 'Admin\DashboardController@index',
+
+
         "/servico" => "ServicoController@index",
        "/servico/criar" => "servicoController@viewCriarServicos",
        "/servico/listar" => "servicoController@viewListarServicos",
@@ -26,7 +32,7 @@ class Rotas
        "/projeto/criar" => "projetoController@viewCriarProjetos",
        "/projeto/listar" => "projetoController@viewListarProjetos",
         "/projeto/editar/{id}" => "projetoController@viewEditarProjetos",
-        "/projeto/excluir/{id} " => "projetoController@viewExcluirProjetos",
+        "/projeto/excluir/{id}" => "projetoController@viewExcluirProjetos",
 
         "/pagamento" => "pagamentoController@index",
        "/pagamento/criar" => "pagamentoController@viewCriarPagamentos",
@@ -51,6 +57,11 @@ class Rotas
         "/usuario/salvar" => "UsuarioController@salvarUsuario",
         "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
         "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
+
+
+         '/register' => 'AuthController@cadastrarUsuario',
+        '/login' => 'AuthController@authenticar',
+
 
         "/servico/salvar" => "ServicoController@salvarServico",
         "/servico/atualizar/{id}" => "ServicoController@atualizarServico",

@@ -5,11 +5,14 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\UsuarioValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class UsuarioController{
+class UsuarioController extends AdminController{
     private $usuario;
     private $db;
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
        $this->usuario = new Usuario($this->db);
     }
@@ -83,6 +86,7 @@ class UsuarioController{
         } else {
             Redirect::redirecionarComMensagem("usuario/listar", "error", "Usuário não encontrado!");
         }
+
     }
     // ✅ JÁ CORRIGIDO o atualizarUsuario (adicione este método completo)
     public function atualizarUsuario($id) {

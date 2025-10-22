@@ -31,7 +31,9 @@ class Projeto{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-      public function buscarPorId($id){
+
+
+      public function buscarProjetoPorID($id){
         $stmt = $this->db->prepare("SELECT * FROM tbl_projeto WHERE id_projeto = :id AND excluido_em IS NULL");
         $stmt->bindParam(':id', $id);
         $stmt->execute();

@@ -53,12 +53,12 @@ class ProjetoController{
 
     public function viewEditarProjetos($id = null){
         if(!$id){
-        Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do serviço não fornecido.");
+        Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do projeto não fornecido.");
     }
-    $projeto = $this->projeto->buscarPorId($id);
+    $projeto = $this->projeto->buscarProjetoPorID($id);
 
     if(!$projeto){
-        Redirect::redirecionarComMensagem("projeto/listar", "error", "Serviço não encontrado.");
+        Redirect::redirecionarComMensagem("projeto/listar", "error", "projeto não encontrado.");
     }
 
     View::render("projeto/edit", ["projeto" => $projeto]);
@@ -91,26 +91,27 @@ class ProjetoController{
     }
 }
     
-    public function viewExcluirProjetos(){
-        if(!$id){
-        Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do projeto não fornecido.");
-    }
-    $projeto = $this->projeto->buscarPorId($id);
-    if(!$projeto){
-        Redirect::redirecionarComMensagem("projeto/listar", "error", "Projeto não encontrado.");
-    }
-    View::render("projeto/delete", ["projeto" => $projeto]);
+    public function viewExcluirProjetos($id){
+   {
+        $projeto = $this->projeto->buscarProjetoPorID($id);
+        if (!$projeto) {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "projeto não encontrado.");
+        }
+
+        View::render("projeto/delete", ["projeto" => $projeto]);
     }
 
+    }
 
-
-    public function deletarProjeto(){
-        if($this->projeto->excluirProjeto($id)){
-            Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto excluído com sucesso!");
-        }else{
+    public function deletarProjeto($id){
+    {
+        $sucesso = $this->projeto->excluirProjeto($id);
+        if ($sucesso) {
+            Redirect::redirecionarComMensagem("projeto/listar", "success", "projeto excluído com sucesso!");
+        } else {
             Redirect::redirecionarComMensagem("projeto/listar", "error", "Erro ao excluir o projeto!");
         }
-        
+    }
     }
 
     }
