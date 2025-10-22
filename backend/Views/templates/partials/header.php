@@ -134,9 +134,10 @@ if (session_status() === PHP_SESSION_NONE) {
     <!-- Menu lateral -->
     <nav class="sidebar">
         <div class="sidebar-logo">
-            <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
+            <a href="/backend/admin/dashboard">
+                <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
+            </a>
         </div>
-
         <a href="/backend/agendamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'agendamento') ? 'active' : '' ?>"><i class="bi bi-calendar-check"></i> Agendamentos</a>
         <a href="/backend/avaliacao/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'avaliacao') ? 'active' : '' ?>"><i class="bi bi-star"></i> Avaliações</a>
         <a href="/backend/contato/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'contato') ? 'active' : '' ?>"><i class="bi bi-envelope"></i> Contatos</a>
