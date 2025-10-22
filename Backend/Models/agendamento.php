@@ -1,5 +1,7 @@
 <?php
-class agendamento{
+namespace App\Impermax\Models;
+use PDO;
+class Agendamento{
     private $id_agendamento;
     private $id_cliente;
     private $data_solicitada;
@@ -8,13 +10,15 @@ class agendamento{
     private $criado_em;
     private $atualizado_em;
     private $excluido_em;
+    private $db;
+    
     // O construtor inicializa a classe e/ou atributos
     public function __construct($db){
         $this->db = $db;
     }
     //método de buscar todos os agendamentos não excluídos
     function buscarAgendamentos(){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_agendamento as ag INNER JOIN tbl_usuario as usu ON ag.id_cliente = usu.id_usuario WHERE ag.excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -40,6 +44,23 @@ class agendamento{
         $sql = 'SELECT * FROM tbl_agendamento WHERE id_cliente = :id_cliente AND excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->bindParam(':id_cliente', $id_cliente);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // Método otimizado para trazer o nome do cliente junto ao agendamento
+    function buscarAgendamentosComCliente(){
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    usu.nome_usuario AS nome_cliente,
+                    ag.data_solicitada,
+                    ag.total_agendamento,
+                    ag.status_agendamento
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                WHERE ag.excluido_em IS NULL';
+        
+        $statement = $this->db->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -69,12 +90,13 @@ class agendamento{
         }
     }
     //método de atualizar o agendamento
-    function atualizarAgendamento($id_cliente, $data_solicitada, $total_agendamento, $status_agendamento){
+    function atualizarAgendamento($id_agendamento, $id_cliente, $data_solicitada, $total_agendamento, $status_agendamento){
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_agendamento SET id_cliente = :id_cliente, data_solicitada = :data_solicitada, 
         total_agendamento = :total_agendamento, status_agendamento = :status_agendamento, atualizado_em = :atualizado 
         WHERE id_agendamento = :id_agendamento';
         $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id_agendamento', $id_agendamento);
         $statement->bindParam(':id_cliente', $id_cliente);
         $statement->bindParam(':data_solicitada', $data_solicitada);
         $statement->bindParam(':total_agendamento', $total_agendamento);

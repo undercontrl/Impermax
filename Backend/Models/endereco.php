@@ -1,5 +1,7 @@
 <?php
-class endereco{
+namespace App\Impermax\Models;
+use PDO;
+class Endereco{
     private $id_endereco;
     private $id_usuario;
     private $cep_endereco;
@@ -12,6 +14,7 @@ class endereco{
     private $criado_em;
     private $atualizado_em;
     private $excluido_em;
+    private $db;
     // O construtor inicializa a classe e/ou atributos
     public function __construct($db){
         $this->db = $db;
@@ -33,7 +36,7 @@ class endereco{
     }
     //método de buscar todos os enderecos por logadouro
     function buscarEnderecoPorLogadouro($logadouro_endereco){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE logadouro_endereco = :logadouro_endereco AND excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_endereco WHERE logadouro_endereco = :logadouro_endereco AND excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->bindParam(':logadouro_endereco', $logadouro_endereco);
         $statement->execute();
@@ -41,7 +44,7 @@ class endereco{
     }
     //método de buscar todos os enderecos por bairro
     function buscarEnderecoPorBairro($bairro_endereco){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE bairro_endereco = :bairro_endereco AND excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_endereco WHERE bairro_endereco = :bairro_endereco AND excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->bindParam(':bairro_endereco', $bairro_endereco);
         $statement->execute();
@@ -49,7 +52,7 @@ class endereco{
     }
     //método de buscar todos os enderecos por cidade
     function buscarEnderecoPorCidade($cidade_endereco){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE cidade_endereco = :cidade_endereco AND excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_endereco WHERE cidade_endereco = :cidade_endereco AND excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->bindParam(':cidade_endereco', $cidade_endereco);
         $statement->execute();
@@ -57,7 +60,7 @@ class endereco{
     }
     //método de buscar todos os enderecos por usuário
     function buscarEnderecoPorUsuario($id_usuario){
-        $sql = 'SELECT * FROM tbl_agendamento WHERE id_usuario = :id_usuario AND excluido_em IS NULL';
+        $sql = 'SELECT * FROM tbl_endereco WHERE id_usuario = :id_usuario AND excluido_em IS NULL';
         $statement = $this->db->prepare($sql);
         $statement->bindParam(':id_usuario', $id_usuario);
         $statement->execute();
