@@ -1,106 +1,102 @@
 <?php
 namespace App\Impermax\Models;
 use PDO;
-class Pagamento{
-    private $id_pagamento;
-    private $id_cliente;
-    private $total_devedor;
-    private $dinheiro;
-    private $credito;
-    private $debito;
-    private $pix;
-    private $status_pagamento;
-    private $data_pagamento;
-    private $criado_em;
-    private $atualizado_em;
-    private $excluido_em;
-    private $db;
-    //construtor inicializa a classe e ou atributos 
-    public function __construct($db){
+
+class Pagamento {
+  private $db;
+    
+    public function __construct($db) {
         $this->db = $db;
-      
     }
-    // metodo de buscar todos os pagamentos
-    function buscarPagamentos(){
-        $sql = 'SELECT * FROM tbl_pagamento where excluido_em IS NULL';
+
+    // ✅ LISTAR TODOS
+    public function buscarPagamentos() {
+        $sql = 'SELECT p.*, u.nome_usuario as cliente_nome,
+                (p.dinheiro + p.credito + p.debito + p.pix) as total_pago
+                FROM tbl_pagamento p 
+                LEFT JOIN tbl_usuario u ON p.id_cliente = u.id_usuario 
+                WHERE p.excluido_em IS NULL 
+                ORDER BY p.id_pagamento DESC';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //metodo de buscar todos pagamentos por status
-    function buscarPagamentosPorStatus($status_pagamento){
-        $sql = 'SELECT * FROM tbl_pagamento where status_pagamento = :status_pagamento and excluido_em IS NULL';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':status_pagamento', $status_pagamento);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // metodo de inserir pagamento
-    function inserirPagamento($id_cliente, $total_devedor, $dinheiro, $credito, $debito, $pix, $status_pagamento, $data_pagamento){
-        $sql = 'INSERT INTO tbl_pagamento (id_cliente, total_devedor, dinheiro, credito, debito, pix, status_pagamento, data_pagamento)
-             VALUES (:id_cliente, :total_devedor, :dinheiro, :credito, :debito, :pix, :status_pagamento, :data_pagamento)';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cliente', $id_cliente);
-        $stmt->bindParam(':total_devedor', $total_devedor);
-        $stmt->bindParam(':dinheiro', $dinheiro);
-        $stmt->bindParam(':credito', $credito);
-        $stmt->bindParam(':debito', $debito);
-        $stmt->bindParam(':pix', $pix);
-        $stmt->bindParam(':status_pagamento', $status_pagamento);
-        $stmt->bindParam(':data_pagamento', $data_pagamento);
-        if($stmt->execute()){
-            return $this->db->lastInsertId();
-        }else{
-            return false;
-        }
-    }
-
-    // metodo de atualizar o pagamento
-    function atualizarPagamento($id_cliente, $total_devedor, $dinheiro, $credito, $debito, $pix, $status_pagamento, $data_pagamento){
-        $dataatual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_pagamento SET id_cliente = :id_cliente,
-        total_devedor = :total_devedor,
-        dinheiro = :dinheiro,
-        credito = :credito,
-        debito = :debito,
-        pix = :pix,
-        staus_pagamento = :status_pagamento,
-        data_pagamento = :data_pagamento,
-        atualizado_em = :atual
-        Where id_pagamento = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id_cliente);
-        $stmt->bindParam(':id_cliente', $id_cliente);
-        $stmt->bindParam(':total_devedor', $total_devedor);
-        $stmt->bindParam(':dinheiro', $dinheiro);
-        $stmt->bindParam(':credito', $credito);
-        $stmt->bindParam(':debito', $debito);
-        $stmt->bindParam(':pix', $pix);
-        $stmt->bindParam(':status_pagamento', $status_pagamento);
-        $stmt->bindParam(':data_pagamento', $data_pagamento);
-        $stmt->bindParam(':atual', $dataatual);
-        if($stmt->execute()){
-            return $this->db->lastInsertId();
-        }else{
-            return false;
-        }
-    }
-
-    // metodo de deletar o pagamento
-    function excluirPagamento($id){
-        $dataatual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_pagamento SET 
-        excluido_em = :atual
-        Where id_pagamento = :id";
+    // ✅ BUSCAR 1 POR ID
+    public function buscarPagamentoPorID(int $id) {
+        $sql = 'SELECT p.*, u.nome_usuario as cliente_nome,
+                (p.dinheiro + p.credito + p.debito + p.pix) as total_pago
+                FROM tbl_pagamento p 
+                LEFT JOIN tbl_usuario u ON p.id_cliente = u.id_usuario 
+                WHERE p.id_pagamento = :id AND p.excluido_em IS NULL';
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':atual', $dataatual);
-        if($stmt->execute()){
-            return true;
-        }else{
-            return false;
-        }
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // ✅ INSERIR - 1 ÚNICA LINHA
+    public function inserirPagamento($id_cliente, $total_devedor, $dinheiro, $credito, $debito, $pix, $status_pagamento, $data_pagamento) {
+        $sql = 'INSERT INTO tbl_pagamento (id_cliente, total_devedor, dinheiro, credito, debito, pix, status_pagamento, data_pagamento) 
+                VALUES (:id_cliente, :total_devedor, :dinheiro, :credito, :debito, :pix, :status_pagamento, :data_pagamento)';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->bindParam(':total_devedor', $total_devedor);
+        $stmt->bindParam(':dinheiro', $dinheiro);
+        $stmt->bindParam(':credito', $credito);
+        $stmt->bindParam(':debito', $debito);
+        $stmt->bindParam(':pix', $pix);
+        $stmt->bindParam(':status_pagamento', $status_pagamento);
+        $stmt->bindParam(':data_pagamento', $data_pagamento);
+        return $stmt->execute();
+    }
+
+    // ✅ ATUALIZAR - 1 ÚNICA LINHA
+    public function atualizarPagamento(int $id, $id_cliente, $total_devedor, $dinheiro, $credito, $debito, $pix, $status_pagamento, $data_pagamento) {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = "UPDATE tbl_pagamento SET 
+                id_cliente = :id_cliente,
+                total_devedor = :total_devedor,
+                dinheiro = :dinheiro,
+                credito = :credito,
+                debito = :debito,
+                pix = :pix,
+                status_pagamento = :status_pagamento,
+                data_pagamento = :data_pagamento,
+                atualizado_em = :atual 
+                WHERE id_pagamento = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->bindParam(':total_devedor', $total_devedor);
+        $stmt->bindParam(':dinheiro', $dinheiro);
+        $stmt->bindParam(':credito', $credito);
+        $stmt->bindParam(':debito', $debito);
+        $stmt->bindParam(':pix', $pix);
+        $stmt->bindParam(':status_pagamento', $status_pagamento);
+        $stmt->bindParam(':data_pagamento', $data_pagamento);
+        $stmt->bindParam(':atual', $dataAtual);
+        return $stmt->execute();
+    }
+
+    // ✅ CALCULAR STATUS AUTOMÁTICO
+    public function calcularStatus(float $total_devedor, float $total_pago) {
+        return $total_pago >= $total_devedor ? 'pago' : 'aberto';
+    }
+
+    public function getClientes() {
+        $sql = "SELECT id_usuario, nome_usuario FROM tbl_usuario WHERE tipo_usuario = 'cliente' AND excluido_em IS NULL ORDER BY nome_usuario";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function excluirPagamento(int $id) {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = "UPDATE tbl_pagamento SET excluido_em = :atual WHERE id_pagamento = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':atual', $dataAtual);
+        return $stmt->execute();
     }
 }

@@ -9,6 +9,11 @@ class Rotas
     return [
     "GET" => [
        // O caminho da url   O nome do controller que e o metodo do controller
+       //login
+       '/register' => 'AuthController@register',
+       '/login' => 'AuthController@login',
+       '/logout' => 'AuthController@logout',
+       '/admin/dashboard' => 'Admin\DashboardController@index',
        //usuarios
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
@@ -56,9 +61,43 @@ class Rotas
         "/item_orcamento/criar" => "ItemOrcamentoController@viewCriarItemOrcamento",
         "/item_orcamento/editar/{id}" => "ItemOrcamentoController@viewEditarItemOrcamento",
         "/item_orcamento/excluir/{id}" => "ItemOrcamentoController@viewExcluirItemOrcamento",
+        //servico
+        "/servico" => "ServicoController@index",
+        "/servico/criar" => "servicoController@viewCriarServicos",
+        "/servico/listar" => "servicoController@viewListarServicos",
+        "/servico/editar/{id}" => "servicoController@viewEditarServicos",
+        "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
+        //projeto
+        "/projeto" => "projetoController@index",
+        "/projeto/criar" => "projetoController@viewCriarProjetos",
+        "/projeto/listar" => "projetoController@viewListarProjetos",
+        "/projeto/editar/{id}" => "projetoController@viewEditarProjetos",
+        "/projeto/excluir/{id}" => "projetoController@viewExcluirProjetos",
+        //pagamento
+        "/pagamento" => "pagamentoController@index",
+        "/pagamento/criar" => "pagamentoController@viewCriarPagamentos",
+        "/pagamento/listar" => "pagamentoController@viewListarPagamentos",
+        "/pagamento/editar/{id}" => "pagamentoController@viewEditarPagamentos",
+        "/pagamento/excluir/{id}" => "pagamentoController@viewExcluirPagamentos",
+        //orcamento
+        "/orcamento" => "orcamentoController@index",
+        "/orcamento/criar" => "orcamentoController@viewCriarOrcamentos",
+        "/orcamento/listar" => "orcamentoController@viewListarOrcamentos",
+        "/orcamento/editar/{id}" => "orcamentoController@viewEditarOrcamentos",
+        "/orcamento/excluir/{id}" => "orcamentoController@viewExcluirOrcamentos",
+        //material
+        "/material" => "materialController@index",
+        "/material/criar" => "materialController@viewCriarMateriais",
+        "/material/listar" => "materialController@viewListarMateriais",
+        "/material/editar/{id}" => "materialController@viewEditarMateriais",
+        "/material/excluir/{id}" => "materialController@viewExcluirMateriais",
+
         
     ],
     "POST" => [
+        //login
+        '/register' => 'AuthController@cadastrarUsuario',
+        '/login' => 'AuthController@authenticar',
         //usuarios
         "/usuario/salvar" => "UsuarioController@salvarUsuario",
         "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
@@ -87,6 +126,26 @@ class Rotas
         "/item_orcamento/salvar" => "ItemOrcamentoController@salvarItemOrcamento",
         "/item_orcamento/atualizar/{id}" => "ItemOrcamentoController@atualizarItemOrcamento",
         "/item_orcamento/deletar/{id}" => "ItemOrcamentoController@deletarItemOrcamento",
+        //servico
+        "/servico/salvar" => "ServicoController@salvarServico",
+        "/servico/atualizar/{id}" => "ServicoController@atualizarServico",
+        "/servico/deletar/{id}" => "ServicoController@deletarServico",
+        //projeto
+        "/projeto/salvar" => "projetoController@salvarProjeto",
+        "/projeto/atualizar/{id}" => "projetoController@atualizarProjeto",
+        "/projeto/deletar/{id}" => "projetoController@deletarProjeto",
+        //pagamento
+        "/pagamento/salvar" => "pagamentoController@salvarPagamento",
+        "/pagamento/atualizar/{id}" => "pagamentoController@atualizarPagamento",
+        "/pagamento/deletar/{id}" => "pagamentoController@deletarPagamento",
+        //orcamento
+        "/orcamento/salvar" => "orcamentoController@salvarOrcamento",
+        "/orcamento/atualizar/{id}" => "orcamentoController@atualizarOrcamento",
+        "/orcamento/deletar/{id}" => "orcamentoController@deletarOrcamento",
+        //material 
+        "/material/salvar" => "materialController@salvarMaterial",
+        "/material/atualizar/{id}" => "materialController@atualizarMaterial",
+        "/material/deletar/{id}" => "materialController@deletarMaterial",
     ]
         ];
     }
