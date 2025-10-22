@@ -8,6 +8,7 @@ $router = new Router();
  
 $rotas = Rotas::get();
 $router->setNamespace('App\Impermax\Controllers');
+require_once __DIR__ . '/bootstrap.php';
  
 foreach ($rotas as $metodhoHTTp => $rota) {
     foreach ($rota as $uri => $acao) {
