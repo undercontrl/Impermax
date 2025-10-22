@@ -3,7 +3,7 @@ namespace App\Impermax\Models;
 
 use PDO;
 
-class contato {
+class Contato {
     private $id_contato;
     private $nome_contato;
     private $telefone_contato;
