@@ -47,8 +47,9 @@
             <label for="status_item_orcamento" class="form-label">Status:</label>
             <select id="status_item_orcamento" name="status_item_orcamento" class="form-select" required>
                 <option value="pendente" <?= $item_orcamento['status_item_orcamento'] == 'pendente' ? 'selected' : '' ?>>Pendente</option>
-                <option value="em_andamento" <?= $item_orcamento['status_item_orcamento'] == 'em_andamento' ? 'selected' : '' ?>>Em andamento</option>
+                <option value="em_andamento" <?= $item_orcamento['status_item_orcamento'] == 'em andamento' ? 'selected' : '' ?>>Em andamento</option>
                 <option value="finalizado" <?= $item_orcamento['status_item_orcamento'] == 'finalizado' ? 'selected' : '' ?>>Finalizado</option>
+                <option value="finalizado" <?= $item_orcamento['status_item_orcamento'] == 'ativo' ? 'selected' : '' ?>>Ativo</option>
             </select>
         </div>
 

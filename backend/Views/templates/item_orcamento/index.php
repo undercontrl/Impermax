@@ -19,16 +19,33 @@
         <tbody>
             <?php if (!empty($itens_orcamento)): ?>
                 <?php foreach ($itens_orcamento as $item): ?>
+                    <?php
+                        $status = strtolower(trim($item['status_item_orcamento'] ?? ''));
+
+                        $badgeClass = match ($status) {
+                            'pendente'     => 'bg-warning text-dark', // amarelo
+                            'em andamento' => 'bg-info text-dark',    // azul claro
+                            'finalizado'   => 'bg-success',           // verde
+                            'ativo'        => 'bg-primary',           // azul forte
+                            default        => 'bg-secondary'          // cinza padrão
+                        };
+                    ?>
                     <tr>
                         <td><?= htmlspecialchars($item['id_item_orcamento'] ?? '') ?></td>
                         <td><?= htmlspecialchars($item['id_orcamento'] ?? '') ?></td>
                         <td><?= htmlspecialchars($item['id_servico'] ?? '') ?></td>
                         <td><?= htmlspecialchars($item['descricao_item_orcamento'] ?? '') ?></td>
                         <td><?= htmlspecialchars($item['metragem'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($item['status_item_orcamento'] ?? '') ?></td>
+                        <td>
+                            <span class="badge rounded-pill <?= $badgeClass ?>"
+                                  style="padding: 4px 8px; font-size: .78rem; border-radius: 6px; font-weight: 500; letter-spacing:.3px;">
+                                <?= htmlspecialchars($item['status_item_orcamento'] ?? '') ?>
+                            </span>
+                        </td>
                         <td>
                             <a href="/backend/item_orcamento/editar/<?= htmlspecialchars($item['id_item_orcamento']) ?>" class="btn btn-sm btn-primary">Editar</a>
-                            <a href="/backend/item_orcamento/excluir/<?= htmlspecialchars($item['id_item_orcamento']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este item?');">Excluir</a>
+                            <a href="/backend/item_orcamento/excluir/<?= htmlspecialchars($item['id_item_orcamento']) ?>" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Tem certeza que deseja excluir este item?');">Excluir</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

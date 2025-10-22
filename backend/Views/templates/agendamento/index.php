@@ -18,12 +18,34 @@
         <tbody>
             <?php if (!empty($agendamentos)): ?>
                 <?php foreach ($agendamentos as $agendamento): ?>
+                    <!--  -->
                     <tr>
                         <td><?= htmlspecialchars($agendamento['id_agendamento']) ?></td>
                         <td><?= htmlspecialchars($agendamento['nome_cliente'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($agendamento['data_solicitada']) ?></td>
-                        <td><?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?></td>
-                        <td><?= htmlspecialchars($agendamento['status_agendamento']) ?></td>
+                        <td><?= htmlspecialchars(date('d/m/Y', strtotime($agendamento['data_solicitada']))) ?></td>
+                        <td>R$ <?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?></td>
+                        <td>
+                            <?php
+                                $status = strtolower(trim($agendamento['status_agendamento']));
+                                $badgeClass = match ($status) {
+                                    'realizada' => 'bg-success',
+                                    'agendada'  => 'bg-primary',
+                                    'pendente'  => 'bg-warning text-dark',
+                                    'cancelada' => 'bg-danger',
+                                    default     => 'bg-secondary'
+                                };
+                            ?>
+                            <span class="badge <?= $badgeClass ?>" 
+                                style="
+                                    padding: 4px 8px; 
+                                    font-size: 0.78rem; 
+                                    border-radius: 6px; 
+                                    font-weight: 500;
+                                    text-transform: capitalize;
+                                    letter-spacing: 0.3px;">
+                                <?= htmlspecialchars($agendamento['status_agendamento']) ?>
+                            </span>
+                        </td>
                         <td>
                             <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" class="btn btn-sm btn-primary">Editar</a>
                             <a href="/backend/agendamento/excluir/<?= $agendamento['id_agendamento'] ?>" class="btn btn-sm btn-danger"

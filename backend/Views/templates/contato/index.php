@@ -20,13 +20,36 @@
         <tbody>
             <?php if (!empty($contatos)): ?>
                 <?php foreach ($contatos as $contato): ?>
+                    <?php
+                        $status = strtolower(trim($contato['status_contato'] ?? ''));
+
+                        // Define as cores conforme o status
+                        switch ($status) {
+                            case 'novo':
+                                $badgeClass = 'bg-primary'; // azul
+                                break;
+                            case 'respondido':
+                                $badgeClass = 'bg-success'; // verde
+                                break;
+                            case 'pendente':
+                                $badgeClass = 'bg-warning text-dark'; // amarelo
+                                break;
+                            default:
+                                $badgeClass = 'bg-secondary'; // cinza padrão
+                        }
+                    ?>
                     <tr>
                         <td><?= htmlspecialchars($contato['id_contato']) ?></td>
                         <td><?= htmlspecialchars($contato['nome_contato']) ?></td>
                         <td><?= htmlspecialchars($contato['telefone_contato']) ?></td>
                         <td><?= htmlspecialchars($contato['email_contato']) ?></td>
                         <td><?= htmlspecialchars($contato['assunto_contato']) ?></td>
-                        <td><?= htmlspecialchars($contato['status_contato']) ?></td>
+                        <td>
+                            <span class="badge rounded-pill <?= $badgeClass ?>"
+                                style="padding: 4px 8px; font-size: .78rem; border-radius: 6px; font-weight: 500; letter-spacing:.3px;">
+                                <?= htmlspecialchars($contato['status_contato']) ?>
+                            </span>
+                        </td>
                         <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($contato['data_envio']))) ?></td>
                         <td>
                             <a href="/backend/contato/editar/<?= $contato['id_contato'] ?>" class="btn btn-sm btn-primary">Editar</a>
