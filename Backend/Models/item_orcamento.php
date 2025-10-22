@@ -1,6 +1,4 @@
 <?php
-namespace App\Impermax\Models;
-use PDO;
 class item_orcamento{
     private $id_item_orcamento;
     private $id_orcamento;
@@ -11,7 +9,6 @@ class item_orcamento{
     private $criado_em;
     private $atualizado_em;
     private $excluido_em;
-    private $db;
     // O construtor inicializa a classe e/ou atributos
     public function __construct($db){
         $this->db = $db;

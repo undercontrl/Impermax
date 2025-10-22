@@ -1,6 +1,4 @@
 <?php
-namespace App\Impermax\Models;
-use PDO;
 class avaliacao{
     private $id_avaliacao;
     private $id_cliente;
@@ -10,7 +8,6 @@ class avaliacao{
     private $criado_em;
     private $atualizado_em;
     private $excluido_em;
-    private $db;
     // O construtor inicializa a classe e/ou atributos
     public function __construct($db){
         $this->db = $db;
@@ -82,8 +79,7 @@ class avaliacao{
         }
     }
     //método de deletar a avaliação 
-    function excluirAvaliacao($id_avaliacao
-    ){
+    function excluirAvaliacao($id){
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_avaliacao SET excluido_em = :excluido WHERE id_avaliacao = :id_avaliacao';
         $statement = $this->db->prepare($sql);
