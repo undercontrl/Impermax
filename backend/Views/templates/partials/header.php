@@ -144,6 +144,11 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="/backend/item_agendamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'item_agendamento') ? 'active' : '' ?>"><i class="bi bi-list-check"></i> Itens Agendamento</a>
         <a href="/backend/item_orcamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'item_orcamento') ? 'active' : '' ?>"><i class="bi bi-receipt"></i> Itens Orçamento</a>
         <a href="/backend/usuario/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'usuario') ? 'active' : '' ?>"><i class="bi bi-people"></i> Usuários</a>
+        <a href="/backend/material/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'material') ? 'active' : '' ?>"><i class="bi bi-tools"></i>Material</a>
+        <a href="/backend/orcamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'orcamento') ? 'active' : '' ?>"><i class="bi bi-newspaper"></i>Orçamentos</a>
+        <a href="/backend/pagamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'pagamento') ? 'active' : '' ?>"><i class="bi bi-cash-coin"></i>Pagamentos</a>
+        <a href="/backend/projeto/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'projetos') ? 'active' : '' ?>"><i class="bi bi-card-image"></i>Projetos</a>
+        <a href="/backend/servico/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'servico') ? 'active' : '' ?>"><i class="bi bi-box-seam"></i>Serviços</a>
     </nav>
 
     <!-- Conteúdo -->
