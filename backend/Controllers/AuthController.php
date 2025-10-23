@@ -9,8 +9,7 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\Session;
 use App\Impermax\Validadores\UsuarioValidador;
 
-
-class AuthController{
+class AuthController {
     private Usuario $usuarioModel;
     private Session $session;
 
@@ -23,20 +22,23 @@ class AuthController{
     public function login(): void {
         View::render('auth/login');
     }
-
+    
     public function register(): void {
         View::render('auth/register');
     }
+    
 
     public function logout(): void {
         $this->session->destroy();
         Redirect::redirecionarComMensagem('/login', 'success', 'Você saiu com sucesso.');
     }
 
-    public function authenticar(): void{
+    public function authenticar(): void {
         $email = $_POST['email_usuario'] ?? null;
         $senha = $_POST['senha_usuario'] ?? null;
+
         $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
+
         if ($usuario) {
             session_regenerate_id(true);
             $this->session->set('usuario_id', $usuario['id_usuario']);
@@ -44,33 +46,37 @@ class AuthController{
             $this->session->set('usuario_tipo', $usuario['tipo_usuario']);
 
             Redirect::redirecionarPara('/admin/dashboard');
-        }else {
-            Redirect::redirecionarComMensagem('login', 'error', 'E-mail ou senha incorrretos.');
+        } else {
+            Redirect::redirecionarComMensagem('login', 'error', 'E-mail ou senha incorretos.');
         }
     }
 
-            public function cadastrarUsuario(): void {
-            $erros = UsuarioValidador::ValidarEntradas($_POST);
-            if (!empty($erros)){
-                Redirect::redirecionarComMensagem('register', 'erros', implode("<br>", $erros));
-            }
-             $nome = $_POST['nome_usuario'] ?? null;
-             $email = $_POST['email_usuario'] ?? null;
-             $senha = $_POST['senha_usuario'] ?? null;
-             $senha_confirm = $_POST['senha_confirm'] ?? null;
-             if($senha != $senha_confirm) {
-                Redirect::redirecionarComMensagem('register', 'erros', 'As senhas não conferem.');
-             }
-             if(!empty($this->usuarioModel ->buscarUsuariosPorEmail($email))){
-                Redirect::redirecionarComMensagem('register', 'erros', 'Erro ao cadastrar, problema no seu e-mail.');
+    public function cadastrarUsuario(): void {
+        $erros = UsuarioValidador::ValidarEntradas($_POST);
 
-             }
-             $novoUsuarioId =$this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', 'Ativo', 'null');
-             if ($novoUsuarioId) {
-                Redirect::redirecionarComMensagem('login', 'sucess', 'Cadastro realizado: Por favor, faça o login.');
-             } else {
-                Redirect::redirecionarComMensagem('register', 'error', 'Erro no servidor. Tente novamente.');
-             }
+        if (!empty($erros)){
+            Redirect::redirecionarComMensagem('register', 'error', implode("<br>", $erros));
         }
 
+        $nome = $_POST['nome_usuario'] ?? null;
+        $email = $_POST['email_usuario'] ?? null;
+        $senha = $_POST['senha_usuario'] ?? null;
+        $senha_confirm = $_POST['senha_confirm'] ?? null;
+
+        if($senha != $senha_confirm) {
+            Redirect::redirecionarComMensagem('register', 'error', 'As senhas não conferem.');
+        }
+
+        if(!empty($this->usuarioModel->buscarUsuariosPorEmail($email))){
+            Redirect::redirecionarComMensagem('register', 'error', 'E-mail já cadastrado.');
+        }
+
+        $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', 'Ativo', null);
+
+        if ($novoUsuarioId) {
+            Redirect::redirecionarComMensagem('login', 'success', 'Cadastro realizado! Faça o login.');
+        } else {
+            Redirect::redirecionarComMensagem('register', 'error', 'Erro no servidor. Tente novamente.');
+        }
+    }
 }

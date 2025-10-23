@@ -2,6 +2,17 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Caminhos onde o menu não deve aparecer
+$rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar'];
+
+// Detecta a rota atual (sem parâmetros)
+$currentPath = strtok($_SERVER['REQUEST_URI'], '?');
+
+// Se for login/register, não renderiza o resto do layout
+if (in_array($currentPath, $rotasPublicas)) {
+    return;
+}
 ?>
 
 <!DOCTYPE html>

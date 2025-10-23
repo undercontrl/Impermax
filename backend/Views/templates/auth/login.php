@@ -15,33 +15,40 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--cor-primaria), var(--cor-terciaria));
-            height: 100vh;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-family: "Poppins", sans-serif;
-            color: #333;
+            justify-content: center;
+            font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background: linear-gradient(135deg, var(--cor-primaria), var(--cor-terciaria));
+        }
+        .content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 162px 40px;
+            background-color: var(--cor-fundo);
         }
 
-        .login-container {
+        .login-card {
             background: var(--cor-secundaria);
-            border-radius: 18px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            width: 380px;
-            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 2.5rem;
             text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
         }
 
-        .login-logo {
-            width: 140px;
-            margin-bottom: 1rem;
+        .login-card img {
+            width: 150px;
+            margin-bottom: 1.5rem;
         }
 
-        h3 {
+        .login-card h3 {
             color: var(--cor-primaria);
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         .form-control {
@@ -53,7 +60,7 @@
 
         .form-control:focus {
             border-color: var(--cor-terciaria);
-            box-shadow: 0 0 0 0.2rem rgba(20, 135, 223, 0.2);
+            box-shadow: 0 0 0 0.2rem rgba(20, 135, 223, 0.25);
         }
 
         .btn-login {
@@ -65,6 +72,7 @@
             padding: 0.75rem;
             transition: all 0.3s ease;
             border: none;
+            margin-top: 1rem;
         }
 
         .btn-login:hover {
@@ -83,37 +91,41 @@
             color: var(--cor-terciaria);
         }
 
-        .input-group-text {
-            background: none;
-            border: none;
-            color: var(--cor-primaria);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-15px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer-login {
+            position: fixed;
+            bottom: 15px;
+            text-align: center;
+            width: 100%;
+            color: #fff;
+            font-size: 0.85rem;
+            opacity: 0.8;
         }
     </style>
 </head>
 
 <body>
-    <div class="login-container fade-in">
-        <img src="/assets/icons/impermax-LOGO.svg" alt="Logo Impermax" class="login-logo">
+    <div class="login-card">
+        <img src="/assets/icons/impermax-LOGO.svg" alt="Logo Impermax">
         <h3>Acesso ao Sistema</h3>
 
-        <form action="/backend/login" method="POST">
+        <form action="/backend/authenticar" method="POST">
             <div class="mb-3 input-group">
-                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" class="form-control" name="email_usuario" placeholder="Email" required>
+                <span class="input-group-text bg-transparent border-end-0">
+                    <i class="bi bi-envelope text-secondary"></i>
+                </span>
+                <input type="email" class="form-control border-start-0" name="email_usuario" placeholder="Email" required>
             </div>
 
             <div class="mb-4 input-group">
-                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" class="form-control" name="senha_usuario" placeholder="Senha" required>
+                <span class="input-group-text bg-transparent border-end-0">
+                    <i class="bi bi-lock text-secondary"></i>
+                </span>
+                <input type="password" class="form-control border-start-0" name="senha_usuario" placeholder="Senha" required>
             </div>
 
             <button type="submit" class="btn-login">Entrar</button>
@@ -123,17 +135,7 @@
             <a href="/backend/register" class="link-registro">Não tenho conta</a>
         </div>
     </div>
+
+    <div class="footer-login">© 2025 Impermax | Painel Administrativo</div>
 </body>
 </html>
-<?php
-use App\Impermax\Core\Flash;
-$mensagem = Flash::get();
-if(isset($mensagem)){
-    foreach($mensagem as $key => $value){
-        if($key == "type"){
-            $tipo = $value == "success" ? "alert-success" : "alert-danger";
-            echo "<div class='alert $tipo mt-3'>$mensagem[message]</div>";
-        }
-    }
-}
-?>
