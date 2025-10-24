@@ -6,12 +6,15 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\OrcamentoValidador;
 use App\Impermax\Models\usuario;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class OrcamentoController {  // ✅ MAIÚSCULA
+class OrcamentoController extends AdminController{  // ✅ MAIÚSCULA
     private $orcamento;
     private $db;
 
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->orcamento = new Orcamento($this->db);  // ✅ MAIÚSCULA
     }

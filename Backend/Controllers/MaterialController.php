@@ -6,13 +6,16 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\MaterialValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class MaterialController {
+class MaterialController  extends AdminController {
     private $material;
     private $servico;
     private $db;
 
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->material = new Material($this->db);
         $this->servico = new Servico($this->db);

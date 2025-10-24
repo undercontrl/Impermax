@@ -7,8 +7,11 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\EnderecoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class EnderecoController
+
+class EnderecoController extends AdminController
 {
     private $endereco;
     private $usuario;
@@ -16,6 +19,7 @@ class EnderecoController
 
     public function __construct()
     {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->endereco = new endereco($this->db);
         $this->usuario = new usuario($this->db);

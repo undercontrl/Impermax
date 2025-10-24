@@ -9,8 +9,10 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ItemAgendamentoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ItemAgendamentoController
+class ItemAgendamentoController extends AdminController
 {
     private $itemAgendamento;
     private $agendamento;
@@ -20,6 +22,7 @@ class ItemAgendamentoController
 
     public function __construct()
     {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->itemAgendamento = new item_agendamento($this->db);
         $this->agendamento = new agendamento($this->db);

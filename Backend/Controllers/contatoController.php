@@ -6,14 +6,16 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ContatoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ContatoController
-{
+class ContatoController extends AdminController{
     private $contato;
     private $db;
 
     public function __construct()
     {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->contato = new Contato($this->db);
     }
@@ -21,8 +23,7 @@ class ContatoController
    
     public function index()
     {
-        $dados = $this->contato->buscarContatos();
-        var_dump($dados);
+        $this->viewListarContatos();
     }
 
     public function viewListarContatos()

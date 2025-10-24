@@ -7,14 +7,15 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ServicoValidador;
 use App\Impermax\Core\FileManager;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ServicoController
-{
+class ServicoController extends AdminController{
     private $servico;
     private $gerenciarImagem;
 
-    public function __construct()
-    {
+    public function __construct() {
+        parent::__construct();
         $db = Database::getInstance();
         $this->servico = new Servico($db);
         $this->gerenciarImagem = new FileManager('upload');

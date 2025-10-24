@@ -7,18 +7,24 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AgendamentoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class AgendamentoController
-{
+
+class AgendamentoController extends AdminController{
     private $agendamento;
     private $usuario;
     private $db;
 
-    public function __construct()
-    {
+    public function __construct(){
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->agendamento = new Agendamento($this->db);
         $this->usuario = new Usuario($this->db);
+    }
+
+        public function index() {
+        $this->viewListarAgendamentos();
     }
 
     // Listar todos os agendamentos

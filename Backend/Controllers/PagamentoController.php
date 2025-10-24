@@ -5,12 +5,15 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\PagamentoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class PagamentoController {
+class PagamentoController extends AdminController {
     private $pagamento;
     private $db;
 
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->pagamento = new Pagamento($this->db);
     }

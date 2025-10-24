@@ -8,8 +8,10 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ItemOrcamentoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ItemOrcamentoController
+class ItemOrcamentoController extends AdminController
 {
     private $item_orcamento;
     private $servico;
@@ -18,6 +20,7 @@ class ItemOrcamentoController
 
     public function __construct()
     {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->item_orcamento = new Item_Orcamento($this->db);
         $this->servico = new Servico($this->db);
@@ -34,7 +37,7 @@ class ItemOrcamentoController
     // Criar
     public function viewCriarItemOrcamento()
     {
-        $orcamentos = $this->orcamento->buscarOrcamentosComCliente(); // com join pra mostrar nome cliente
+        $orcamentos = $this->orcamento->buscarOrcamentos(); // usar método existente que retorna orçamentos
         $servicos = $this->servico->buscarServicos();
 
         View::render("item_orcamento/create", [
@@ -69,7 +72,7 @@ class ItemOrcamentoController
     public function viewEditarItemOrcamento($id)
     {
         $item = $this->item_orcamento->buscarItemOrcamentoPorId($id);
-        $orcamentos = $this->orcamento->buscarOrcamentosComCliente();
+        $orcamentos = $this->orcamento->buscarOrcamentos();
         $servicos = $this->servico->buscarServicos();
 
         View::render("item_orcamento/edit", [

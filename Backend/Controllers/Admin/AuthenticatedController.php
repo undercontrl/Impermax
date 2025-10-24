@@ -15,6 +15,6 @@ abstract class AuthenticatedController{
                     'Você precisa estar logado para acessar esta página.'
                 );
             }
-        
+
     }
 }

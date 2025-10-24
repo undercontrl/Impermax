@@ -7,15 +7,16 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AvaliacaoValidador;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class AvaliacaoController
-{
+class AvaliacaoController extends AdminController{
     private $avaliacao;
     private $usuario;
     private $db;
 
-    public function __construct()
-    {
+    public function __construct(){
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->avaliacao = new Avaliacao($this->db);
         $this->usuario = new Usuario($this->db);

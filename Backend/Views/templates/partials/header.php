@@ -137,6 +137,12 @@ if (in_array($currentPath, $rotasPublicas)) {
         .alert {
             margin-bottom: 20px;
         }
+
+        .botao-sair {
+            margin-top: auto;
+            background-color: var(--cor-primaria);
+            color: #fff ;
+        }
     </style>
 </head>
 
@@ -146,7 +152,7 @@ if (in_array($currentPath, $rotasPublicas)) {
     <nav class="sidebar">
         <div class="sidebar-logo">
             <a href="/backend/admin/dashboard">
-                <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
+                <img src="/assets/logo/impermax-LOGO.svg" alt="Impermax Logo">
             </a>
         </div>
         <a href="/backend/agendamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'agendamento') ? 'active' : '' ?>"><i class="bi bi-calendar-check"></i> Agendamentos</a>
@@ -161,6 +167,7 @@ if (in_array($currentPath, $rotasPublicas)) {
         <a href="/backend/pagamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'pagamento') ? 'active' : '' ?>"><i class="bi bi-cash-coin"></i>Pagamentos</a>
         <a href="/backend/projeto/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'projetos') ? 'active' : '' ?>"><i class="bi bi-card-image"></i>Projetos</a>
         <a href="/backend/servico/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'servico') ? 'active' : '' ?>"><i class="bi bi-box-seam"></i>Serviços</a>
+        <a href="/backend/logout" class ="botao-sair"><i class="bi bi-box-arrow-right"></i> Sair</a>
     </nav>
 
     <!-- Conteúdo -->

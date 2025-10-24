@@ -6,12 +6,15 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\projetoValidador;
 use App\Impermax\Core\FileManager;
+use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ProjetoController{
+class ProjetoController extends AdminController {
     public $projeto;
     public $db;
     public $gerenciarImagem;
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
        $this->projeto = new Projeto($this->db);
        $this->gerenciarImagem = new FileManager('upload');

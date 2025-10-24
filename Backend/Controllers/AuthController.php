@@ -30,7 +30,7 @@ class AuthController {
 
     public function logout(): void {
         $this->session->destroy();
-        Redirect::redirecionarComMensagem('/login', 'success', 'Você saiu com sucesso.');
+        Redirect::redirecionarComMensagem('login', 'success', 'Você saiu com sucesso.');
     }
 
     public function authenticar(): void {

@@ -9,6 +9,7 @@
     <!-- Resumo geral -->
     <div class="row g-4">
         <div class="col-md-3 col-sm-6">
+            <a href="/backend/usuarios" class="text-decoration-none">
             <div class="card border-0 shadow-sm p-3 dashboard-card">
                 <div class="d-flex align-items-center">
                     <div class="icon-circle bg-primary text-white me-3">
@@ -20,9 +21,11 @@
                     </div>
                 </div>
             </div>
+            </a>
         </div>
 
         <div class="col-md-3 col-sm-6">
+            <a href="/backend/agendamentos" class="text-decoration-none">
             <div class="card border-0 shadow-sm p-3 dashboard-card">
                 <div class="d-flex align-items-center">
                     <div class="icon-circle bg-success text-white me-3">
@@ -34,9 +37,12 @@
                     </div>
                 </div>
             </div>
+            </a>
         </div>
 
+       
         <div class="col-md-3 col-sm-6">
+             <a href="/backend/orcamento" class="text-decoration-none">
             <div class="card border-0 shadow-sm p-3 dashboard-card">
                 <div class="d-flex align-items-center">
                     <div class="icon-circle bg-info text-white me-3">
@@ -44,13 +50,16 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">Orçamentos</h6>
-                        <h4 class="fw-bold"><?= htmlspecialchars($totalOrcamentos ?? 0) ?></h4>
+                        <h4 class="fw-bold "><?= htmlspecialchars($totalOrcamentos ?? 0) ?></h4>
                     </div>
                 </div>
             </div>
+            </a>
         </div>
+        
 
         <div class="col-md-3 col-sm-6">
+            <a href="/backend/contatos" class="text-decoration-none">
             <div class="card border-0 shadow-sm p-3 dashboard-card">
                 <div class="d-flex align-items-center">
                     <div class="icon-circle bg-warning text-white me-3">
@@ -62,6 +71,7 @@
                     </div>
                 </div>
             </div>
+            </a>
         </div>
     </div>
 
