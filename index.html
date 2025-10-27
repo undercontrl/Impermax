@@ -164,5 +164,47 @@
     <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
     <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
 </footer>
+
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.servico__lista');
+            if (!container) return;
+            container.innerHTML = '<p>Carregando serviços...</p>';
+            fetch('/backend/api/servicos')
+                .then(response => {
+                    if (!response.ok){
+                        throw new Error('Falha ao carregar dados da rede.');
+                    }
+                    return response.json();
+                })
+                .then(json => {
+                    if (json.status !== 'success' || !json.data) {
+                        throw new Error('Api retornou um erro: ' + (json.message || 'Formato inválida'));
+                    }
+                    container.innerHTML = '';
+                    json.data.forEach(servico => {
+
+                        const cardHtml = `
+                            <div class="card" data-service="${servico.nome_servico.toLowerCase()}">
+                                <div class="card_frente" style="background-image: url('${servico.caminho_imagem}');">
+                                    <h3 class="card__titulo">${servico.nome_servico.toUpperCase()}</h3>
+                                </div>
+                                <div class="card__verso">
+                                    <h3 class="card__titulo--verso">${servico.nome_servico.toUpperCase()}</h3>
+                                    <p class="card__descricao">${servico.descricao_servico}</p>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', cardHtml);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar serviços:', error);
+                    container.innerHTML = '<p style="color: red;">Não foi possível carregar os serviços no momento. Tente novamente mais tarde.</p>';
+                });
+        });
+    </script>
+
+
 </body>
 </html>

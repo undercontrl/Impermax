@@ -48,6 +48,18 @@ class Servico{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //buscar servicos ativos para API pública
+
+     public function buscarServicosAtivos(){
+        $sql = "SELECT nome_servico, descricao_servico, foto_servico 
+                FROM tbl_servico 
+                WHERE status_servico = 'ativo' 
+                ORDER BY criado_em DESC LIMIT 4";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Inserir novo serviço
     public function inserirServico($nome, $descricao, $valor, $foto_servico, $status)
     {
@@ -86,15 +98,15 @@ class Servico{
     }
 
     // Marcar serviço como excluído
-    public function excluirServico($id)
+    public function deletarServico($id)
     {
-        $dataAtual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_servico 
-                SET excluido_em = :excluido 
-                WHERE id_servico = :id";
+        $status = $this->buscarServicoPorID($id);
+        $status = $status['status_servico'] == 'ativo' ? 'Inativo' : 'ativo';
+
+        $sql = "UPDATE tbl_servico SET status_servico = :status WHERE id_servico = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':excluido', $dataAtual);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $status);
         return $stmt->execute();
     }
 }

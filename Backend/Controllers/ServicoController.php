@@ -116,11 +116,11 @@ class ServicoController extends AdminController{
     // Executar exclusão
     public function deletarServico($id)
     {
-        $sucesso = $this->servico->excluirServico($id);
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço excluído com sucesso!");
+         $id = (int)$_POST['id_servico'];
+        if ($this->servico->deletarServico($id)) {
+            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço inativado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("servico/listar", "error", "Erro ao excluir o serviço!");
+            Redirect::redirecionarComMensagem("servico/listar", "error", "Erro ao inativar serviço.");
         }
     }
 }
