@@ -1,2 +1,4 @@
 /vendor/
 backend/Database/Config.php
+backend/Database/Config copy.php
+
