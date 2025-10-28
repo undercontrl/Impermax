@@ -1,2 +1,3 @@
- /vendor/
- backend/Database/Config.php
+#  /vendor/
+#  backend/Database/Config.php
+#  backend/Database/Config-antigo.php

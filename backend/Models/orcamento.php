@@ -102,4 +102,25 @@ class Orcamento{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Contar orçamentos em andamento
+    public function contarOrcamentosEmAndamento(): int
+    {
+        $sql = "SELECT COUNT(*) FROM tbl_orcamento 
+                WHERE LOWER(status_orcamento) = 'em andamento'
+                AND excluido_em IS NULL";
+        return (int) $this->db->query($sql)->fetchColumn();
+    }
+
+    public function buscarOrcamentosComCliente(){
+        $sql = 'SELECT o.*, u.nome_usuario as cliente_nome 
+            FROM tbl_orcamento o 
+            INNER JOIN tbl_usuario u ON o.id_cliente = u.id_usuario 
+            WHERE o.excluido_em IS NULL 
+            ORDER BY o.id_orcamento DESC';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

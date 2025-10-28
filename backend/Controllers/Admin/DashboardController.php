@@ -16,7 +16,7 @@ class DashboardController extends AuthenticatedController {
     private $contato;
 
     public function __construct() {
-        parent::__construct();
+        parent::__construct(['admin']); // garante acesso só ao admin
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
         $this->agendamento = new Agendamento($this->db);
@@ -25,18 +25,48 @@ class DashboardController extends AuthenticatedController {
     }
 
     public function index(): void {
+        // === Contadores ===
         $usuarios = $this->usuario->buscarUsuarios() ?? [];
         $totalAgendamentos = count($this->agendamento->buscarAgendamentos() ?? []);
-        $totalOrcamentos = method_exists($this->orcamento, 'buscarOrcamentos') ? count($this->orcamento->buscarOrcamentos()) : 0;
+        $totalOrcamentos = count($this->orcamento->buscarOrcamentos() ?? []);
         $totalContatos = count($this->contato->buscarContatos() ?? []);
 
+        // === Gráfico: Agendamentos por mês ===
+        $sqlAgMes = "
+            SELECT MONTH(data_solicitada) AS mes, COUNT(*) AS total
+            FROM tbl_agendamento
+            WHERE excluido_em IS NULL
+            GROUP BY MONTH(data_solicitada)
+        ";
+        $stmtAgMes = $this->db->query($sqlAgMes);
+        $graficoAgendamentos = array_fill(1, 12, 0);
+        while ($row = $stmtAgMes->fetch(\PDO::FETCH_ASSOC)) {
+            $graficoAgendamentos[(int)$row['mes']] = (int)$row['total'];
+        }
+
+        // === Gráfico: Distribuição de status ===
+        $sqlStatus = "
+            SELECT status_agendamento, COUNT(*) AS total
+            FROM tbl_agendamento
+            WHERE excluido_em IS NULL
+            GROUP BY status_agendamento
+        ";
+        $stmtStatus = $this->db->query($sqlStatus);
+        $graficoStatusAdmin = [];
+        while ($row = $stmtStatus->fetch(\PDO::FETCH_ASSOC)) {
+            $graficoStatusAdmin[$row['status_agendamento']] = (int)$row['total'];
+        }
+
+        // === Renderiza a View ===
         View::render('admin/dashboard/index', [
             'nomeUsuario' => $this->session->get('usuario_nome'),
             'tipo' => $this->session->get('usuario_tipo'),
             'usuarios' => $usuarios,
             'totalAgendamentos' => $totalAgendamentos,
             'totalOrcamentos' => $totalOrcamentos,
-            'totalContatos' => $totalContatos
+            'totalContatos' => $totalContatos,
+            'graficoAgendamentos' => json_encode(array_values($graficoAgendamentos)),
+            'graficoStatusAdmin' => json_encode($graficoStatusAdmin)
         ]);
     }
 }

@@ -14,6 +14,7 @@ class Rotas
        '/login' => 'AuthController@login',
        '/logout' => 'AuthController@logout',
        '/admin/dashboard' => 'Admin\DashboardController@index',
+       '/funcionario/dashboard' => 'Funcionario\DashboardController@index',
        //usuarios
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
@@ -98,6 +99,7 @@ class Rotas
         //login
         '/register' => 'AuthController@cadastrarUsuario',
         '/login' => 'AuthController@authenticar',
+        "/authenticar" => "AuthController@authenticar",
         //usuarios
         "/usuario/salvar" => "UsuarioController@salvarUsuario",
         "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",

@@ -106,7 +106,7 @@ class Usuario{
     // ✅ EXCLUIR (SOFT DELETE)
     public function excluirUsuario(int $id) {
         $dataAtual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_usuario SET excluido_em = :atual WHERE id_usuario = :id";
+        $sql = "UPDATE tbl_usuario SET status_usuario = 'Inativo', excluido_em = :atual WHERE id_usuario = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':atual', $dataAtual);

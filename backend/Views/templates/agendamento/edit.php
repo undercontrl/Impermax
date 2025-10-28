@@ -32,7 +32,7 @@
             <label for="status_agendamento" class="form-label">Status:</label>
             <select id="status_agendamento" name="status_agendamento" class="form-select" required>
                 <?php
-                    $status = ["pendente", "confirmado", "cancelado", "finalizado"];
+                    $status = ["pendente", "agendada", "cancelada", "realizada"];
                     foreach ($status as $st):
                 ?>
                     <option value="<?= $st ?>" <?= ($st == $agendamento['status_agendamento']) ? 'selected' : '' ?>>

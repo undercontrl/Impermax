@@ -121,4 +121,91 @@ class Agendamento{
             return false;
         }
     }
+    // Buscar agendamentos atribuídos a um funcionário específico (ou todos se não houver campo)
+    public function buscarAgendamentosPorResponsavel($id_responsavel)
+    {
+        // Primeiro, verifica se a coluna 'id_responsavel' existe no banco
+        $checkColumn = $this->db->query("SHOW COLUMNS FROM tbl_agendamento LIKE 'id_responsavel'");
+        $hasResponsavel = $checkColumn->fetch(PDO::FETCH_ASSOC);
+
+        if ($hasResponsavel) {
+            // Caso a coluna exista — busca filtrando por responsável
+            $sql = 'SELECT ag.*, usu.nome_usuario AS nome_cliente
+                    FROM tbl_agendamento AS ag
+                    INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                    WHERE ag.id_responsavel = :id_responsavel
+                    AND ag.excluido_em IS NULL
+                    ORDER BY ag.data_solicitada ASC';
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id_responsavel', $id_responsavel);
+        } else {
+            // Caso a coluna não exista — busca todos os agendamentos ativos
+            $sql = 'SELECT ag.*, usu.nome_usuario AS nome_cliente
+                    FROM tbl_agendamento AS ag
+                    INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                    WHERE ag.excluido_em IS NULL
+                    ORDER BY ag.data_solicitada ASC';
+
+            $stmt = $this->db->prepare($sql);
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // ====================== DASHBOARD MÉTRICAS ======================
+
+    // Contar agendamentos de hoje
+    public function contarAgendamentosDeHoje(): int
+    {
+        $hoje = date('Y-m-d');
+        $sql = "SELECT COUNT(*) FROM tbl_agendamento 
+                WHERE DATE(data_solicitada) = :hoje AND excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':hoje', $hoje);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
+    // Contar pendências
+    public function contarPendencias(): int
+    {
+        $sql = "SELECT COUNT(*) FROM tbl_agendamento 
+                WHERE LOWER(status_agendamento) = 'pendente' 
+                AND excluido_em IS NULL";
+        return (int) $this->db->query($sql)->fetchColumn();
+    }
+
+    // Contar serviços concluídos por mês
+    public function contarServicosPorMes(): array
+    {
+        $sql = "SELECT MONTH(data_solicitada) AS mes, COUNT(*) AS total
+                FROM tbl_agendamento
+                WHERE LOWER(status_agendamento) IN ('finalizado', 'concluído')
+                AND excluido_em IS NULL
+                GROUP BY MONTH(data_solicitada)";
+        $stmt = $this->db->query($sql);
+        $dados = array_fill(1, 12, 0);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $dados[(int)$row['mes']] = (int)$row['total'];
+        }
+        return array_values($dados);
+    }
+
+    // Distribuição de status (para gráfico de pizza)
+    public function distribuicaoPorStatus(): array
+    {
+        $sql = "SELECT status_agendamento, COUNT(*) AS total
+                FROM tbl_agendamento
+                WHERE excluido_em IS NULL
+                GROUP BY status_agendamento";
+        $stmt = $this->db->query($sql);
+        $resultado = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $resultado[$row['status_agendamento']] = (int)$row['total'];
+        }
+        return $resultado;
+    }
+
 }
