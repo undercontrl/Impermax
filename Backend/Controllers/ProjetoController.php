@@ -25,9 +25,26 @@ class ProjetoController extends AdminController {
         var_dump($resultado);
     }
 
-    public function viewListarProjetos(){
-        $dados = $this->projeto->buscarProjetos();
-        View::render("projeto/index", ["Projetos" => $dados]);
+    public function viewListarProjetos($pagina = 1){
+        $pagina = max(1, (int)$pagina);
+    
+    // Lê termo de busca
+    $termo = $_GET['termo'] ?? '';
+    
+    if (!empty($termo)) {
+        $dados = $this->projeto->buscarProjetos($termo);
+        $paginacao = null;
+    } else {
+        $dados = $this->projeto->listarInternos($pagina, 20);
+        $paginacao = $dados;
+        $dados = $dados['data'];
+    }
+
+    View::render("projeto/index", [
+        "Projetos" => $dados,
+        'paginacao' => $paginacao,
+        'termo' => $termo
+    ]);
     }
 
     public function viewCriarProjetos(){

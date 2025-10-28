@@ -99,4 +99,38 @@ class Pagamento {
         $stmt->bindParam(':atual', $dataAtual);
         return $stmt->execute();
     }
+
+    //paginação
+    public function listarInternos($pagina = 1, $porPagina = 20) {
+    $offset = ($pagina - 1) * $porPagina;
+
+    $sql = "SELECT 
+                p.id_pagamento,
+                p.valor_pagamento,
+                p.data_pagamento,
+                p.metodo_pagamento,
+                c.nome_cliente
+            FROM tbl_pagamento p
+            LEFT JOIN tbl_cliente c ON p.id_cliente = c.id_cliente
+            WHERE p.excluido_em IS NULL
+            ORDER BY p.data_pagamento DESC
+            LIMIT :offset, :porPagina";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+    $stmt->execute();
+    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $total = $this->db->query("SELECT COUNT(*) FROM tbl_pagamento WHERE excluido_em IS NULL")->fetchColumn();
+    $totalPaginas = ceil($total / $porPagina);
+
+    return [
+        'data' => $dados,
+        'total' => (int)$total,
+        'por_pagina' => (int)$porPagina,
+        'pagina_atual' => (int)$pagina,
+        'total_paginas' => (int)$totalPaginas
+    ];
+}
 }

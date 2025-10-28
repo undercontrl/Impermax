@@ -45,12 +45,14 @@ class Rotas
         "/projeto" => "ProjetoController@index",
        "/projeto/criar" => "ProjetoController@viewCriarProjetos",
        "/projeto/listar" => "ProjetoController@viewListarProjetos",
+        "/projeto/listar/{pagina}" => "ProjetoController@viewListarProjetos",
         "/projeto/editar/{id}" => "ProjetoController@viewEditarProjetos",
         "/projeto/excluir/{id}" => "ProjetoController@viewExcluirProjetos",
 
         "/pagamento" => "PagamentoController@index",
        "/pagamento/criar" => "PagamentoController@viewCriarPagamentos",
        "/pagamento/listar" => "PagamentoController@viewListarPagamentos",
+       "/pagamento/listar/{pagina}" => "PagamentoController@viewListarPagamentos",
         "/pagamento/editar/{id}" => "PagamentoController@viewEditarPagamentos",
         "/pagamento/excluir/{id}" => "PagamentoController@viewExcluirPagamentos",
 

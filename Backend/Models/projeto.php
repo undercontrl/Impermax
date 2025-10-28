@@ -93,4 +93,33 @@ class Projeto{
             return false;
         }
     }
+
+    //paginação
+    public function listarInternos($pagina = 1, $porPagina = 20) {
+    $offset = ($pagina - 1) * $porPagina;
+    $sql = "SELECT id_projeto, foto_antes_projeto, foto_depois_projeto,descricao_projeto
+            FROM tbl_projeto 
+            WHERE excluido_em IS NULL
+            ORDER BY id_projeto ASC
+            LIMIT :offset, :porPagina";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+    $stmt->execute();
+    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_projeto WHERE excluido_em IS NULL");
+    $total = $totalStmt->fetchColumn();
+    $totalPaginas = ceil($total / $porPagina);
+
+    return [
+        'data' => $dados,
+        'total' => (int)$total,
+        'por_pagina' => (int)$porPagina,
+        'pagina_atual' => (int)$pagina,
+        'total_paginas' => (int)$totalPaginas
+    ];
+}
+
 }

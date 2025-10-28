@@ -30,4 +30,17 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+     <?php if ($paginacao && $paginacao['total_paginas'] > 1): ?>
+    <nav aria-label="Paginação">
+        <ul class="pagination justify-content-center">
+            <?php for($i = 1; $i <= $paginacao['total_paginas']; $i++): ?>
+            <li class="page-item <?= $i == $paginacao['pagina_atual'] ? 'active' : '' ?>">
+                <a class="page-link" href="/backend/projeto/listar/<?= $i ?>">
+                    <?= $i ?>
+                </a>
+            </li>
+            <?php endfor; ?>
+        </ul>
+    </nav>
+    <?php endif; ?>
 </div>
