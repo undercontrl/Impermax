@@ -21,11 +21,20 @@ class ServicoController extends AdminController{
         $this->gerenciarImagem = new FileManager('upload');
     }
 
+        public function index() {
+        $this->viewListarServicos();
+    }
+
     // Listar serviços
-    public function viewListarServicos()
-    {
-        $dados = $this->servico->buscarServicos();
-        View::render("servico/index", ["servicos" => $dados]);
+    public function viewListarServicos($pagina = 1) {
+        if (empty($pagina) || $pagina <= 0) $pagina = 1;
+        
+        $dados = $this->servico->paginacao($pagina, 50);
+        
+        View::render("servico/index", [
+            "servicos" => $dados['data'],
+            'paginacao' => $dados
+        ]);
     }
 
     // Exibir formulário de criação
@@ -114,13 +123,23 @@ class ServicoController extends AdminController{
     }
 
     // Executar exclusão
-    public function deletarServico($id)
-    {
-         $id = (int)$_POST['id_servico'];
-        if ($this->servico->deletarServico($id)) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço inativado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico/listar", "error", "Erro ao inativar serviço.");
-        }
+public function deletarServico($id)
+{
+    $id = (int) ($id ?: $_POST['id_servico'] ?? 0); // Usa URL ou POST para flexibilidade
+    if ($id <= 0) {
+        Redirect::redirecionarComMensagem("servico/listar", "error", "ID inválido.");
     }
+
+    $servico = $this->servico->buscarServicoPorID($id);
+    if (!$servico) {
+        Redirect::redirecionarComMensagem("servico/listar", "error", "Serviço não encontrado.");
+    }
+
+    $acao = ($servico['status_servico'] === 'Ativo') ? 'inativado' : 'ativado';
+    if ($this->servico->deletarServico($id)) {
+        Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço $acao com sucesso!");
+    } else {
+        Redirect::redirecionarComMensagem("servico/listar", "error", "Erro ao alterar status do serviço.");
+    }
+}
 }

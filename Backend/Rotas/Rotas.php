@@ -26,7 +26,7 @@ class Rotas
         "/servico" => "ServicoController@index",
        "/servico/criar" => "ServicoController@viewCriarServicos",
        "/servico/listar" => "ServicoController@viewListarServicos",
-      "/api/servico" => "PublicApiController@listarServicosAtivos",
+      "api/servicos" => "PublicApiController@getServicos",
         "/servico/editar/{id}" => "ServicoController@viewEditarServicos",
         "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
 

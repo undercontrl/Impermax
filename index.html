@@ -58,9 +58,17 @@
             <a class="botao-saiba-mais" href="sobre.html">Saiba Mais</a>
         </section>
 
-        <section id="servicos" class="servicos">
-            <h2 class="titulo-servico">Serviços</h2>
-            <div class="container-servicos"></div>
+        <section class="servicos">
+            <div class="container-servicos">
+                <h3 class="titulo-servico">Serviços</h3>
+                <div class="cards" id="cards-container">
+                    <!-- Cards serão inseridos aqui via JS -->
+                    <p class="loading">Carregando serviços...</p>
+                </div>
+                <div class="titulo-externo" id="titulos-externos">
+                    <!-- Títulos externos serão gerados dinamicamente -->
+                </div>
+            </div>
         </section>
 
             <!-- <section class="servicos">
@@ -171,47 +179,67 @@
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".container-servicos");
+document.addEventListener('DOMContentLoaded', function () {
+    const cardsContainer = document.getElementById('cards-container');
+    const titulosContainer = document.getElementById('titulos-externos');
 
-  // Requisição para a API
-  fetch("/backend/api/servico")
-    .then(response => {
-      if (!response.ok) throw new Error("Erro na resposta da API");
-      return response.json();
-    })
-    .then(data => {
-      if (data.status === "success" && data.data.length > 0) {
-        container.innerHTML = "";
+    if (!cardsContainer || !titulosContainer) return;
 
-        data.data.forEach(servico => {
-          // Cria o card do serviço
-          const card = document.createElement("div");
-          card.classList.add("card-servico");
+    cardsContainer.innerHTML = '<p class="loading">Carregando...</p>';
 
-          // Adiciona o conteúdo HTML
-          card.innerHTML = `
-            <div class="img-container">
-              <img src="/backend/uploads/${servico.foto_servico}" alt="${servico.nome_servico}">
-              <div class="descricao">${servico.descricao_servico}</div>
-            </div>
-            <h3>${servico.nome_servico}</h3>
-          `;
+    fetch('/backend/api/servicos')
+        .then(r => r.ok ? r.json() : Promise.reject('Erro na rede'))
+        .then(json => {
+            if (json.status !== 'success' || !Array.isArray(json.data)) {
+                throw new Error('Dados inválidos');
+            }
 
-          // Adiciona o card ao container
-          container.appendChild(card);
+            const servicos = json.data;
+            if (servicos.length === 0) {
+                cardsContainer.innerHTML = '<p style="color:#ccc">Nenhum serviço ativo.</p>';
+                return;
+            }
+
+            // Limpa
+            cardsContainer.innerHTML = '';
+            titulosContainer.innerHTML = '';
+
+            servicos.forEach(servico => {
+                // CARD
+                const cardHtml = `
+                    <div class="card-servico">
+                        <a href="servicos.html?id=${servico.id_servico}">
+                            <figure>
+                                <img src="${servico.caminho_imagem}" 
+                                     alt="${servico.nome_servico}" 
+                                     class="servico-imagem"
+                                     onerror="this.src='assets/cards/default.jpg'">
+                                <figcaption class="figcaption-servico">
+                                    <p class="titulo-interno">
+                                        ${servico.descricao_servico.replace(/<span[^>]*>([^<]+)<\/span>/g, '<span class="texto-destaque">$1</span>')}
+                                    </p>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                `;
+                cardsContainer.insertAdjacentHTML('beforeend', cardHtml);
+
+                // TÍTULO EXTERNO (em branco, centralizado)
+                const tituloHtml = `<h3 class="titulo-externo-item">${servico.nome_servico}</h3>`;
+                titulosContainer.insertAdjacentHTML('beforeend', tituloHtml);
+            });
+
+            // Ajusta gap do título para alinhar com gap dos cards
+            titulosContainer.style.gap = '100px';
+            titulosContainer.style.justifyContent = 'center';
+        })
+        .catch(err => {
+            console.error(err);
+            cardsContainer.innerHTML = '<p style="color:#ff6b6b">Erro ao carregar.</p>';
         });
-      } else {
-        container.innerHTML = "<p>Nenhum serviço encontrado no momento.</p>";
-      }
-    })
-    .catch(error => {
-      console.error("Erro ao carregar serviços:", error);
-      container.innerHTML = "<p>Erro ao carregar os serviços.</p>";
-    });
 });
 </script>
-
 
 </body>
 </html>

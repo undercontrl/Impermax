@@ -18,7 +18,7 @@ class Servico{
         $this->db = $db;
     }
 
-    // Buscar todos os serviços ativos
+    // Buscar todos os serviços (ativos e inativos, mas não excluídos)
     public function buscarServicos()
     {
         $sql = "SELECT * FROM tbl_servico WHERE excluido_em IS NULL";
@@ -48,16 +48,39 @@ class Servico{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //buscar servicos ativos para API pública
+     public function paginacao(int $pagina = 1, int $porPagina = 50){
+        $offset = ($pagina - 1) * $porPagina;
+        $sql = "SELECT * FROM tbl_servico 
+                WHERE excluido_em IS NULL
+                LIMIT :offset, :porPagina";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-public function listarServicosAtivos() {
-    $sql = "SELECT id_servico, nome_servico, descricao_servico, foto_servico
-            FROM tbl_servico
-            WHERE status_servico = 'ativo'";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-}
+        $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_servico WHERE excluido_em IS NULL");
+        $total = $totalStmt->fetchColumn();
+        $totalPaginas = ceil($total / $porPagina);
+
+        return [
+            'data' => $dados,
+            'total' => (int) $total,
+            'por_pagina' => (int) $porPagina,
+            'pagina_atual' => (int) $pagina,
+            'total_paginas' => (int) $totalPaginas
+        ];
+    }
+
+    //buscar servicos ativos para API pública
+    public function listarServicosAtivos() {
+        $sql = "SELECT id_servico, nome_servico, descricao_servico, foto_servico
+                FROM tbl_servico
+                WHERE status_servico = 'Ativo' AND excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
     // Inserir novo serviço
     public function inserirServico($nome, $descricao, $valor, $foto_servico, $status)
@@ -96,16 +119,19 @@ public function listarServicosAtivos() {
         return $stmt->execute();
     }
 
-    // Marcar serviço como excluído
+    // Toggle status do serviço (Ativo <-> Inativo)
     public function deletarServico($id)
     {
-        $status = $this->buscarServicoPorID($id);
-        $status = $status['status_servico'] == 'ativo' ? 'Inativo' : 'ativo';
+        $servico = $this->buscarServicoPorID($id);
+        if (!$servico) {
+            return false;
+        }
+        $novoStatus = ($servico['status_servico'] === 'Ativo') ? 'Inativo' : 'Ativo';
 
         $sql = "UPDATE tbl_servico SET status_servico = :status WHERE id_servico = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':status', $novoStatus);
         return $stmt->execute();
     }
 }
