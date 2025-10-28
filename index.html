@@ -57,8 +57,13 @@
             <P class="texto-quem-somos">A <a href="index.html" class="texto-destaque">Impermax</a> oferece serviços especializados para proteger sua construção contra infiltrações e umidade. Atuamos em pisos, lajes, telhados, banheiros, piscinas e muito mais, com qualidade, compromisso e os melhores materiais do mercado.</P>
             <a class="botao-saiba-mais" href="sobre.html">Saiba Mais</a>
         </section>
-        <section>
-            <section class="servicos">
+
+        <section id="servicos" class="servicos">
+            <h2 class="titulo-servico">Serviços</h2>
+            <div class="container-servicos"></div>
+        </section>
+
+            <!-- <section class="servicos">
                <div class="container-servicos">
                    <h3 class="titulo-servico">Serviços</h3>
                    <div class="cards">
@@ -103,7 +108,7 @@
                    </div>
    
                </div>
-       </section>
+       </section> -->
         <section class="antes-depois">
             <div class="img-comp-container">
                 <div class="img-comp-img">
@@ -165,45 +170,47 @@
     <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
 </footer>
 
- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.querySelector('.servico__lista');
-            if (!container) return;
-            container.innerHTML = '<p>Carregando serviços...</p>';
-            fetch('/backend/api/servicos')
-                .then(response => {
-                    if (!response.ok){
-                        throw new Error('Falha ao carregar dados da rede.');
-                    }
-                    return response.json();
-                })
-                .then(json => {
-                    if (json.status !== 'success' || !json.data) {
-                        throw new Error('Api retornou um erro: ' + (json.message || 'Formato inválida'));
-                    }
-                    container.innerHTML = '';
-                    json.data.forEach(servico => {
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector(".container-servicos");
 
-                        const cardHtml = `
-                            <div class="card" data-service="${servico.nome_servico.toLowerCase()}">
-                                <div class="card_frente" style="background-image: url('${servico.caminho_imagem}');">
-                                    <h3 class="card__titulo">${servico.nome_servico.toUpperCase()}</h3>
-                                </div>
-                                <div class="card__verso">
-                                    <h3 class="card__titulo--verso">${servico.nome_servico.toUpperCase()}</h3>
-                                    <p class="card__descricao">${servico.descricao_servico}</p>
-                                </div>
-                            </div>
-                        `;
-                        container.insertAdjacentHTML('beforeend', cardHtml);
-                    });
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar serviços:', error);
-                    container.innerHTML = '<p style="color: red;">Não foi possível carregar os serviços no momento. Tente novamente mais tarde.</p>';
-                });
+  // Requisição para a API
+  fetch("/backend/api/servico")
+    .then(response => {
+      if (!response.ok) throw new Error("Erro na resposta da API");
+      return response.json();
+    })
+    .then(data => {
+      if (data.status === "success" && data.data.length > 0) {
+        container.innerHTML = "";
+
+        data.data.forEach(servico => {
+          // Cria o card do serviço
+          const card = document.createElement("div");
+          card.classList.add("card-servico");
+
+          // Adiciona o conteúdo HTML
+          card.innerHTML = `
+            <div class="img-container">
+              <img src="/backend/uploads/${servico.foto_servico}" alt="${servico.nome_servico}">
+              <div class="descricao">${servico.descricao_servico}</div>
+            </div>
+            <h3>${servico.nome_servico}</h3>
+          `;
+
+          // Adiciona o card ao container
+          container.appendChild(card);
         });
-    </script>
+      } else {
+        container.innerHTML = "<p>Nenhum serviço encontrado no momento.</p>";
+      }
+    })
+    .catch(error => {
+      console.error("Erro ao carregar serviços:", error);
+      container.innerHTML = "<p>Erro ao carregar os serviços.</p>";
+    });
+});
+</script>
 
 
 </body>

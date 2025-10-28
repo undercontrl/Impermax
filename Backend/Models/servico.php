@@ -50,15 +50,14 @@ class Servico{
 
     //buscar servicos ativos para API pública
 
-     public function buscarServicosAtivos(){
-        $sql = "SELECT nome_servico, descricao_servico, foto_servico 
-                FROM tbl_servico 
-                WHERE status_servico = 'ativo' 
-                ORDER BY criado_em DESC LIMIT 4";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+public function listarServicosAtivos() {
+    $sql = "SELECT id_servico, nome_servico, descricao_servico, foto_servico
+            FROM tbl_servico
+            WHERE status_servico = 'ativo'";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
 
     // Inserir novo serviço
     public function inserirServico($nome, $descricao, $valor, $foto_servico, $status)

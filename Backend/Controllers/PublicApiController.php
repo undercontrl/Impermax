@@ -12,21 +12,22 @@ class PublicApiController{
         $this->servicoModel = new Servico($db);
     }
 
-    public function getServicos(){
-        $dados = $this->servicoModel->buscarServicosAtivos();
-        // & no foreach anexa a mudança nos dados reais do array
-        foreach($dados as &$servico){
-            $servico['caminho_imagem'] = '/backend/upload/'. $servico['foto_servico'];
-        }
-        unset($servico);
-        header('Content-Type: application/json');
-        echo json_encode([
-            'status' => 'success',
-            'data' => $dados
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        exit;
-    }
+    public function listarServicosAtivos(): void {
+        header('Content-Type: application/json; charset=utf-8');
 
+        try {
+            $servicos = $this->servicoModel->listarServicosAtivos();
+            echo json_encode([
+                'status' => 'success',
+                'data' => $servicos
+            ]);
+        } catch (\Throwable $e) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Erro ao buscar serviços: ' . $e->getMessage()
+            ]);
+        }
+    }
 
 
 
