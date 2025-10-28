@@ -13,23 +13,17 @@ class PublicApiController{
     }
 
     public function getServicos(){
-    $dados = $this->servicoModel->listarServicosAtivos();
-    
-    // Ordenar por ID (ou por nome, se preferir)
-    usort($dados, function($a, $b) {
-        return $a['id_servico'] <=> $b['id_servico'];
-    });
+    $db = Database::getInstance();
+    $model = new \App\Impermax\Models\Servico($db);
+    $dados = $model->listarAtivosParaSite();
 
-    foreach($dados as &$servico){
-        $servico['caminho_imagem'] = '/backend/upload/' . $servico['foto_servico'];
+    foreach($dados as &$s){
+        $s['caminho_imagem'] = '/backend/upload/' . $s['foto_servico'];
     }
-    unset($servico);
+    unset($s);
 
     header('Content-Type: application/json');
-    echo json_encode([
-        'status' => 'success',
-        'data' => $dados
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    echo json_encode(['status' => 'success', 'data' => $dados], JSON_UNESCAPED_SLASHES);
     exit;
 }
 

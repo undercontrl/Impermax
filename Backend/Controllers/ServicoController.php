@@ -26,16 +26,16 @@ class ServicoController extends AdminController{
     }
 
     // Listar serviços
-    public function viewListarServicos($pagina = 1) {
-        if (empty($pagina) || $pagina <= 0) $pagina = 1;
+    // public function viewListarServicos($pagina = 1) {
+    //     if (empty($pagina) || $pagina <= 0) $pagina = 1;
         
-        $dados = $this->servico->paginacao($pagina, 50);
+    //     $dados = $this->servico->paginacao($pagina, 50);
         
-        View::render("servico/index", [
-            "servicos" => $dados['data'],
-            'paginacao' => $dados
-        ]);
-    }
+    //     View::render("servico/index", [
+    //         "servicos" => $dados['data'],
+    //         'paginacao' => $dados
+    //     ]);
+    // }
 
     // Exibir formulário de criação
     public function viewCriarServicos()

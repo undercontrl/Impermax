@@ -30,6 +30,13 @@ class Rotas
         "/servico/editar/{id}" => "ServicoController@viewEditarServicos",
         "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
 
+        // Dashboard do Site
+        "/servico-site" => "ServicoSiteController@index",
+        "/servico-site/listar" => "ServicoSiteController@listar",
+        "/servico-site/editar/{id}" => "ServicoSiteController@editar",
+        "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
+        "/servico-site/alternar/{id}" => "ServicoSiteController@alternarStatus",
+
         "/projeto" => "ProjetoController@index",
        "/projeto/criar" => "ProjetoController@viewCriarProjetos",
        "/projeto/listar" => "ProjetoController@viewListarProjetos",
