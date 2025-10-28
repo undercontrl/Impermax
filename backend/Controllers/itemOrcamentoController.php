@@ -24,17 +24,17 @@ class ItemOrcamentoController
         $this->orcamento = new Orcamento($this->db);
     }
 
-    // Listagem
+    // ✅ Listagem
     public function viewListarItemOrcamento()
     {
         $itens = $this->item_orcamento->buscarItemOrcamento();
-        View::render("item_orcamento/index", ["itens_orcamento" => $itens]);
+        View::render("item_orcamento/index", ["itens" => $itens]);
     }
 
     // Criar
     public function viewCriarItemOrcamento()
     {
-        $orcamentos = $this->orcamento->buscarOrcamentosComCliente(); // com join pra mostrar nome cliente
+        $orcamentos = $this->orcamento->buscarOrcamentosComCliente(); 
         $servicos = $this->servico->buscarServicos();
 
         View::render("item_orcamento/create", [

@@ -7,8 +7,9 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AvaliacaoValidador;
+use App\Impermax\Controllers\Admin\FuncionarioController;
 
-class AvaliacaoController
+class AvaliacaoController extends FuncionarioController
 {
     private $avaliacao;
     private $usuario;
@@ -16,6 +17,7 @@ class AvaliacaoController
 
     public function __construct()
     {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->avaliacao = new Avaliacao($this->db);
         $this->usuario = new Usuario($this->db);

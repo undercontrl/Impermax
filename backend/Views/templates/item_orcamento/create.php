@@ -6,14 +6,19 @@
         <!-- Orçamento -->
         <div class="mb-3">
             <label for="id_orcamento" class="form-label">Orçamento:</label>
-            <select id="id_orcamento" name="id_orcamento" class="form-select" required>
-                <option value="">Selecione um orçamento</option>
-                <?php foreach ($orcamentos as $orc): ?>
-                    <option value="<?= htmlspecialchars($orc['id_orcamento']) ?>">
-                        <?= htmlspecialchars("Orçamento #" . $orc['id_orcamento'] . " - Cliente: " . $orc['nome_cliente']) ?>
+            <select name="id_orcamento" class="form-select" required>
+            <option value="">Selecione um orçamento</option>
+                <?php foreach ($orcamentos as $orcamento): ?>
+                    <?php
+                        $nomeCliente = $orcamento['nome_cliente'] ?? 'Cliente não definido';
+                        $idOrcamento = htmlspecialchars($orcamento['id_orcamento']);
+                    ?>
+                    <option value="<?= $idOrcamento ?>">
+                        Orçamento #<?= $idOrcamento ?> - Cliente: <?= htmlspecialchars($nomeCliente) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
+
         </div>
 
         <!-- Serviço -->

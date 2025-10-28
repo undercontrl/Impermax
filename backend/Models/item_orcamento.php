@@ -19,11 +19,27 @@ class item_orcamento{
     }
     //método de buscar todos os item_orcamentos não excluídos
     function buscarItemOrcamento(){
-        $sql = 'SELECT * FROM tbl_item_orcamento WHERE excluido_em IS NULL';
-        $statement = $this->db->prepare($sql);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
+        $sql = 'SELECT 
+                    io.id_item_orcamento,
+                    io.id_orcamento,
+                    io.id_servico,
+                    io.descricao_item_orcamento,
+                    io.metragem,
+                    io.status_item_orcamento,
+                    o.id_cliente,
+                    u.nome_usuario AS nome_cliente,
+                    s.nome_servico
+                FROM tbl_item_orcamento AS io
+                LEFT JOIN tbl_orcamento AS o ON io.id_orcamento = o.id_orcamento
+                LEFT JOIN tbl_usuario AS u ON o.id_cliente = u.id_usuario
+                LEFT JOIN tbl_servico AS s ON io.id_servico = s.id_servico
+                WHERE io.excluido_em IS NULL
+                ORDER BY io.id_item_orcamento ASC';
+    
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }    
     //método de buscar todos os item_orcamento por orcamento
     function buscarItemOrcamentoPorOrcamento($id_orcamento){
         $sql = 'SELECT * FROM tbl_item_orcamento WHERE id_orcamento = :id_orcamento AND excluido_em IS NULL';
