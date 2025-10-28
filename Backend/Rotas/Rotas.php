@@ -26,16 +26,21 @@ class Rotas
         "/servico" => "ServicoController@index",
        "/servico/criar" => "ServicoController@viewCriarServicos",
        "/servico/listar" => "ServicoController@viewListarServicos",
-      "api/servicos" => "PublicApiController@getServicos",
+        "/servico/listar/{pagina}" => "ServicoController@viewListarServicos",
+        "/servico/buscar" => "ServicoController@buscar",
+        "api/servicos" => "PublicApiController@getServicos",
         "/servico/editar/{id}" => "ServicoController@viewEditarServicos",
         "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
 
+        "/servico/sugestoes" => "ServicoController@sugestoes",
+
         // Dashboard do Site
-        "/servico-site" => "ServicoSiteController@index",
-        "/servico-site/listar" => "ServicoSiteController@listar",
-        "/servico-site/editar/{id}" => "ServicoSiteController@editar",
-        "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
-        "/servico-site/alternar/{id}" => "ServicoSiteController@alternarStatus",
+        "/servico-site" => "ServicoSiteController@index",                   
+        "/servico-site/listar" => "ServicoSiteController@listar",           
+        "/servico-site/listar/{pagina}" => "ServicoSiteController@listar",  
+        "/servico-site/criar" => "ServicoSiteController@criar",             
+        "/servico-site/editar/{id}" => "ServicoSiteController@editar",      
+        "/servico-site/alternar/{id}" => "ServicoSiteController@alternar",
 
         "/projeto" => "ProjetoController@index",
        "/projeto/criar" => "ProjetoController@viewCriarProjetos",
@@ -111,14 +116,18 @@ class Rotas
         "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
 
 
-        '/register' => 'AuthController@cadastrarUsuario',
-        '/login' => 'AuthController@authenticar',
+        "/register" => "AuthController@cadastrarUsuario",
+        "/login" => "AuthController@authenticar",
         "/authenticar" => "AuthController@authenticar",
 
 
         "/servico/salvar" => "ServicoController@salvarServico",
         "/servico/atualizar/{id}" => "ServicoController@atualizarServico",
         "/servico/deletar/{id}" => "ServicoController@deletarServico",
+
+        
+        "/servico-site/salvar" => "ServicoSiteController@salvar",
+        "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
 
         "/projeto/salvar" => "projetoController@salvarProjeto",
         "/projeto/atualizar/{id}" => "projetoController@atualizarProjeto",

@@ -6,73 +6,77 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ServicoValidador;
-use App\Impermax\Core\FileManager;
 use App\Impermax\Controllers\Admin\AuthenticatedController;
-use App\Impermax\Controllers\Admin\AdminController;
 
-class ServicoController extends AdminController{
+class ServicoController extends AuthenticatedController {
     private $servico;
-    private $gerenciarImagem;
 
     public function __construct() {
         parent::__construct();
         $db = Database::getInstance();
         $this->servico = new Servico($db);
-        $this->gerenciarImagem = new FileManager('upload');
     }
 
-        public function index() {
-        $this->viewListarServicos();
+    public function index() {
+        $this->viewListarServicos(1);
     }
 
-    // Listar serviços
-    // public function viewListarServicos($pagina = 1) {
-    //     if (empty($pagina) || $pagina <= 0) $pagina = 1;
-        
-    //     $dados = $this->servico->paginacao($pagina, 50);
-        
-    //     View::render("servico/index", [
-    //         "servicos" => $dados['data'],
-    //         'paginacao' => $dados
-    //     ]);
-    // }
+    // === DASHBOARD INTERNO ===
+    public function viewListarServicos($pagina = 1) {
+    $pagina = max(1, (int)$pagina);
+    
+    // Lê termo de busca
+    $termo = $_GET['termo'] ?? '';
+    
+    if (!empty($termo)) {
+        $dados = $this->servico->buscarServicosPorNome($termo);
+        $paginacao = null;
+    } else {
+        $dados = $this->servico->listarInternos($pagina, 20);
+        $paginacao = $dados;
+        $dados = $dados['data'];
+    }
 
-    // Exibir formulário de criação
-    public function viewCriarServicos()
-    {
+    View::render("servico/index", [
+        "servicos" => $dados,
+        'paginacao' => $paginacao,
+        'termo' => $termo
+    ]);
+}
+
+// Rota de busca
+public function buscar() {
+    $this->viewListarServicos(1); // Usa mesmo método
+}
+
+    // === CRUD INTERNO ===
+    public function viewCriarServicos() {
         View::render("servico/create");
     }
 
-    // Salvar novo serviço
-    public function salvarServico()
-    {
+    public function salvarServico() {
         $erros = ServicoValidador::ValidarEntradas($_POST);
         if (!empty($erros)) {
             Redirect::redirecionarComMensagem("servico/criar", "error", implode("<br>", $erros));
         }
 
-        $foto_servico = $this->gerenciarImagem->salvarArquivo($_FILES['foto_servico'], 'servicos');
-
+        // Não precisa de foto para uso interno
         $sucesso = $this->servico->inserirServico(
             $_POST["nome_servico"],
             $_POST["descricao_servico"],
             $_POST["valor_base_servico"],
-            $foto_servico,
-            "Ativo"
+            null, // foto_servico = null (interno não usa)
+            'Inativo' // status padrão, mas controlado pelo site
         );
 
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço cadastrado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico/criar", "error", "Erro ao cadastrar serviço!");
-        }
+        $msg = $sucesso ? "Serviço interno cadastrado!" : "Erro ao cadastrar.";
+        $tipo = $sucesso ? "success" : "error";
+        Redirect::redirecionarComMensagem("servico/listar", $tipo, $msg);
     }
 
-    // Exibir formulário de edição
-    public function viewEditarServicos($id = null)
-    {
+    public function viewEditarServicos($id = null) {
         if (!$id) {
-            Redirect::redirecionarComMensagem("servico/listar", "error", "ID do serviço não fornecido.");
+            Redirect::redirecionarComMensagem("servico/listar", "error", "ID não fornecido.");
         }
 
         $servico = $this->servico->buscarServicoPorID($id);
@@ -83,37 +87,30 @@ class ServicoController extends AdminController{
         View::render("servico/edit", ["servico" => $servico]);
     }
 
-    // Atualizar serviço
-    public function atualizarServico($id)
-    {
+    public function atualizarServico($id) {
         $erros = ServicoValidador::ValidarEntradas($_POST);
         if (!empty($erros)) {
             Redirect::redirecionarComMensagem("servico/editar/$id", "error", implode("<br>", $erros));
         }
 
-        $foto_servico = !empty($_FILES['foto_servico']['name'])
-            ? $this->gerenciarImagem->salvarArquivo($_FILES['foto_servico'], 'servicos')
-            : $_POST['foto_servico_atual'];
+        // Mantém foto atual (se existir) - não é foco do interno
+        $fotoAtual = $_POST['foto_servico_atual'] ?? null;
 
-        $sucesso = $this->servico->atualizaServico(
+        $sucesso = $this->servico->atualizarServico(
             $id,
             $_POST["nome_servico"],
             $_POST["descricao_servico"],
             $_POST["valor_base_servico"],
-            $foto_servico,
-            $_POST["status_servico"]
+            $_POST["status_servico"] ?? 'Inativo' // Mantém status
         );
 
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço atualizado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico/editar/$id", "error", "Erro ao atualizar o serviço!");
-        }
+        $msg = $sucesso ? "Serviço interno atualizado!" : "Erro ao atualizar.";
+        $tipo = $sucesso ? "success" : "error";
+        Redirect::redirecionarComMensagem("servico/listar", $tipo, $msg);
     }
 
-    // Exibir confirmação de exclusão
-    public function viewExcluirServicos($id)
-    {
+    // === EXCLUSÃO INTERNA (soft delete) ===
+    public function viewExcluirServicos($id) {
         $servico = $this->servico->buscarServicoPorID($id);
         if (!$servico) {
             Redirect::redirecionarComMensagem("servico/listar", "error", "Serviço não encontrado.");
@@ -122,24 +119,37 @@ class ServicoController extends AdminController{
         View::render("servico/delete", ["servico" => $servico]);
     }
 
-    // Executar exclusão
-public function deletarServico($id)
-{
-    $id = (int) ($id ?: $_POST['id_servico'] ?? 0); // Usa URL ou POST para flexibilidade
-    if ($id <= 0) {
-        Redirect::redirecionarComMensagem("servico/listar", "error", "ID inválido.");
+    public function deletarServico($id) {
+        $id = (int) ($id ?: $_POST['id_servico'] ?? 0);
+        if ($id <= 0) {
+            Redirect::redirecionarComMensagem("servico/listar", "error", "ID inválido.");
+        }
+
+        // Para uso interno: usa soft delete (excluido_em)
+        $sucesso = $this->servico->deletarServicoInterno($id);
+
+        $msg = $sucesso ? "Serviço interno removido!" : "Erro ao remover.";
+        $tipo = $sucesso ? "success" : "error";
+        Redirect::redirecionarComMensagem("servico/listar", $tipo, $msg);
     }
 
-    $servico = $this->servico->buscarServicoPorID($id);
-    if (!$servico) {
-        Redirect::redirecionarComMensagem("servico/listar", "error", "Serviço não encontrado.");
+
+
+
+    public function sugestoes() {
+    $termo = $_GET['termo'] ?? '';
+    if (strlen($termo) < 2) {
+        echo json_encode([]);
+        exit;
     }
 
-    $acao = ($servico['status_servico'] === 'Ativo') ? 'inativado' : 'ativado';
-    if ($this->servico->deletarServico($id)) {
-        Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço $acao com sucesso!");
-    } else {
-        Redirect::redirecionarComMensagem("servico/listar", "error", "Erro ao alterar status do serviço.");
-    }
+    $resultados = $this->servico->buscarServicosPorNome($termo);
+    $limitados = array_slice($resultados, 0, 8); // Máximo 8 sugestões
+
+    header('Content-Type: application/json');
+    echo json_encode($limitados);
+    exit;
 }
+
+    
 }

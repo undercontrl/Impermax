@@ -13,9 +13,6 @@ class ServicoValidador{
         if(isset($dados['valor_base_servico']) && empty($dados['valor_base_servico'])){
             $erros[] = "O campo valor é obrigatório.";
         } 
-        if(isset($dados['foto_servico']) && empty($dados['foto_servico'])){
-            $erros[] = "O campo foto é obrigatório.";
-        } 
         return $erros;
     }
 }

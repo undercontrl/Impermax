@@ -185,10 +185,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!cardsContainer || !titulosContainer) return;
 
-    cardsContainer.innerHTML = '<p class="loading">Carregando...</p>';
+    cardsContainer.innerHTML = '<p class="loading">Carregando serviços...</p>';
 
     fetch('/backend/api/servicos')
-        .then(r => r.ok ? r.json() : Promise.reject('Erro na rede'))
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
         .then(json => {
             if (json.status !== 'success' || !Array.isArray(json.data)) {
                 throw new Error('Dados inválidos');
@@ -196,7 +199,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const servicos = json.data;
             if (servicos.length === 0) {
-                cardsContainer.innerHTML = '<p style="color:#ccc">Nenhum serviço ativo.</p>';
+                cardsContainer.innerHTML = '<p style="color:#ccc;text-align:center;">Nenhum serviço ativo.</p>';
+                titulosContainer.innerHTML = '';
                 return;
             }
 
@@ -213,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <img src="${servico.caminho_imagem}" 
                                      alt="${servico.nome_servico}" 
                                      class="servico-imagem"
-                                     onerror="this.src='assets/cards/default.jpg'">
+                                     onerror="this.onerror=null; this.src='assets/cards/default.jpg';">
                                 <figcaption class="figcaption-servico">
                                     <p class="titulo-interno">
                                         ${servico.descricao_servico.replace(/<span[^>]*>([^<]+)<\/span>/g, '<span class="texto-destaque">$1</span>')}
@@ -225,14 +229,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 cardsContainer.insertAdjacentHTML('beforeend', cardHtml);
 
-                // TÍTULO EXTERNO (em branco, centralizado)
+                // TÍTULO EXTERNO
                 const tituloHtml = `<h3 class="titulo-externo-item">${servico.nome_servico}</h3>`;
                 titulosContainer.insertAdjacentHTML('beforeend', tituloHtml);
             });
 
-            // Ajusta gap do título para alinhar com gap dos cards
+            // Ajusta gap
             titulosContainer.style.gap = '100px';
-            titulosContainer.style.justifyContent = 'center';
         })
         .catch(err => {
             console.error(err);
