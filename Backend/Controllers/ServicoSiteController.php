@@ -8,13 +8,17 @@ use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ServicoSiteValidador;
 use App\Impermax\Controllers\Admin\AuthenticatedController;
 use App\Impermax\Controllers\Admin\AdminController;
+use App\Impermax\Core\FileManager;
 
 class ServicoSiteController extends AdminController {
     private $model;
+    private $fileManager;
 
     public function __construct() {
         parent::__construct();
-        $this->model = new ServicoSite(Database::getInstance());
+         $db = Database::getInstance();
+       $this->model = new ServicoSite($db);
+       $this->fileManager = new FileManager('upload');
     }
 
     public function index() {
@@ -54,7 +58,6 @@ class ServicoSiteController extends AdminController {
         if ($erros) {
             return Redirect::redirecionarComMensagem("servico-site/criar", "error", implode("<br>", $erros));
         }
-
         $foto = $this->fileManager->salvarArquivo($_FILES['foto_servico'], 'servicos');
 
         $sucesso = $this->model->inserir(
