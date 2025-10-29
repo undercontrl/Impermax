@@ -2,7 +2,6 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 // Caminhos onde o menu não deve aparecer
 $rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar'];
 

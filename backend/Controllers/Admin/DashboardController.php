@@ -25,14 +25,8 @@ class DashboardController extends AuthenticatedController {
     }
 
     public function index(): void {
-        // ============================================
-        // FILTRO DE PERÍODO
-        // ============================================
-        
-        // Pega o período selecionado (padrão: mês)
+        // Dados para o dashboard
         $periodo = $_GET['periodo'] ?? 'mes';
-        
-        // Calcula as datas de início e fim baseado no período
         $dataFim = date('Y-m-d 23:59:59');
         
         switch ($periodo) {
@@ -44,7 +38,6 @@ class DashboardController extends AuthenticatedController {
                 $dataInicio = date('Y-m-d 00:00:00', strtotime('-1 year'));
                 $periodoTexto = 'Último Ano';
                 break;
-            case 'mes':
             default:
                 $dataInicio = date('Y-m-d 00:00:00', strtotime('-1 month'));
                 $periodoTexto = 'Último Mês';
@@ -52,119 +45,66 @@ class DashboardController extends AuthenticatedController {
                 break;
         }
 
-        // ============================================
-        // BUSCA DE DADOS (usando métodos das Models)
-        // ============================================
-
-        // Usuários (sem filtro de período)
+        // Buscar dados
         $usuarios = $this->usuario->buscarUsuarios() ?? [];
-
-        // Agendamentos filtrados por período
         $totalAgendamentos = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
-        
-        // Orçamentos filtrados por período
         $totalOrcamentos = $this->orcamento->contarPorPeriodo($dataInicio, $dataFim);
-        
-        // Contatos filtrados por período
         $totalContatos = $this->contato->contarPorPeriodo($dataInicio, $dataFim);
 
-        // ============================================
-        // ESTATÍSTICAS DE CRESCIMENTO
-        // ============================================
-        
+        // Estatísticas
         $estatisticas = $this->calcularEstatisticas($dataInicio, $dataFim, $periodo);
 
-        // ============================================
-        // GRÁFICOS (usando métodos das Models)
-        // ============================================
-        
-        // Gráfico: Agendamentos por mês
-        $graficoAgendamentos = $this->agendamento->buscarPorMes($dataInicio, $dataFim);
-
-        // Gráfico: Distribuição de status
+        // Gráficos
+        $graficoTendencia = $this->prepararGraficoTendencia();
         $graficoStatusAdmin = $this->agendamento->buscarDistribuicaoPorStatus($dataInicio, $dataFim);
 
-        // ============================================
-        // RENDERIZA A VIEW
-        // ============================================
-        
+        // Atividades
+        $atividadesRecentes = $this->buscarAtividadesRecentes();
+
+        // Renderizar
         View::render('admin/dashboard/index', [
-            'nomeUsuario' => $this->session->get('usuario_nome'),
-            'tipo' => $this->session->get('usuario_tipo'),
-            'usuarios' => $usuarios,
-            'totalAgendamentos' => $totalAgendamentos,
-            'totalOrcamentos' => $totalOrcamentos,
-            'totalContatos' => $totalContatos,
-            'periodo' => $periodo,
-            'periodoTexto' => $periodoTexto,
-            'dataInicio' => date('d/m/Y', strtotime($dataInicio)),
-            'dataFim' => date('d/m/Y', strtotime($dataFim)),
-            'estatisticas' => $estatisticas,
-            'graficoAgendamentos' => json_encode(array_values($graficoAgendamentos)),
-            'graficoStatusAdmin' => json_encode($graficoStatusAdmin)
-        ]);
-    }
+                'nomeUsuario' => $this->session->get('usuario_nome') ?? 'Admin',
+                'tipo' => $this->session->get('usuario_tipo') ?? 'admin',
+                'usuarios' => $usuarios,
+                'totalUsuarios' => count($usuarios),
+                'totalAgendamentos' => $totalAgendamentos,
+                'totalOrcamentos' => $totalOrcamentos,
+                'totalContatos' => $totalContatos,
+                'periodo' => $periodo,
+                'periodoTexto' => $periodoTexto,
+                'dataInicio' => date('d/m/Y', strtotime($dataInicio)),
+                'dataFim' => date('d/m/Y', strtotime($dataFim)),
+                'estatisticas' => $estatisticas,
+                'graficoTendencia' => json_encode($graficoTendencia),
+                'graficoStatusAdmin' => json_encode($graficoStatusAdmin),
+                'atividadesRecentes' => $atividadesRecentes
+            ]);
+        }
 
-    // ============================================
-    // CÁLCULO DE ESTATÍSTICAS E TENDÊNCIAS
-    // ============================================
-
-    /**
-     * Calcula estatísticas de crescimento comparando períodos
-     */
-    private function calcularEstatisticas(string $dataInicio, string $dataFim, string $periodo): array
-    {
-        // Calcula o período anterior para comparação
+    // Exemplo de função para calcular estatísticas
+    private function calcularEstatisticas($dataInicio, $dataFim, $periodo) {
+        // Você deve definir como obter $atual e $anterior
+        $atual = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
+        // Exemplo: calcula $anterior com base no período
         switch ($periodo) {
             case '3meses':
                 $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-6 months'));
-                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-3 months -1 day'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-3 months'));
                 break;
             case 'ano':
-                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 years'));
-                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 year -1 day'));
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 year'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 year'));
                 break;
-            default: // mes
-                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 months'));
-                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 month -1 day'));
+            default:
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 month'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 month'));
                 break;
         }
-
-        // Busca dados do período ANTERIOR (usando Models)
-        $agendamentosAnteriores = $this->agendamento->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
-        $orcamentosAnteriores = $this->orcamento->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
-        $contatosAnteriores = $this->contato->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
-
-        // Busca dados do período ATUAL (usando Models)
-        $agendamentosAtuais = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
-        $orcamentosAtuais = $this->orcamento->contarPorPeriodo($dataInicio, $dataFim);
-        $contatosAtuais = $this->contato->contarPorPeriodo($dataInicio, $dataFim);
-
-        // Calcula variações percentuais
-        return [
-            'agendamentos' => $this->calcularVariacao($agendamentosAtuais, $agendamentosAnteriores),
-            'orcamentos' => $this->calcularVariacao($orcamentosAtuais, $orcamentosAnteriores),
-            'contatos' => $this->calcularVariacao($contatosAtuais, $contatosAnteriores)
-        ];
-    }
-
-    /**
-     * Calcula variação percentual entre dois valores
-     */
-    private function calcularVariacao(int $atual, int $anterior): array
-    {
-        // Se não havia dados no período anterior
-        if ($anterior == 0) {
-            return [
-                'percentual' => $atual > 0 ? 100 : 0,
-                'diferenca' => $atual,
-                'tendencia' => $atual > 0 ? 'up' : 'neutral'
-            ];
-        }
+        $anterior = $this->agendamento->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
 
         // Calcula diferença e percentual
         $diferenca = $atual - $anterior;
-        $percentual = round(($diferenca / $anterior) * 100, 1);
+        $percentual = $anterior != 0 ? round(($diferenca / $anterior) * 100, 1) : 0;
         
         // Define tendência (up/down/neutral)
         if ($diferenca > 0) {
@@ -180,5 +120,39 @@ class DashboardController extends AuthenticatedController {
             'diferenca' => abs($diferenca),
             'tendencia' => $tendencia
         ];
+    }
+
+    // Adiciona o método prepararGraficoTendencia
+    private function prepararGraficoTendencia(): array
+    {
+        $dados = [];
+        
+        // Últimos 6 meses
+        for ($i = 5; $i >= 0; $i--) {
+            $dataFim = date('Y-m-d 23:59:59', strtotime("-{$i} months"));
+            $dataInicio = date('Y-m-01 00:00:00', strtotime("-{$i} months"));
+            
+            // Formatar mês em português
+            $meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            $mesNum = (int)date('n', strtotime($dataInicio)) - 1;
+            $mes = $meses[$mesNum];
+
+            $dados[] = [
+                'mes' => $mes,
+                'agendamentos' => (int)$this->agendamento->contarPorPeriodo($dataInicio, $dataFim),
+                'orcamentos' => (int)$this->orcamento->contarPorPeriodo($dataInicio, $dataFim),
+                'contatos' => (int)$this->contato->contarPorPeriodo($dataInicio, $dataFim)
+            ];
+        }
+
+        return $dados;
+    }
+
+    // Implementa o método buscarAtividadesRecentes
+    private function buscarAtividadesRecentes() {
+        // Exemplo: busca os últimos 10 agendamentos
+        $atividades = $this->agendamento->buscarRecentes(10);
+        // Se necessário, pode adicionar outros tipos de atividades
+        return $atividades;
     }
 }
