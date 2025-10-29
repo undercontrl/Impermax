@@ -96,6 +96,21 @@ class AgendamentoController extends AdminController
         ]);
     }
 
+    // Visualizar detalhes do agendamento (página de visualização)
+    public function viewVerAgendamento($id)
+    {
+        $agendamento = $this->agendamento->buscarAgendamentoComClienteCompleto($id);
+        
+        if (!$agendamento) {
+            Redirect::redirecionarComMensagem("agendamento/listar", "error", "Agendamento não encontrado!");
+            return;
+        }
+
+        View::render("agendamento/view", [
+            "agendamento" => $agendamento
+        ]);
+    }
+
     // Confirmação de exclusão
     public function viewExcluirAgendamentos($id)
     {

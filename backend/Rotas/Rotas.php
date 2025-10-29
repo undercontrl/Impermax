@@ -19,6 +19,7 @@ class Rotas
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
         "/usuario/listar" => "UsuarioController@viewListarUsuarios",
+        "/agendamento/ver/{id}" => "AgendamentoController@viewVerAgendamento",
         "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",

@@ -570,4 +570,23 @@ class Agendamento
         
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function buscarAgendamentoComClienteCompleto($id)
+    {
+        $sql = "SELECT 
+                    ag.*, 
+                    usu.*
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu 
+                    ON ag.id_cliente = usu.id_usuario
+                WHERE ag.id_agendamento = :id
+                AND ag.excluido_em IS NULL";
+
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
 }

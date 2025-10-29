@@ -223,7 +223,7 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="action-buttons">
-                                        <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" 
+                                        <a href="/backend/agendamento/ver/<?= $agendamento['id_agendamento'] ?>" 
                                            class="btn-action btn-action-view" 
                                            title="Ver detalhes">
                                             <i class="bi bi-eye"></i>
@@ -406,7 +406,7 @@
 
                             <!-- Ações -->
                             <div class="card-actions">
-                                <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" 
+                                <a href="/backend/agendamento/ver/<?= $agendamento['id_agendamento'] ?>" 
                                    class="btn-card-action btn-card-view">
                                     <i class="bi bi-eye"></i>
                                     Ver
@@ -1595,6 +1595,26 @@ function changeView(view) {
     const url = new URL(window.location);
     url.searchParams.set('view', view);
     window.location.href = url.toString();
+}
+
+// Alternar visualizações sem recarregar (alternativa)
+function toggleView(view) {
+    const tableView = document.getElementById('tableView');
+    const gridView = document.getElementById('gridView');
+    
+    if (view === 'list') {
+        tableView.style.display = 'block';
+        gridView.style.display = 'none';
+    } else {
+        tableView.style.display = 'none';
+        gridView.style.display = 'block';
+    }
+    
+    // Atualizar estado ativo dos botões
+    document.querySelectorAll('.view-toggle').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.closest('.view-toggle').classList.add('active');
 }
 
 // ==================== INICIALIZAÇÃO ====================
