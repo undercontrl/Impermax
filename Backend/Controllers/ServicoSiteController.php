@@ -7,8 +7,9 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ServicoSiteValidador;
 use App\Impermax\Controllers\Admin\AuthenticatedController;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ServicoSiteController extends AuthenticatedController {
+class ServicoSiteController extends AdminController {
     private $model;
 
     public function __construct() {
