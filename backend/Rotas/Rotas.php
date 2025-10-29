@@ -15,6 +15,10 @@ class Rotas
        '/logout' => 'AuthController@logout',
        '/admin/dashboard' => 'Admin\DashboardController@index',
        '/funcionario/dashboard' => 'Funcionario\DashboardController@index',
+       
+       //perfil
+       '/perfil' => 'PerfilController@index',
+       
        //usuarios
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
@@ -86,6 +90,7 @@ class Rotas
         "/orcamento" => "orcamentoController@index",
         "/orcamento/criar" => "orcamentoController@viewCriarOrcamentos",
         "/orcamento/listar" => "orcamentoController@viewListarOrcamentos",
+        "/orcamento/visualizar/{id}" => "OrcamentoController@viewVisualizarOrcamento",
         "/orcamento/editar/{id}" => "orcamentoController@viewEditarOrcamentos",
         "/orcamento/excluir/{id}" => "orcamentoController@viewExcluirOrcamentos",
         //material
@@ -102,6 +107,13 @@ class Rotas
         '/register' => 'AuthController@cadastrarUsuario',
         '/login' => 'AuthController@authenticar',
         "/authenticar" => "AuthController@authenticar",
+        
+        //perfil
+        '/perfil/atualizar' => 'PerfilController@atualizar',
+        '/perfil/atualizar-senha' => 'PerfilController@atualizarSenha',
+        '/perfil/atualizar-foto' => 'PerfilController@atualizarFoto',
+        '/perfil/remover-foto' => 'PerfilController@removerFoto',
+        
         //usuarios
         "/usuario/salvar" => "UsuarioController@salvarUsuario",
         "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
@@ -147,6 +159,8 @@ class Rotas
         "/orcamento/salvar" => "orcamentoController@salvarOrcamento",
         "/orcamento/atualizar/{id}" => "orcamentoController@atualizarOrcamento",
         "/orcamento/deletar/{id}" => "orcamentoController@deletarOrcamento",
+        "/orcamento/alterar-status-massa" => "orcamentoController@alterarStatusEmMassa",
+        "/orcamento/excluir-massa" => "orcamentoController@excluirEmMassa",
         //material 
         "/material/salvar" => "materialController@salvarMaterial",
         "/material/atualizar/{id}" => "materialController@atualizarMaterial",

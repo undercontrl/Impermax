@@ -28,3 +28,12 @@ class Session{
         session_destroy();
     }
 }
+if (!function_exists('getDashboardLink')) {
+    function getDashboardLink(): string {
+        $tipo = $_SESSION['usuario_tipo'] ?? '';
+        return ($tipo === 'admin')
+            ? '/backend/admin/dashboard'
+            : '/backend/funcionario/dashboard';
+    }
+}
+

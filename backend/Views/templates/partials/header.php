@@ -75,6 +75,7 @@ if (in_array($currentPath, $rotasPublicas)) {
             position: fixed;
             left: 0;
             top: 0;
+            border-radius: 20px;
             z-index: 1000;
             box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
             transition: var(--transition);
@@ -326,6 +327,11 @@ if (in_array($currentPath, $rotasPublicas)) {
             border: 2px solid white;
         }
 
+        /* ==================== USER MENU DROPDOWN ==================== */
+        .user-menu-wrapper {
+            position: relative;
+        }
+
         .user-menu {
             display: flex;
             align-items: center;
@@ -334,7 +340,8 @@ if (in_array($currentPath, $rotasPublicas)) {
             border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
-            text-decoration: none;
+            background: transparent;
+            border: none;
             color: inherit;
         }
 
@@ -353,6 +360,13 @@ if (in_array($currentPath, $rotasPublicas)) {
             justify-content: center;
             font-weight: 600;
             font-size: 0.9375rem;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .user-info-text {
@@ -371,6 +385,70 @@ if (in_array($currentPath, $rotasPublicas)) {
         .user-role {
             font-size: 0.75rem;
             color: var(--cor-cinza);
+        }
+
+        /* Dropdown Menu */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border: 1px solid #f1f5f9;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .user-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.25rem;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item i {
+            font-size: 1.125rem;
+            width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown-item:hover {
+            background: #f8fafc;
+            color: var(--cor-acento);
+        }
+
+        .dropdown-item.danger {
+            color: #ef4444;
+        }
+
+        .dropdown-item.danger:hover {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #f1f5f9;
+            margin: 0.5rem 0;
         }
 
         /* ==================== CONTEÚDO PRINCIPAL ==================== */
@@ -412,11 +490,11 @@ if (in_array($currentPath, $rotasPublicas)) {
         }
 
         .alert-success::before {
-            content: '\f26b'; /* bi-check-circle-fill */
+            content: '\f26b';
         }
 
         .alert-danger::before {
-            content: '\f623'; /* bi-x-circle-fill */
+            content: '\f623';
         }
 
         /* ==================== RESPONSIVIDADE ==================== */
@@ -584,23 +662,51 @@ if (in_array($currentPath, $rotasPublicas)) {
             </div>
         </div>
         <div class="topbar-right">
+            <!-- -- Ícone de Notificações 
             <a href="#" class="topbar-icon-btn" title="Notificações">
                 <i class="bi bi-bell"></i>
                 <span class="badge-notification"></span>
             </a>
             <a href="#" class="topbar-icon-btn" title="Configurações">
                 <i class="bi bi-gear"></i>
-            </a>
-            <a href="#" class="user-menu">
-                <div class="user-avatar">
-                    <?= strtoupper(substr($_SESSION['nome_usuario'] ?? 'A', 0, 1)) ?>
+            </a> 
+            
+            -->     
+            <!-- User Menu com Dropdown -->
+            <div class="user-menu-wrapper">
+                <button class="user-menu" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <?php if (!empty($_SESSION['foto_usuario'])): ?>
+                            <img src="/public/uploads/avatars/<?= htmlspecialchars($_SESSION['foto_usuario']) ?>" 
+                                 alt="Avatar">
+                        <?php else: ?>
+                            <?= strtoupper(substr($_SESSION['nome_usuario'] ?? 'A', 0, 1)) ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="user-info-text">
+                        <span class="user-name"><?= htmlspecialchars($_SESSION['nome_usuario'] ?? 'Usuário') ?></span>
+                        <span class="user-role"><?= ucfirst($_SESSION['tipo_usuario'] ?? 'Usuário') ?></span>
+                    </div>
+                    <i class="bi bi-chevron-down" style="color: #94a3b8; font-size: 0.75rem;"></i>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="/backend/perfil" class="dropdown-item">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Meu Perfil</span>
+                    </a>
+                    <a href="/backend/perfil" class="dropdown-item">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Alterar Senha</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/backend/logout" class="dropdown-item danger">
+                        <i class="bi bi-box-arrow-left"></i>
+                        <span>Sair</span>
+                    </a>
                 </div>
-                <div class="user-info-text">
-                    <span class="user-name"><?= htmlspecialchars($_SESSION['nome_usuario'] ?? 'Administrador') ?></span>
-                    <span class="user-role">Administrador</span>
-                </div>
-                <i class="bi bi-chevron-down" style="color: #94a3b8; font-size: 0.75rem;"></i>
-            </a>
+            </div>
         </div>
     </div>
 
@@ -622,3 +728,34 @@ if (in_array($currentPath, $rotasPublicas)) {
             }
         }
         ?>
+        
+        <script>
+        // Toggle User Dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            if (userMenuBtn && userDropdown) {
+                userMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('active');
+                });
+                
+                // Fechar ao clicar fora
+                document.addEventListener('click', function() {
+                    userDropdown.classList.remove('active');
+                });
+                
+                // Prevenir fechar ao clicar no dropdown
+                userDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
+
+        // Toggle Mobile Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+        </script>

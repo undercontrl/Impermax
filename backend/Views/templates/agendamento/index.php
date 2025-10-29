@@ -58,13 +58,13 @@
             </div>
 
             <div class="view-options">
-                <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'grid') === 'grid' ? 'active' : '' ?>" 
-                        onclick="changeView('grid')" title="Visualização em Grade">
-                    <i class="bi bi-grid-3x3-gap"></i>
-                </button>
-                <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'grid') === 'list' ? 'active' : '' ?>" 
+                <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'list') === 'list' ? 'active' : '' ?>" 
                         onclick="changeView('list')" title="Visualização em Lista">
                     <i class="bi bi-list-ul"></i>
+                </button>
+                <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'list') === 'grid' ? 'active' : '' ?>" 
+                        onclick="changeView('grid')" title="Visualização em Grade">
+                    <i class="bi bi-grid-3x3-gap"></i>
                 </button>
             </div>
         </div>
@@ -133,7 +133,7 @@
     <!-- Tabela/Grade de Agendamentos -->
     <div class="content-card">
         <!-- VISUALIZAÇÃO EM TABELA -->
-        <div class="table-container" id="tableView" style="<?= ($_GET['view'] ?? 'grid') === 'list' ? 'display: block;' : 'display: none;' ?>">
+        <div class="table-container" id="tableView" style="<?= ($_GET['view'] ?? 'list') === 'list' ? 'display: block;' : 'display: none;' ?>">
             <?php if (!empty($agendamentos)): ?>
                 <table class="data-table" id="agendamentosTable">
                     <thead>
@@ -340,7 +340,7 @@
         </div>
 
         <!-- VISUALIZAÇÃO EM GRADE -->
-        <div class="grid-container" id="gridView" style="<?= ($_GET['view'] ?? 'grid') === 'grid' ? 'display: block;' : 'display: none;' ?>">
+        <div class="grid-container" id="gridView" style="<?= ($_GET['view'] ?? 'list') === 'grid' ? 'display: block;' : 'display: none;' ?>">
             <?php if (!empty($agendamentos)): ?>
                 <div class="agendamentos-grid">
                     <?php foreach ($agendamentos as $agendamento): ?>

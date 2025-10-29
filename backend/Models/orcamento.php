@@ -173,4 +173,269 @@ class Orcamento{
         return $dados;
     }
 
+    /**
+     * Busca orçamentos com filtros + ordenação + paginação
+     */
+    public function buscarOrcamentosComFiltros($busca = '', $status = '', $periodo = '', $pagina = 1, $itensPorPagina = 10, $ordenarPor = 'id_orcamento', $direcao = 'DESC')
+    {
+        $offset = ($pagina - 1) * $itensPorPagina;
+        
+        $sql = 'SELECT 
+                    o.id_orcamento,
+                    o.id_cliente,
+                    u.nome_usuario AS cliente_nome,
+                    u.email_usuario AS cliente_email,
+                    o.descricao_orcamento,
+                    o.status_orcamento,
+                    o.data_orcamento,
+                    o.valor_orcamento,
+                    o.total_item_orcamento
+                FROM tbl_orcamento o
+                LEFT JOIN tbl_usuario u ON o.id_cliente = u.id_usuario
+                WHERE o.excluido_em IS NULL';
+        
+        $params = [];
+
+        // Filtro de busca
+        if (!empty($busca)) {
+            $sql .= ' AND (
+                u.nome_usuario LIKE :busca 
+                OR o.id_orcamento LIKE :busca
+                OR o.descricao_orcamento LIKE :busca
+            )';
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        // Filtro de status
+        if (!empty($status)) {
+            $sql .= ' AND o.status_orcamento = :status';
+            $params[':status'] = $status;
+        }
+
+        // Filtro de período
+        if (!empty($periodo)) {
+            switch ($periodo) {
+                case 'hoje':
+                    $sql .= ' AND DATE(o.data_orcamento) = CURDATE()';
+                    break;
+                case 'semana':
+                    $sql .= ' AND YEARWEEK(o.data_orcamento, 1) = YEARWEEK(CURDATE(), 1)';
+                    break;
+                case 'mes':
+                    $sql .= ' AND MONTH(o.data_orcamento) = MONTH(CURDATE()) 
+                            AND YEAR(o.data_orcamento) = YEAR(CURDATE())';
+                    break;
+            }
+        }
+
+        // Ordenação
+        $camposPermitidos = ['id_orcamento', 'cliente_nome', 'data_orcamento', 'valor_orcamento', 'status_orcamento'];
+        $campo = in_array($ordenarPor, $camposPermitidos) ? $ordenarPor : 'id_orcamento';
+        $dir = strtoupper($direcao) === 'ASC' ? 'ASC' : 'DESC';
+        
+        if ($campo === 'cliente_nome') {
+            $sql .= " ORDER BY u.nome_usuario $dir, o.id_orcamento DESC";
+        } else {
+            $sql .= " ORDER BY o.$campo $dir";
+            if ($campo !== 'id_orcamento') {
+                $sql .= ', o.id_orcamento DESC';
+            }
+        }
+
+        $sql .= ' LIMIT :limit OFFSET :offset';
+
+        $statement = $this->db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        
+        $statement->bindValue(':limit', (int)$itensPorPagina, PDO::PARAM_INT);
+        $statement->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Conta total com filtros (para paginação)
+     */
+    public function contarOrcamentosComFiltros($busca = '', $status = '', $periodo = '')
+    {
+        $sql = 'SELECT COUNT(*) as total
+                FROM tbl_orcamento o
+                LEFT JOIN tbl_usuario u ON o.id_cliente = u.id_usuario
+                WHERE o.excluido_em IS NULL';
+        
+        $params = [];
+
+        if (!empty($busca)) {
+            $sql .= ' AND (
+                u.nome_usuario LIKE :busca 
+                OR o.id_orcamento LIKE :busca
+                OR o.descricao_orcamento LIKE :busca
+            )';
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        if (!empty($status)) {
+            $sql .= ' AND o.status_orcamento = :status';
+            $params[':status'] = $status;
+        }
+
+        if (!empty($periodo)) {
+            switch ($periodo) {
+                case 'hoje':
+                    $sql .= ' AND DATE(o.data_orcamento) = CURDATE()';
+                    break;
+                case 'semana':
+                    $sql .= ' AND YEARWEEK(o.data_orcamento, 1) = YEARWEEK(CURDATE(), 1)';
+                    break;
+                case 'mes':
+                    $sql .= ' AND MONTH(o.data_orcamento) = MONTH(CURDATE()) 
+                            AND YEAR(o.data_orcamento) = YEAR(CURDATE())';
+                    break;
+            }
+        }
+
+        $statement = $this->db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        
+        $statement->execute();
+        $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)$resultado['total'];
+    }
+
+    /**
+     * Calcula estatísticas (cards no topo)
+     */
+    public function calcularEstatisticas($busca = '', $status = '', $periodo = '')
+    {
+        $sql = 'SELECT 
+                    o.status_orcamento as status,
+                    COUNT(*) as quantidade,
+                    SUM(o.valor_orcamento) as valor_total
+                FROM tbl_orcamento o
+                LEFT JOIN tbl_usuario u ON o.id_cliente = u.id_usuario
+                WHERE o.excluido_em IS NULL';
+        
+        $params = [];
+
+        if (!empty($busca)) {
+            $sql .= ' AND (
+                u.nome_usuario LIKE :busca 
+                OR o.id_orcamento LIKE :busca
+                OR o.descricao_orcamento LIKE :busca
+            )';
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        if (!empty($status)) {
+            $sql .= ' AND o.status_orcamento = :status';
+            $params[':status'] = $status;
+        }
+
+        if (!empty($periodo)) {
+            switch ($periodo) {
+                case 'hoje':
+                    $sql .= ' AND DATE(o.data_orcamento) = CURDATE()';
+                    break;
+                case 'semana':
+                    $sql .= ' AND YEARWEEK(o.data_orcamento, 1) = YEARWEEK(CURDATE(), 1)';
+                    break;
+                case 'mes':
+                    $sql .= ' AND MONTH(o.data_orcamento) = MONTH(CURDATE()) 
+                            AND YEAR(o.data_orcamento) = YEAR(CURDATE())';
+                    break;
+            }
+        }
+
+        $sql .= ' GROUP BY o.status_orcamento';
+
+        $statement = $this->db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        
+        $statement->execute();
+        $resultados = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $stats = [
+            'aprovado' => 0,
+            'aguardando' => 0,
+            'recusado' => 0,
+            'em_analise' => 0,
+            'valor_total' => 0
+        ];
+
+        foreach ($resultados as $row) {
+            $statusNormalizado = $row['status'];
+            
+            if (isset($stats[$statusNormalizado])) {
+                $stats[$statusNormalizado] = (int)$row['quantidade'];
+            }
+            
+            // Soma total de valores
+            $stats['valor_total'] += (float)$row['valor_total'];
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Altera status de múltiplos orçamentos
+     */
+    public function alterarStatusEmMassa($ids, $novoStatus)
+    {
+        if (empty($ids) || !is_array($ids)) {
+            return false;
+        }
+
+        $dataAtual = date('Y-m-d H:i:s');
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        
+        $sql = "UPDATE tbl_orcamento 
+                SET status_orcamento = ?, 
+                    atualizado_em = ? 
+                WHERE id_orcamento IN ($placeholders) 
+                AND excluido_em IS NULL";
+        
+        $statement = $this->db->prepare($sql);
+        
+        $params = [$novoStatus, $dataAtual];
+        $params = array_merge($params, $ids);
+        
+        return $statement->execute($params);
+    }
+
+    /**
+     * Exclui múltiplos orçamentos (soft delete)
+     */
+    public function excluirEmMassa($ids)
+    {
+        if (empty($ids) || !is_array($ids)) {
+            return false;
+        }
+
+        $dataAtual = date('Y-m-d H:i:s');
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        
+        $sql = "UPDATE tbl_orcamento 
+                SET excluido_em = ? 
+                WHERE id_orcamento IN ($placeholders) 
+                AND excluido_em IS NULL";
+        
+        $statement = $this->db->prepare($sql);
+        
+        $params = [$dataAtual];
+        $params = array_merge($params, $ids);
+        
+        return $statement->execute($params);
+    }
+
 }

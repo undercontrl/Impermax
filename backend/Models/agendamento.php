@@ -588,5 +588,300 @@ class Agendamento
 
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
+    /**
+     * Conta agendamentos de hoje
+     */
+    public function contarAgendamentosDeHoje(): int
+    {
+        $sql = 'SELECT COUNT(*) as total 
+                FROM tbl_agendamento 
+                WHERE excluido_em IS NULL
+                AND DATE(data_solicitada) = CURDATE()';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)($result['total'] ?? 0);
+    }
+
+    /**
+     * Conta agendamentos dos próximos 3 dias
+     */
+    public function contarProximos3Dias(): int
+    {
+        $sql = 'SELECT COUNT(*) as total 
+                FROM tbl_agendamento 
+                WHERE excluido_em IS NULL
+                AND DATE(data_solicitada) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+                AND status_agendamento IN ("pendente", "agendada")';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)($result['total'] ?? 0);
+    }
+
+    /**
+     * Conta pendências (status pendente)
+     */
+    public function contarPendencias(): int
+    {
+        $sql = 'SELECT COUNT(*) as total 
+                FROM tbl_agendamento 
+                WHERE excluido_em IS NULL
+                AND status_agendamento = "pendente"';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)($result['total'] ?? 0);
+    }
+
+    /**
+     * Conta serviços da semana atual
+     */
+    public function contarServicosDaSemana(): int
+    {
+        $sql = 'SELECT COUNT(*) as total 
+                FROM tbl_agendamento 
+                WHERE excluido_em IS NULL
+                AND YEARWEEK(data_solicitada, 1) = YEARWEEK(CURDATE(), 1)';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)($result['total'] ?? 0);
+    }
+
+    /**
+     * Conta serviços concluídos (realizados)
+     */
+    public function contarServicosConcluidos(): int
+    {
+        $sql = 'SELECT COUNT(*) as total 
+                FROM tbl_agendamento 
+                WHERE excluido_em IS NULL
+                AND status_agendamento = "realizada"';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)($result['total'] ?? 0);
+    }
+
+    /**
+     * Busca serviços concluídos por mês do ano atual
+     * Retorna array com 12 posições (Jan a Dez)
+     */
+    public function contarServicosPorMes(): array
+    {
+        $anoAtual = date('Y');
+        
+        $sql = 'SELECT 
+                    MONTH(data_solicitada) as mes,
+                    COUNT(*) as total
+                FROM tbl_agendamento
+                WHERE excluido_em IS NULL
+                AND status_agendamento = "realizada"
+                AND YEAR(data_solicitada) = :ano
+                GROUP BY MONTH(data_solicitada)
+                ORDER BY mes ASC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':ano', $anoAtual, PDO::PARAM_INT);
+        $statement->execute();
+        $resultados = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Inicializa array com 12 meses zerados
+        $dados = array_fill(0, 12, 0);
+        
+        // Preenche com os dados reais
+        foreach ($resultados as $row) {
+            $mesIndex = (int)$row['mes'] - 1; // Janeiro = 0
+            $dados[$mesIndex] = (int)$row['total'];
+        }
+        
+        return $dados;
+    }
+
+    /**
+     * Busca distribuição de status (todos os agendamentos)
+     * Retorna objeto para o gráfico de pizza
+     */
+    public function distribuicaoPorStatus(): array
+    {
+        $sql = 'SELECT 
+                    status_agendamento,
+                    COUNT(*) as total
+                FROM tbl_agendamento
+                WHERE excluido_em IS NULL
+                GROUP BY status_agendamento
+                ORDER BY total DESC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $resultados = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Formata para objeto {status: total}
+        $dados = [];
+        foreach ($resultados as $row) {
+            $status = ucfirst($row['status_agendamento']);
+            $dados[$status] = (int)$row['total'];
+        }
+        
+        return $dados;
+    }
+
+    /**
+     * Busca agendamentos de hoje com detalhes
+     */
+    public function buscarAgendamentosDeHojeDetalhado(): array
+    {
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    ag.data_solicitada,
+                    ag.total_agendamento,
+                    ag.status_agendamento,
+                    usu.nome_usuario AS nome_cliente,
+                    usu.email_usuario AS email_cliente
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                WHERE ag.excluido_em IS NULL
+                AND DATE(ag.data_solicitada) = CURDATE()
+                ORDER BY ag.data_solicitada ASC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca próximos agendamentos (próximos 7 dias)
+     */
+    public function buscarProximosAgendamentos(int $limite = 10): array
+    {
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    ag.data_solicitada,
+                    ag.total_agendamento,
+                    ag.status_agendamento,
+                    usu.nome_usuario AS nome_cliente,
+                    usu.email_usuario AS email_cliente
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                WHERE ag.excluido_em IS NULL
+                AND ag.data_solicitada BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+                AND ag.status_agendamento IN ("pendente", "agendada")
+                ORDER BY ag.data_solicitada ASC
+                LIMIT :limite';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca agendamentos da semana atual
+     */
+    public function buscarAgendamentosDaSemana(): array
+    {
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    ag.data_solicitada,
+                    ag.total_agendamento,
+                    ag.status_agendamento,
+                    usu.nome_usuario AS nome_cliente
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                WHERE ag.excluido_em IS NULL
+                AND YEARWEEK(ag.data_solicitada, 1) = YEARWEEK(CURDATE(), 1)
+                ORDER BY ag.data_solicitada ASC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca estatísticas resumidas para o funcionário
+     */
+    public function buscarEstatisticasFuncionario(): array
+    {
+        $sql = 'SELECT 
+                    COUNT(*) as total_geral,
+                    COUNT(CASE WHEN DATE(data_solicitada) = CURDATE() THEN 1 END) as hoje,
+                    COUNT(CASE WHEN YEARWEEK(data_solicitada, 1) = YEARWEEK(CURDATE(), 1) THEN 1 END) as semana,
+                    COUNT(CASE WHEN status_agendamento = "pendente" THEN 1 END) as pendentes,
+                    COUNT(CASE WHEN status_agendamento = "realizada" THEN 1 END) as concluidos,
+                    COUNT(CASE WHEN DATE(data_solicitada) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) 
+                        AND status_agendamento IN ("pendente", "agendada") THEN 1 END) as proximos_3_dias
+                FROM tbl_agendamento
+                WHERE excluido_em IS NULL';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca desempenho semanal (últimas 4 semanas)
+     */
+    public function buscarDesempenhoSemanal(): array
+    {
+        $sql = 'SELECT 
+                    CONCAT("Semana ", WEEK(data_solicitada)) as semana,
+                    COUNT(*) as total
+                FROM tbl_agendamento
+                WHERE excluido_em IS NULL
+                AND status_agendamento = "realizada"
+                AND data_solicitada >= DATE_SUB(CURDATE(), INTERVAL 4 WEEK)
+                GROUP BY WEEK(data_solicitada)
+                ORDER BY WEEK(data_solicitada) ASC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca últimos agendamentos atualizados
+     */
+    public function buscarUltimosAtualizados(int $limite = 5): array
+    {
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    ag.data_solicitada,
+                    ag.status_agendamento,
+                    ag.atualizado_em,
+                    usu.nome_usuario AS nome_cliente
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                WHERE ag.excluido_em IS NULL
+                AND ag.atualizado_em IS NOT NULL
+                ORDER BY ag.atualizado_em DESC
+                LIMIT :limite';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }
