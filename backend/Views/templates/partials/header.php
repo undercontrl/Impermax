@@ -75,7 +75,6 @@ if (in_array($currentPath, $rotasPublicas)) {
             position: fixed;
             left: 0;
             top: 0;
-            border-radius: 20px;
             z-index: 1000;
             box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
             transition: var(--transition);
