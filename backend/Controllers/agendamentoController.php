@@ -23,11 +23,58 @@ class AgendamentoController extends AdminController
         $this->usuario = new Usuario($this->db);
     }
 
-    // Listar todos os agendamentos
+    // Listar todos os agendamentos com filtros, busca, ordenação e paginação
     public function viewListarAgendamentos()
     {
-        $dados = $this->agendamento->buscarAgendamentosComCliente();
-        View::render("agendamento/index", ["agendamentos" => $dados]);
+        // Parâmetros de filtro
+        $busca = $_GET['busca'] ?? '';
+        $status = $_GET['status'] ?? '';
+        $periodo = $_GET['periodo'] ?? '';
+        
+        // Parâmetros de ordenação
+        $ordemCampo = $_GET['ordem_campo'] ?? 'data_solicitada';
+        $ordemDirecao = $_GET['ordem_direcao'] ?? 'DESC';
+        
+        // Parâmetros de paginação
+        $paginaAtual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+        $itensPorPagina = 10;
+        $offset = ($paginaAtual - 1) * $itensPorPagina;
+        
+        // Buscar agendamentos filtrados
+        $agendamentos = $this->agendamento->buscarAgendamentosFiltrados(
+            $busca,
+            $status,
+            $periodo,
+            $ordemCampo,
+            $ordemDirecao,
+            $itensPorPagina,
+            $offset
+        );
+        
+        // Contar total de registros para paginação
+        $totalRegistros = $this->agendamento->contarAgendamentosFiltrados($busca, $status, $periodo);
+        $totalPaginas = ceil($totalRegistros / $itensPorPagina);
+        
+        // Calcular informações de paginação
+        $inicio = $offset + 1;
+        $fim = min($offset + $itensPorPagina, $totalRegistros);
+        
+        $paginacao = [
+            'pagina_atual' => $paginaAtual,
+            'total_paginas' => $totalPaginas,
+            'total' => $totalRegistros,
+            'inicio' => $inicio,
+            'fim' => $fim
+        ];
+        
+        // Buscar estatísticas
+        $stats = $this->agendamento->buscarEstatisticas($busca, $status, $periodo);
+        
+        View::render("agendamento/index", [
+            "agendamentos" => $agendamentos,
+            "paginacao" => $paginacao,
+            "stats" => $stats
+        ]);
     }
 
     // Formulário de criação
@@ -55,7 +102,7 @@ class AgendamentoController extends AdminController
         View::render("agendamento/delete", ["id_agendamento" => $id]);
     }
 
-    //  Salvar novo agendamento
+    // Salvar novo agendamento
     public function salvarAgendamento()
     {
         $erros = AgendamentoValidador::ValidarEntradas($_POST);
@@ -84,7 +131,7 @@ class AgendamentoController extends AdminController
         $erros = AgendamentoValidador::ValidarEntradas($_POST);
 
         if (!empty($erros)) {
-            Redirect::redirecionarComMensagem("agendamento/editar/{id}", "error", implode("<br>", $erros));
+            Redirect::redirecionarComMensagem("agendamento/editar/{$_POST['id_agendamento']}", "error", implode("<br>", $erros));
         }
 
         $ok = $this->agendamento->atualizarAgendamento(
@@ -98,7 +145,7 @@ class AgendamentoController extends AdminController
         if ($ok) {
             Redirect::redirecionarComMensagem("agendamento/listar", "success", "Agendamento atualizado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("agendamento/editar/{id}", "error", "Erro ao atualizar agendamento!");
+            Redirect::redirecionarComMensagem("agendamento/editar/{$_POST['id_agendamento']}", "error", "Erro ao atualizar agendamento!");
         }
     }
 
@@ -114,7 +161,40 @@ class AgendamentoController extends AdminController
         }
     }
 
-    // Relatório (mantido)
+    // Exclusão múltipla via AJAX
+    public function deletarMultiplos()
+    {
+        header('Content-Type: application/json');
+        
+        $ids = $_POST['ids'] ?? [];
+        
+        if (empty($ids)) {
+            echo json_encode(['success' => false, 'message' => 'Nenhum agendamento selecionado']);
+            exit;
+        }
+        
+        $sucesso = 0;
+        foreach ($ids as $id) {
+            if ($this->agendamento->excluirAgendamento($id)) {
+                $sucesso++;
+            }
+        }
+        
+        if ($sucesso > 0) {
+            echo json_encode([
+                'success' => true, 
+                'message' => "$sucesso agendamento(s) excluído(s) com sucesso!"
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Erro ao excluir agendamentos'
+            ]);
+        }
+        exit;
+    }
+
+    // Relatório
     public function relatorioAgendamento($id, $dataInicial, $dataFinal)
     {
         View::render("agendamento/relatorio", [

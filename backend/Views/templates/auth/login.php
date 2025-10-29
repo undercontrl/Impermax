@@ -107,7 +107,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="login-card">
         <img src="/assets/icons/impermax-LOGO.svg" alt="Logo Impermax">

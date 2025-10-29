@@ -125,4 +125,54 @@ class Contato {
         $statement->bindParam(':excluido', $dataAtual);
         return $statement->execute();
     }
+
+    public function contarPorPeriodo($dataInicio, $dataFim)
+    {
+        // Ajuste o nome da tabela e campos conforme sua estrutura
+        $sql = 'SELECT COUNT(*) as total 
+                FROM tbl_contato 
+                WHERE excluido_em IS NULL
+                AND criado_em BETWEEN :dataInicio AND :dataFim';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':dataInicio', $dataInicio);
+        $statement->bindParam(':dataFim', $dataFim);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Buscar contatos agrupados por mês
+     */
+    public function buscarPorMes($dataInicio, $dataFim)
+    {
+        $sql = 'SELECT 
+                    DATE_FORMAT(criado_em, "%Y-%m") as mes,
+                    DATE_FORMAT(criado_em, "%b/%Y") as mes_formatado,
+                    COUNT(*) as total
+                FROM tbl_contato
+                WHERE excluido_em IS NULL
+                AND criado_em BETWEEN :dataInicio AND :dataFim
+                GROUP BY DATE_FORMAT(criado_em, "%Y-%m")
+                ORDER BY mes ASC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':dataInicio', $dataInicio);
+        $statement->bindParam(':dataFim', $dataFim);
+        $statement->execute();
+        
+        $resultados = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+        $dados = [];
+        foreach ($resultados as $row) {
+            $dados[] = [
+                'mes' => $row['mes_formatado'],
+                'total' => (int)$row['total']
+            ];
+        }
+        
+        return $dados;
+    }
 }

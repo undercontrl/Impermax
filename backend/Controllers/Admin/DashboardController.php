@@ -25,39 +25,69 @@ class DashboardController extends AuthenticatedController {
     }
 
     public function index(): void {
-        // === Contadores ===
+        // ============================================
+        // FILTRO DE PERÍODO
+        // ============================================
+        
+        // Pega o período selecionado (padrão: mês)
+        $periodo = $_GET['periodo'] ?? 'mes';
+        
+        // Calcula as datas de início e fim baseado no período
+        $dataFim = date('Y-m-d 23:59:59');
+        
+        switch ($periodo) {
+            case '3meses':
+                $dataInicio = date('Y-m-d 00:00:00', strtotime('-3 months'));
+                $periodoTexto = 'Últimos 3 Meses';
+                break;
+            case 'ano':
+                $dataInicio = date('Y-m-d 00:00:00', strtotime('-1 year'));
+                $periodoTexto = 'Último Ano';
+                break;
+            case 'mes':
+            default:
+                $dataInicio = date('Y-m-d 00:00:00', strtotime('-1 month'));
+                $periodoTexto = 'Último Mês';
+                $periodo = 'mes';
+                break;
+        }
+
+        // ============================================
+        // BUSCA DE DADOS (usando métodos das Models)
+        // ============================================
+
+        // Usuários (sem filtro de período)
         $usuarios = $this->usuario->buscarUsuarios() ?? [];
-        $totalAgendamentos = count($this->agendamento->buscarAgendamentos() ?? []);
-        $totalOrcamentos = count($this->orcamento->buscarOrcamentos() ?? []);
-        $totalContatos = count($this->contato->buscarContatos() ?? []);
 
-        // === Gráfico: Agendamentos por mês ===
-        $sqlAgMes = "
-            SELECT MONTH(data_solicitada) AS mes, COUNT(*) AS total
-            FROM tbl_agendamento
-            WHERE excluido_em IS NULL
-            GROUP BY MONTH(data_solicitada)
-        ";
-        $stmtAgMes = $this->db->query($sqlAgMes);
-        $graficoAgendamentos = array_fill(1, 12, 0);
-        while ($row = $stmtAgMes->fetch(\PDO::FETCH_ASSOC)) {
-            $graficoAgendamentos[(int)$row['mes']] = (int)$row['total'];
-        }
+        // Agendamentos filtrados por período
+        $totalAgendamentos = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
+        
+        // Orçamentos filtrados por período
+        $totalOrcamentos = $this->orcamento->contarPorPeriodo($dataInicio, $dataFim);
+        
+        // Contatos filtrados por período
+        $totalContatos = $this->contato->contarPorPeriodo($dataInicio, $dataFim);
 
-        // === Gráfico: Distribuição de status ===
-        $sqlStatus = "
-            SELECT status_agendamento, COUNT(*) AS total
-            FROM tbl_agendamento
-            WHERE excluido_em IS NULL
-            GROUP BY status_agendamento
-        ";
-        $stmtStatus = $this->db->query($sqlStatus);
-        $graficoStatusAdmin = [];
-        while ($row = $stmtStatus->fetch(\PDO::FETCH_ASSOC)) {
-            $graficoStatusAdmin[$row['status_agendamento']] = (int)$row['total'];
-        }
+        // ============================================
+        // ESTATÍSTICAS DE CRESCIMENTO
+        // ============================================
+        
+        $estatisticas = $this->calcularEstatisticas($dataInicio, $dataFim, $periodo);
 
-        // === Renderiza a View ===
+        // ============================================
+        // GRÁFICOS (usando métodos das Models)
+        // ============================================
+        
+        // Gráfico: Agendamentos por mês
+        $graficoAgendamentos = $this->agendamento->buscarPorMes($dataInicio, $dataFim);
+
+        // Gráfico: Distribuição de status
+        $graficoStatusAdmin = $this->agendamento->buscarDistribuicaoPorStatus($dataInicio, $dataFim);
+
+        // ============================================
+        // RENDERIZA A VIEW
+        // ============================================
+        
         View::render('admin/dashboard/index', [
             'nomeUsuario' => $this->session->get('usuario_nome'),
             'tipo' => $this->session->get('usuario_tipo'),
@@ -65,8 +95,90 @@ class DashboardController extends AuthenticatedController {
             'totalAgendamentos' => $totalAgendamentos,
             'totalOrcamentos' => $totalOrcamentos,
             'totalContatos' => $totalContatos,
+            'periodo' => $periodo,
+            'periodoTexto' => $periodoTexto,
+            'dataInicio' => date('d/m/Y', strtotime($dataInicio)),
+            'dataFim' => date('d/m/Y', strtotime($dataFim)),
+            'estatisticas' => $estatisticas,
             'graficoAgendamentos' => json_encode(array_values($graficoAgendamentos)),
             'graficoStatusAdmin' => json_encode($graficoStatusAdmin)
         ]);
+    }
+
+    // ============================================
+    // CÁLCULO DE ESTATÍSTICAS E TENDÊNCIAS
+    // ============================================
+
+    /**
+     * Calcula estatísticas de crescimento comparando períodos
+     */
+    private function calcularEstatisticas(string $dataInicio, string $dataFim, string $periodo): array
+    {
+        // Calcula o período anterior para comparação
+        switch ($periodo) {
+            case '3meses':
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-6 months'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-3 months -1 day'));
+                break;
+            case 'ano':
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 years'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 year -1 day'));
+                break;
+            default: // mes
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 months'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 month -1 day'));
+                break;
+        }
+
+        // Busca dados do período ANTERIOR (usando Models)
+        $agendamentosAnteriores = $this->agendamento->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
+        $orcamentosAnteriores = $this->orcamento->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
+        $contatosAnteriores = $this->contato->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
+
+        // Busca dados do período ATUAL (usando Models)
+        $agendamentosAtuais = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
+        $orcamentosAtuais = $this->orcamento->contarPorPeriodo($dataInicio, $dataFim);
+        $contatosAtuais = $this->contato->contarPorPeriodo($dataInicio, $dataFim);
+
+        // Calcula variações percentuais
+        return [
+            'agendamentos' => $this->calcularVariacao($agendamentosAtuais, $agendamentosAnteriores),
+            'orcamentos' => $this->calcularVariacao($orcamentosAtuais, $orcamentosAnteriores),
+            'contatos' => $this->calcularVariacao($contatosAtuais, $contatosAnteriores)
+        ];
+    }
+
+    /**
+     * Calcula variação percentual entre dois valores
+     */
+    private function calcularVariacao(int $atual, int $anterior): array
+    {
+        // Se não havia dados no período anterior
+        if ($anterior == 0) {
+            return [
+                'percentual' => $atual > 0 ? 100 : 0,
+                'diferenca' => $atual,
+                'tendencia' => $atual > 0 ? 'up' : 'neutral'
+            ];
+        }
+
+        // Calcula diferença e percentual
+        $diferenca = $atual - $anterior;
+        $percentual = round(($diferenca / $anterior) * 100, 1);
+        
+        // Define tendência (up/down/neutral)
+        if ($diferenca > 0) {
+            $tendencia = 'up';
+        } elseif ($diferenca < 0) {
+            $tendencia = 'down';
+        } else {
+            $tendencia = 'neutral';
+        }
+
+        return [
+            'percentual' => abs($percentual),
+            'diferenca' => abs($diferenca),
+            'tendencia' => $tendencia
+        ];
     }
 }

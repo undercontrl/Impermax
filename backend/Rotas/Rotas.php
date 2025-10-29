@@ -29,6 +29,7 @@ class Rotas
         "/agendamento/editar/{id}" => "AgendamentoController@viewEditarAgendamentos",
         "/agendamento/excluir/{id}" => "AgendamentoController@viewExcluirAgendamentos",
         "/agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "AgendamentoController@relatorioAgendamento",
+        '/agendamento/deletar-multiplos' => 'AgendamentoController@deletarMultiplos',
         //avaliações
         "/avaliacoes" => "AvaliacaoController@index",
         "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacao",
@@ -108,6 +109,7 @@ class Rotas
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",
         "/agendamento/atualizar/{id}" => "AgendamentoController@atualizarAgendamento",
         "/agendamento/deletar/{id}" => "AgendamentoController@deletarAgendamento",
+        "/agendamento/deletar-multiplos" => "AgendamentoController@deletarMultiplos",
         //avaliações
         "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
         "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
