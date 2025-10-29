@@ -11,9 +11,9 @@
                 <option>Últimos 3 Meses</option>
                 <option>Último Ano</option>
             </select>
-            <button class="btn btn-primary dashboard-btn-primary">
+            <!-- <button class="btn btn-primary dashboard-btn-primary">
                 <i class="bi bi-download me-2"></i>Exportar
-            </button>
+            </button> -->
         </div>
     </div>
 

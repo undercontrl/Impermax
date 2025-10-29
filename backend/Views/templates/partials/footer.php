@@ -55,7 +55,6 @@ if (in_array($currentPath, $rotasPublicas)) {
 <style>
     /* ==================== FOOTER ==================== */
     .dashboard-footer {
-        background: white;
         border-top: 1px solid #e2e8f0;
         padding: 1.5rem 0;
         margin-top: 3rem;
