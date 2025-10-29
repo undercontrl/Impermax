@@ -58,13 +58,13 @@
             </div>
 
             <div class="view-options">
-                <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'grid') === 'grid' ? 'active' : '' ?>" 
-                        onclick="changeView('grid')" title="Visualização em Grade">
-                    <i class="bi bi-grid-3x3-gap"></i>
-                </button>
                 <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'grid') === 'list' ? 'active' : '' ?>" 
                         onclick="changeView('list')" title="Visualização em Lista">
                     <i class="bi bi-list-ul"></i>
+                </button>
+                <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'grid') === 'grid' ? 'active' : '' ?>" 
+                        onclick="changeView('grid')" title="Visualização em Grade">
+                    <i class="bi bi-grid-3x3-gap"></i>
                 </button>
             </div>
         </div>

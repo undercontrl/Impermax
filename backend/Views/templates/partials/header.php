@@ -415,9 +415,9 @@ if (in_array($currentPath, $rotasPublicas)) {
             content: '\f26b'; /* bi-check-circle-fill */
         }
 
-        .alert-danger::before {
-            content: '\f623'; /* bi-x-circle-fill */
-        }
+        /* .alert-danger::before {
+            content: '\f623';
+        } */
 
         /* ==================== RESPONSIVIDADE ==================== */
         @media (max-width: 1024px) {

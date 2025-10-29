@@ -407,6 +407,7 @@
         background: #fafbfc;
     }
 
+
     .card-title {
         font-size: 1rem;
         font-weight: 700;
