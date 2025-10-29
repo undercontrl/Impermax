@@ -66,6 +66,5 @@
     text-align: center;
     flex-wrap: wrap;
     text-align: justify;
-    line-height: 1.5;
     color: var(--cor-fonte-hero-secundaria);
 }

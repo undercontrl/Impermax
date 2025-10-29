@@ -1,0 +1,17 @@
+{
+    "name": "app/impermax",
+    "autoload": {
+        "psr-4": {
+            "App\\Impermax\\": "backend/"
+        }
+    },
+    "authors": [
+        {
+            "name": "undercontrl",
+            "email": "lumaiza@gmail.com"
+        }
+    ],
+    "require": {
+        "bramus/router": "~1.6"
+    }
+}
