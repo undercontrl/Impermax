@@ -31,14 +31,14 @@ $secao->set('csrf_token', $codigoToken);
         </div>
     </div>
     <nav class="header-primario">
-        <a href="index.html">
+        <a href="index.php">
             <img src="assets/logo/impermax-LOGO.svg" alt="Impermax Logo" class="logo">
         </a>
         <ul class="menu-nav">
-            <li><a href="index.html">INICIO</a></li>
-            <li><a href="sobre.html">SOBRE</a></li>
-            <li><a href="servicos.html">SERVIÇOS</a></li>
-            <li><a href="projetos.html">PROJETOS</a></li>
+            <li><a href="index.php">INICIO</a></li>
+            <li><a href="sobre.php">SOBRE</a></li>
+            <li><a href="servicos.php">SERVIÇOS</a></li>
+            <li><a href="projetos.php">PROJETOS</a></li>
             <li><a href="#contato">CONTATO</a></li>
         </ul>
     </nav>
@@ -179,21 +179,29 @@ $secao->set('csrf_token', $codigoToken);
         <script>initComparisons();</script>
         <section class="parallax" id="contato">
             <div class="bloco-contato">
+
                 <div id="caixa-orcamento2">
                     <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                    <form>
+                    <form action="backend/enviar-contato" method="POST" id="form-contato-topo2">
+                        <!-- CSRF TOKEN -->
+                        <input type="hidden" name="csrf_token" value="<?= $codigoToken; ?>">
+
+                        <!-- HONEYPOT (escondido) -->
+                        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
                         <input type="text" name="nome" placeholder="Nome" required>
                         <input type="tel" name="telefone" placeholder="Telefone" required>
                         <input type="email" name="email" placeholder="E-mail" required>
                         <select name="servico" required>
-                            <option value="">Escolha o tipo de serviço solicitado</option>
+                            <option value="">Escolha o tipo de serviço</option>
                             <option value="residencial">Impermeabilização Residencial</option>
                             <option value="comercial">Impermeabilização Comercial</option>
                             <option value="telhado">Impermeabilização de Telhado</option>
                             <option value="laje">Impermeabilização de Laje</option>
                         </select>
-                        <button type="submit">Enviar solicitação de orçamento</button>
-                    </form>
+                    <button type="submit">Enviar solicitação de orçamento</button>
+                   </form>
+                     <div id="mensagem-flash-topo2"></div>
                 </div>
                 <div class="whatsapp-contato">
                     <h2>Prefere falar direto pelo WhatsApp?</h2>
@@ -208,7 +216,7 @@ $secao->set('csrf_token', $codigoToken);
    <footer id="footer-impermax">
     <div class="footer-conteudo">
         <div class="logo-footer">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="assets/logo/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
             </a>
         </div>
@@ -224,78 +232,7 @@ $secao->set('csrf_token', $codigoToken);
 
 
 <!-- Script para o formulário do topo -->
-<script>
-(function () {
-    const formTopo = document.getElementById('form-contato-topo');
-    if (!formTopo) return;
-
-    const flashTopo = document.getElementById('mensagem-flash-topo');
-
-    function showMessageTopo(text, type = 'success', timeout = 10000000) {
-        flashTopo.innerHTML = '<div class="alert alert-' + (type === 'success' ? 'success' : 'error') + '">' + text + '</div>';
-        flashTopo.style.marginTop = '8px';  // Adiciona espaço acima da mensagem
-        if (timeout > 0) {
-            setTimeout(() => { flashTopo.innerHTML = ''; }, timeout);
-        }
-    }
-
-    formTopo.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const submitBtn = formTopo.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn ? submitBtn.innerHTML : null;
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Enviando...';
-        }
-
-        const data = new FormData(formTopo);
-
-        fetch(formTopo.action, {
-            method: formTopo.method || 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            },
-            body: data,
-            credentials: 'same-origin'
-        })
-        .then(async response => {
-            let json = null;
-            try { json = await response.json(); } catch (err) { /* resposta não JSON */ }
-
-            if (response.ok) {
-                // interpretações comuns de sucesso do backend
-                if ((json && (json.status === 'success' || json.success === true)) || !json) {
-                    showMessageTopo('Enviado com sucesso', 'success', 10000000);
-                    formTopo.reset();
-                } else if (json && json.message) {
-                    // backend retornou mensagem customizada (pode ser sucesso)
-                    showMessageTopo(json.message, (json.status === 'success' || json.success) ? 'success' : 'error', 10000000);
-                    if (json.status === 'success' || json.success) formTopo.reset();
-                } else {
-                    showMessageTopo('Enviado com sucesso', 'success', 10000000);
-                    formTopo.reset();
-                }
-            } else {
-                // erro HTTP
-                showMessageTopo((json && json.message) || 'Erro ao enviar. Tente novamente.', 'error', 10000000);
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            showMessageTopo('Erro de conexão. Verifique sua internet.', 'error', 10000000);
-        })
-        .finally(() => {
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText || 'Enviar solicitação de orçamento';
-            }
-        });
-    });
-})();
-</script>
-
+<script src="js/formulario.js"></script>
 <!-- Aba de serviços - carregamento dinâmico via JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {

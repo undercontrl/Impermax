@@ -2,9 +2,39 @@
 #mensagem-flash-topo {
     text-align: center;
     width: 100%;
+    margin-top: 8px;
+
+    
+  }
+#mensagem-flash-topo2 {
+    text-align: center;
+    width: 100%;
+    margin-top: 8px;
+
   }
 
-#mensagem-flash-topo .alert {
+  #mensagem-flash-topo3 {
+    text-align: center;
+    width: 100%;
+    margin-top: 8px;
+
+  }
+
+    #mensagem-flash-topo4 {
+    text-align: center;
+    width: 100%;
+    margin-top: 8px;
+
+  }
+
+    #mensagem-flash-topo5 {
+    text-align: center;
+    width: 100%;
+    margin-top: 8px;
+
+  }
+
+.alert {
     padding: 12px 16px;
     margin-bottom: 0;
     border-radius: 12px;
@@ -16,18 +46,18 @@
     word-wrap: break-word;
 }
 
-#mensagem-flash-topo .alert-success {
+ .alert-success {
     background-color: #2f89647a;
     color: #ffffff;
 }
 
-#mensagem-flash-topo .alert-error {
+ .alert-error {
     background-color: #b53c3c8f;
     color: #ffffff;
 }
 
 /* Animação suave de entrada */
-#mensagem-flash-topo .alert {
+.alert {
     opacity: 0;
     transform: translateY(-10px);
     animation: fadeInDown 0.4s ease forwards;
