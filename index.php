@@ -1,3 +1,13 @@
+<?php 
+require __DIR__.'/vendor/autoload.php';
+use App\Impermax\Core\CSRF;
+use App\Impermax\Core\Session;
+session_start();
+$codigoToken = CSRF::generate();
+$secao= new Session();
+$secao->set('csrf_token', $codigoToken);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -60,7 +70,7 @@
             <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
             <form action="backend/enviar-contato" method="POST" id="form-contato-topo">
                 <!-- CSRF TOKEN -->
-                <input type="hidden" name="csrf_token" value="<?= \App\Impermax\Core\CSRF::generate() ?>">
+                <input type="hidden" name="csrf_token" value="<?= $codigoToken; ?>">
 
                 <!-- HONEYPOT (escondido) -->
                 <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
