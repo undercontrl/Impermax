@@ -78,6 +78,7 @@ class Rotas
         "/projeto" => "projetoController@index",
         "/projeto/criar" => "projetoController@viewCriarProjetos",
         "/projeto/listar" => "projetoController@viewListarProjetos",
+        "/projeto/ver/{id}" => "projetoController@viewVerProjetos",
         "/projeto/editar/{id}" => "projetoController@viewEditarProjetos",
         "/projeto/excluir/{id}" => "projetoController@viewExcluirProjetos",
         //pagamento
@@ -151,6 +152,7 @@ class Rotas
         "/projeto/salvar" => "projetoController@salvarProjeto",
         "/projeto/atualizar/{id}" => "projetoController@atualizarProjeto",
         "/projeto/deletar/{id}" => "projetoController@deletarProjeto",
+        "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         //pagamento
         "/pagamento/salvar" => "pagamentoController@salvarPagamento",
         "/pagamento/atualizar/{id}" => "pagamentoController@atualizarPagamento",

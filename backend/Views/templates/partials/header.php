@@ -66,7 +66,7 @@ if (in_array($currentPath, $rotasPublicas)) {
         /* ==================== SIDEBAR ==================== */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, #4a5f7f 0%, var(--cor-primaria) 100%);
+            background: linear-gradient(135deg, #1a202c 0%, #062f77c9 100%);
             color: var(--cor-clara);
             flex-shrink: 0;
             display: flex;
@@ -76,7 +76,7 @@ if (in_array($currentPath, $rotasPublicas)) {
             left: 0;
             top: 0;
             z-index: 1000;
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 4px 0 40px rgba(0, 0, 0, 0.2);
             transition: var(--transition);
         }
 
@@ -84,27 +84,25 @@ if (in_array($currentPath, $rotasPublicas)) {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, var(--cor-acento), #0e6eb8);
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
             padding: 1.5rem 1.25rem;
             height: var(--topbar-height);
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-logo::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 3s ease-in-out infinite;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(20, 135, 223, 0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
         }
 
         .sidebar-logo a {
@@ -116,15 +114,16 @@ if (in_array($currentPath, $rotasPublicas)) {
             width: 160px;
             max-height: 45px;
             object-fit: contain;
-            filter: brightness(0) invert(1);
+            filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(255,255,255,0.3));
             transition: var(--transition);
         }
 
         .sidebar-logo img:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
+            filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(255,255,255,0.5));
         }
 
-        /* Menu de Navegação */
+        /* Menu de Navegação Premium */
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
@@ -132,92 +131,221 @@ if (in_array($currentPath, $rotasPublicas)) {
         }
 
         .sidebar-nav::-webkit-scrollbar {
-            width: 4px;
+            width: 6px;
         }
 
         .sidebar-nav::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .sidebar-nav::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
+            background: linear-gradient(180deg, rgba(20, 135, 223, 0.5), rgba(14, 165, 233, 0.5));
+            border-radius: 10px;
         }
 
         .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: linear-gradient(180deg, rgba(20, 135, 223, 0.8), rgba(14, 165, 233, 0.8));
         }
 
         .nav-section-title {
-            padding: 1.25rem 1.5rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
+            padding: 1.5rem 1.5rem 0.75rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-section-title::before {
+            content: '';
+            width: 3px;
+            height: 12px;
+            background: linear-gradient(180deg, #1487df, #0ea5e9);
+            border-radius: 10px;
         }
 
         .sidebar a {
             display: flex;
             align-items: center;
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.75);
             text-decoration: none;
-            padding: 0.875rem 1.5rem;
+            padding: 0.875rem 1.25rem;
             font-size: 0.9375rem;
             font-weight: 500;
             transition: var(--transition);
             position: relative;
             margin: 0.25rem 0.75rem;
-            border-radius: 10px;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
+        /* Linha lateral sutil (aparece no hover e ativo) */
         .sidebar a::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0;
             width: 3px;
-            height: 0;
-            background: white;
-            border-radius: 0 3px 3px 0;
+            height: 100%;
+            background: linear-gradient(180deg, #1487df, #0ea5e9);
+            transform: scaleY(0);
             transition: var(--transition);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Brilho sutil no hover (muito discreto) */
+        .sidebar a::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(20, 135, 223, 0.08), transparent);
+            opacity: 0;
+            transition: var(--transition);
+            border-radius: 12px;
         }
 
         .sidebar a i {
-            margin-right: 0.875rem;
-            font-size: 1.15rem;
-            width: 24px;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
         }
 
+        /* Hover suave */
         .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            transform: translateX(4px);
+            color: #ffffff;
+            transform: translateX(2px);
         }
 
         .sidebar a:hover::before {
-            height: 20px;
+            transform: scaleY(1);
         }
 
+        .sidebar a:hover::after {
+            opacity: 1;
+        }
+
+        .sidebar a:hover i {
+            background: rgba(20, 135, 223, 0.15);
+            transform: scale(1.05);
+        }
+
+        /* Item ativo - SUPER SUTIL */
         .sidebar a.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff;
+            background: transparent; /* SEM FUNDO PESADO */
+            color: #ffffff;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar a.active::before {
-            height: 24px;
+            transform: scaleY(1);
+            box-shadow: 0 0 12px rgba(20, 135, 223, 0.5); /* Brilho na linha */
+        }
+
+        .sidebar a.active::after {
+            opacity: 1;
+            background: linear-gradient(90deg, rgba(20, 135, 223, 0.12), transparent); /* Brilho muito sutil */
+        }
+
+        /* Ícone ativo com gradiente suave */
+        .sidebar a.active i {
+            background: linear-gradient(135deg, rgba(20, 135, 223, 0.25), rgba(14, 165, 233, 0.15));
+            color: #60a5fa; /* Azul claro no ícone */
+            box-shadow: 0 0 16px rgba(20, 135, 223, 0.3); /* Brilho suave */
+        }
+
+        /* Ícones coloridos por categoria (mais sutis) */
+        .sidebar a[href*="dashboard"] i {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.06));
+        }
+
+        .sidebar a[href*="agendamento"] i {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(22, 163, 74, 0.06));
+        }
+
+        .sidebar a[href*="orcamento"] i {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.06));
+        }
+
+        .sidebar a[href*="projeto"] i {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(147, 51, 234, 0.06));
+        }
+
+        .sidebar a[href*="pagamento"] i {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.12), rgba(13, 148, 136, 0.06));
+        }
+
+        .sidebar a[href*="contato"] i {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(220, 38, 38, 0.06));
+        }
+
+        .sidebar a[href*="avaliacao"] i {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.06));
+        }
+
+        .sidebar a[href*="usuario"] i {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.06));
+        }
+
+        /* Hover nos ícones coloridos */
+        .sidebar a[href*="dashboard"]:hover i {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1));
+        }
+
+        .sidebar a[href*="agendamento"]:hover i {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.1));
+        }
+
+        .sidebar a[href*="orcamento"]:hover i {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
+        }
+
+        .sidebar a[href*="projeto"]:hover i {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(147, 51, 234, 0.1));
+        }
+
+        .sidebar a[href*="pagamento"]:hover i {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(13, 148, 136, 0.1));
+        }
+
+        .sidebar a[href*="contato"]:hover i {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+        }
+
+        .sidebar a[href*="avaliacao"]:hover i {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1));
+        }
+
+        .sidebar a[href*="usuario"]:hover i {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.1));
         }
 
         /* Logout na Sidebar */
         .sidebar-footer {
             padding: 1rem 0.75rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .sidebar-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
         .sidebar-footer a {
@@ -227,6 +355,10 @@ if (in_array($currentPath, $rotasPublicas)) {
         .sidebar-footer a:hover {
             color: #fca5a5;
             background: rgba(239, 68, 68, 0.15);
+        }
+
+        .sidebar-footer a:hover i {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.2));
         }
 
         /* ==================== TOPBAR ==================== */
@@ -661,16 +793,14 @@ if (in_array($currentPath, $rotasPublicas)) {
             </div>
         </div>
         <div class="topbar-right">
-            <!-- -- Ícone de Notificações 
             <a href="#" class="topbar-icon-btn" title="Notificações">
                 <i class="bi bi-bell"></i>
                 <span class="badge-notification"></span>
             </a>
             <a href="#" class="topbar-icon-btn" title="Configurações">
                 <i class="bi bi-gear"></i>
-            </a> 
+            </a>
             
-            -->     
             <!-- User Menu com Dropdown -->
             <div class="user-menu-wrapper">
                 <button class="user-menu" id="userMenuBtn">
