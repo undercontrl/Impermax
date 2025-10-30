@@ -1,3 +1,32 @@
+#mensagem-flash-topo {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  }
+
+.alert {
+  padding: 5px;
+  border-radius: 4px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 50%;
+  margin: 0 auto;
+   }
+
+.alert-success {
+background: #4CAF50;
+color: white;
+ }
+
+.alert-error {
+  background: #f44336;
+ color: white;
+   }
+
+
+
+
 #caixa-orcamento {
     background-color: #2e2e2ebb;
     color: white;

@@ -125,4 +125,47 @@ class Contato {
         $statement->bindParam(':excluido', $dataAtual);
         return $statement->execute();
     }
+
+    public function salvar($dados)
+{
+    $sql = "INSERT INTO tbl_contato 
+            (nome_contato, telefone_contato, email_contato, assunto_contato, status_contato, data_envio)
+            VALUES (:nome, :telefone, :email, :assunto, 'Novo', NOW())";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':nome', $dados['nome']);
+    $stmt->bindParam(':telefone', $dados['telefone']);
+    $stmt->bindParam(':email', $dados['email']);
+    $stmt->bindParam(':assunto', $dados['assunto']);
+
+    return $stmt->execute();
+}
+
+
+public function listarTodos($pagina = 1, $porPagina = 20)
+{
+    $offset = ($pagina - 1) * $porPagina;
+    $sql = "SELECT * FROM tbl_contato WHERE excluido_em IS NULL ORDER BY data_envio DESC LIMIT :offset, :porPagina";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $total = $this->db->query("SELECT COUNT(*) FROM tbl_contato WHERE excluido_em IS NULL")->fetchColumn();
+    
+    return [
+        'data' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+        'total' => (int)$total,
+        'total_paginas' => (int)ceil($total / $porPagina)
+    ];
+}
+
+public function buscarPorId($id)
+{
+    $sql = "SELECT * FROM tbl_contato WHERE id_contato = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 }

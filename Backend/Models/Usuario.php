@@ -134,4 +134,34 @@ class Usuario{
         }
         return false;
     }
+
+
+
+
+    public function criarCliente($dados)
+    {
+        $sql = "INSERT INTO tbl_usuario
+                (nome_usuario, email_usuario, tipo_usuario, status_usuario)
+                VALUES (:nome, :email, 'cliente', 'Ativo')";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':nome', $dados['nome']);
+        $stmt->bindParam(':email', $dados['email']);
+
+        return $stmt->execute();
+    }
+
+    public function emailJaExiste($email)
+    {
+        $sql = "SELECT id_usuario FROM tbl_usuario WHERE email_usuario = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+
+
+
+
 }

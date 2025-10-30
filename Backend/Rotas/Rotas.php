@@ -89,6 +89,8 @@ class Rotas
         "/contato/editar/{id}" => "ContatoController@viewEditarContato",
         "/contato/excluir/{id}" => "ContatoController@viewExcluirContato",
         "/contato/{id}/relatorio/{dataInicial}/{dataFinal}" => "ContatoController@relatorioContato",
+        "/teste-salvar" => "TesteController@salvar",
+        
         // enderecos
         "/enderecos" => "EnderecoController@index",
         "/endereco/listar" => "EnderecoController@viewListarEnderecos",
@@ -159,6 +161,8 @@ class Rotas
         "/contato/salvar" => "ContatoController@salvarContato",
         "/contato/atualizar/{id}" => "ContatoController@atualizarContato",
         "/contato/deletar/{id}" => "ContatoController@deletarContato",
+        "/enviar-contato" => "PublicContatoController@enviar",
+        "/contato/converter/{id}" => "ContatoController@converterEmCliente",
         // endereços
         "/endereco/salvar" => "EnderecoController@salvarEndereco",
         "/endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",

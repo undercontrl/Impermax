@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impermax Impermeabilização</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+
+    </style>
 </head>
 <body>
    <header>
@@ -34,7 +37,7 @@
         <section class="hero">
             <h3 class="titulo-hero">SEJA BEM-VINDO À IMPERMAX!</h3>
             <p class="texto-hero">Especialistas em Impermeabilização Residencial e Comercial</p>
-            <div id="caixa-orcamento">
+            <!-- <div id="caixa-orcamento">
                 <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
                 <form>
                     <input type="text" name="nome" placeholder="Nome" required>
@@ -49,7 +52,38 @@
                     </select>
                     <button type="submit">Enviar solicitação de orçamento</button>
                 </form>
-            </div>
+            </div> -->
+
+
+
+            <div id="caixa-orcamento">
+            <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
+            <form action="backend/enviar-contato" method="POST" id="form-contato-topo">
+                <!-- CSRF TOKEN -->
+                <input type="hidden" name="csrf_token" value="<?= \App\Impermax\Core\CSRF::generate() ?>">
+
+                <!-- HONEYPOT (escondido) -->
+                <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
+                <input type="text" name="nome" placeholder="Nome" required>
+                <input type="tel" name="telefone" placeholder="Telefone" required>
+                <input type="email" name="email" placeholder="E-mail" required>
+                <select name="servico" required>
+                    <option value="">Escolha o tipo de serviço</option>
+                    <option value="residencial">Impermeabilização Residencial</option>
+                    <option value="comercial">Impermeabilização Comercial</option>
+                    <option value="telhado">Impermeabilização de Telhado</option>
+                    <option value="laje">Impermeabilização de Laje</option>
+                </select>
+                <button type="submit">Enviar solicitação de orçamento</button>
+            </form>
+            <div id="mensagem-flash-topo"></div>
+        </div>
+
+
+
+
+
         </section>
         <section class="quem-somos">
             <h2 class="titulo-quem-somos">Quem Somos</h2>
@@ -178,6 +212,77 @@
     <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
 </footer>
 
+
+<!-- Script para o formulário do topo -->
+<script>
+(function () {
+    const formTopo = document.getElementById('form-contato-topo');
+    if (!formTopo) return;
+
+    const flashTopo = document.getElementById('mensagem-flash-topo');
+
+    function showMessageTopo(text, type = 'success', timeout = 5000) {
+        flashTopo.innerHTML = '<div class="alert alert-' + (type === 'success' ? 'success' : 'error') + '">' + text + '</div>';
+        flashTopo.style.marginTop = '15px';  // Adiciona espaço acima da mensagem
+        if (timeout > 0) {
+            setTimeout(() => { flashTopo.innerHTML = ''; }, timeout);
+        }
+    }
+
+    formTopo.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const submitBtn = formTopo.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn ? submitBtn.innerHTML : null;
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Enviando...';
+        }
+
+        const data = new FormData(formTopo);
+
+        fetch(formTopo.action, {
+            method: formTopo.method || 'POST',
+            body: data,
+            credentials: 'same-origin'
+        })
+        .then(async response => {
+            let json = null;
+            try { json = await response.json(); } catch (err) { /* resposta não JSON */ }
+
+            if (response.ok) {
+                // interpretações comuns de sucesso do backend
+                if ((json && (json.status === 'success' || json.success === true)) || !json) {
+                    showMessageTopo('Enviado com sucesso', 'success', 5000);
+                    formTopo.reset();
+                } else if (json && json.message) {
+                    // backend retornou mensagem customizada (pode ser sucesso)
+                    showMessageTopo(json.message, (json.status === 'success' || json.success) ? 'success' : 'error', 5000);
+                    if (json.status === 'success' || json.success) formTopo.reset();
+                } else {
+                    showMessageTopo('Enviado com sucesso', 'success', 5000);
+                    formTopo.reset();
+                }
+            } else {
+                // erro HTTP
+                showMessageTopo((json && json.message) || 'Erro ao enviar. Tente novamente.', 'error', 5000);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showMessageTopo('Erro de conexão. Verifique sua internet.', 'error', 5000);
+        })
+        .finally(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText || 'Enviar solicitação de orçamento';
+            }
+        });
+    });
+})();
+</script>
+
+<!-- Aba de serviços - carregamento dinâmico via JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const cardsContainer = document.getElementById('cards-container');
@@ -243,6 +348,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 });
 </script>
+
+
+
 
 </body>
 </html>
