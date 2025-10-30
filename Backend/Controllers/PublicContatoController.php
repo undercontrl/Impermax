@@ -37,14 +37,27 @@ class PublicContatoController
         }
     }
 
+    // detectar se é requisição AJAX (fetch)
+    $isAjax = false;
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        $isAjax = true;
+    } elseif (!empty($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false) {
+        $isAjax = true;
+    }
+
     // === VERIFICAR LIMITE ===
     $currentCount = $rateData[$ip]['count'] ?? 0;
 
     if ($currentCount >= 3) {
-        $_SESSION['flash'] = [
-            'type' => 'error',
-            'message' => 'Limite diário excedido (3 envios). Tente novamente amanhã.'
-        ];
+        $payload = ['type' => 'error', 'message' => 'Limite diário excedido (3 envios). Tente novamente amanhã.'];
+        if ($isAjax) {
+            http_response_code(429);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'error', 'message' => $payload['message']], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $_SESSION['flash'] = $payload;
         header("Location: /");
         exit;
     }
@@ -53,7 +66,15 @@ class PublicContatoController
     $tokenFormulario = $_POST['csrf_token'] ?? '';
     $tokenSessao = $this->secao->get('csrf_token');
     if (empty($tokenFormulario) || $tokenFormulario !== $tokenSessao) {
-        $_SESSION['flash'] = ['type' => 'error', 'message' => 'Token CSRF inválido.'];
+        $payload = ['type' => 'error', 'message' => 'Token CSRF inválido.'];
+        if ($isAjax) {
+            http_response_code(400);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'error', 'message' => $payload['message']], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $_SESSION['flash'] = $payload;
         header("Location: /");
         exit;
     }
@@ -96,8 +117,21 @@ class PublicContatoController
         // SALVAR COM BLOQUEIO E ESCRITA ATÔMICA
         $this->saveRateLimitData($rateLimitFile, $rateData);
 
+        if ($isAjax) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'success', 'message' => 'Orçamento solicitado com sucesso!'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
         $_SESSION['flash'] = ['type' => 'success', 'message' => 'Orçamento solicitado com sucesso!'];
     } else {
+        if ($isAjax) {
+            http_response_code(500);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar.'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
         $_SESSION['flash'] = ['type' => 'error', 'message' => 'Erro ao enviar.'];
     }
 

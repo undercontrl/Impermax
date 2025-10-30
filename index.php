@@ -231,9 +231,9 @@ $secao->set('csrf_token', $codigoToken);
 
     const flashTopo = document.getElementById('mensagem-flash-topo');
 
-    function showMessageTopo(text, type = 'success', timeout = 5000) {
+    function showMessageTopo(text, type = 'success', timeout = 10000000) {
         flashTopo.innerHTML = '<div class="alert alert-' + (type === 'success' ? 'success' : 'error') + '">' + text + '</div>';
-        flashTopo.style.marginTop = '15px';  // Adiciona espaço acima da mensagem
+        flashTopo.style.marginTop = '8px';  // Adiciona espaço acima da mensagem
         if (timeout > 0) {
             setTimeout(() => { flashTopo.innerHTML = ''; }, timeout);
         }
@@ -253,6 +253,10 @@ $secao->set('csrf_token', $codigoToken);
 
         fetch(formTopo.action, {
             method: formTopo.method || 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
             body: data,
             credentials: 'same-origin'
         })
@@ -263,24 +267,24 @@ $secao->set('csrf_token', $codigoToken);
             if (response.ok) {
                 // interpretações comuns de sucesso do backend
                 if ((json && (json.status === 'success' || json.success === true)) || !json) {
-                    showMessageTopo('Enviado com sucesso', 'success', 5000);
+                    showMessageTopo('Enviado com sucesso', 'success', 10000000);
                     formTopo.reset();
                 } else if (json && json.message) {
                     // backend retornou mensagem customizada (pode ser sucesso)
-                    showMessageTopo(json.message, (json.status === 'success' || json.success) ? 'success' : 'error', 5000);
+                    showMessageTopo(json.message, (json.status === 'success' || json.success) ? 'success' : 'error', 10000000);
                     if (json.status === 'success' || json.success) formTopo.reset();
                 } else {
-                    showMessageTopo('Enviado com sucesso', 'success', 5000);
+                    showMessageTopo('Enviado com sucesso', 'success', 10000000);
                     formTopo.reset();
                 }
             } else {
                 // erro HTTP
-                showMessageTopo((json && json.message) || 'Erro ao enviar. Tente novamente.', 'error', 5000);
+                showMessageTopo((json && json.message) || 'Erro ao enviar. Tente novamente.', 'error', 10000000);
             }
         })
         .catch(err => {
             console.error(err);
-            showMessageTopo('Erro de conexão. Verifique sua internet.', 'error', 5000);
+            showMessageTopo('Erro de conexão. Verifique sua internet.', 'error', 10000000);
         })
         .finally(() => {
             if (submitBtn) {
