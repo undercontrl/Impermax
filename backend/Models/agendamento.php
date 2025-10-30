@@ -237,6 +237,62 @@ class Agendamento
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    
+    public function buscarAgendamentosComServicoEOrcamento($busca = '', $status = '', $periodo = '', $ordemCampo = 'data_solicitada', $ordemDirecao = 'DESC', $limite = 10, $offset = 0)
+    {
+        $sql = 'SELECT 
+                    ag.id_agendamento,
+                    ag.id_cliente,
+                    usu.nome_usuario AS nome_cliente,
+                    usu.email_usuario AS email_cliente,
+                    ag.data_solicitada,
+                    ag.status_agendamento,
+                    COALESCE(SUM(orc.valor_orcamento), 0) AS total_agendamento,
+                    GROUP_CONCAT(DISTINCT srv.nome_servico SEPARATOR ", ") AS descricao_servico
+                FROM tbl_agendamento AS ag
+                INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
+                LEFT JOIN tbl_orcamento AS orc ON orc.id_cliente = ag.id_cliente AND orc.excluido_em IS NULL
+                LEFT JOIN tbl_item_orcamento AS item ON item.id_orcamento = orc.id_orcamento AND item.excluido_em IS NULL
+                LEFT JOIN tbl_servico AS srv ON srv.id_servico = item.id_servico
+                WHERE ag.excluido_em IS NULL';
+
+        $params = [];
+
+        // Filtro de busca
+        if (!empty($busca)) {
+            $sql .= ' AND (usu.nome_usuario LIKE :busca OR srv.nome_servico LIKE :busca)';
+            $params[':busca'] = "%$busca%";
+        }
+
+        // Filtro de status
+        if (!empty($status)) {
+            $sql .= ' AND ag.status_agendamento = :status';
+            $params[':status'] = $status;
+        }
+
+        // Agrupar e ordenar
+        $sql .= ' GROUP BY ag.id_agendamento';
+        $camposValidos = ['id_agendamento', 'nome_cliente', 'data_solicitada', 'status_agendamento'];
+        if (!in_array($ordemCampo, $camposValidos)) {
+            $ordemCampo = 'data_solicitada';
+        }
+        $ordemDirecao = strtoupper($ordemDirecao) === 'ASC' ? 'ASC' : 'DESC';
+        $sql .= " ORDER BY $ordemCampo $ordemDirecao LIMIT :limite OFFSET :offset";
+
+        $stmt = $this->db->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
     
     function buscarAgendamentoPorId($id_agendamento)
     {

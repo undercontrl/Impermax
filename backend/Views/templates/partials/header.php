@@ -793,13 +793,13 @@ if (in_array($currentPath, $rotasPublicas)) {
             </div>
         </div>
         <div class="topbar-right">
-            <a href="#" class="topbar-icon-btn" title="Notificações">
+            <!-- <a href="#" class="topbar-icon-btn" title="Notificações">
                 <i class="bi bi-bell"></i>
                 <span class="badge-notification"></span>
             </a>
             <a href="#" class="topbar-icon-btn" title="Configurações">
                 <i class="bi bi-gear"></i>
-            </a>
+            </a> -->
             
             <!-- User Menu com Dropdown -->
             <div class="user-menu-wrapper">

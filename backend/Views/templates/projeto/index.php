@@ -41,12 +41,12 @@
                 <?php endif; ?>
             </div>
 
-            <div class="view-options">
+            <!-- <div class="view-options">
                 <span class="view-label">Visualização:</span>
                 <button type="button" class="view-toggle active" title="Grade de Fotos">
                     <i class="bi bi-grid-3x3-gap"></i>
                 </button>
-            </div>
+            </div> -->
         </div>
     </form>
 
@@ -720,6 +720,7 @@
         font-weight: 700;
         letter-spacing: 0.05em;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        margin-top: 30px;
     }
 
     /* Info do Projeto */

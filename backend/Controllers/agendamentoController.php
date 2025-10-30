@@ -4,6 +4,7 @@ namespace App\Impermax\Controllers;
 use App\Impermax\Controllers\Admin\AdminController;
 use App\Impermax\Models\Agendamento;
 use App\Impermax\Models\Usuario;
+use App\Impermax\Models\Orcamento;
 use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
@@ -21,6 +22,7 @@ class AgendamentoController extends AdminController
         $this->db = Database::getInstance();
         $this->agendamento = new Agendamento($this->db);
         $this->usuario = new Usuario($this->db);
+        // $this->orcamento = new Orcamento($this->db);
     }
 
     // Listar todos os agendamentos com filtros, busca, ordenação e paginação
@@ -41,7 +43,17 @@ class AgendamentoController extends AdminController
         $offset = ($paginaAtual - 1) * $itensPorPagina;
         
         // Buscar agendamentos filtrados
-        $agendamentos = $this->agendamento->buscarAgendamentosFiltrados(
+        // $agendamentos = $this->agendamento->buscarAgendamentosFiltrados(
+        //     $busca,
+        //     $status,
+        //     $periodo,
+        //     $ordemCampo,
+        //     $ordemDirecao,
+        //     $itensPorPagina,
+        //     $offset
+        // );
+
+        $agendamentos = $this->agendamento->buscarAgendamentosComServicoEOrcamento(
             $busca,
             $status,
             $periodo,
@@ -50,6 +62,7 @@ class AgendamentoController extends AdminController
             $itensPorPagina,
             $offset
         );
+        
         
         // Contar total de registros para paginação
         $totalRegistros = $this->agendamento->contarAgendamentosFiltrados($busca, $status, $periodo);
