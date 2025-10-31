@@ -168,8 +168,6 @@ $secao->set('csrf_token', $codigoToken);
                     <button type="submit">Enviar solicitação de orçamento</button>
                    </form>
                      <div id="mensagem-flash-topo2"></div>
-
-                </div>
                 </div>
                 <div class="whatsapp-contato">
                     <h2>Prefere falar direto pelo WhatsApp?</h2>
