@@ -8,7 +8,7 @@
             </h1>
             <p class="page-subtitle">Gerencie suas informações pessoais e configurações de conta</p>
         </div>
-        <a href="/backend/admin/dashboard" class="btn btn-outline-secondary">
+        <a href="/backend/<?= ($_SESSION['usuario_tipo'] === 'admin') ? 'admin' : 'funcionario' ?>/dashboard" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-2"></i>Voltar ao Dashboard
         </a>
     </div>

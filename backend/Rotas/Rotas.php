@@ -45,12 +45,14 @@ class Rotas
         "/avaliacao/{id}/relatorio/{dataInicial}/{dataFinal}" => "AvaliacaoController@relatorioAvaliacao",
         // contatos
         "/contatos" => "ContatoController@index",
+        "/contato" => "ContatoController@viewListarContatos",
         "/contato/listar" => "ContatoController@viewListarContatos",
-        "/contato/criar" => "ContatoController@viewCriarContato",
-        "/contato/editar/{id}" => "ContatoController@viewEditarContato",
+        "/contato/criar" => "ContatoController@viewCriar",
+        "/contato/editar/{id}"=> "ContatoController@viewEditar",
         "/contato/excluir/{id}" => "ContatoController@viewExcluirContato",
         "/contato/{id}/relatorio/{dataInicial}/{dataFinal}" => "ContatoController@relatorioContato",
-        "/endereco/buscar-cep" => "EnderecoController@buscarCep",
+        "/teste-salvar" => "TesteController@salvar",
+        '/contato/deletar-multiplos' => 'ContatoController@deletarMultiplos',
         // enderecos
         "/enderecos" => "EnderecoController@index",
         "/endereco/listar" => "EnderecoController@viewListarEnderecos",
@@ -58,6 +60,7 @@ class Rotas
         "/endereco/criar" => "EnderecoController@viewCriarEndereco",
         "/endereco/editar/{id}" => "EnderecoController@viewEditarEndereco",
         "/endereco/excluir/{id}" => "EnderecoController@viewExcluirEndereco",
+        "/endereco/buscar-cep" => "EnderecoController@buscarCep",
         // itens de agendamento
         "/item_agendamento" => "ItemAgendamentoController@index",
         "/item_agendamento/listar" => "ItemAgendamentoController@viewListarItemAgendamento",
@@ -137,9 +140,13 @@ class Rotas
         "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
         "/avaliacao/deletar-multiplos" => "AvaliacaoController@deletarMultiplos",
         // contatos
-        "/contato/salvar" => "ContatoController@salvarContato",
-        "/contato/atualizar/{id}" => "ContatoController@atualizarContato",
+        "/contato/salvar" => "ContatoController@salvar",
+        "/contato/atualizar/(\d+)" => "ContatoController@atualizar",
         "/contato/deletar/{id}" => "ContatoController@deletarContato",
+        "/enviar-contato" => "PublicContatoController@enviar",
+        "/contato/converter/{id}" => "ContatoController@converterEmCliente",
+        "/contato/deletar-multiplos" => "ContatoController@deletarMultiplos",
+        "/contato/excluir-confirmado/(\d+)" => "ContatoController@excluirContatoConfirmado",
         // endereços
         "/endereco/salvar" => "EnderecoController@salvarEndereco",
         "/endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",
@@ -159,12 +166,12 @@ class Rotas
         "/servico/deletar/{id}" => "ServicoController@deletarServico",
         //projeto
         "/projeto/salvar" => "ProjetoController@salvarProjeto",
-        "/projeto/atualizar" => "ProjetoController@atualizarProjeto",
+        "/projeto/atualizar/{id}" => "ProjetoController@atualizarProjeto",
         "/projeto/deletar" => "ProjetoController@deletarProjeto",
         "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         //pagamento
         "/pagamento/salvar" => "PagamentoController@salvarPagamento",
-        "/pagamento/atualizar" => "PagamentoController@atualizarPagamento",
+        "/pagamento/atualizar/{id}" => "PagamentoController@atualizarPagamento",
         "/pagamento/deletar" => "PagamentoController@deletarPagamento",
         "/pagamento/deletar-multiplos" => "PagamentoController@deletarMultiplos",
         //orcamento
