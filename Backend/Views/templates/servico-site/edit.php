@@ -2,7 +2,7 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/backend/dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/backend/admin/dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/backend/servico-site/listar">Serviços do Site</a></li>
             <li class="breadcrumb-item active" aria-current="page">Editar Serviço #<?= $servico['id_servico'] ?></li>
         </ol>

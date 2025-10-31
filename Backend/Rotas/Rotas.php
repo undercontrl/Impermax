@@ -43,9 +43,9 @@ class Rotas
         "/servico-site/alternar/{id}" => "ServicoSiteController@alternar",
 
         "/projeto" => "ProjetoController@index",
-       "/projeto/criar" => "ProjetoController@viewCriarProjetos",
-       "/projeto/listar" => "ProjetoController@viewListarProjetos",
-        "/projeto/listar/{pagina}" => "ProjetoController@viewListarProjetos",
+        "/projeto/criar" => "ProjetoController@viewCriarProjetos",
+        "/projeto/listar" => "ProjetoController@viewListarProjetos",
+        "/projeto/ver/{id}" => "ProjetoController@viewVerProjeto",
         "/projeto/editar/{id}" => "ProjetoController@viewEditarProjetos",
         "/projeto/excluir/{id}" => "ProjetoController@viewExcluirProjetos",
 
@@ -136,9 +136,10 @@ class Rotas
         "/servico-site/salvar" => "ServicoSiteController@salvar",
         "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
 
-        "/projeto/salvar" => "projetoController@salvarProjeto",
-        "/projeto/atualizar/{id}" => "projetoController@atualizarProjeto",
-        "/projeto/deletar/{id}" => "projetoController@deletarProjeto",
+       "/projeto/salvar" => "ProjetoController@salvarProjeto",
+        "/projeto/atualizar/{id}" => "ProjetoController@atualizarProjeto",
+        "/projeto/deletar" => "ProjetoController@deletarProjeto",
+        "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         
         "/pagamento/salvar" => "pagamentoController@salvarPagamento",
         "/pagamento/atualizar/{id}" => "pagamentoController@atualizarPagamento",
