@@ -9,25 +9,32 @@ use App\Impermax\Validadores\ServicoSiteValidador;
 use App\Impermax\Controllers\Admin\AdminController;
 use App\Impermax\Core\FileManager;
 
-class ServicoSiteController extends AdminController {
+class ServicoSiteController extends AdminController 
+{
     private $model;
     private $fileManager;
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $db = Database::getInstance();
         $this->model = new ServicoSite($db);
-        $this->fileManager = new FileManager('upload');
+        // Usar caminho absoluto como no ProjetoController
+        $this->fileManager = new FileManager($_SERVER['DOCUMENT_ROOT'] . '/upload');
     }
 
-    public function index() {
+    // ==================== VIEWS ====================
+
+    public function index() 
+    {
         $this->listar(1);
     }
 
     /**
      * Lista serviços do site com filtros e paginação
      */
-    public function listar($pagina = 1) {
+    public function listar($pagina = 1) 
+    {
         $pagina = max(1, (int)$pagina);
         $statusFiltro = $_GET['status'] ?? '';
         
@@ -56,132 +63,248 @@ class ServicoSiteController extends AdminController {
     /**
      * Exibe formulário de criação
      */
-    public function criar() {
+    public function criar() 
+    {
         View::render("servico-site/create");
     }
 
     /**
      * Exibe formulário de edição
      */
-    public function editar($id) {
+    public function editar($id) 
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("servico-site/listar", "error", "ID do serviço não fornecido!");
+            return;
+        }
+
         $servico = $this->model->buscarPorId($id);
+        
         if (!$servico) {
             Redirect::redirecionarComMensagem("servico-site/listar", "error", "Serviço não encontrado.");
+            return;
         }
+        
         View::render("servico-site/edit", ['servico' => $servico]);
     }
 
-    /**
-     * Alterna status entre Ativo/Inativo
-     */
-    public function alternar($id) {
-        $sucesso = $this->model->alternarStatus($id);
-        
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico-site/listar", "success", "Status alterado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico-site/listar", "error", "Erro ao alterar status.");
-        }
-    }
+    // ==================== AÇÕES ====================
 
     /**
      * Salva novo serviço
      */
-    public function salvar() {
-        // Validação
-        $erros = ServicoSiteValidador::validar($_POST, $_FILES);
-        if ($erros) {
-            return Redirect::redirecionarComMensagem(
+    public function salvar() 
+    {
+        // Validação completa (foto obrigatória na criação)
+        $erros = ServicoSiteValidador::validar($_POST, $_FILES, false);
+        
+        if (!empty($erros)) {
+            Redirect::redirecionarComMensagem(
                 "servico-site/criar", 
                 "error", 
                 implode("<br>", $erros)
             );
+            return;
         }
 
-        // Upload da foto
-        $foto = null;
-        if (isset($_FILES['foto_servico']) && $_FILES['foto_servico']['error'] === UPLOAD_ERR_OK) {
+        try {
+            // Upload da foto
             $foto = $this->fileManager->salvarArquivo($_FILES['foto_servico'], 'servicos');
             
             if (!$foto) {
-                return Redirect::redirecionarComMensagem(
+                Redirect::redirecionarComMensagem(
                     "servico-site/criar",
                     "error",
-                    "Erro ao fazer upload da imagem."
+                    "Erro ao fazer upload da imagem. Verifique o formato e tamanho."
+                );
+                return;
+            }
+
+            // Insere no banco
+            $sucesso = $this->model->inserir(
+                $_POST['nome_servico'],
+                $_POST['descricao_servico'],
+                $foto,
+                'Inativo' // Status padrão
+            );
+
+            if ($sucesso) {
+                Redirect::redirecionarComMensagem(
+                    "servico-site/listar", 
+                    "success", 
+                    "Serviço criado com sucesso!"
+                );
+            } else {
+                // Se falhou ao inserir no banco, deletar a imagem
+                $caminhoCompleto = $_SERVER['DOCUMENT_ROOT'] . '/upload/servicos/' . $foto;
+                if (file_exists($caminhoCompleto)) {
+                    @unlink($caminhoCompleto);
+                }
+                
+                Redirect::redirecionarComMensagem(
+                    "servico-site/criar", 
+                    "error", 
+                    "Erro ao salvar serviço no banco de dados."
                 );
             }
+        } catch (\Exception $e) {
+            error_log("Erro ao criar serviço: " . $e->getMessage());
+            Redirect::redirecionarComMensagem(
+                "servico-site/criar",
+                "error",
+                "Erro ao processar: " . $e->getMessage()
+            );
         }
-
-        // Insere no banco
-        $sucesso = $this->model->inserir(
-            $_POST['nome_servico'],
-            $_POST['descricao_servico'],
-            $foto,
-            'Inativo' // Status padrão
-        );
-
-        $msg = $sucesso ? "Serviço criado com sucesso!" : "Erro ao criar serviço.";
-        $tipo = $sucesso ? "success" : "error";
-        
-        Redirect::redirecionarComMensagem("servico-site/listar", $tipo, $msg);
     }
 
     /**
      * Atualiza serviço existente
      */
-    public function atualizar($id) {
-        // Validação (permite edição sem nova foto)
+    public function atualizar($id) 
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("servico-site/listar", "error", "ID do serviço não fornecido!");
+            return;
+        }
+
+        // Buscar serviço atual
+        $servicoAtual = $this->model->buscarPorId($id);
+        
+        if (!$servicoAtual) {
+            Redirect::redirecionarComMensagem("servico-site/listar", "error", "Serviço não encontrado!");
+            return;
+        }
+
+        // Validação (foto opcional na atualização)
         $erros = ServicoSiteValidador::validar($_POST, $_FILES, true);
-        if ($erros) {
-            return Redirect::redirecionarComMensagem(
+        
+        if (!empty($erros)) {
+            Redirect::redirecionarComMensagem(
                 "servico-site/editar/$id",
                 "error",
                 implode("<br>", $erros)
             );
+            return;
         }
 
-        // Verifica se há nova foto
-        $foto = $_POST['foto_servico_atual'] ?? null;
-        
-        if (isset($_FILES['foto_servico']) && $_FILES['foto_servico']['error'] === UPLOAD_ERR_OK) {
-            $novaFoto = $this->fileManager->salvarArquivo($_FILES['foto_servico'], 'servicos');
+        try {
+            // Manter foto atual por padrão
+            $foto = $servicoAtual['foto_servico'];
             
-            if ($novaFoto) {
-                // Remove foto antiga se existir
-                if (!empty($foto)) {
-                    $this->fileManager->excluirArquivo($foto, 'servicos');
+            // Verificar se há nova foto
+            if (isset($_FILES['foto_servico']) && $_FILES['foto_servico']['error'] === UPLOAD_ERR_OK) {
+                // Upload da nova foto
+                $novaFoto = $this->fileManager->salvarArquivo($_FILES['foto_servico'], 'servicos');
+                
+                if ($novaFoto) {
+                    // Deletar foto antiga se existir
+                    if (!empty($servicoAtual['foto_servico'])) {
+                        $caminhoAntigo = $_SERVER['DOCUMENT_ROOT'] . '/upload/servicos/' . $servicoAtual['foto_servico'];
+                        if (file_exists($caminhoAntigo)) {
+                            @unlink($caminhoAntigo);
+                        }
+                    }
+                    $foto = $novaFoto;
+                } else {
+                    Redirect::redirecionarComMensagem(
+                        "servico-site/editar/$id",
+                        "error",
+                        "Erro ao fazer upload da nova imagem."
+                    );
+                    return;
                 }
-                $foto = $novaFoto;
             }
+
+            // Atualizar no banco
+            $sucesso = $this->model->atualizar(
+                $id,
+                $_POST['nome_servico'],
+                $_POST['descricao_servico'],
+                $foto,
+                $_POST['status_servico'] ?? 'Inativo'
+            );
+
+            if ($sucesso) {
+                Redirect::redirecionarComMensagem(
+                    "servico-site/listar", 
+                    "success", 
+                    "Serviço atualizado com sucesso!"
+                );
+            } else {
+                Redirect::redirecionarComMensagem(
+                    "servico-site/editar/$id", 
+                    "error", 
+                    "Erro ao atualizar o serviço no banco de dados!"
+                );
+            }
+        } catch (\Exception $e) {
+            error_log("Erro ao atualizar serviço: " . $e->getMessage());
+            Redirect::redirecionarComMensagem(
+                "servico-site/editar/$id",
+                "error",
+                "Erro ao processar atualização: " . $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Alterna status entre Ativo/Inativo
+     */
+    public function alternar($id) 
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("servico-site/listar", "error", "ID do serviço não fornecido!");
+            return;
         }
 
-        // Atualiza no banco
-        $sucesso = $this->model->atualizar(
-            $id,
-            $_POST['nome_servico'],
-            $_POST['descricao_servico'],
-            $foto,
-            $_POST['status_servico'] ?? 'Inativo'
-        );
-
-        $msg = $sucesso ? "Serviço atualizado com sucesso!" : "Erro ao atualizar.";
-        $tipo = $sucesso ? "success" : "error";
-        
-        Redirect::redirecionarComMensagem("servico-site/listar", $tipo, $msg);
+        try {
+            $sucesso = $this->model->alternarStatus($id);
+            
+            if ($sucesso) {
+                Redirect::redirecionarComMensagem(
+                    "servico-site/listar", 
+                    "success", 
+                    "Status alterado com sucesso!"
+                );
+            } else {
+                Redirect::redirecionarComMensagem(
+                    "servico-site/listar", 
+                    "error", 
+                    "Erro ao alterar status. Serviço não encontrado."
+                );
+            }
+        } catch (\Exception $e) {
+            error_log("Erro ao alternar status: " . $e->getMessage());
+            Redirect::redirecionarComMensagem(
+                "servico-site/listar",
+                "error",
+                "Erro ao processar: " . $e->getMessage()
+            );
+        }
     }
 
     /**
      * API: Retorna serviços ativos para o site público
      */
-    public function api() {
-        $servicos = $this->model->listarAtivos();
-        
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => true,
-            'data' => $servicos,
-            'total' => count($servicos)
-        ]);
+    public function api() 
+    {
+        try {
+            $servicos = $this->model->listarAtivos();
+            
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'data' => $servicos,
+                'total' => count($servicos)
+            ]);
+        } catch (\Exception $e) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Erro ao buscar serviços',
+                'error' => $e->getMessage()
+            ]);
+        }
         exit;
     }
 }
