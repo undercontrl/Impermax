@@ -75,8 +75,8 @@ $secao->set('csrf_token', $codigoToken);
         <section class="quem-somos">
             <h2 class="titulo-quem-somos">Quem Somos</h2>
             <h3 class="subtitulo-quem-somos">Soluções Profissionais em Impermeabilização</h2>
-            <P class="texto-quem-somos">A <a href="index.html" class="texto-destaque">Impermax</a> oferece serviços especializados para proteger sua construção contra infiltrações e umidade. Atuamos em pisos, lajes, telhados, banheiros, piscinas e muito mais, com qualidade, compromisso e os melhores materiais do mercado.</P>
-            <a class="botao-saiba-mais" href="sobre.html">Saiba Mais</a>
+            <P class="texto-quem-somos">A <a href="index.php" class="texto-destaque">Impermax</a> oferece serviços especializados para proteger sua construção contra infiltrações e umidade. Atuamos em pisos, lajes, telhados, banheiros, piscinas e muito mais, com qualidade, compromisso e os melhores materiais do mercado.</P>
+            <a class="botao-saiba-mais" href="sobre.php">Saiba Mais</a>
         </section>
         <section>
             <section class="servicos">
@@ -84,7 +84,7 @@ $secao->set('csrf_token', $codigoToken);
                    <h3 class="titulo-servico">Serviços</h3>
                    <div class="cards">
                        <div class="card-servico">
-                           <a href="servicos.html">
+                           <a href="servicos.php">
                                 <figure>
                                     <img src="assets/cards/card1.png" alt="" class="servico-imagem">
                                     <figcaption class="figcaption-servico">
@@ -95,7 +95,7 @@ $secao->set('csrf_token', $codigoToken);
                            </a>
                        </div>
                        <div class="card-servico">
-                           <a href="servicos.html">
+                           <a href="servicos.php">
                                 <figure>
                                     <img src="assets/cards/card2.png" alt="" class="servico-imagem">
                                     <figcaption class="figcaption-servico">
@@ -106,7 +106,7 @@ $secao->set('csrf_token', $codigoToken);
                            </a>
                        </div>
                        <div class="card-servico">
-                           <a href="servicos.html">
+                           <a href="servicos.php">
                                 <figure>
                                     <img src="assets/cards/card3.png" alt="" class="servico-imagem">
                                 <figcaption class="figcaption-servico">
@@ -181,7 +181,7 @@ $secao->set('csrf_token', $codigoToken);
    <footer id="footer-impermax">
     <div class="footer-conteudo">
         <div class="logo-footer">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
             </a>
         </div>

@@ -30,14 +30,14 @@ $secao->set('csrf_token', $codigoToken);
         </div>
     </div>
     <nav class="header-primario">
-        <a href="index.html">
+        <a href="index.php">
             <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo">
         </a>
         <ul class="menu-nav">
-            <li><a href="index.html">INICIO</a></li>
-            <li><a href="sobre.html">SOBRE</a></li>
-            <li><a href="servicos.html">SERVIÇOS</a></li>
-            <li><a href="projetos.html">PROJETOS</a></li>
+            <li><a href="index.php">INICIO</a></li>
+            <li><a href="sobre.php">SOBRE</a></li>
+            <li><a href="servicos.php">SERVIÇOS</a></li>
+            <li><a href="projetos.php">PROJETOS</a></li>
             <li><a href="#contato">CONTATO</a></li>
         </ul>
     </nav>
@@ -137,7 +137,7 @@ $secao->set('csrf_token', $codigoToken);
     <footer id="footer-impermax">
         <div class="footer-conteudo">
             <div class="logo-footer">
-                <a href="index.html">
+                <a href="index.php">
                     <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
                 </a>
             </div>
