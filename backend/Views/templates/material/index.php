@@ -970,29 +970,73 @@ function bulkDelete() {
         return;
     }
     
-    if (!confirm(`Tem certeza que deseja excluir ${selectedIds.size} material(is)?\n\nEsta ação não pode ser desfeita.`)) {
+    const count = selectedIds.size;
+    const materialText = count === 1 ? 'material' : 'materiais';
+    
+    if (!confirm(`Tem certeza que deseja excluir ${count} ${materialText}?\n\nEsta ação não pode ser desfeita.`)) {
         return;
     }
     
-    const formData = new FormData();
-    selectedIds.forEach(id => formData.append('ids[]', id));
+    // Mostrar loading
+    const bulkBar = document.getElementById('bulkActionsBar');
+    const originalHTML = bulkBar.innerHTML;
+    bulkBar.innerHTML = '<div style="text-align: center; width: 100%; padding: 1rem;">Excluindo materiais... Por favor, aguarde.</div>';
     
-    fetch('/backend/material/deletar-multiplos', {
+    const formData = new FormData();
+    selectedIds.forEach(id => {
+        formData.append('ids[]', id);
+        console.log('Adicionando ID:', id); // Debug
+    });
+    
+    console.log('IDs para excluir:', Array.from(selectedIds)); // Debug
+    console.log('URL da requisição:', window.location.origin + '/backend/material/deletar-multiplos'); // Debug
+    
+    // Tentar com caminho absoluto primeiro
+    const url = '/backend/material/deletar-multiplos';
+    
+    fetch(url, {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Status HTTP:', response.status); // Debug
+        console.log('Headers:', response.headers); // Debug
+        
+        if (response.status === 404) {
+            throw new Error('Rota não encontrada (404). Verifique se a rota POST /backend/material/deletar-multiplos existe.');
+        }
+        
+        if (!response.ok) {
+            throw new Error('Erro HTTP: ' + response.status);
+        }
+        
+        // Tentar ler como JSON
+        return response.json().catch(err => {
+            console.error('Resposta não é JSON:', err);
+            return response.text().then(text => {
+                console.error('Resposta texto:', text);
+                throw new Error('Resposta inválida do servidor');
+            });
+        });
+    })
     .then(data => {
+        console.log('Resposta do servidor:', data); // Debug
         if (data.success) {
             alert(data.message);
             window.location.reload();
         } else {
+            bulkBar.innerHTML = originalHTML;
             alert('Erro: ' + data.message);
         }
     })
     .catch(error => {
-        console.error('Erro:', error);
-        alert('Erro ao excluir materiais!');
+        console.error('Erro completo:', error);
+        bulkBar.innerHTML = originalHTML;
+        alert('Erro ao excluir materiais: ' + error.message + '\n\nVerifique o console (F12) para mais detalhes.');
     });
 }
 

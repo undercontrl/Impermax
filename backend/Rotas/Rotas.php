@@ -203,6 +203,7 @@ class Rotas
         "/material/salvar" => "materialController@salvarMaterial",
         "/material/atualizar/{id}" => "materialController@atualizarMaterial",
         "/material/deletar/{id}" => "materialController@deletarMaterial",
+        "/material/deletar-multiplos" => "MaterialController@deletarMultiplos"
     ]
         ];
     }

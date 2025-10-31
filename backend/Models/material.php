@@ -33,7 +33,7 @@ class Material {
         }
         
         // Filtro por serviço
-        if (!empty($filtros['servico'])) {
+        if (!empty($filtros['servico']) && $filtros['servico'] !== '') {
             $sql .= ' AND m.id_servico = :servico';
             $params[':servico'] = $filtros['servico'];
         }
@@ -48,11 +48,12 @@ class Material {
             $ordem_campo = 'id_material';
         }
         
-        if (!in_array(strtoupper($ordem_direcao), ['ASC', 'DESC'])) {
-            $ordem_direcao = 'DESC';
+        // Tratar ordenação por nome_servico (pode ser NULL)
+        if ($ordem_campo === 'nome_servico') {
+            $sql .= " ORDER BY COALESCE(s.nome_servico, 'ZZZZ') {$ordem_direcao}";
+        } else {
+            $sql .= " ORDER BY m.{$ordem_campo} {$ordem_direcao}";
         }
-        
-        $sql .= " ORDER BY {$ordem_campo} {$ordem_direcao}";
         
         // Paginação
         $sql .= ' LIMIT :limite OFFSET :offset';
@@ -85,7 +86,7 @@ class Material {
             $params[':busca'] = '%' . $filtros['busca'] . '%';
         }
         
-        if (!empty($filtros['servico'])) {
+        if (!empty($filtros['servico']) && $filtros['servico'] !== '') {
             $sql .= ' AND m.id_servico = :servico';
             $params[':servico'] = $filtros['servico'];
         }
@@ -108,7 +109,7 @@ class Material {
                 LEFT JOIN tbl_servico s ON m.id_servico = s.id_servico 
                 WHERE m.id_material = :id AND m.excluido_em IS NULL';
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -119,9 +120,9 @@ class Material {
                 VALUES (:nome_material, :qtd_material, :descricao_material, :id_servico)';
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nome_material', $nome_material);
-        $stmt->bindParam(':qtd_material', $qtd_material);
+        $stmt->bindParam(':qtd_material', $qtd_material, PDO::PARAM_INT);
         $stmt->bindParam(':descricao_material', $descricao_material);
-        $stmt->bindParam(':id_servico', $id_servico);
+        $stmt->bindValue(':id_servico', $id_servico ?: null, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return $this->db->lastInsertId();
         }
@@ -139,11 +140,11 @@ class Material {
                 atualizado_em = :atual 
                 WHERE id_material = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':nome_material', $nome_material);
-        $stmt->bindParam(':qtd_material', $qtd_material);
+        $stmt->bindParam(':qtd_material', $qtd_material, PDO::PARAM_INT);
         $stmt->bindParam(':descricao_material', $descricao_material);
-        $stmt->bindParam(':id_servico', $id_servico);
+        $stmt->bindValue(':id_servico', $id_servico ?: null, PDO::PARAM_INT);
         $stmt->bindParam(':atual', $dataAtual);
         return $stmt->execute();
     }
@@ -153,40 +154,60 @@ class Material {
         $dataAtual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_material SET excluido_em = :atual WHERE id_material = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':atual', $dataAtual);
         return $stmt->execute();
     }
 
-    // ✅ EXCLUIR MÚLTIPLOS
+    // ✅ EXCLUIR MÚLTIPLOS - CORRIGIDO
     public function excluirMultiplos(array $ids) {
         if (empty($ids)) {
             return false;
         }
 
-        $dataAtual = date('Y-m-d H:i:s');
-        $placeholders = implode(',', array_fill(0, count($ids), '?'));
-        $sql = "UPDATE tbl_material SET excluido_em = ? WHERE id_material IN ($placeholders)";
-        
-        $stmt = $this->db->prepare($sql);
-        $params = array_merge([$dataAtual], $ids);
-        
-        return $stmt->execute($params);
+        try {
+            $dataAtual = date('Y-m-d H:i:s');
+            
+            // Criar placeholders para IN clause
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $sql = "UPDATE tbl_material SET excluido_em = ? WHERE id_material IN ($placeholders)";
+            
+            $stmt = $this->db->prepare($sql);
+            
+            // Primeiro parâmetro é a data, depois os IDs
+            $params = [$dataAtual];
+            foreach ($ids as $id) {
+                $params[] = (int)$id;
+            }
+            
+            return $stmt->execute($params);
+        } catch (\Exception $e) {
+            error_log("Erro ao excluir múltiplos materiais: " . $e->getMessage());
+            return false;
+        }
     }
 
-    // ✅ OBTER ESTATÍSTICAS
+    // ✅ OBTER ESTATÍSTICAS - CORRIGIDO
     public function obterEstatisticas() {
         $sql = "SELECT 
                 COUNT(*) as total_materiais,
-                SUM(qtd_material) as total_estoque,
+                COALESCE(SUM(qtd_material), 0) as total_estoque,
                 SUM(CASE WHEN qtd_material < 10 THEN 1 ELSE 0 END) as estoque_baixo,
-                COUNT(DISTINCT id_servico) as servicos_vinculados
+                COUNT(DISTINCT CASE WHEN id_servico IS NOT NULL THEN id_servico END) as servicos_vinculados
                 FROM tbl_material 
                 WHERE excluido_em IS NULL";
         
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Garantir que todos os valores são inteiros
+        return [
+            'total_materiais' => (int)($result['total_materiais'] ?? 0),
+            'total_estoque' => (int)($result['total_estoque'] ?? 0),
+            'estoque_baixo' => (int)($result['estoque_baixo'] ?? 0),
+            'servicos_vinculados' => (int)($result['servicos_vinculados'] ?? 0)
+        ];
     }
 
     // ✅ BUSCAR SERVIÇOS ÚNICOS DOS MATERIAIS
@@ -194,11 +215,17 @@ class Material {
         $sql = "SELECT DISTINCT s.id_servico, s.nome_servico
                 FROM tbl_material m
                 INNER JOIN tbl_servico s ON m.id_servico = s.id_servico
-                WHERE m.excluido_em IS NULL AND s.excluido_em IS NULL
+                WHERE m.excluido_em IS NULL 
+                AND s.excluido_em IS NULL
                 ORDER BY s.nome_servico ASC";
         
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // ✅ MÉTODO AUXILIAR - BUSCAR TODOS OS MATERIAIS (SEM FILTROS)
+    public function listarTodos() {
+        return $this->buscarMateriais();
     }
 }
