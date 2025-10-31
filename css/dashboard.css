@@ -1,0 +1,17 @@
+/* Garante que o ícone de admin tenha o mesmo tamanho dos outros */
+.icon-redes {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+}
+
+.ancora-header-secundaria:hover .icon-redes {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* Destaque sutil no hover do botão admin (opcional) */
+.ancora-header-secundaria[href*="login"]:hover {
+    background: rgba(20, 135, 223, 0.1);
+    border-radius: 6px;
+}
