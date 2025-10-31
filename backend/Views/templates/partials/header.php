@@ -6,6 +6,12 @@ if (session_status() === PHP_SESSION_NONE) {
 // Caminhos onde o menu não deve aparecer
 $rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar'];
 
+use App\Impermax\Core\Permissions;
+
+// Pega o tipo de usuário da sessão
+$tipoUsuario = $_SESSION['usuario_tipo'] ?? 'funcionario';
+$nomeUsuario = $_SESSION['usuario_nome'] ?? 'Usuário';
+
 // Detecta a rota atual (sem parâmetros)
 $currentPath = strtok($_SERVER['REQUEST_URI'], '?');
 
@@ -721,56 +727,120 @@ if (in_array($currentPath, $rotasPublicas)) {
         </div>
 
         <div class="sidebar-nav">
+            <!-- PRINCIPAL -->
             <div class="nav-section-title">Principal</div>
-            <a href="/backend/<?= ($_SESSION['usuario_tipo'] === 'admin') ? 'admin' : 'funcionario' ?>/dashboard" class="<?= str_contains($_SERVER['REQUEST_URI'], 'dashboard') ? 'active' : '' ?>">
+            <a href="/backend/<?= ($tipoUsuario === 'admin') ? 'admin' : 'funcionario' ?>/dashboard" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'dashboard') ? 'active' : '' ?>">
                 <i class="bi bi-speedometer2"></i> Dashboard
             </a>
 
+            <!-- GESTÃO -->
             <div class="nav-section-title">Gestão</div>
-            <a href="/backend/agendamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'agendamento') ? 'active' : '' ?>">
+            
+            <!-- Agendamentos - Todos podem acessar -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'agendamento')): ?>
+            <a href="/backend/agendamento/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'agendamento') ? 'active' : '' ?>">
                 <i class="bi bi-calendar-check"></i> Agendamentos
             </a>
-            <a href="/backend/orcamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'orcamento') ? 'active' : '' ?>">
+            <?php endif; ?>
+            
+            <!-- Orçamentos - Todos podem ver -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'orcamento')): ?>
+            <a href="/backend/orcamento/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'orcamento') ? 'active' : '' ?>">
                 <i class="bi bi-newspaper"></i> Orçamentos
+                <?php if (!Permissions::canCreate($tipoUsuario, 'orcamento')): ?>
+                    <span class="badge-readonly"></span>
+                <?php endif; ?>
             </a>
-            <a href="/backend/projeto/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'projetos') ? 'active' : '' ?>">
+            <?php endif; ?>
+            
+            <!-- Projetos - Todos podem ver -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'projeto')): ?>
+            <a href="/backend/projeto/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'projetos') ? 'active' : '' ?>">
                 <i class="bi bi-card-image"></i> Projetos
+                <?php if (!Permissions::canCreate($tipoUsuario, 'projeto')): ?>
+                    <span class="badge-readonly"></span>
+                <?php endif; ?>
             </a>
-            <a href="/backend/pagamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'pagamento') ? 'active' : '' ?>">
+            <?php endif; ?>
+            
+            <!-- Pagamentos - APENAS ADMIN -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'pagamento')): ?>
+            <a href="/backend/pagamento/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'pagamento') ? 'active' : '' ?>">
                 <i class="bi bi-cash-coin"></i> Pagamentos
             </a>
+            <?php endif; ?>
 
+            <!-- COMUNICAÇÃO -->
             <div class="nav-section-title">Comunicação</div>
-            <a href="/backend/contato/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'contato') ? 'active' : '' ?>">
+            
+            <!-- Contatos - Todos podem acessar -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'contato')): ?>
+            <a href="/backend/contato/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'contato') ? 'active' : '' ?>">
                 <i class="bi bi-envelope"></i> Contatos
             </a>
-            <a href="/backend/avaliacao/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'avaliacao') ? 'active' : '' ?>">
+            <?php endif; ?>
+            
+            <!-- Avaliações - Todos podem ver -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'avaliacao')): ?>
+            <a href="/backend/avaliacao/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'avaliacao') ? 'active' : '' ?>">
                 <i class="bi bi-star"></i> Avaliações
+                <?php if (!Permissions::canDelete($tipoUsuario, 'avaliacao')): ?>
+                    <span class="badge-readonly"></span>
+                <?php endif; ?>
             </a>
+            <?php endif; ?>
 
+            <!-- CADASTROS -->
             <div class="nav-section-title">Cadastros</div>
-            <a href="/backend/usuario/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'usuario') ? 'active' : '' ?>">
+            
+            <!-- Usuários - APENAS ADMIN -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'usuario')): ?>
+            <a href="/backend/usuario/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'usuario') ? 'active' : '' ?>">
                 <i class="bi bi-people"></i> Usuários
             </a>
-            <a href="/backend/servico/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'servico') ? 'active' : '' ?>">
+            <?php endif; ?>
+            
+            <!-- Serviços - Todos podem ver -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'servico')): ?>
+            <a href="/backend/servico/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'servico') ? 'active' : '' ?>">
                 <i class="bi bi-box-seam"></i> Serviços
+                <?php if (!Permissions::canCreate($tipoUsuario, 'servico')): ?>
+                    <span class="badge-readonly"></span>
+                <?php endif; ?>
             </a>
-            <a href="/backend/material/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'material') ? 'active' : '' ?>">
-                <i class="bi bi-tools"></i> Material
+            <?php endif; ?>
+            
+            <!-- Material - Todos podem ver -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'material')): ?>
+            <a href="/backend/material/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'material') ? 'active' : '' ?>">
+                <i class="bi bi-tools"></i> Materiais
+                <?php if (!Permissions::canCreate($tipoUsuario, 'material')): ?>
+                    <span class="badge-readonly"></span>
+                <?php endif; ?>
             </a>
-            <a href="/backend/endereco/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'endereco') ? 'active' : '' ?>">
+            <?php endif; ?>
+            
+            <!-- Endereços - Todos podem ver -->
+            <?php if (Permissions::canAccess($tipoUsuario, 'endereco')): ?>
+            <a href="/backend/endereco/listar" 
+            class="<?= str_contains($_SERVER['REQUEST_URI'], 'endereco') ? 'active' : '' ?>">
                 <i class="bi bi-geo-alt"></i> Endereços
+                <?php if (!Permissions::canCreate($tipoUsuario, 'endereco')): ?>
+                    <span class="badge-readonly"></span>
+                <?php endif; ?>
             </a>
-
-            <!-- <div class="nav-section-title">Itens</div>
-            <a href="/backend/item_agendamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'item_agendamento') ? 'active' : '' ?>">
-                <i class="bi bi-list-check"></i> Itens Agendamento
-            </a>
-            <a href="/backend/item_orcamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'item_orcamento') ? 'active' : '' ?>">
-                <i class="bi bi-receipt"></i> Itens Orçamento
-            </a> -->
+            <?php endif; ?>
         </div>
-
         <div class="sidebar-footer">
             <a href="/backend/logout">
                 <i class="bi bi-box-arrow-left"></i> Sair
