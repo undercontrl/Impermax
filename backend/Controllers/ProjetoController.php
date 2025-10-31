@@ -20,6 +20,7 @@ class ProjetoController extends AdminController
         parent::__construct();
         $this->db = Database::getInstance();
         $this->projeto = new Projeto($this->db);
+        // CORREÇÃO: Caminho correto para o diretório de uploads
         $this->gerenciarImagem = new FileManager($_SERVER['DOCUMENT_ROOT'] . '/upload');
     }
 
@@ -110,6 +111,11 @@ class ProjetoController extends AdminController
      */
     public function viewVerProjeto($id)
     {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "ID do projeto não fornecido!");
+            return;
+        }
+
         $projeto = $this->projeto->buscarProjetoPorID($id);
         
         if (!$projeto) {

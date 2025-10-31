@@ -2,6 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 // Caminhos onde o menu não deve aparecer
 $rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar'];
 
@@ -714,14 +715,14 @@ if (in_array($currentPath, $rotasPublicas)) {
     <!-- Menu lateral -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <a href="/backend/admin/dashboard">
+            <a href="/backend/<?= ($_SESSION['usuario_tipo'] === 'admin') ? 'admin' : 'funcionario' ?>/dashboard">
                 <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
             </a>
         </div>
 
         <div class="sidebar-nav">
             <div class="nav-section-title">Principal</div>
-            <a href="/backend/admin/dashboard" class="<?= str_contains($_SERVER['REQUEST_URI'], 'dashboard') ? 'active' : '' ?>">
+            <a href="/backend/<?= ($_SESSION['usuario_tipo'] === 'admin') ? 'admin' : 'funcionario' ?>/dashboard" class="<?= str_contains($_SERVER['REQUEST_URI'], 'dashboard') ? 'active' : '' ?>">
                 <i class="bi bi-speedometer2"></i> Dashboard
             </a>
 
@@ -761,13 +762,13 @@ if (in_array($currentPath, $rotasPublicas)) {
                 <i class="bi bi-geo-alt"></i> Endereços
             </a>
 
-            <div class="nav-section-title">Itens</div>
+            <!-- <div class="nav-section-title">Itens</div>
             <a href="/backend/item_agendamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'item_agendamento') ? 'active' : '' ?>">
                 <i class="bi bi-list-check"></i> Itens Agendamento
             </a>
             <a href="/backend/item_orcamento/listar" class="<?= str_contains($_SERVER['REQUEST_URI'], 'item_orcamento') ? 'active' : '' ?>">
                 <i class="bi bi-receipt"></i> Itens Orçamento
-            </a>
+            </a> -->
         </div>
 
         <div class="sidebar-footer">
@@ -786,9 +787,13 @@ if (in_array($currentPath, $rotasPublicas)) {
             <div>
                 <h1 class="topbar-title">Painel de Controle</h1>
                 <ul class="breadcrumb-custom">
-                    <li><a href="/backend/admin/dashboard"><i class="bi bi-house-door"></i> Home</a></li>
+                    <li>
+                        <a href="<?= \App\Impermax\Core\Helpers\LinkHelper::getDashboardUrl() ?>">
+                            <i class="bi bi-house-door"></i> Home
+                        </a>
+                    </li>
                     <li><i class="bi bi-chevron-right"></i></li>
-                    <li>Dashboard</li>
+                    <li><?= \App\Impermax\Core\Helpers\LinkHelper::getDashboardLabel() ?></li>
                 </ul>
             </div>
         </div>

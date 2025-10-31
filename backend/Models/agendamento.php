@@ -242,26 +242,27 @@ class Agendamento
     public function buscarAgendamentosComServicoEOrcamento($busca = '', $status = '', $periodo = '', $ordemCampo = 'data_solicitada', $ordemDirecao = 'DESC', $limite = 10, $offset = 0)
     {
         $sql = 'SELECT 
+
                     ag.id_agendamento,
                     ag.id_cliente,
                     usu.nome_usuario AS nome_cliente,
                     usu.email_usuario AS email_cliente,
                     ag.data_solicitada,
                     ag.status_agendamento,
+                    ag.criado_em,
                     COALESCE(SUM(orc.valor_orcamento), 0) AS total_agendamento,
-                    GROUP_CONCAT(DISTINCT srv.nome_servico SEPARATOR ", ") AS descricao_servico
+                    GROUP_CONCAT(DISTINCT orc.descricao_orcamento SEPARATOR "|||") AS descricoes_orcamentos
                 FROM tbl_agendamento AS ag
                 INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
-                LEFT JOIN tbl_orcamento AS orc ON orc.id_cliente = ag.id_cliente AND orc.excluido_em IS NULL
-                LEFT JOIN tbl_item_orcamento AS item ON item.id_orcamento = orc.id_orcamento AND item.excluido_em IS NULL
-                LEFT JOIN tbl_servico AS srv ON srv.id_servico = item.id_servico
+                LEFT JOIN tbl_agendamento_orcamento AS ao ON ao.id_agendamento = ag.id_agendamento
+                LEFT JOIN tbl_orcamento AS orc ON orc.id_orcamento = ao.id_orcamento AND orc.excluido_em IS NULL
                 WHERE ag.excluido_em IS NULL';
 
         $params = [];
 
         // Filtro de busca
         if (!empty($busca)) {
-            $sql .= ' AND (usu.nome_usuario LIKE :busca OR srv.nome_servico LIKE :busca)';
+            $sql .= ' AND (usu.nome_usuario LIKE :busca OR ag.id_agendamento LIKE :busca)';
             $params[':busca'] = "%$busca%";
         }
 
@@ -271,8 +272,24 @@ class Agendamento
             $params[':status'] = $status;
         }
 
+        // Filtro de período
+        if (!empty($periodo)) {
+            switch ($periodo) {
+                case 'hoje':
+                    $sql .= ' AND DATE(ag.data_solicitada) = CURDATE()';
+                    break;
+                case 'semana':
+                    $sql .= ' AND YEARWEEK(ag.data_solicitada, 1) = YEARWEEK(CURDATE(), 1)';
+                    break;
+                case 'mes':
+                    $sql .= ' AND MONTH(ag.data_solicitada) = MONTH(CURDATE()) AND YEAR(ag.data_solicitada) = YEAR(CURDATE())';
+                    break;
+            }
+        }
+
         // Agrupar e ordenar
         $sql .= ' GROUP BY ag.id_agendamento';
+        
         $camposValidos = ['id_agendamento', 'nome_cliente', 'data_solicitada', 'status_agendamento'];
         if (!in_array($ordemCampo, $camposValidos)) {
             $ordemCampo = 'data_solicitada';
@@ -938,6 +955,25 @@ class Agendamento
         
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    
+    public function buscarOrcamentosPorCliente($id_cliente)
+    {
+        $sql = 'SELECT 
+                    o.id_orcamento,
+                    o.valor_orcamento,
+                    o.status_orcamento,
+                    o.descricao_orcamento,
+                    o.data_orcamento
+                FROM tbl_orcamento AS o
+                WHERE o.id_cliente = :id_cliente
+                AND o.excluido_em IS NULL
+                ORDER BY o.criado_em DESC';
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }

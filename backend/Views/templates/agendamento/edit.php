@@ -4,7 +4,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/backend/dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/backend/agendamento/listar">Agendamentos</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Editar #<?= htmlspecialchars($agendamento['id_agendamento']) ?></li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Agendamento #<?= $agendamento['id_agendamento'] ?></li>
         </ol>
     </nav>
 
@@ -14,19 +14,19 @@
             <div class="page-title-group">
                 <h1 class="page-title">
                     <i class="bi bi-pencil-square me-2"></i>
-                    Editar Agendamento #<?= htmlspecialchars($agendamento['id_agendamento']) ?>
+                    Editar Agendamento
                 </h1>
-                <p class="page-subtitle">Atualize as informações do agendamento</p>
+                <p class="page-subtitle">Atualize as informações do agendamento #<?= $agendamento['id_agendamento'] ?></p>
             </div>
         </div>
     </div>
 
     <!-- Formulário -->
     <div class="form-card">
-        <form action="/backend/agendamento/atualizar/<?= htmlspecialchars($agendamento['id_agendamento']) ?>" method="post" id="formAgendamento">
+        <form action="/backend/agendamento/atualizar" method="POST" id="formAgendamento">
+            <input type="hidden" name="id_agendamento" value="<?= $agendamento['id_agendamento'] ?>">
             
-            <input type="hidden" name="id_agendamento" value="<?= htmlspecialchars($agendamento['id_agendamento']) ?>">
-
+            <!-- Seção: Informações do Cliente -->
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-person-circle"></i>
@@ -41,20 +41,22 @@
                         <div class="select-wrapper">
                             <i class="bi bi-person-fill select-icon"></i>
                             <select id="id_cliente" name="id_cliente" class="form-control" required>
+                                <option value="">Selecione um cliente</option>
                                 <?php foreach ($usuarios as $usuario): ?>
-                                    <option value="<?= htmlspecialchars($usuario['id_usuario']) ?>"
-                                        <?= ($usuario['id_usuario'] == $agendamento['id_cliente']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($usuario['nome_usuario']) ?>
+                                    <option value="<?= $usuario['id_usuario'] ?>" 
+                                            <?= ($agendamento['id_cliente'] == $usuario['id_usuario']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($usuario['nome_usuario']) ?> - <?= htmlspecialchars($usuario['email_usuario']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                             <i class="bi bi-chevron-down select-arrow"></i>
                         </div>
-                        <small class="form-hint">Cliente responsável por este agendamento</small>
+                        <small class="form-hint">Cliente vinculado a este agendamento</small>
                     </div>
                 </div>
             </div>
 
+            <!-- Seção: Detalhes do Agendamento -->
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-calendar-event"></i>
@@ -64,18 +66,18 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="data_solicitada" class="form-label">
-                            Data Solicitada <span class="required">*</span>
+                            Data e Hora <span class="required">*</span>
                         </label>
                         <div class="input-wrapper">
                             <i class="bi bi-calendar3 input-icon"></i>
-                            <input type="date" 
+                            <input type="datetime-local" 
                                    id="data_solicitada" 
                                    name="data_solicitada" 
-                                   class="form-control"
-                                   value="<?= htmlspecialchars($agendamento['data_solicitada']) ?>"
+                                   class="form-control" 
+                                   value="<?= date('Y-m-d\TH:i', strtotime($agendamento['data_solicitada'])) ?>"
                                    required>
                         </div>
-                        <small class="form-hint">Data desejada para o serviço</small>
+                        <small class="form-hint">Data e hora do agendamento</small>
                     </div>
 
                     <div class="form-group">
@@ -88,10 +90,10 @@
                                    id="total_agendamento" 
                                    name="total_agendamento" 
                                    class="form-control" 
-                                   value="R$ <?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?>"
+                                   value="R$ <?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?>" 
                                    required>
                         </div>
-                        <small class="form-hint">Valor total do serviço</small>
+                        <small class="form-hint">Valor total do agendamento</small>
                     </div>
 
                     <div class="form-group full-width">
@@ -101,25 +103,25 @@
                         <div class="status-selector">
                             <label class="status-option">
                                 <input type="radio" name="status_agendamento" value="pendente" 
-                                    <?= ($agendamento['status_agendamento'] == 'pendente') ? 'checked' : '' ?>>
+                                       <?= ($agendamento['status_agendamento'] == 'pendente') ? 'checked' : '' ?>>
                                 <span class="status-card status-pendente">
-                                    <i class="bi bi-clock-fill"></i>
+                                    <i class="bi bi-clock-history"></i>
                                     <span class="status-text">Pendente</span>
                                 </span>
                             </label>
                             
                             <label class="status-option">
                                 <input type="radio" name="status_agendamento" value="agendada"
-                                    <?= ($agendamento['status_agendamento'] == 'agendada') ? 'checked' : '' ?>>
+                                       <?= ($agendamento['status_agendamento'] == 'agendada') ? 'checked' : '' ?>>
                                 <span class="status-card status-agendada">
-                                    <i class="bi bi-calendar-check-fill"></i>
+                                    <i class="bi bi-calendar-check"></i>
                                     <span class="status-text">Agendada</span>
                                 </span>
                             </label>
                             
                             <label class="status-option">
                                 <input type="radio" name="status_agendamento" value="realizada"
-                                    <?= ($agendamento['status_agendamento'] == 'realizada') ? 'checked' : '' ?>>
+                                       <?= ($agendamento['status_agendamento'] == 'realizada') ? 'checked' : '' ?>>
                                 <span class="status-card status-realizada">
                                     <i class="bi bi-check-circle-fill"></i>
                                     <span class="status-text">Realizada</span>
@@ -128,7 +130,7 @@
                             
                             <label class="status-option">
                                 <input type="radio" name="status_agendamento" value="cancelada"
-                                    <?= ($agendamento['status_agendamento'] == 'cancelada') ? 'checked' : '' ?>>
+                                       <?= ($agendamento['status_agendamento'] == 'cancelada') ? 'checked' : '' ?>>
                                 <span class="status-card status-cancelada">
                                     <i class="bi bi-x-circle-fill"></i>
                                     <span class="status-text">Cancelada</span>
@@ -140,19 +142,11 @@
                 </div>
             </div>
 
-            <!-- Info Box -->
-            <div class="info-box">
-                <i class="bi bi-info-circle-fill"></i>
-                <div>
-                    <strong>Informação:</strong> As alterações serão salvas imediatamente após confirmar.
-                </div>
-            </div>
-
             <!-- Botões de Ação -->
             <div class="form-actions">
                 <a href="/backend/agendamento/listar" class="btn-secondary">
-                    <i class="bi bi-x-lg"></i>
-                    Cancelar
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
                 </a>
                 <button type="submit" class="btn-primary">
                     <i class="bi bi-check-lg"></i>
@@ -179,7 +173,6 @@
         padding: 0 1rem;
     }
 
-    /* Breadcrumb */
     .breadcrumb-nav {
         margin-bottom: 1.5rem;
     }
@@ -218,7 +211,6 @@
         font-weight: 500;
     }
 
-    /* Header */
     .page-header {
         margin-bottom: 2rem;
     }
@@ -242,7 +234,6 @@
         margin: 0;
     }
 
-    /* Formulário */
     .form-card {
         background: white;
         border-radius: 12px;
@@ -353,7 +344,6 @@
         margin-top: 0.375rem;
     }
 
-    /* Seletor de Status */
     .status-selector {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -432,27 +422,6 @@
         border-color: #ef4444;
     }
 
-    /* Info Box */
-    .info-box {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding: 1rem;
-        background: #f0f9ff;
-        border: 1px solid #bae6fd;
-        border-radius: 10px;
-        margin-top: 1.5rem;
-        color: #0c4a6e;
-    }
-
-    .info-box i {
-        font-size: 1.25rem;
-        color: var(--cor-info);
-        flex-shrink: 0;
-        margin-top: 0.125rem;
-    }
-
-    /* Botões de Ação */
     .form-actions {
         display: flex;
         justify-content: space-between;
@@ -501,7 +470,6 @@
         border-color: #cbd5e1;
     }
 
-    /* Responsivo */
     @media (max-width: 768px) {
         .form-grid {
             grid-template-columns: 1fr;
@@ -533,19 +501,15 @@ document.getElementById('total_agendamento').addEventListener('input', function(
 
 // Validação do formulário
 document.getElementById('formAgendamento').addEventListener('submit', function(e) {
-    const totalInput = document.getElementById('total_agendamento');
-    const valorLimpo = totalInput.value.replace(/[R$\s.]/g, '').replace(',', '.');
+    const valorInput = document.getElementById('total_agendamento');
+    const valorLimpo = valorInput.value.replace(/[R$\s.]/g, '').replace(',', '.');
     
-    // Cria um input hidden com o valor numérico
     const hiddenInput = document.createElement('input');
     hiddenInput.type = 'hidden';
     hiddenInput.name = 'total_agendamento';
     hiddenInput.value = valorLimpo;
     
-    // Remove o name do input original para não enviar
-    totalInput.removeAttribute('name');
-    
-    // Adiciona o hidden input ao formulário
+    valorInput.removeAttribute('name');
     this.appendChild(hiddenInput);
 });
 </script>

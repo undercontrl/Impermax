@@ -134,4 +134,270 @@ class Usuario{
         }
         return false;
     }
+
+    public function buscarUsuariosComFiltros($busca = '', $tipo = '', $status = '', $pagina = 1, $itensPorPagina = 10, $ordenarPor = 'id_usuario', $direcao = 'DESC')
+    {
+        $offset = ($pagina - 1) * $itensPorPagina;
+        
+        $sql = 'SELECT 
+                    id_usuario,
+                    nome_usuario,
+                    email_usuario,
+                    tipo_usuario,
+                    status_usuario,
+                    criado_em,
+                    atualizado_em
+                FROM tbl_usuario
+                WHERE excluido_em IS NULL';
+        
+        $params = [];
+
+        // Filtro de busca
+        if (!empty($busca)) {
+            $sql .= ' AND (
+                nome_usuario LIKE :busca 
+                OR email_usuario LIKE :busca
+                OR id_usuario LIKE :busca
+            )';
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        // Filtro de tipo
+        if (!empty($tipo)) {
+            $sql .= ' AND tipo_usuario = :tipo';
+            $params[':tipo'] = $tipo;
+        }
+
+        // Filtro de status
+        if (!empty($status)) {
+            $sql .= ' AND status_usuario = :status';
+            $params[':status'] = $status;
+        }
+
+        // Ordenação
+        $camposPermitidos = ['id_usuario', 'nome_usuario', 'email_usuario', 'tipo_usuario', 'status_usuario', 'criado_em'];
+        $campo = in_array($ordenarPor, $camposPermitidos) ? $ordenarPor : 'id_usuario';
+        $dir = strtoupper($direcao) === 'ASC' ? 'ASC' : 'DESC';
+        
+        $sql .= " ORDER BY $campo $dir";
+        if ($campo !== 'id_usuario') {
+            $sql .= ', id_usuario DESC';
+        }
+
+        $sql .= ' LIMIT :limit OFFSET :offset';
+
+        $statement = $this->db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        
+        $statement->bindValue(':limit', (int)$itensPorPagina, PDO::PARAM_INT);
+        $statement->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Conta total com filtros (para paginação)
+     */
+    public function contarUsuariosComFiltros($busca = '', $tipo = '', $status = '')
+    {
+        $sql = 'SELECT COUNT(*) as total
+                FROM tbl_usuario
+                WHERE excluido_em IS NULL';
+        
+        $params = [];
+
+        if (!empty($busca)) {
+            $sql .= ' AND (
+                nome_usuario LIKE :busca 
+                OR email_usuario LIKE :busca
+                OR id_usuario LIKE :busca
+            )';
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        if (!empty($tipo)) {
+            $sql .= ' AND tipo_usuario = :tipo';
+            $params[':tipo'] = $tipo;
+        }
+
+        if (!empty($status)) {
+            $sql .= ' AND status_usuario = :status';
+            $params[':status'] = $status;
+        }
+
+        $statement = $this->db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        
+        $statement->execute();
+        $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (int)$resultado['total'];
+    }
+
+    /**
+     * Calcula estatísticas (cards no topo)
+     */
+    public function calcularEstatisticas($busca = '', $tipo = '', $status = '')
+    {
+        // Conta por tipo
+        $sqlTipo = 'SELECT tipo_usuario, COUNT(*) as quantidade
+                    FROM tbl_usuario
+                    WHERE excluido_em IS NULL';
+        
+        $params = [];
+
+        if (!empty($busca)) {
+            $sqlTipo .= ' AND (
+                nome_usuario LIKE :busca 
+                OR email_usuario LIKE :busca
+                OR id_usuario LIKE :busca
+            )';
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        if (!empty($tipo)) {
+            $sqlTipo .= ' AND tipo_usuario = :tipo';
+            $params[':tipo'] = $tipo;
+        }
+
+        if (!empty($status)) {
+            $sqlTipo .= ' AND status_usuario = :status';
+            $params[':status'] = $status;
+        }
+
+        $sqlTipo .= ' GROUP BY tipo_usuario';
+
+        $statement = $this->db->prepare($sqlTipo);
+        
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        
+        $statement->execute();
+        $resultadosTipo = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // Conta por status
+        $sqlStatus = 'SELECT status_usuario, COUNT(*) as quantidade
+                    FROM tbl_usuario
+                    WHERE excluido_em IS NULL';
+        
+        $paramsStatus = [];
+
+        if (!empty($busca)) {
+            $sqlStatus .= ' AND (
+                nome_usuario LIKE :busca 
+                OR email_usuario LIKE :busca
+                OR id_usuario LIKE :busca
+            )';
+            $paramsStatus[':busca'] = '%' . $busca . '%';
+        }
+
+        if (!empty($tipo)) {
+            $sqlStatus .= ' AND tipo_usuario = :tipo';
+            $paramsStatus[':tipo'] = $tipo;
+        }
+
+        if (!empty($status)) {
+            $sqlStatus .= ' AND status_usuario = :status';
+            $paramsStatus[':status'] = $status;
+        }
+
+        $sqlStatus .= ' GROUP BY status_usuario';
+
+        $statementStatus = $this->db->prepare($sqlStatus);
+        
+        foreach ($paramsStatus as $key => $value) {
+            $statementStatus->bindValue($key, $value);
+        }
+        
+        $statementStatus->execute();
+        $resultadosStatus = $statementStatus->fetchAll(PDO::FETCH_ASSOC);
+
+        $stats = [
+            'admin' => 0,
+            'cliente' => 0,
+            'funcionario' => 0,
+            'ativo' => 0,
+            'inativo' => 0,
+            'pendente' => 0,
+            'total' => 0
+        ];
+
+        foreach ($resultadosTipo as $row) {
+            $tipoNormalizado = strtolower($row['tipo_usuario']);
+            if (isset($stats[$tipoNormalizado])) {
+                $stats[$tipoNormalizado] = (int)$row['quantidade'];
+            }
+            $stats['total'] += (int)$row['quantidade'];
+        }
+
+        foreach ($resultadosStatus as $row) {
+            $statusNormalizado = strtolower($row['status_usuario']);
+            if (isset($stats[$statusNormalizado])) {
+                $stats[$statusNormalizado] = (int)$row['quantidade'];
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Altera status de múltiplos usuários
+     */
+    public function alterarStatusEmMassa($ids, $novoStatus)
+    {
+        if (empty($ids) || !is_array($ids)) {
+            return false;
+        }
+
+        $dataAtual = date('Y-m-d H:i:s');
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        
+        $sql = "UPDATE tbl_usuario 
+                SET status_usuario = ?, 
+                    atualizado_em = ? 
+                WHERE id_usuario IN ($placeholders) 
+                AND excluido_em IS NULL";
+        
+        $statement = $this->db->prepare($sql);
+        
+        $params = [$novoStatus, $dataAtual];
+        $params = array_merge($params, $ids);
+        
+        return $statement->execute($params);
+    }
+
+    /**
+     * Exclui múltiplos usuários (soft delete)
+     */
+    public function excluirEmMassa($ids)
+    {
+        if (empty($ids) || !is_array($ids)) {
+            return false;
+        }
+
+        $dataAtual = date('Y-m-d H:i:s');
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        
+        $sql = "UPDATE tbl_usuario 
+                SET status_usuario = 'Inativo',
+                    excluido_em = ? 
+                WHERE id_usuario IN ($placeholders) 
+                AND excluido_em IS NULL";
+        
+        $statement = $this->db->prepare($sql);
+        
+        $params = [$dataAtual];
+        $params = array_merge($params, $ids);
+        
+        return $statement->execute($params);
+    }
+
 }

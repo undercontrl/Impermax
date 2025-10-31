@@ -4,194 +4,138 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/backend/dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/backend/agendamento/listar">Agendamentos</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Detalhes #<?= htmlspecialchars($agendamento['id_agendamento']) ?></li>
+            <li class="breadcrumb-item active" aria-current="page">Agendamento #<?= $agendamento['id_agendamento'] ?></li>
         </ol>
     </nav>
 
-    <!-- Header com Ações -->
+    <!-- Header -->
     <div class="page-header">
         <div class="page-header-content">
             <div class="page-title-group">
                 <h1 class="page-title">
                     <i class="bi bi-eye-fill me-2"></i>
-                    Agendamento #<?= htmlspecialchars($agendamento['id_agendamento']) ?>
+                    Detalhes do Agendamento
                 </h1>
-                <p class="page-subtitle">Visualização completa do agendamento</p>
+                <p class="page-subtitle">Visualização completa do agendamento #<?= $agendamento['id_agendamento'] ?></p>
             </div>
             <div class="header-actions">
-                <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" class="btn-action-edit">
+                <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" class="btn-action btn-edit">
                     <i class="bi bi-pencil"></i>
                     Editar
                 </a>
-                <button onclick="confirmarExclusao(<?= $agendamento['id_agendamento'] ?>)" class="btn-action-delete">
+                <a href="/backend/agendamento/excluir/<?= $agendamento['id_agendamento'] ?>" class="btn-action btn-delete">
                     <i class="bi bi-trash"></i>
                     Excluir
-                </button>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Status Badge Grande -->
-    <div class="status-banner">
-        <?php
-            $status = strtolower(trim($agendamento['status_agendamento']));
-            $statusConfig = match ($status) {
-                'realizada' => ['class' => 'status-realizada', 'icon' => 'check-circle-fill', 'text' => 'Realizada', 'desc' => 'Este agendamento foi concluído com sucesso'],
-                'agendada'  => ['class' => 'status-agendada', 'icon' => 'calendar-check-fill', 'text' => 'Agendada', 'desc' => 'Data confirmada e agendamento ativo'],
-                'pendente'  => ['class' => 'status-pendente', 'icon' => 'clock-fill', 'text' => 'Pendente', 'desc' => 'Aguardando confirmação'],
-                'cancelada' => ['class' => 'status-cancelada', 'icon' => 'x-circle-fill', 'text' => 'Cancelada', 'desc' => 'Este agendamento foi cancelado'],
-                default     => ['class' => 'status-default', 'icon' => 'circle-fill', 'text' => ucfirst($status), 'desc' => '']
-            };
-        ?>
-        <div class="status-badge-large <?= $statusConfig['class'] ?>">
-            <i class="bi bi-<?= $statusConfig['icon'] ?>"></i>
-            <div class="status-info">
-                <span class="status-title"><?= $statusConfig['text'] ?></span>
-                <span class="status-desc"><?= $statusConfig['desc'] ?></span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Grid de Cards de Informações -->
-    <div class="info-grid">
-        <!-- Card Cliente -->
-        <div class="info-card card-cliente">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-person-circle"></i>
-                    Informações do Cliente
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="client-profile">
-                    <div class="client-avatar-xl">
-                        <?= strtoupper(substr($agendamento['nome_cliente'] ?? 'C', 0, 1)) ?>
-                    </div>
-                    <div class="client-info-details">
-                        <h4 class="client-name-xl"><?= htmlspecialchars($agendamento['nome_cliente'] ?? 'Cliente') ?></h4>
-                        <p class="client-email-xl">
-                            <i class="bi bi-envelope"></i>
-                            <?= htmlspecialchars($agendamento['email_cliente'] ?? 'Não informado') ?>
-                        </p>
-                    </div>
+    <!-- Conteúdo -->
+    <div class="content-grid">
+        <!-- Card de Status -->
+        <div class="status-card-large full-width">
+            <?php
+                $status = strtolower(trim($agendamento['status_agendamento']));
+                $statusConfig = match ($status) {
+                    'realizada' => ['class' => 'status-realizada', 'icon' => 'check-circle-fill', 'text' => 'Realizada', 'desc' => 'Este agendamento foi concluído com sucesso'],
+                    'agendada'  => ['class' => 'status-agendada', 'icon' => 'calendar-check-fill', 'text' => 'Agendada', 'desc' => 'Agendamento confirmado e aguardando execução'],
+                    'pendente'  => ['class' => 'status-pendente', 'icon' => 'clock-fill', 'text' => 'Pendente', 'desc' => 'Aguardando confirmação do agendamento'],
+                    'cancelada' => ['class' => 'status-cancelada', 'icon' => 'x-circle-fill', 'text' => 'Cancelada', 'desc' => 'Este agendamento foi cancelado'],
+                    default     => ['class' => 'status-default', 'icon' => 'circle-fill', 'text' => ucfirst($status), 'desc' => '']
+                };
+            ?>
+            <div class="status-badge-view <?= $statusConfig['class'] ?>">
+                <i class="bi bi-<?= $statusConfig['icon'] ?>"></i>
+                <div>
+                    <span class="status-text"><?= $statusConfig['text'] ?></span>
+                    <span class="status-desc"><?= $statusConfig['desc'] ?></span>
                 </div>
             </div>
         </div>
 
-        <!-- Card Detalhes do Agendamento -->
+        <!-- Informações do Cliente -->
         <div class="info-card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-calendar-event"></i>
-                    Detalhes do Agendamento
-                </h3>
+            <h3 class="card-title">
+                <i class="bi bi-person-circle"></i>
+                Informações do Cliente
+            </h3>
+            <div class="info-content">
+                <div class="client-profile">
+                    <div class="client-avatar-view">
+                        <?= strtoupper(substr($agendamento['nome_usuario'] ?? 'C', 0, 1)) ?>
+                    </div>
+                    <div class="client-info-view">
+                        <h4 class="client-name-view"><?= htmlspecialchars($agendamento['nome_usuario'] ?? 'Cliente') ?></h4>
+                        <p class="client-email-view">
+                            <i class="bi bi-envelope"></i>
+                            <?= htmlspecialchars($agendamento['email_usuario'] ?? 'email@exemplo.com') ?>
+                        </p>
+                        <?php if (!empty($agendamento['telefone_usuario'])): ?>
+                            <p class="client-phone-view">
+                                <i class="bi bi-telephone"></i>
+                                <?= htmlspecialchars($agendamento['telefone_usuario']) ?>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="detail-item">
-                    <span class="detail-label">
+        </div>
+
+        <!-- Detalhes do Agendamento -->
+        <div class="info-card">
+            <h3 class="card-title">
+                <i class="bi bi-calendar-event"></i>
+                Detalhes do Agendamento
+            </h3>
+            <div class="info-content">
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="bi bi-hash"></i>
+                        ID do Agendamento
+                    </span>
+                    <span class="info-value">#<?= htmlspecialchars($agendamento['id_agendamento']) ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">
                         <i class="bi bi-calendar3"></i>
-                        Data Solicitada
+                        Data e Hora
                     </span>
-                    <span class="detail-value"><?= date('d/m/Y', strtotime($agendamento['data_solicitada'])) ?></span>
+                    <span class="info-value"><?= date('d/m/Y às H:i', strtotime($agendamento['data_solicitada'])) ?></span>
                 </div>
-                
-                <div class="detail-item">
-                    <span class="detail-label">
-                        <i class="bi bi-clock"></i>
-                        Hora
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="bi bi-cash-coin"></i>
+                        Valor Total
                     </span>
-                    <span class="detail-value"><?= date('H:i', strtotime($agendamento['data_solicitada'])) ?></span>
+                    <span class="info-value value-highlight">R$ <?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?></span>
                 </div>
-            </div>
-        </div>
-
-        <!-- Card Valor -->
-        <div class="info-card card-valor">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-cash-coin"></i>
-                    Valor do Serviço
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="valor-display">
-                    <span class="valor-cifrao">R$</span>
-                    <span class="valor-numero"><?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?></span>
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="bi bi-clock-history"></i>
+                        Criado em
+                    </span>
+                    <span class="info-value"><?= date('d/m/Y às H:i', strtotime($agendamento['criado_em'])) ?></span>
                 </div>
-                <p class="valor-descricao">Valor total do agendamento</p>
-            </div>
-        </div>
-
-        <!-- Card Timeline/Histórico -->
-        <div class="info-card card-full">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-clock-history"></i>
-                    Histórico do Agendamento
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-icon timeline-success">
-                            <i class="bi bi-plus-circle-fill"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h5 class="timeline-title">Agendamento Criado</h5>
-                            <p class="timeline-date">
-                                <?= isset($agendamento['criado_em']) ? date('d/m/Y às H:i', strtotime($agendamento['criado_em'])) : 'Data não disponível' ?>
-                            </p>
-                        </div>
+                <?php if (!empty($agendamento['atualizado_em'])): ?>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Última atualização
+                        </span>
+                        <span class="info-value"><?= date('d/m/Y às H:i', strtotime($agendamento['atualizado_em'])) ?></span>
                     </div>
-                    
-                    <?php if (isset($agendamento['atualizado_em']) && $agendamento['atualizado_em']): ?>
-                    <div class="timeline-item">
-                        <div class="timeline-icon timeline-info">
-                            <i class="bi bi-pencil-fill"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h5 class="timeline-title">Última Atualização</h5>
-                            <p class="timeline-date">
-                                <?= date('d/m/Y às H:i', strtotime($agendamento['atualizado_em'])) ?>
-                            </p>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($status == 'realizada'): ?>
-                    <div class="timeline-item">
-                        <div class="timeline-icon timeline-success">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h5 class="timeline-title">Serviço Realizado</h5>
-                            <p class="timeline-date">
-                                <?= date('d/m/Y', strtotime($agendamento['data_solicitada'])) ?>
-                            </p>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 
-    <!-- Botões de Ação -->
-    <div class="page-actions">
+    <!-- Botão Voltar -->
+    <div class="back-section">
         <a href="/backend/agendamento/listar" class="btn-back">
             <i class="bi bi-arrow-left"></i>
-            Voltar para Lista
+            Voltar para listagem
         </a>
-        <div class="action-group">
-            <a href="/backend/agendamento/editar/<?= $agendamento['id_agendamento'] ?>" class="btn-primary">
-                <i class="bi bi-pencil"></i>
-                Editar Agendamento
-            </a>
-            <button onclick="imprimirAgendamento()" class="btn-secondary">
-                <i class="bi bi-printer"></i>
-                Imprimir
-            </button>
-        </div>
     </div>
 </div>
 
@@ -206,12 +150,11 @@
     }
 
     .page-wrapper {
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 0 1rem;
     }
 
-    /* Breadcrumb */
     .breadcrumb-nav {
         margin-bottom: 1.5rem;
     }
@@ -250,7 +193,6 @@
         font-weight: 500;
     }
 
-    /* Header */
     .page-header {
         margin-bottom: 2rem;
     }
@@ -258,7 +200,7 @@
     .page-header-content {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         flex-wrap: wrap;
         gap: 1rem;
     }
@@ -287,8 +229,7 @@
         gap: 0.75rem;
     }
 
-    .btn-action-edit,
-    .btn-action-delete {
+    .btn-action {
         padding: 0.625rem 1.25rem;
         border-radius: 8px;
         font-weight: 600;
@@ -296,145 +237,140 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s;
         text-decoration: none;
-        border: none;
+        border: 1px solid;
+        transition: all 0.2s;
     }
 
-    .btn-action-edit {
+    .btn-edit {
+        background: white;
+        color: var(--cor-acento);
+        border-color: var(--cor-acento);
+    }
+
+    .btn-edit:hover {
         background: var(--cor-acento);
         color: white;
     }
 
-    .btn-action-edit:hover {
-        background: #0e6eb8;
-        transform: translateY(-1px);
-    }
-
-    .btn-action-delete {
+    .btn-delete {
         background: white;
         color: var(--cor-danger);
-        border: 1px solid #fee2e2;
-    }
-
-    .btn-action-delete:hover {
-        background: #fee2e2;
         border-color: var(--cor-danger);
     }
 
-    /* Status Banner */
-    .status-banner {
-        margin-bottom: 2rem;
+    .btn-delete:hover {
+        background: var(--cor-danger);
+        color: white;
     }
 
-    .status-badge-large {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 2px solid;
-    }
-
-    .status-badge-large i {
-        font-size: 2.5rem;
-    }
-
-    .status-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .status-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-    }
-
-    .status-desc {
-        font-size: 0.875rem;
-        opacity: 0.8;
-    }
-
-    .status-pendente {
-        background: #fef3c7;
-        border-color: #f59e0b;
-        color: #92400e;
-    }
-
-    .status-agendada {
-        background: #dbeafe;
-        border-color: #3b82f6;
-        color: #1e40af;
-    }
-
-    .status-realizada {
-        background: #dcfce7;
-        border-color: #22c55e;
-        color: #166534;
-    }
-
-    .status-cancelada {
-        background: #fee2e2;
-        border-color: #ef4444;
-        color: #991b1b;
-    }
-
-    /* Grid de Cards */
-    .info-grid {
+    .content-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
         margin-bottom: 2rem;
     }
 
-    .info-card {
+    .status-card-large {
         background: white;
         border-radius: 12px;
+        padding: 2rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         border: 1px solid #f1f5f9;
-        overflow: hidden;
     }
 
-    .card-full {
+    .status-card-large.full-width {
         grid-column: 1 / -1;
     }
 
-    .card-header {
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid #f1f5f9;
-        background: #fafbfc;
+    .status-badge-view {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+
+    .status-badge-view i {
+        font-size: 2.5rem;
+    }
+
+    .status-badge-view > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .status-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .status-desc {
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+
+    .status-realizada {
+        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        color: #166534;
+    }
+
+    .status-agendada {
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        color: #1e40af;
+    }
+
+    .status-pendente {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        color: #92400e;
+    }
+
+    .status-cancelada {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        color: #991b1b;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f1f5f9;
     }
 
     .card-title {
-        font-size: 1rem;
+        font-size: 1.125rem;
         font-weight: 700;
         color: #1e293b;
-        margin: 0;
+        margin: 0 0 1.5rem 0;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #f1f5f9;
     }
 
     .card-title i {
         color: var(--cor-acento);
     }
 
-    .card-body {
-        padding: 1.5rem;
+    .info-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
-    /* Cliente Profile */
     .client-profile {
         display: flex;
         align-items: center;
-        gap: 1.25rem;
+        gap: 1rem;
     }
 
-    .client-avatar-xl {
-        width: 80px;
-        height: 80px;
+    .client-avatar-view {
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--cor-primaria), var(--cor-acento));
         color: white;
@@ -442,169 +378,91 @@
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 2rem;
+        font-size: 1.5rem;
         flex-shrink: 0;
     }
 
-    .client-name-xl {
-        font-size: 1.375rem;
+    .client-info-view {
+        flex: 1;
+    }
+
+    .client-name-view {
+        font-size: 1.25rem;
         font-weight: 700;
         color: #1e293b;
         margin: 0 0 0.5rem 0;
     }
 
-    .client-email-xl {
-        font-size: 0.9375rem;
+    .client-email-view,
+    .client-phone-view {
+        font-size: 0.875rem;
         color: #64748b;
-        margin: 0;
+        margin: 0.25rem 0;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
-    /* Detail Items */
-    .detail-item {
+    .client-email-view i,
+    .client-phone-view i {
+        color: var(--cor-acento);
+    }
+
+    .info-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
+        padding: 0.75rem 0;
         border-bottom: 1px solid #f1f5f9;
     }
 
-    .detail-item:last-child {
+    .info-row:last-child {
         border-bottom: none;
     }
 
-    .detail-label {
+    .info-label {
         font-size: 0.875rem;
+        color: #64748b;
         font-weight: 500;
-        color: #64748b;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
-    .detail-value {
-        font-size: 1rem;
-        font-weight: 600;
+    .info-label i {
+        color: #94a3b8;
+    }
+
+    .info-value {
+        font-size: 0.9375rem;
         color: #1e293b;
+        font-weight: 600;
     }
 
-    /* Valor Display */
-    .card-valor .card-body {
-        text-align: center;
-    }
-
-    .valor-display {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .valor-cifrao {
-        font-size: 1.5rem;
-        font-weight: 700;
+    .value-highlight {
         color: var(--cor-success);
-    }
-
-    .valor-numero {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--cor-success);
-    }
-
-    .valor-descricao {
-        font-size: 0.875rem;
-        color: #64748b;
-        margin: 0;
-    }
-
-    /* Timeline */
-    .timeline {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .timeline-item {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .timeline-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 1.125rem;
-        flex-shrink: 0;
     }
 
-    .timeline-success {
-        background: #dcfce7;
-        color: #166534;
+    .back-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #f1f5f9;
     }
 
-    .timeline-info {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-
-    .timeline-content {
-        flex: 1;
-    }
-
-    .timeline-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin: 0 0 0.25rem 0;
-    }
-
-    .timeline-date {
-        font-size: 0.875rem;
-        color: #64748b;
-        margin: 0;
-    }
-
-    /* Page Actions */
-    .page-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        padding: 2rem 0;
-    }
-
-    .action-group {
-        display: flex;
-        gap: 0.75rem;
-    }
-
-    .btn-back,
-    .btn-primary,
-    .btn-secondary {
+    .btn-back {
         padding: 0.875rem 1.75rem;
         border-radius: 10px;
+        background: white;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
         font-weight: 600;
         font-size: 0.9375rem;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s;
         text-decoration: none;
-        border: none;
-    }
-
-    .btn-back {
-        background: white;
-        color: #64748b;
-        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
     }
 
     .btn-back:hover {
@@ -612,61 +470,17 @@
         border-color: #cbd5e1;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, var(--cor-acento), #0e6eb8);
-        color: white;
-        box-shadow: 0 4px 12px rgba(20, 135, 223, 0.3);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
-    }
-
-    .btn-secondary {
-        background: white;
-        color: var(--cor-acento);
-        border: 1px solid #e0f2fe;
-    }
-
-    .btn-secondary:hover {
-        background: #f0f9ff;
-        border-color: var(--cor-acento);
-    }
-
-    /* Responsivo */
     @media (max-width: 768px) {
-        .info-grid {
+        .content-grid {
             grid-template-columns: 1fr;
-        }
-
-        .page-header-content {
-            flex-direction: column;
         }
 
         .header-actions {
             width: 100%;
         }
 
-        .btn-action-edit,
-        .btn-action-delete {
+        .btn-action {
             flex: 1;
-            justify-content: center;
-        }
-
-        .page-actions {
-            flex-direction: column;
-        }
-
-        .action-group {
-            width: 100%;
-            flex-direction: column;
-        }
-
-        .btn-back,
-        .btn-primary,
-        .btn-secondary {
-            width: 100%;
             justify-content: center;
         }
 
@@ -674,17 +488,11 @@
             flex-direction: column;
             text-align: center;
         }
+
+        .info-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
     }
 </style>
-
-<script>
-function confirmarExclusao(id) {
-    if (confirm('Tem certeza que deseja excluir este agendamento?\n\nEsta ação não pode ser desfeita.')) {
-        window.location.href = `/backend/agendamento/excluir/${id}`;
-    }
-}
-
-function imprimirAgendamento() {
-    window.print();
-}
-</script>

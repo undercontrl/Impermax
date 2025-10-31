@@ -94,8 +94,22 @@ class AgendamentoController extends AdminController
     public function viewCriarAgendamentos()
     {
         $usuarios = $this->usuario->buscarUsuarios();
-        View::render("agendamento/create", ["usuarios" => $usuarios]);
+
+        // Se já tiver um cliente selecionado (via GET)
+        $id_cliente = $_GET['id_cliente'] ?? null;
+        $servicos = [];
+
+        if ($id_cliente) {
+            $servicos = $this->agendamento->buscarOrcamentosPorCliente($id_cliente);
+        }
+
+        View::render("agendamento/create", [
+            "usuarios" => $usuarios,
+            "servicos" => $servicos,
+            "id_cliente_selecionado" => $id_cliente
+        ]);
     }
+
 
     // Formulário de edição
     public function viewEditarAgendamentos($id)
@@ -139,6 +153,7 @@ class AgendamentoController extends AdminController
             Redirect::redirecionarComMensagem("agendamento/criar", "error", implode("<br>", $erros));
         }
 
+        // Inserir o agendamento
         $ok = $this->agendamento->inserirAgendamento(
             $_POST["id_cliente"],
             $_POST["data_solicitada"],
@@ -147,6 +162,23 @@ class AgendamentoController extends AdminController
         );
 
         if ($ok) {
+            // Pegar o ID do agendamento recém-criado
+            $id_agendamento = $this->db->lastInsertId();
+            
+            // Salvar os orçamentos selecionados
+            if (!empty($_POST['orcamentos_selecionados'])) {
+                $orcamentos = json_decode($_POST['orcamentos_selecionados'], true);
+                
+                foreach ($orcamentos as $id_orcamento) {
+                    $sql = "INSERT INTO tbl_agendamento_orcamento (id_agendamento, id_orcamento) 
+                            VALUES (:id_agendamento, :id_orcamento)";
+                    $stmt = $this->db->prepare($sql);
+                    $stmt->bindParam(':id_agendamento', $id_agendamento);
+                    $stmt->bindParam(':id_orcamento', $id_orcamento);
+                    $stmt->execute();
+                }
+            }
+            
             Redirect::redirecionarComMensagem("agendamento/listar", "success", "Agendamento realizado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("agendamento/criar", "error", "Erro ao realizar agendamento!");
@@ -231,4 +263,42 @@ class AgendamentoController extends AdminController
             "dataFinal" => $dataFinal
         ]);
     }
+
+    public function buscarOrcamentosPorClienteAjax()
+    {
+        // Define o cabeçalho como JSON
+        header('Content-Type: application/json');
+        
+        // Verifica se o ID do cliente foi enviado
+        $id_cliente = $_POST['id_cliente'] ?? null;
+
+        if (!$id_cliente) {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Cliente não informado'
+            ]);
+            exit;
+        }
+
+        try {
+            // Busca os orçamentos do cliente
+            $orcamentos = $this->agendamento->buscarOrcamentosPorCliente($id_cliente);
+
+            // Retorna os dados
+            echo json_encode([
+                'success' => true,
+                'orcamentos' => $orcamentos
+            ]);
+        } catch (\Exception $e) {
+            // Em caso de erro
+            echo json_encode([
+                'success' => false,
+                'message' => 'Erro ao buscar orçamentos: ' . $e->getMessage()
+            ]);
+        }
+        
+        exit;
+    }
+
+
 }

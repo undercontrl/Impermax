@@ -30,10 +30,14 @@ class Session{
 }
 if (!function_exists('getDashboardLink')) {
     function getDashboardLink(): string {
-        $tipo = $_SESSION['usuario_tipo'] ?? '';
-        return ($tipo === 'admin')
-            ? '/backend/admin/dashboard'
-            : '/backend/funcionario/dashboard';
+        $session = new \App\Impermax\Core\Session();
+        $tipo = strtolower($session->get('usuario_tipo') ?? '');
+
+        return match ($tipo) {
+            'admin'       => 'admin/dashboard',
+            'funcionario' => 'funcionario/dashboard',
+            default       => 'login',
+        };
     }
 }
 

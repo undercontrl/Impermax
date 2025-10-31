@@ -30,30 +30,53 @@ class AvaliacaoController extends FuncionarioController
         var_dump($dados);
     }
 
-    // View listar
+    // View listar COM FILTROS
     public function viewListarAvaliacao()
     {
-        $avaliacoes = $this->avaliacao->buscarAvaliacao();
-        View::render("avaliacao/index", ["avaliacoes" => $avaliacoes]);
+        // Captura os filtros da URL
+        $filtros = [
+            'busca' => $_GET['busca'] ?? '',
+            'status' => $_GET['status'] ?? '',
+            'nota' => $_GET['nota'] ?? '',
+            'ordem_campo' => $_GET['ordem_campo'] ?? '',
+            'ordem_direcao' => $_GET['ordem_direcao'] ?? ''
+        ];
+
+        // Busca avaliações com filtros
+        $avaliacoes = $this->avaliacao->buscarAvaliacoesComFiltros($filtros);
+
+        // Renderiza a view
+        View::render("avaliacao/index", [
+            "avaliacoes" => $avaliacoes
+        ]);
     }
 
     // View criar
     public function viewCriarAvaliacao()
     {
-        $avaliacao = $this->avaliacao->buscarAvaliacao();
-        View::render("avaliacao/create", ["avaliacao" => $avaliacao]);
+        // Busca todos os clientes para o select
+        $clientes = $this->usuario->buscarUsuarios();
+        
+        View::render("avaliacao/create", [
+            "clientes" => $clientes
+        ]);
     }
 
     // View editar
     public function viewEditarAvaliacao($id)
     {
-        // Busca os dados da avaliação (cliente + detalhes)
+        // Busca os dados da avaliação
         $avaliacao = $this->avaliacao->buscarAvaliacaoPorId($id);
-    
-        // Renderiza a view com a avaliação
-        View::render("avaliacao/edit", ["avaliacao" => $avaliacao]);
+        
+        // Busca todos os clientes para o select
+        $clientes = $this->usuario->buscarUsuarios();
+        
+        // Renderiza a view
+        View::render("avaliacao/edit", [
+            "avaliacao" => $avaliacao,
+            "clientes" => $clientes
+        ]);
     }
-    
 
     // View excluir
     public function viewExcluirAvaliacao($id)
@@ -112,5 +135,37 @@ class AvaliacaoController extends FuncionarioController
         } else {
             Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Erro ao excluir avaliação!");
         }
+    }
+
+    public function deletarMultiplos()
+    {
+        header('Content-Type: application/json');
+        
+        $ids = $_POST['ids'] ?? [];
+        
+        if (empty($ids)) {
+            echo json_encode(['success' => false, 'message' => 'Nenhuma avaliação selecionada']);
+            exit;
+        }
+        
+        $sucesso = 0;
+        foreach ($ids as $id) {
+            if ($this->avaliacao->excluirAvaliacao($id)) {
+                $sucesso++;
+            }
+        }
+        
+        if ($sucesso > 0) {
+            echo json_encode([
+                'success' => true,
+                'message' => "$sucesso avaliação(ões) excluída(s) com sucesso!"
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Erro ao excluir avaliações'
+            ]);
+        }
+        exit;
     }
 }

@@ -175,4 +175,53 @@ class Contato {
         
         return $dados;
     }
+
+    /**
+     * Busca contatos por status no período
+     */
+    public function buscarPorStatus(string $dataInicio, string $dataFim): array
+    {
+        $sql = "
+            SELECT status_contato, COUNT(*) AS total
+            FROM tbl_contato
+            WHERE excluido_em IS NULL
+            AND data_envio BETWEEN :dataInicio AND :dataFim
+            GROUP BY status_contato
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':dataInicio', $dataInicio);
+        $stmt->bindParam(':dataFim', $dataFim);
+        $stmt->execute();
+        
+        $porStatus = [];
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $porStatus[$row['status_contato']] = (int)$row['total'];
+        }
+        
+        return $porStatus;
+    }
+
+    /**
+     * Busca contatos mais recentes do período
+     */
+    public function buscarRecentesPorPeriodo(string $dataInicio, string $dataFim, int $limite = 10): array
+    {
+        $sql = "
+            SELECT *
+            FROM tbl_contato
+            WHERE excluido_em IS NULL
+            AND data_envio BETWEEN :dataInicio AND :dataFim
+            ORDER BY data_envio DESC
+            LIMIT :limite
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':dataInicio', $dataInicio);
+        $stmt->bindParam(':dataFim', $dataFim);
+        $stmt->bindParam(':limite', $limite, \PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

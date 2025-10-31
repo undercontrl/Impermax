@@ -3,6 +3,7 @@ namespace App\Impermax;
 require __DIR__.'/../vendor/autoload.php';
 date_default_timezone_set('America/Sao_Paulo');
 require_once __DIR__ . '/Core/Session.php';
+require_once __DIR__ . '/Core/Helpers/LinkHelper.php';
 use App\Impermax\Rotas\Rotas;
  
 use Bramus\Router\Router;

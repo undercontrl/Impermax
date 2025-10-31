@@ -1,14 +1,14 @@
+<?php if (!isset($projeto) || empty($projeto)): ?>
+    <div class="page-wrapper">
+        <div class="alert alert-danger">
+            <h3>Projeto não encontrado</h3>
+            <p>O projeto solicitado não existe ou foi excluído.</p>
+            <a href="/backend/projeto/listar" class="btn-action-primary">Voltar para lista</a>
+        </div>
+    </div>
+<?php else: ?>
 <div class="page-wrapper">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="breadcrumb-nav">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/backend/dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="/backend/projeto/listar">Projetos</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Detalhes #<?= htmlspecialchars($projeto['id_projeto']) ?></li>
-        </ol>
-    </nav>
-
-    <!-- Header com Ações -->
+    <!-- Header -->
     <div class="page-header">
         <div class="page-header-content">
             <div class="page-title-group">
@@ -23,166 +23,125 @@
                     <i class="bi bi-pencil"></i>
                     Editar
                 </a>
-                <button onclick="confirmarExclusao(<?= $projeto['id_projeto'] ?>)" class="btn-action-delete">
-                    <i class="bi bi-trash"></i>
-                    Excluir
-                </button>
+                <a href="/backend/projeto/listar" class="btn-action-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Comparador Before/After Grande -->
-    <div class="comparador-destaque">
-        <div class="before-after-slider" id="mainSlider">
-            <div class="image-before" style="background-image: url('<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>');"></div>
-            <div class="image-after" style="background-image: url('<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>');"></div>
-            <div class="slider-handle">
-                <div class="slider-line"></div>
-                <div class="slider-button">
-                    <i class="bi bi-chevron-left"></i>
-                    <i class="bi bi-chevron-right"></i>
+    <!-- Card de Visualização -->
+    <div class="view-card">
+        <!-- Seção: Comparador de Imagens -->
+        <div class="view-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="bi bi-images"></i>
+                    Comparação Antes e Depois
+                </h3>
+            </div>
+
+            <!-- Comparador Interativo -->
+            <div class="before-after-viewer">
+                <div class="before-after-slider-large" id="mainSlider">
+                    <div class="image-before" style="background-image: url('/upload/<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>');"></div>
+                    <div class="image-after" style="background-image: url('/upload/<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>');"></div>
+                    <div class="slider-handle">
+                        <div class="slider-line"></div>
+                        <div class="slider-button">
+                            <i class="bi bi-chevron-left"></i>
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="labels">
+                        <span class="label-before">ANTES</span>
+                        <span class="label-after">DEPOIS</span>
+                    </div>
                 </div>
             </div>
-            <div class="labels">
-                <span class="label-before">ANTES</span>
-                <span class="label-after">DEPOIS</span>
-            </div>
-        </div>
-    </div>
 
-    <!-- Grid de Informações -->
-    <div class="info-grid">
-        <!-- Card Descrição -->
-        <div class="info-card card-descricao">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-file-text"></i>
-                    Descrição do Projeto
-                </h3>
-            </div>
-            <div class="card-body">
-                <p class="description-text"><?= nl2br(htmlspecialchars($projeto['descricao_projeto'])) ?></p>
+            <!-- Miniaturas -->
+            <div class="thumbnails-grid">
+                <div class="thumbnail-card">
+                    <img src="/upload/<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>" alt="Antes">
+                    <span class="thumbnail-label">Foto ANTES</span>
+                </div>
+                <div class="thumbnail-card">
+                    <img src="/upload/<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>" alt="Depois">
+                    <span class="thumbnail-label">Foto DEPOIS</span>
+                </div>
             </div>
         </div>
 
-        <!-- Card Informações -->
-        <div class="info-card">
-            <div class="card-header">
-                <h3 class="card-title">
+        <!-- Seção: Informações -->
+        <div class="view-section">
+            <div class="section-header">
+                <h3 class="section-title">
                     <i class="bi bi-info-circle"></i>
-                    Informações
+                    Informações do Projeto
                 </h3>
             </div>
-            <div class="card-body">
-                <div class="detail-item">
-                    <span class="detail-label">
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">
                         <i class="bi bi-hash"></i>
                         ID do Projeto
                     </span>
-                    <span class="detail-value">#<?= htmlspecialchars($projeto['id_projeto']) ?></span>
+                    <span class="info-value">#<?= htmlspecialchars($projeto['id_projeto']) ?></span>
                 </div>
-                
-                <div class="detail-item">
-                    <span class="detail-label">
+
+                <div class="info-item">
+                    <span class="info-label">
                         <i class="bi bi-calendar-plus"></i>
                         Data de Criação
                     </span>
-                    <span class="detail-value"><?= date('d/m/Y às H:i', strtotime($projeto['criado_em'])) ?></span>
+                    <span class="info-value"><?= date('d/m/Y \à\s H:i', strtotime($projeto['criado_em'])) ?></span>
                 </div>
 
-                <?php if (isset($projeto['atualizado_em']) && $projeto['atualizado_em']): ?>
-                <div class="detail-item">
-                    <span class="detail-label">
-                        <i class="bi bi-pencil"></i>
+                <?php if ($projeto['atualizado_em']): ?>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="bi bi-calendar-check"></i>
                         Última Atualização
                     </span>
-                    <span class="detail-value"><?= date('d/m/Y às H:i', strtotime($projeto['atualizado_em'])) ?></span>
+                    <span class="info-value"><?= date('d/m/Y \à\s H:i', strtotime($projeto['atualizado_em'])) ?></span>
                 </div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- Card Ações Rápidas -->
-        <div class="info-card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-lightning-charge"></i>
-                    Ações Rápidas
+        <!-- Seção: Descrição -->
+        <div class="view-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="bi bi-card-text"></i>
+                    Descrição do Projeto
                 </h3>
             </div>
-            <div class="card-body">
-                <div class="quick-actions">
-                    <a href="/backend/projeto/editar/<?= $projeto['id_projeto'] ?>" class="quick-action-btn btn-edit">
-                        <i class="bi bi-pencil-square"></i>
-                        <span>Editar Projeto</span>
-                    </a>
-                    <button onclick="baixarImagens()" class="quick-action-btn btn-download">
-                        <i class="bi bi-download"></i>
-                        <span>Baixar Fotos</span>
-                    </button>
-                    <button onclick="compartilhar()" class="quick-action-btn btn-share">
-                        <i class="bi bi-share"></i>
-                        <span>Compartilhar</span>
-                    </button>
-                    <button onclick="imprimirProjeto()" class="quick-action-btn btn-print">
-                        <i class="bi bi-printer"></i>
-                        <span>Imprimir</span>
-                    </button>
-                </div>
+
+            <div class="description-box">
+                <p><?= nl2br(htmlspecialchars($projeto['descricao_projeto'])) ?></p>
             </div>
         </div>
 
-        <!-- Card Timeline -->
-        <div class="info-card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="bi bi-clock-history"></i>
-                    Linha do Tempo
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-icon timeline-success">
-                            <i class="bi bi-plus-circle-fill"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h5 class="timeline-title">Projeto Criado</h5>
-                            <p class="timeline-date">
-                                <?= date('d/m/Y às H:i', strtotime($projeto['criado_em'])) ?>
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <?php if (isset($projeto['atualizado_em']) && $projeto['atualizado_em']): ?>
-                    <div class="timeline-item">
-                        <div class="timeline-icon timeline-info">
-                            <i class="bi bi-pencil-fill"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h5 class="timeline-title">Última Modificação</h5>
-                            <p class="timeline-date">
-                                <?= date('d/m/Y às H:i', strtotime($projeto['atualizado_em'])) ?>
-                            </p>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Botões de Ação -->
-    <div class="page-actions">
-        <a href="/backend/projeto/listar" class="btn-back">
-            <i class="bi bi-arrow-left"></i>
-            Voltar para Lista
-        </a>
-        <div class="action-group">
-            <a href="/backend/projeto/editar/<?= $projeto['id_projeto'] ?>" class="btn-primary">
-                <i class="bi bi-pencil"></i>
-                Editar Projeto
+        <!-- Ações -->
+        <div class="view-actions">
+            <a href="/backend/projeto/listar" class="btn-action-back">
+                <i class="bi bi-arrow-left"></i>
+                Voltar para Lista
             </a>
+            <div class="actions-right">
+                <a href="/backend/projeto/editar/<?= $projeto['id_projeto'] ?>" class="btn-action-primary">
+                    <i class="bi bi-pencil"></i>
+                    Editar Projeto
+                </a>
+                <button onclick="confirmarExclusao(<?= $projeto['id_projeto'] ?>)" class="btn-action-danger">
+                    <i class="bi bi-trash"></i>
+                    Excluir
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -193,51 +152,12 @@
         --cor-acento: #1487df;
         --cor-success: #22c55e;
         --cor-danger: #ef4444;
-        --cor-info: #3b82f6;
     }
 
     .page-wrapper {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 1rem;
-    }
-
-    .breadcrumb-nav {
-        margin-bottom: 1.5rem;
-    }
-
-    .breadcrumb {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        background: transparent;
-    }
-
-    .breadcrumb-item {
-        font-size: 0.875rem;
-    }
-
-    .breadcrumb-item + .breadcrumb-item::before {
-        content: "›";
-        padding: 0 0.5rem;
-        color: #94a3b8;
-    }
-
-    .breadcrumb-item a {
-        color: #64748b;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-
-    .breadcrumb-item a:hover {
-        color: var(--cor-acento);
-    }
-
-    .breadcrumb-item.active {
-        color: #1e293b;
-        font-weight: 500;
+        padding: 2rem 1rem;
     }
 
     .page-header {
@@ -247,7 +167,7 @@
     .page-header-content {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         flex-wrap: wrap;
         gap: 1rem;
     }
@@ -256,7 +176,7 @@
         font-size: 1.875rem;
         font-weight: 700;
         color: #1e293b;
-        margin: 0 0 0.5rem 0;
+        margin: 0 0 0.25rem 0;
         display: flex;
         align-items: center;
     }
@@ -276,58 +196,96 @@
         gap: 0.75rem;
     }
 
-    .btn-action-edit,
-    .btn-action-delete {
-        padding: 0.625rem 1.25rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-decoration: none;
-        border: none;
-    }
-
     .btn-action-edit {
         background: var(--cor-acento);
         color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: all 0.2s;
     }
 
     .btn-action-edit:hover {
         background: #0e6eb8;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
-    .btn-action-delete {
+    .btn-action-secondary {
         background: white;
-        color: var(--cor-danger);
-        border: 1px solid #fee2e2;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: all 0.2s;
     }
 
-    .btn-action-delete:hover {
-        background: #fee2e2;
-        border-color: var(--cor-danger);
+    .btn-action-secondary:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
     }
 
-    /* Comparador Destaque */
-    .comparador-destaque {
+    /* Card de Visualização */
+    .view-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f1f5f9;
+        overflow: hidden;
+    }
+
+    .view-section {
+        padding: 2rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .view-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-title i {
+        color: var(--cor-acento);
+        font-size: 1.25rem;
+    }
+
+    /* Comparador de Imagens */
+    .before-after-viewer {
+        margin-bottom: 2rem;
+    }
+
+    .before-after-slider-large {
         position: relative;
         width: 100%;
         height: 500px;
-        margin-bottom: 2rem;
-        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    }
-
-    .before-after-slider {
-        position: relative;
-        width: 100%;
-        height: 100%;
+        border-radius: 12px;
         cursor: ew-resize;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .image-before,
@@ -369,7 +327,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         font-size: 1.5rem;
         color: var(--cor-acento);
     }
@@ -392,275 +350,190 @@
 
     .label-before,
     .label-after {
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.75);
         color: white;
-        padding: 0.625rem 1.25rem;
+        padding: 0.5rem 1rem;
         border-radius: 8px;
-        font-size: 1rem;
+        font-size: 0.875rem;
         font-weight: 700;
         letter-spacing: 0.1em;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Miniaturas */
+    .thumbnails-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .thumbnail-card {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid #e2e8f0;
+        transition: all 0.2s;
+    }
+
+    .thumbnail-card:hover {
+        border-color: var(--cor-acento);
+        transform: translateY(-2px);
+    }
+
+    .thumbnail-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .thumbnail-label {
+        display: block;
+        padding: 0.75rem;
+        background: #f8fafc;
+        text-align: center;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #64748b;
     }
 
     /* Grid de Informações */
     .info-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 1.5rem;
-        margin-bottom: 2rem;
     }
 
-    .info-card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f1f5f9;
-        overflow: hidden;
-    }
-
-    .card-descricao {
-        grid-column: 1 / -1;
-    }
-
-    .card-header {
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid #f1f5f9;
-        background: #fafbfc;
-    }
-
-    .card-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 0;
+    .info-item {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         gap: 0.5rem;
     }
 
-    .card-title i {
-        color: var(--cor-acento);
-    }
-
-    .card-body {
-        padding: 1.5rem;
-    }
-
-    .description-text {
-        font-size: 1rem;
-        color: #334155;
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    .detail-item {
+    .info-label {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
-        border-bottom: 1px solid #f1f5f9;
-    }
-
-    .detail-item:last-child {
-        border-bottom: none;
-    }
-
-    .detail-label {
+        gap: 0.5rem;
         font-size: 0.875rem;
-        font-weight: 500;
+        font-weight: 600;
         color: #64748b;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
-    .detail-value {
-        font-size: 0.9375rem;
+    .info-label i {
+        color: var(--cor-acento);
+        font-size: 1rem;
+    }
+
+    .info-value {
+        font-size: 1.125rem;
         font-weight: 600;
         color: #1e293b;
     }
 
-    /* Ações Rápidas */
-    .quick-actions {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+    /* Box de Descrição */
+    .description-box {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 1.5rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .description-box p {
+        font-size: 1rem;
+        line-height: 1.75;
+        color: #334155;
+        margin: 0;
+    }
+
+    /* Ações da View */
+    .view-actions {
+        padding: 1.5rem 2rem;
+        background: #f8fafc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .actions-right {
+        display: flex;
         gap: 0.75rem;
     }
 
-    .quick-action-btn {
-        padding: 1rem;
-        border-radius: 10px;
+    .btn-action-back {
+        padding: 0.75rem 1.5rem;
         border: 1px solid #e2e8f0;
-        background: white;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-    }
-
-    .quick-action-btn i {
-        font-size: 1.5rem;
-    }
-
-    .quick-action-btn span {
-        font-size: 0.8125rem;
-        font-weight: 600;
-    }
-
-    .btn-edit {
-        color: var(--cor-acento);
-        border-color: #e0f2fe;
-    }
-
-    .btn-edit:hover {
-        background: #e0f2fe;
-        transform: translateY(-2px);
-    }
-
-    .btn-download {
-        color: var(--cor-success);
-        border-color: #dcfce7;
-    }
-
-    .btn-download:hover {
-        background: #dcfce7;
-        transform: translateY(-2px);
-    }
-
-    .btn-share {
-        color: #8b5cf6;
-        border-color: #ede9fe;
-    }
-
-    .btn-share:hover {
-        background: #ede9fe;
-        transform: translateY(-2px);
-    }
-
-    .btn-print {
-        color: #64748b;
-        border-color: #f1f5f9;
-    }
-
-    .btn-print:hover {
-        background: #f8fafc;
-        transform: translateY(-2px);
-    }
-
-    /* Timeline */
-    .timeline {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .timeline-item {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .timeline-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.125rem;
-        flex-shrink: 0;
-    }
-
-    .timeline-success {
-        background: #dcfce7;
-        color: #166534;
-    }
-
-    .timeline-info {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-
-    .timeline-content {
-        flex: 1;
-    }
-
-    .timeline-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin: 0 0 0.25rem 0;
-    }
-
-    .timeline-date {
-        font-size: 0.875rem;
-        color: #64748b;
-        margin: 0;
-    }
-
-    /* Page Actions */
-    .page-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        padding: 2rem 0;
-    }
-
-    .btn-back,
-    .btn-primary {
-        padding: 0.875rem 1.75rem;
         border-radius: 10px;
+        background: white;
+        color: #64748b;
         font-weight: 600;
         font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s;
         text-decoration: none;
-        border: none;
     }
 
-    .btn-back {
-        background: white;
-        color: #64748b;
-        border: 1px solid #e2e8f0;
-    }
-
-    .btn-back:hover {
+    .btn-action-back:hover {
         background: #f8fafc;
         border-color: #cbd5e1;
     }
 
-    .btn-primary {
+    .btn-action-primary {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 10px;
         background: linear-gradient(135deg, var(--cor-acento), #0e6eb8);
         color: white;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
         box-shadow: 0 4px 12px rgba(20, 135, 223, 0.3);
     }
 
-    .btn-primary:hover {
+    .btn-action-primary:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
     }
 
+    .btn-action-danger {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 10px;
+        background: var(--cor-danger);
+        color: white;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-action-danger:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+    }
+
+    /* Responsivo */
     @media (max-width: 768px) {
-        .info-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .comparador-destaque {
-            height: 400px;
-        }
-
-        .quick-actions {
-            grid-template-columns: 1fr;
+        .before-after-slider-large {
+            height: 350px;
         }
 
         .page-header-content {
             flex-direction: column;
+            align-items: flex-start;
         }
 
         .header-actions {
@@ -668,17 +541,32 @@
         }
 
         .btn-action-edit,
-        .btn-action-delete {
+        .btn-action-secondary {
             flex: 1;
             justify-content: center;
         }
 
-        .page-actions {
+        .thumbnails-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .view-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .actions-right {
+            width: 100%;
             flex-direction: column;
         }
 
-        .btn-back,
-        .btn-primary {
+        .btn-action-back,
+        .btn-action-primary,
+        .btn-action-danger {
             width: 100%;
             justify-content: center;
         }
@@ -717,6 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = false;
     });
     
+    // Touch support
     slider.addEventListener('touchstart', (e) => {
         isDragging = true;
         updateSlider(e.touches[0].clientX);
@@ -733,29 +622,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Confirmação de Exclusão
 function confirmarExclusao(id) {
     if (confirm('Tem certeza que deseja excluir este projeto?\n\nEsta ação não pode ser desfeita.')) {
         window.location.href = `/backend/projeto/excluir/${id}`;
     }
 }
-
-function baixarImagens() {
-    alert('Função de download em desenvolvimento!');
-}
-
-function compartilhar() {
-    if (navigator.share) {
-        navigator.share({
-            title: 'Projeto',
-            text: 'Confira este projeto incrível!',
-            url: window.location.href
-        });
-    } else {
-        alert('Compartilhamento não suportado neste navegador');
-    }
-}
-
-function imprimirProjeto() {
-    window.print();
-}
 </script>
+<?php endif; ?>
+        exit;

@@ -127,8 +127,9 @@
                         <!-- Comparador Before/After -->
                         <div class="before-after-container">
                             <div class="before-after-slider" data-projeto="<?= $projeto['id_projeto'] ?>">
-                                <div class="image-before" style="background-image: url('<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>');"></div>
-                                <div class="image-after" style="background-image: url('<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>');"></div>
+                                <!-- CORREÇÃO: Caminho correto das imagens -->
+                                <div class="image-before" style="background-image: url('/upload/<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>');"></div>
+                                <div class="image-after" style="background-image: url('/upload/<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>');"></div>
                                 <div class="slider-handle">
                                     <div class="slider-line"></div>
                                     <div class="slider-button">
@@ -154,16 +155,16 @@
                             </div>
                             
                             <p class="projeto-descricao">
-                                <?= htmlspecialchars(substr($projeto['descricao_projeto'], 0, 80)) ?><?= strlen($projeto['descricao_projeto']) > 80 ? '...' : '' ?>
+                                <?= htmlspecialchars(substr($projeto['descricao_projeto'], 0, 100)) ?><?= strlen($projeto['descricao_projeto']) > 100 ? '...' : '' ?>
                             </p>
                             
                             <!-- Ações -->
                             <div class="projeto-actions">
-                                <a href="/backend/projeto/ver/<?= $projeto['id_projeto'] ?>" 
+                                <!-- <a href="/backend/projeto/ver/" 
                                    class="btn-projeto-action btn-projeto-view">
                                     <i class="bi bi-eye"></i>
                                     Ver
-                                </a>
+                                </a> -->
                                 <a href="/backend/projeto/editar/<?= $projeto['id_projeto'] ?>" 
                                    class="btn-projeto-action btn-projeto-edit">
                                     <i class="bi bi-pencil"></i>
@@ -286,6 +287,7 @@
     .page-wrapper {
         max-width: 1400px;
         margin: 0 auto;
+        padding: 2rem 1rem;
     }
 
     .page-header {
@@ -333,8 +335,67 @@
         box-shadow: 0 4px 12px rgba(20, 135, 223, 0.3);
         transition: all 0.2s;
         cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
     }
 
+    .pagination-btn:hover:not(:disabled):not(.active) {
+        border-color: var(--cor-acento);
+        color: var(--cor-acento);
+        background: #f0f9ff;
+    }
+
+    .pagination-btn.active {
+        background: var(--cor-acento);
+        color: white;
+        border-color: var(--cor-acento);
+        font-weight: 600;
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .pagination-dots {
+        color: #94a3b8;
+        padding: 0 0.5rem;
+    }
+
+    /* Estado Vazio */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        border-radius: 50%;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #94a3b8;
+    }
+
+    .empty-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .empty-description {
+        font-size: 0.9375rem;
+        color: #64748b;
+        margin: 0 0 1.5rem 0;
+    }
     .btn-action-primary:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
@@ -720,7 +781,7 @@
         font-weight: 700;
         letter-spacing: 0.05em;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        margin-top: 30px;
+        margin-top: 25px;
     }
 
     /* Info do Projeto */
@@ -858,61 +919,6 @@
         text-decoration: none;
     }
 
-    .pagination-btn:hover:not(:disabled):not(.active) {
-        border-color: var(--cor-acento);
-        color: var(--cor-acento);
-        background: #f0f9ff;
-    }
-
-    .pagination-btn.active {
-        background: var(--cor-acento);
-        color: white;
-        border-color: var(--cor-acento);
-        font-weight: 600;
-    }
-
-    .pagination-btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-    }
-
-    .pagination-dots {
-        color: #94a3b8;
-        padding: 0 0.5rem;
-    }
-
-    /* Estado Vazio */
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-    }
-
-    .empty-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1.5rem;
-        border-radius: 50%;
-        background: #f1f5f9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        color: #94a3b8;
-    }
-
-    .empty-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 0 0 0.5rem 0;
-    }
-
-    .empty-description {
-        font-size: 0.9375rem;
-        color: #64748b;
-        margin: 0 0 1.5rem 0;
-    }
-
     /* Responsivo */
     @media (max-width: 768px) {
         .projetos-grid {
@@ -1006,8 +1012,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ==================== SELEÇÃO DE CHECKBOXES ====================
-let selectedIds = new Set();
-
+selectedIds = selectedIds || new Set();
 function updateSelection() {
     const checkboxes = document.querySelectorAll('.row-checkbox:checked');
     selectedIds.clear();
@@ -1077,5 +1082,74 @@ function autoSubmitFilter() {
     timeoutId = setTimeout(() => {
         document.getElementById('filterForm').submit();
     }, 500);
+}
+</script>
+<script>
+// ==================== COMPARADOR BEFORE/AFTER ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const sliders = document.querySelectorAll('.before-after-slider');
+    
+    sliders.forEach(slider => {
+        let isDragging = false;
+        const afterImage = slider.querySelector('.image-after');
+        const handle = slider.querySelector('.slider-handle');
+        
+        function updateSlider(x) {
+            const rect = slider.getBoundingClientRect();
+            const position = Math.max(0, Math.min(x - rect.left, rect.width));
+            const percentage = (position / rect.width) * 100;
+            
+            afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            handle.style.left = `${percentage}%`;
+        }
+        
+        slider.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            updateSlider(e.clientX);
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                updateSlider(e.clientX);
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        
+        // Touch support
+        slider.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            updateSlider(e.touches[0].clientX);
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                updateSlider(e.touches[0].clientX);
+            }
+        });
+        
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+    });
+});
+// ==================== SELEÇÃO DE CHECKBOXES ====================
+let selectedIds = new Set();
+function updateSelection() {
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    selectedIds.clear();
+    checkboxes.forEach(cb => selectedIds.add(cb.value));
+    
+    const bulkBar = document.getElementById('bulkActionsBar');
+    const selectedCount = document.getElementById('selectedCount');
+    
+    if (selectedIds.size > 0) {
+        bulkBar.style.display = 'flex';
+        selectedCount.textContent = selectedIds.size;
+    } else {
+        bulkBar.style.display = 'none';
+    }
 }
 </script>

@@ -113,10 +113,10 @@
         </div>
     </div>
 
-    <!-- Barra de Ações em Massa (aparece quando há seleção) -->
+    <!-- Barra de Ações em Massa -->
     <div id="bulkActionsBar" class="bulk-actions-bar" style="display: none;">
         <div class="bulk-actions-info">
-            <span id="selectedCount">0</span> item(ns) selecionado(s)
+            <span id="selectedCount">0</span> agendamento(s) selecionado(s)
         </div>
         <div class="bulk-actions-buttons">
             <button onclick="bulkDelete()" class="btn-bulk-action btn-bulk-delete">
@@ -135,7 +135,7 @@
         <!-- VISUALIZAÇÃO EM TABELA -->
         <div class="table-container" id="tableView" style="<?= ($_GET['view'] ?? 'list') === 'list' ? 'display: block;' : 'display: none;' ?>">
             <?php if (!empty($agendamentos)): ?>
-                <table class="data-table" id="agendamentosTable">
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>
@@ -155,10 +155,11 @@
                             </th>
                             <th>
                                 <div class="th-content" onclick="sortTable('data_solicitada')">
-                                    Data Solicitada
+                                    Data Agendada
                                     <i class="bi bi-chevron-expand sort-icon <?= ($_GET['ordem_campo'] ?? '') === 'data_solicitada' ? 'active' : '' ?>"></i>
                                 </div>
                             </th>
+                            <th>Serviços</th>
                             <th>
                                 <div class="th-content" onclick="sortTable('total_agendamento')">
                                     Valor Total
@@ -199,19 +200,46 @@
                                 <td>
                                     <div class="date-info">
                                         <i class="bi bi-calendar3 me-2 text-muted"></i>
-                                        <span><?= htmlspecialchars(date('d/m/Y', strtotime($agendamento['data_solicitada']))) ?></span>
+                                        <span><?= date('d/m/Y H:i', strtotime($agendamento['data_solicitada'])) ?></span>
                                     </div>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($agendamento['descricao_servico'] ?? '—') ?>
+                                    <div class="servicos-info">
+                                        <?php if (!empty($agendamento['descricoes_orcamentos'])): ?>
+                                            <div class="servicos-lista">
+                                                <?php 
+                                                $descricoes = explode('|||', $agendamento['descricoes_orcamentos']);
+                                                $contador = 0;
+                                                foreach ($descricoes as $desc): 
+                                                    if ($contador >= 2) break;
+                                                    $desc = trim($desc);
+                                                    if (!empty($desc)):
+                                                ?>
+                                                    <span class="servico-tag">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        <?= htmlspecialchars(mb_strimwidth($desc, 0, 40, '...')) ?>
+                                                    </span>
+                                                <?php 
+                                                    $contador++;
+                                                    endif;
+                                                endforeach; 
+                                                ?>
+                                                <?php if (count($descricoes) > 2): ?>
+                                                    <span class="servico-tag servico-mais">
+                                                        +<?= count($descricoes) - 2 ?> mais
+                                                    </span>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <span class="text-muted">
+                                                <i class="bi bi-dash-circle"></i> Sem serviços
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                                 <td>
-                                    R$ <?= number_format($agendamento['total_agendamento'] ?? 0, 2, ',', '.') ?>
+                                    <span class="table-amount">R$ <?= number_format($agendamento['total_agendamento'] ?? 0, 2, ',', '.') ?></span>
                                 </td>
-
-                                <!-- <td>
-                                    <span class="table-amount">R$ </span>
-                                </td> -->
                                 <td>
                                     <?php
                                         $status = strtolower(trim($agendamento['status_agendamento']));
@@ -398,15 +426,31 @@
                                 <div class="info-item">
                                     <i class="bi bi-calendar3"></i>
                                     <div>
-                                        <span class="info-label">Data Solicitada</span>
-                                        <span class="info-value"><?= htmlspecialchars(date('d/m/Y', strtotime($agendamento['data_solicitada']))) ?></span>
+                                        <span class="info-label">Data Agendada</span>
+                                        <span class="info-value"><?= date('d/m/Y H:i', strtotime($agendamento['data_solicitada'])) ?></span>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <i class="bi bi-receipt"></i>
+                                    <div>
+                                        <span class="info-label">Serviços</span>
+                                        <span class="info-value">
+                                            <?php if (!empty($agendamento['descricoes_orcamentos'])): ?>
+                                                <?php 
+                                                $descricoes = explode('|||', $agendamento['descricoes_orcamentos']);
+                                                echo count($descricoes) . ' serviço(s)';
+                                                ?>
+                                            <?php else: ?>
+                                                Sem serviços
+                                            <?php endif; ?>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="info-item">
                                     <i class="bi bi-cash-coin"></i>
                                     <div>
                                         <span class="info-label">Valor Total</span>
-                                        <span class="info-value">R$ <?= number_format($agendamento['total_agendamento'], 2, ',', '.') ?></span>
+                                        <span class="info-value">R$ <?= number_format($agendamento['total_agendamento'] ?? 0, 2, ',', '.') ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -1028,6 +1072,45 @@
         font-size: 1rem;
     }
 
+    /* Serviços Info */
+    .servicos-info {
+        max-width: 300px;
+    }
+
+    .servicos-lista {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+    }
+
+    .servico-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        background: #f1f5f9;
+        border-radius: 6px;
+        font-size: 0.8125rem;
+        color: #334155;
+        font-weight: 500;
+        max-width: fit-content;
+    }
+
+    .servico-tag i {
+        font-size: 0.75rem;
+        color: var(--cor-success);
+    }
+
+    .servico-mais {
+        background: var(--cor-acento);
+        color: white;
+        font-weight: 600;
+    }
+
+    .servico-mais i {
+        color: white;
+    }
+
     /* Status Badges */
     .status-badge {
         display: inline-flex;
@@ -1039,7 +1122,6 @@
         font-weight: 600;
         letter-spacing: 0.025em;
         white-space: nowrap;
-        margin-top: 15px;
     }
 
     .status-realizada {
@@ -1478,7 +1560,6 @@
             flex: 1;
         }
 
-        /* Grid responsivo */
         .agendamentos-grid {
             grid-template-columns: 1fr;
         }
@@ -1577,11 +1658,9 @@ function sortTable(campo) {
     const ordemCampoInput = document.getElementById('ordem_campo');
     const ordemDirecaoInput = document.getElementById('ordem_direcao');
     
-    // Se clicar no mesmo campo, inverte a direção
     if (ordemCampoInput.value === campo) {
         ordemDirecaoInput.value = ordemDirecaoInput.value === 'ASC' ? 'DESC' : 'ASC';
     } else {
-        // Se for um novo campo, começa com DESC
         ordemCampoInput.value = campo;
         ordemDirecaoInput.value = 'DESC';
     }
@@ -1605,29 +1684,8 @@ function changeView(view) {
     window.location.href = url.toString();
 }
 
-// Alternar visualizações sem recarregar (alternativa)
-function toggleView(view) {
-    const tableView = document.getElementById('tableView');
-    const gridView = document.getElementById('gridView');
-    
-    if (view === 'list') {
-        tableView.style.display = 'block';
-        gridView.style.display = 'none';
-    } else {
-        tableView.style.display = 'none';
-        gridView.style.display = 'block';
-    }
-    
-    // Atualizar estado ativo dos botões
-    document.querySelectorAll('.view-toggle').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.closest('.view-toggle').classList.add('active');
-}
-
 // ==================== INICIALIZAÇÃO ====================
 document.addEventListener('DOMContentLoaded', function() {
-    // Atualizar estado dos ícones de ordenação
     const ordemCampo = new URLSearchParams(window.location.search).get('ordem_campo');
     const ordemDirecao = new URLSearchParams(window.location.search).get('ordem_direcao');
     

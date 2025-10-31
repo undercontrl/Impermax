@@ -1,361 +1,418 @@
 <div class="page-wrapper">
-    <div class="delete-container">
-        <!-- Ícone de Aviso -->
-        <div class="warning-icon">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-        </div>
-
-        <!-- Título e Descrição -->
-        <h1 class="delete-title">Confirmar Exclusão</h1>
-        <p class="delete-description">
-            Tem certeza que deseja excluir o projeto <strong>#<?= htmlspecialchars($projeto['id_projeto']) ?></strong>?
-        </p>
-
-        <!-- Preview das Fotos -->
-        <div class="projeto-preview">
-            <div class="preview-images">
-                <div class="preview-image">
-                    <img src="<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>" alt="Antes">
-                    <span class="preview-label">ANTES</span>
-                </div>
-                <div class="preview-image">
-                    <img src="<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>" alt="Depois">
-                    <span class="preview-label">DEPOIS</span>
-                </div>
-            </div>
-            <div class="preview-descricao">
-                <p><?= htmlspecialchars(substr($projeto['descricao_projeto'], 0, 150)) ?><?= strlen($projeto['descricao_projeto']) > 150 ? '...' : '' ?></p>
+    <!-- Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <div class="page-title-group">
+                <h1 class="page-title">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Confirmar Exclusão
+                </h1>
+                <p class="page-subtitle">Você está prestes a excluir um projeto</p>
             </div>
         </div>
+    </div>
 
-        <!-- Alert de Aviso -->
+    <!-- Card de Confirmação -->
+    <div class="delete-card">
+        <!-- Alerta -->
         <div class="alert-danger">
-            <i class="bi bi-shield-exclamation"></i>
-            <div>
-                <strong>Atenção!</strong> Esta ação não pode ser desfeita. O projeto e suas imagens serão removidos permanentemente do sistema.
+            <div class="alert-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div class="alert-content">
+                <h3 class="alert-title">Atenção! Esta ação não pode ser desfeita.</h3>
+                <p class="alert-message">
+                    Ao confirmar, o projeto #<?= htmlspecialchars($projeto['id_projeto']) ?> será excluído permanentemente do sistema.
+                </p>
             </div>
         </div>
 
-        <!-- Formulário de Exclusão -->
-        <form action="/backend/projeto/deletar/<?= htmlspecialchars($projeto['id_projeto']) ?>" method="post" class="delete-form">
+        <!-- Preview do Projeto -->
+        <div class="delete-preview">
+            <h4 class="preview-title">Projeto que será excluído:</h4>
             
-            <div class="form-actions">
+            <div class="preview-content">
+                <!-- Imagens -->
+                <div class="preview-images">
+                    <div class="preview-image-card">
+                        <img src="/upload/<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>" alt="Antes">
+                        <span class="preview-label">ANTES</span>
+                    </div>
+                    <div class="preview-image-card">
+                        <img src="/upload/<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>" alt="Depois">
+                        <span class="preview-label">DEPOIS</span>
+                    </div>
+                </div>
+
+                <!-- Informações -->
+                <div class="preview-info">
+                    <div class="info-row">
+                        <span class="info-label">ID:</span>
+                        <span class="info-value">#<?= htmlspecialchars($projeto['id_projeto']) ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Criado em:</span>
+                        <span class="info-value"><?= date('d/m/Y \à\s H:i', strtotime($projeto['criado_em'])) ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Descrição:</span>
+                        <span class="info-value"><?= htmlspecialchars(substr($projeto['descricao_projeto'], 0, 150)) ?><?= strlen($projeto['descricao_projeto']) > 150 ? '...' : '' ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário de Confirmação -->
+        <form action="/backend/projeto/deletar" method="POST" id="deleteForm">
+            <input type="hidden" name="id_projeto" value="<?= htmlspecialchars($projeto['id_projeto']) ?>">
+            
+            <!-- Checkbox de Confirmação -->
+            <div class="confirmation-checkbox">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="confirmDelete" required>
+                    <span class="checkbox-text">
+                        Confirmo que li o aviso e desejo excluir este projeto permanentemente
+                    </span>
+                </label>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="delete-actions">
                 <a href="/backend/projeto/listar" class="btn-cancel">
                     <i class="bi bi-x-lg"></i>
                     Cancelar
                 </a>
-                <button type="submit" class="btn-delete">
+                <button type="submit" class="btn-delete" id="btnDelete" disabled>
                     <i class="bi bi-trash-fill"></i>
-                    Sim, Excluir Projeto
+                    Confirmar Exclusão
                 </button>
             </div>
         </form>
-
-        <!-- Link Alternativo -->
-        <div class="alternative-action">
-            <p>Prefere visualizar os detalhes antes de decidir?</p>
-            <a href="/backend/projeto/ver/<?= htmlspecialchars($projeto['id_projeto']) ?>" class="link-view">
-                <i class="bi bi-eye"></i>
-                Ver Detalhes do Projeto
-            </a>
-        </div>
     </div>
 </div>
 
 <style>
     :root {
+        --cor-primaria: #5f7396;
+        --cor-acento: #1487df;
         --cor-danger: #ef4444;
-        --cor-danger-dark: #dc2626;
-    }
-
-    body {
-        background: #f4f6f9;
+        --cor-warning: #f59e0b;
     }
 
     .page-wrapper {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
     }
 
-    .delete-container {
-        max-width: 650px;
-        width: 100%;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        padding: 3rem;
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-header-content {
         text-align: center;
     }
 
-    .warning-icon {
-        width: 100px;
-        height: 100px;
-        margin: 0 auto 2rem;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #fee2e2, #fecaca);
-        display: flex;
+    .page-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--cor-danger);
+        margin: 0 0 0.25rem 0;
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        animation: pulse 2s infinite;
+        gap: 0.5rem;
     }
 
-    .warning-icon i {
-        font-size: 3.5rem;
+    .page-subtitle {
+        font-size: 0.9375rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    /* Card de Exclusão */
+    .delete-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        border: 2px solid #fee2e2;
+        overflow: hidden;
+    }
+
+    /* Alerta de Perigo */
+    .alert-danger {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        padding: 2rem;
+        display: flex;
+        gap: 1.5rem;
+        border-bottom: 2px solid #fca5a5;
+    }
+
+    .alert-icon {
+        flex-shrink: 0;
+    }
+
+    .alert-icon i {
+        font-size: 3rem;
         color: var(--cor-danger);
+        animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
         0%, 100% {
+            opacity: 1;
             transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
         }
         50% {
+            opacity: 0.8;
             transform: scale(1.05);
-            box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
         }
     }
 
-    .delete-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 0 0 1rem 0;
+    .alert-content {
+        flex: 1;
     }
 
-    .delete-description {
-        font-size: 1.125rem;
-        color: #64748b;
-        margin: 0 0 2rem 0;
+    .alert-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #991b1b;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .alert-message {
+        font-size: 0.9375rem;
+        color: #7f1d1d;
+        margin: 0;
         line-height: 1.6;
     }
 
-    .delete-description strong {
-        color: #1e293b;
-        font-weight: 600;
+    /* Preview do Projeto */
+    .delete-preview {
+        padding: 2rem;
+        border-bottom: 1px solid #f1f5f9;
     }
 
-    .projeto-preview {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
+    .preview-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+    }
+
+    .preview-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
     .preview-images {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        margin-bottom: 1rem;
     }
 
-    .preview-image {
-        position: relative;
-        aspect-ratio: 4/3;
-        border-radius: 8px;
+    .preview-image-card {
+        border-radius: 10px;
         overflow: hidden;
+        border: 2px solid #e2e8f0;
+        position: relative;
     }
 
-    .preview-image img {
+    .preview-image-card img {
         width: 100%;
-        height: 100%;
+        height: 180px;
         object-fit: cover;
+        display: block;
     }
 
     .preview-label {
         position: absolute;
-        top: 0.5rem;
-        left: 0.5rem;
-        padding: 0.25rem 0.625rem;
-        background: rgba(0, 0, 0, 0.7);
+        top: 0.75rem;
+        left: 0.75rem;
+        background: rgba(0, 0, 0, 0.75);
         color: white;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
         font-size: 0.75rem;
         font-weight: 700;
-        border-radius: 4px;
+        letter-spacing: 0.05em;
     }
 
-    .preview-descricao {
-        text-align: left;
-        padding-top: 1rem;
-        border-top: 1px solid #e2e8f0;
-    }
-
-    .preview-descricao p {
-        font-size: 0.9375rem;
-        color: #64748b;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .alert-danger {
+    .preview-info {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 1.5rem;
         display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding: 1.25rem;
-        background: #fef2f2;
-        border: 2px solid #fee2e2;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        text-align: left;
+        flex-direction: column;
+        gap: 1rem;
     }
 
-    .alert-danger i {
-        font-size: 1.5rem;
-        color: var(--cor-danger);
-        flex-shrink: 0;
-        margin-top: 0.125rem;
-    }
-
-    .alert-danger div {
-        color: #991b1b;
-        font-size: 0.9375rem;
-        line-height: 1.5;
-    }
-
-    .alert-danger strong {
-        font-weight: 700;
-        display: block;
-        margin-bottom: 0.25rem;
-    }
-
-    .delete-form {
-        margin-bottom: 2rem;
-    }
-
-    .form-actions {
+    .info-row {
         display: flex;
         gap: 1rem;
     }
 
-    .btn-cancel,
-    .btn-delete {
+    .info-label {
+        font-weight: 600;
+        color: #64748b;
+        min-width: 100px;
+    }
+
+    .info-value {
+        color: #1e293b;
         flex: 1;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.625rem;
+    }
+
+    /* Checkbox de Confirmação */
+    .confirmation-checkbox {
+        padding: 2rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
         cursor: pointer;
-        transition: all 0.2s;
-        text-decoration: none;
-        border: none;
+        user-select: none;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: var(--cor-danger);
+        flex-shrink: 0;
+    }
+
+    .checkbox-text {
+        font-size: 0.9375rem;
+        color: #334155;
+        line-height: 1.6;
+    }
+
+    /* Ações */
+    .delete-actions {
+        padding: 1.5rem 2rem;
+        background: #f8fafc;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
     }
 
     .btn-cancel {
+        padding: 0.875rem 2rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
         background: white;
         color: #64748b;
-        border: 2px solid #e2e8f0;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
     }
 
     .btn-cancel:hover {
         background: #f8fafc;
         border-color: #cbd5e1;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
     .btn-delete {
-        background: linear-gradient(135deg, var(--cor-danger), var(--cor-danger-dark));
+        padding: 0.875rem 2rem;
+        border: none;
+        border-radius: 10px;
+        background: var(--cor-danger);
         color: white;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-delete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-    }
-
-    .btn-delete:active {
-        transform: translateY(0);
-    }
-
-    .alternative-action {
-        padding-top: 2rem;
-        border-top: 1px solid #f1f5f9;
-    }
-
-    .alternative-action p {
+        font-weight: 600;
         font-size: 0.9375rem;
-        color: #64748b;
-        margin: 0 0 0.75rem 0;
-    }
-
-    .link-view {
+        cursor: pointer;
+        transition: all 0.2s;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        color: #1487df;
-        font-weight: 600;
-        font-size: 0.9375rem;
-        text-decoration: none;
-        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    .link-view:hover {
-        color: #0e6eb8;
-        gap: 0.75rem;
+    .btn-delete:disabled {
+        background: #cbd5e1;
+        color: #94a3b8;
+        cursor: not-allowed;
+        box-shadow: none;
     }
 
-    .link-view i {
-        font-size: 1.125rem;
+    .btn-delete:not(:disabled):hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
     }
 
-    @media (max-width: 600px) {
-        .delete-container {
-            padding: 2rem 1.5rem;
+    /* Responsivo */
+    @media (max-width: 768px) {
+        .alert-danger {
+            flex-direction: column;
+            text-align: center;
         }
 
-        .warning-icon {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 1.5rem;
-        }
-
-        .warning-icon i {
+        .alert-icon i {
             font-size: 2.5rem;
-        }
-
-        .delete-title {
-            font-size: 1.5rem;
-        }
-
-        .delete-description {
-            font-size: 1rem;
         }
 
         .preview-images {
             grid-template-columns: 1fr;
         }
 
-        .form-actions {
-            flex-direction: column-reverse;
+        .delete-actions {
+            flex-direction: column;
         }
 
         .btn-cancel,
         .btn-delete {
             width: 100%;
+            justify-content: center;
+        }
+
+        .info-row {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .info-label {
+            min-width: auto;
+            font-size: 0.875rem;
         }
     }
 </style>
 
 <script>
-document.querySelector('.delete-form').addEventListener('submit', function(e) {
-    const btn = this.querySelector('.btn-delete');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Excluindo...';
+// Habilitar/desabilitar botão de exclusão
+document.getElementById('confirmDelete').addEventListener('change', function() {
+    const btnDelete = document.getElementById('btnDelete');
+    btnDelete.disabled = !this.checked;
 });
 
-document.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
+// Confirmação adicional antes de enviar
+document.getElementById('deleteForm').addEventListener('submit', function(e) {
+    if (!confirm('ÚLTIMA CONFIRMAÇÃO: Deseja realmente excluir este projeto?\n\nEsta ação é IRREVERSÍVEL!')) {
         e.preventDefault();
-        if (confirm('Pressione OK para confirmar a exclusão do projeto.')) {
-            document.querySelector('.delete-form').submit();
-        }
+        return false;
+    }
+    
+    // Mostrar loading
+    const btnDelete = document.getElementById('btnDelete');
+    btnDelete.innerHTML = '<i class="bi bi-hourglass-split"></i> Excluindo...';
+    btnDelete.disabled = true;
+});
+
+// Atalho ESC para cancelar
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        window.location.href = '/backend/projeto/listar';
     }
 });
 </script>
