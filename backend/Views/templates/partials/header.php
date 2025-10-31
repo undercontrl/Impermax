@@ -713,9 +713,9 @@ if (in_array($currentPath, $rotasPublicas)) {
 <body>
 
     <!-- Menu lateral -->
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar" id="sidebar">  
         <div class="sidebar-logo">
-            <a href="/backend/<?= ($_SESSION['usuario_tipo'] === 'admin') ? 'admin' : 'funcionario' ?>/dashboard">
+            <a href="/../../index.php">
                 <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
             </a>
         </div>
