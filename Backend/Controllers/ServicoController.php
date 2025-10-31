@@ -39,7 +39,7 @@ class ServicoController extends AdminController {
             ];
         } else {
             // Listagem normal com paginação
-            $resultado = $this->servico->listarInternos($pagina, 20);
+            $resultado = $this->servico->listarInternos($pagina, 10);
             $dados = $resultado['data'];
             $paginacao = $resultado;
         }

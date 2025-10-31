@@ -19,7 +19,7 @@ class Servico{
     }
 
     // Lista serviços para uso interno (sem foto, foco em valor)
-public function listarInternos($pagina = 1, $porPagina = 20) {
+public function listarInternos($pagina = 1, $porPagina = 10) {
     $offset = ($pagina - 1) * $porPagina;
 
     // REMOVA qualquer filtro de status_servico aqui!
