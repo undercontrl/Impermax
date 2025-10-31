@@ -43,12 +43,15 @@
                                    name="foto_antes_projeto" 
                                    id="foto_antes_projeto" 
                                    class="image-input"
-                                   accept="image/jpeg,image/png,image/webp"
+                                   accept="image/jpeg,image/png,image/webp,image/jpg"
                                    onchange="previewImage(this, 'preview_antes')">
                             
                             <!-- Preview Atual -->
+                            <?php if (!empty($projeto['foto_antes_projeto'])): ?>
                             <div class="image-preview current" id="current_antes">
-                                <img src="/upload/<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>" alt="Foto Antes Atual">
+                                <img src="/upload/<?= htmlspecialchars($projeto['foto_antes_projeto']) ?>" 
+                                     alt="Foto Antes Atual"
+                                     onerror="this.src='/assets/img/no-image.png'">
                                 <div class="image-overlay">
                                     <button type="button" class="btn-change-image" onclick="document.getElementById('foto_antes_projeto').click()">
                                         <i class="bi bi-arrow-repeat"></i>
@@ -56,6 +59,12 @@
                                     </button>
                                 </div>
                             </div>
+                            <?php else: ?>
+                            <div class="image-placeholder" onclick="document.getElementById('foto_antes_projeto').click()">
+                                <i class="bi bi-image"></i>
+                                <p>Clique para adicionar imagem</p>
+                            </div>
+                            <?php endif; ?>
                             
                             <!-- Preview Nova -->
                             <div class="image-preview" id="preview_antes" style="display: none;">
@@ -79,12 +88,15 @@
                                    name="foto_depois_projeto" 
                                    id="foto_depois_projeto" 
                                    class="image-input"
-                                   accept="image/jpeg,image/png,image/webp"
+                                   accept="image/jpeg,image/png,image/webp,image/jpg"
                                    onchange="previewImage(this, 'preview_depois')">
                             
                             <!-- Preview Atual -->
+                            <?php if (!empty($projeto['foto_depois_projeto'])): ?>
                             <div class="image-preview current" id="current_depois">
-                                <img src="/upload/<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>" alt="Foto Depois Atual">
+                                <img src="/upload/<?= htmlspecialchars($projeto['foto_depois_projeto']) ?>" 
+                                     alt="Foto Depois Atual"
+                                     onerror="this.src='/assets/img/no-image.png'">
                                 <div class="image-overlay">
                                     <button type="button" class="btn-change-image" onclick="document.getElementById('foto_depois_projeto').click()">
                                         <i class="bi bi-arrow-repeat"></i>
@@ -92,6 +104,12 @@
                                     </button>
                                 </div>
                             </div>
+                            <?php else: ?>
+                            <div class="image-placeholder" onclick="document.getElementById('foto_depois_projeto').click()">
+                                <i class="bi bi-image"></i>
+                                <p>Clique para adicionar imagem</p>
+                            </div>
+                            <?php endif; ?>
                             
                             <!-- Preview Nova -->
                             <div class="image-preview" id="preview_depois" style="display: none;">
@@ -129,7 +147,7 @@
                               minlength="10"
                               maxlength="500"><?= htmlspecialchars($projeto['descricao_projeto']) ?></textarea>
                     <div class="char-counter">
-                        <span id="charCount"><?= strlen($projeto['descricao_projeto']) ?></span> / 500 caracteres
+                        <span id="charCount"><?= mb_strlen($projeto['descricao_projeto']) ?></span> / 500 caracteres
                     </div>
                 </div>
             </div>
@@ -314,6 +332,36 @@
         border-color: var(--cor-success);
     }
 
+    .image-placeholder {
+        height: 300px;
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: #f8fafc;
+    }
+
+    .image-placeholder:hover {
+        border-color: var(--cor-acento);
+        background: #f0f9ff;
+    }
+
+    .image-placeholder i {
+        font-size: 3rem;
+        color: #cbd5e1;
+    }
+
+    .image-placeholder p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.875rem;
+    }
+
     .image-overlay {
         position: absolute;
         top: 0;
@@ -367,6 +415,7 @@
         align-items: center;
         justify-content: center;
         transition: all 0.2s;
+        z-index: 10;
     }
 
     .btn-remove-image:hover {
@@ -447,6 +496,12 @@
         box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
     }
 
+    .btn-form-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
     @media (max-width: 768px) {
         .images-grid {
             grid-template-columns: 1fr;
@@ -479,13 +534,30 @@
 function previewImage(input, previewId) {
     const file = input.files[0];
     if (file) {
+        // Validar tamanho (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('A imagem não pode ser maior que 5MB!');
+            input.value = '';
+            return;
+        }
+        
+        // Validar tipo
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+        if (!validTypes.includes(file.type)) {
+            alert('Apenas imagens JPG, PNG ou WEBP são permitidas!');
+            input.value = '';
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             const preview = document.getElementById(previewId);
-            const currentPreview = preview.previousElementSibling;
+            const currentPreview = document.getElementById('current_' + previewId.replace('preview_', ''));
             
             preview.querySelector('img').src = e.target.result;
-            currentPreview.style.display = 'none';
+            if (currentPreview) {
+                currentPreview.style.display = 'none';
+            }
             preview.style.display = 'block';
         };
         reader.readAsDataURL(file);
@@ -501,34 +573,46 @@ function cancelImageChange(inputId, previewId, currentId) {
     input.value = '';
     preview.querySelector('img').src = '';
     preview.style.display = 'none';
-    currentPreview.style.display = 'block';
+    if (currentPreview) {
+        currentPreview.style.display = 'block';
+    }
 }
 
 // Contador de Caracteres
-document.getElementById('descricao_projeto').addEventListener('input', function() {
+const textarea = document.getElementById('descricao_projeto');
+const charCount = document.getElementById('charCount');
+
+textarea.addEventListener('input', function() {
     const count = this.value.length;
-    document.getElementById('charCount').textContent = count;
+    charCount.textContent = count;
     
     if (count > 500) {
-        document.getElementById('charCount').style.color = 'var(--cor-danger)';
+        charCount.style.color = 'var(--cor-danger)';
+        charCount.style.fontWeight = '700';
+    } else if (count > 450) {
+        charCount.style.color = 'var(--cor-warning, #f59e0b)';
+        charCount.style.fontWeight = '600';
     } else {
-        document.getElementById('charCount').style.color = '#64748b';
+        charCount.style.color = '#64748b';
+        charCount.style.fontWeight = '400';
     }
 });
 
 // Validação antes de enviar
 document.getElementById('formProjeto').addEventListener('submit', function(e) {
-    const descricao = document.getElementById('descricao_projeto').value;
+    const descricao = document.getElementById('descricao_projeto').value.trim();
     
     if (descricao.length < 10) {
         e.preventDefault();
         alert('A descrição deve ter no mínimo 10 caracteres.');
+        document.getElementById('descricao_projeto').focus();
         return false;
     }
     
     if (descricao.length > 500) {
         e.preventDefault();
         alert('A descrição deve ter no máximo 500 caracteres.');
+        document.getElementById('descricao_projeto').focus();
         return false;
     }
     
@@ -536,5 +620,7 @@ document.getElementById('formProjeto').addEventListener('submit', function(e) {
     const btnSubmit = this.querySelector('.btn-form-submit');
     btnSubmit.innerHTML = '<i class="bi bi-hourglass-split"></i> Atualizando...';
     btnSubmit.disabled = true;
+    
+    return true;
 });
 </script>

@@ -185,7 +185,7 @@ class Rotas
         "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
         //projeto
         "/projeto/salvar" => "ProjetoController@salvarProjeto",
-        "/projeto/atualizar/{id}" => "ProjetoController@atualizarProjeto",
+        "/projeto/atualizar" => "ProjetoController@atualizarProjeto",
         "/projeto/deletar" => "ProjetoController@deletarProjeto",
         "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         //pagamento
