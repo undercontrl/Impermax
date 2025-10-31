@@ -155,7 +155,8 @@
                 </div>
                     <button class="btn-direita">&#9654;</button>
             </div>
-                    
+            <div class="adicionar-depoimento">
+                <a href="avaliacao.php"><button class="btn-adicionar-depoimento">Adicionar Depoimento</button></a> 
             </div>
 
 

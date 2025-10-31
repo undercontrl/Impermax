@@ -1,7 +1,3 @@
-<!-- ============================================ -->
-<!-- ARQUIVO: /backend/Views/templates/avaliacao/create.php -->
-<!-- ============================================ -->
-
 <div class="page-wrapper">
     <!-- Header da Página -->
     <div class="page-header">

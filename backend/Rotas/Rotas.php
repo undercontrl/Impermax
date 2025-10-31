@@ -31,6 +31,7 @@ class Rotas
         //agendamentos
         "/agendamentos" => "AgendamentoController@index",
         "/agendamento/criar" => "AgendamentoController@viewCriarAgendamentos",
+        "/agendamento/criar-publico" => "AgendamentoController@viewCriarAgendamentos",
         "/agendamento/listar" => "AgendamentoController@viewListarAgendamentos",
         "/agendamento/editar/{id}" => "AgendamentoController@viewEditarAgendamentos",
         "/agendamento/excluir/{id}" => "AgendamentoController@viewExcluirAgendamentos",
@@ -43,6 +44,7 @@ class Rotas
         "/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacao",
         "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacao",
         "/avaliacao/{id}/relatorio/{dataInicial}/{dataFinal}" => "AvaliacaoController@relatorioAvaliacao",
+        "/avaliar" => "AvaliacaoPublicaController@viewFormularioPublico",
         // contatos
         "/contatos" => "ContatoController@index",
         "/contato" => "ContatoController@viewListarContatos",
@@ -152,6 +154,7 @@ class Rotas
         "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
         "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
         "/avaliacao/deletar-multiplos" => "AvaliacaoController@deletarMultiplos",
+        "/enviar-avaliacao" => "AvaliacaoPublicaController@enviarAvaliacaoPublica",
         // contatos
         "/contato/salvar" => "ContatoController@salvar",
         "/contato/atualizar/(\d+)" => "ContatoController@atualizar",

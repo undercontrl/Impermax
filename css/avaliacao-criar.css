@@ -1,0 +1,487 @@
+
+:root {
+    --cor-primaria: #5f7396;
+    --cor-acento: #1487df;
+    --cor-success: #22c55e;
+    --cor-warning: #f59e0b;
+    --cor-star: #fbbf24;
+    --cinza-escuro: #1f2937;
+    --cinza-medio: #6b7280;
+    --cinza-claro: #f3f4f6;
+}
+
+
+/* Container Principal */
+.avaliacao-section {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: var(--cor-de-fundo-primaria);
+}
+
+.main-avaliacao {
+    background-color: var(--cor-de-fundo-primaria);
+    padding: 180px;
+    min-height: 100vh;
+}
+
+.container-avaliacao {
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.span-header{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+    gap: 10px;
+}
+.ancora-header-secundaria{
+    position: relative;
+    padding: 5px;
+    gap: 5px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.header-secundario{
+    height: 27px;
+    background-color: var(--cor-de-fundo-primaria);
+    color: var(--cor-de-fundo-quaternaria);
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: bold;
+    display: flex;
+}
+.icon{
+    width: 22px;
+    height: 22px;
+}
+.icon-redes{
+    width: 20px;
+    height: 20px;
+}
+.container-header-secundario{
+    max-width: 1200px;
+    margin: 0 0 0 660px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0px 5px 0;
+}
+.logo{
+    height: 69px;
+}
+.header-primario{
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 20px;
+    font-size: 1.2em;
+    background-color: var(--cor-de-fundo-secundaria);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.menu-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    color: var(--cor-de-fundo-primaria);
+    font-weight: 750;
+}
+
+
+
+
+/* Header */
+.avaliacao-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: white;
+}
+
+.header-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.avaliacao-titulo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.avaliacao-subtitulo {
+    font-size: 1.125rem;
+    opacity: 0.95;
+    line-height: 1.6;
+}
+
+/* Card do Formulário */
+.avaliacao-card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: var(--cinza-escuro);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.form-label i {
+    color: var(--cor-acento);
+    font-size: 1.125rem;
+}
+
+.required {
+    color: #ef4444;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--cor-acento);
+    box-shadow: 0 0 0 4px rgba(20, 135, 223, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--cinza-medio);
+}
+
+/* Rating Stars */
+.rating-container {
+    background: var(--cinza-claro);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.stars-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.stars-wrapper input[type="radio"] {
+    display: none;
+}
+
+.star {
+    font-size: 3rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.star:hover,
+.star:hover ~ .star,
+.stars-wrapper input[type="radio"]:checked ~ .star {
+    color: var(--cor-star);
+    transform: scale(1.1);
+}
+
+.rating-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--cinza-medio);
+}
+
+.rating-text.rated {
+    color: var(--cor-star);
+}
+
+/* Contador de Caracteres */
+.char-counter {
+    text-align: right;
+    font-size: 0.875rem;
+    color: var(--cinza-medio);
+    margin-top: 0.5rem;
+}
+
+/* Checkbox */
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label:hover {
+    border-color: var(--cor-acento);
+    background: rgba(20, 135, 223, 0.05);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    accent-color: var(--cor-acento);
+}
+
+.checkbox-text {
+    font-size: 0.9375rem;
+    color: var(--cinza-escuro);
+    line-height: 1.5;
+}
+
+/* Botão de Envio */
+.form-actions {
+    margin-top: 2.5rem;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, var(--cor-acento), #0c6bb8);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(20, 135, 223, 0.4);
+}
+
+.btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(20, 135, 223, 0.5);
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Mensagem de Sucesso */
+.success-message {
+    text-align: center;
+    padding: 3rem 2rem;
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.success-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, var(--cor-success), #16a34a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: white;
+    animation: successPulse 0.6s ease;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.success-message h3 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--cinza-escuro);
+    margin-bottom: 0.75rem;
+}
+
+.success-message p {
+    font-size: 1.125rem;
+    color: var(--cinza-medio);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.btn-nova-avaliacao {
+    background: white;
+    color: var(--cor-acento);
+    padding: 1rem 2rem;
+    border: 2px solid var(--cor-acento);
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-nova-avaliacao:hover {
+    background: var(--cor-acento);
+    color: white;
+}
+
+/* Benefícios */
+.beneficios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.beneficio-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.beneficio-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.beneficio-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+.beneficio-card h4 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.beneficio-card p {
+    font-size: 0.9375rem;
+    opacity: 0.9;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    .avaliacao-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .avaliacao-titulo {
+        font-size: 2rem;
+    }
+
+    .star {
+        font-size: 2.5rem;
+    }
+
+    .beneficios-grid {
+        grid-template-columns: 1fr;
+    }
+}
