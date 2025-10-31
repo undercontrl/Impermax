@@ -5,11 +5,11 @@
             <div class="page-title-group">
                 <h1 class="page-title">
                     <i class="bi bi-plus-circle-fill me-2"></i>
-                    Novo Projeto
+                    Nova Avaliação
                 </h1>
-                <p class="page-subtitle">Adicione um novo projeto antes e depois</p>
+                <p class="page-subtitle">Adicione uma nova avaliação de cliente</p>
             </div>
-            <a href="/backend/projeto/listar" class="btn-action-secondary">
+            <a href="/backend/avaliacao/listar" class="btn-action-secondary">
                 <i class="bi bi-arrow-left me-2"></i>
                 Voltar
             </a>
@@ -18,75 +18,77 @@
 
     <!-- Formulário -->
     <div class="form-card">
-        <form action="/backend/projeto/salvar" method="POST" enctype="multipart/form-data" id="formProjeto">
+        <form action="/backend/avaliacao/salvar" method="POST" id="formAvaliacao">
             
-            <!-- Seção: Imagens -->
+            <!-- Seção: Dados da Avaliação -->
             <div class="form-section">
                 <div class="section-header">
                     <h3 class="section-title">
-                        <i class="bi bi-image"></i>
-                        Imagens do Projeto
+                        <i class="bi bi-star-fill"></i>
+                        Dados da Avaliação
                     </h3>
-                    <p class="section-subtitle">Adicione as fotos antes e depois da transformação</p>
+                    <p class="section-subtitle">Selecione o cliente e a nota</p>
                 </div>
 
-                <div class="images-grid">
-                    <!-- Foto ANTES -->
+                <div class="form-grid">
+                    <!-- Cliente -->
                     <div class="form-group">
-                        <label for="foto_antes_projeto" class="form-label required">
-                            <i class="bi bi-camera"></i>
-                            Foto ANTES
+                        <label for="id_cliente" class="form-label required">
+                            <i class="bi bi-person-fill"></i>
+                            Cliente
                         </label>
-                        <div class="image-upload-wrapper">
-                            <input type="file" 
-                                   name="foto_antes_projeto" 
-                                   id="foto_antes_projeto" 
-                                   class="image-input"
-                                   accept="image/jpeg,image/png,image/webp"
-                                   required
-                                   onchange="previewImage(this, 'preview_antes')">
-                            <div class="image-upload-area" id="upload_antes" onclick="document.getElementById('foto_antes_projeto').click()">
-                                <i class="bi bi-cloud-upload"></i>
-                                <span>Clique para selecionar</span>
-                                <small>JPG, PNG ou WEBP (máx. 5MB)</small>
-                            </div>
-                            <div class="image-preview" id="preview_antes" style="display: none;">
-                                <img src="" alt="Preview Antes">
-                                <button type="button" class="btn-remove-image" onclick="removeImage('foto_antes_projeto', 'preview_antes')">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <small class="form-hint">Recomendado: mínimo 400x300 pixels</small>
+                        <select name="id_cliente" id="id_cliente" class="form-select" required>
+                            <option value="">Selecione um cliente</option>
+                            <?php if (isset($usuarios) && !empty($usuarios)): ?>
+                                <?php foreach ($usuarios as $usuario): ?>
+                                    <option value="<?= htmlspecialchars($usuario['id_usuario']) ?>">
+                                        <?= htmlspecialchars($usuario['nome_usuario']) ?>
+                                        <?php if (!empty($usuario['email_usuario'])): ?>
+                                            - <?= htmlspecialchars($usuario['email_usuario']) ?>
+                                        <?php endif; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled>Nenhum cliente disponível</option>
+                            <?php endif; ?>
+                        </select>
+                        <small class="form-hint">Selecione o cliente que fez a avaliação</small>
                     </div>
 
-                    <!-- Foto DEPOIS -->
+                    <!-- Nota -->
                     <div class="form-group">
-                        <label for="foto_depois_projeto" class="form-label required">
-                            <i class="bi bi-camera"></i>
-                            Foto DEPOIS
+                        <label for="nota_avaliacao" class="form-label required">
+                            <i class="bi bi-star-fill"></i>
+                            Nota
                         </label>
-                        <div class="image-upload-wrapper">
-                            <input type="file" 
-                                   name="foto_depois_projeto" 
-                                   id="foto_depois_projeto" 
-                                   class="image-input"
-                                   accept="image/jpeg,image/png,image/webp"
-                                   required
-                                   onchange="previewImage(this, 'preview_depois')">
-                            <div class="image-upload-area" id="upload_depois" onclick="document.getElementById('foto_depois_projeto').click()">
-                                <i class="bi bi-cloud-upload"></i>
-                                <span>Clique para selecionar</span>
-                                <small>JPG, PNG ou WEBP (máx. 5MB)</small>
-                            </div>
-                            <div class="image-preview" id="preview_depois" style="display: none;">
-                                <img src="" alt="Preview Depois">
-                                <button type="button" class="btn-remove-image" onclick="removeImage('foto_depois_projeto', 'preview_depois')">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                            </div>
+                        <div class="rating-input">
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <input type="radio" 
+                                       name="nota_avaliacao" 
+                                       id="nota_<?= $i ?>" 
+                                       value="<?= $i ?>" 
+                                       required>
+                                <label for="nota_<?= $i ?>" class="star-label">
+                                    <i class="bi bi-star-fill"></i>
+                                </label>
+                            <?php endfor; ?>
                         </div>
-                        <small class="form-hint">Recomendado: mínimo 400x300 pixels</small>
+                        <div id="nota_texto" class="rating-text"></div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label for="status_avaliacao" class="form-label required">
+                            <i class="bi bi-eye-fill"></i>
+                            Status
+                        </label>
+                        <select name="status_avaliacao" id="status_avaliacao" class="form-select" required>
+                            <option value="">Selecione o status</option>
+                            <option value="publicada">Publicada</option>
+                            <option value="pendente" selected>Pendente</option>
+                            <option value="oculta">Oculta</option>
+                        </select>
+                        <small class="form-hint">Define se a avaliação será exibida publicamente</small>
                     </div>
                 </div>
             </div>
@@ -95,39 +97,39 @@
             <div class="form-section">
                 <div class="section-header">
                     <h3 class="section-title">
-                        <i class="bi bi-card-text"></i>
-                        Descrição
+                        <i class="bi bi-chat-quote-fill"></i>
+                        Avaliação
                     </h3>
-                    <p class="section-subtitle">Descreva os detalhes e melhorias do projeto</p>
+                    <p class="section-subtitle">Escreva o comentário do cliente</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="descricao_projeto" class="form-label required">
-                        Descrição do Projeto
+                    <label for="descricao_avaliacao" class="form-label required">
+                        Comentário
                     </label>
-                    <textarea name="descricao_projeto" 
-                              id="descricao_projeto" 
+                    <textarea name="descricao_avaliacao" 
+                              id="descricao_avaliacao" 
                               class="form-textarea"
                               rows="6"
-                              placeholder="Descreva as melhorias, técnicas utilizadas, resultados alcançados..."
+                              placeholder="Escreva aqui o comentário do cliente sobre o serviço..."
                               required
                               minlength="10"
-                              maxlength="500"></textarea>
+                              maxlength="1000"></textarea>
                     <div class="char-counter">
-                        <span id="charCount">0</span> / 500 caracteres
+                        <span id="charCount">0</span> / 1000 caracteres
                     </div>
                 </div>
             </div>
 
             <!-- Botões de Ação -->
             <div class="form-actions">
-                <a href="/backend/projeto/listar" class="btn-form-cancel">
+                <a href="/backend/avaliacao/listar" class="btn-form-cancel">
                     <i class="bi bi-x-lg"></i>
                     Cancelar
                 </a>
                 <button type="submit" class="btn-form-submit">
                     <i class="bi bi-check-lg"></i>
-                    Salvar Projeto
+                    Salvar Avaliação
                 </button>
             </div>
         </form>
@@ -140,6 +142,7 @@
         --cor-acento: #1487df;
         --cor-success: #22c55e;
         --cor-danger: #ef4444;
+        --cor-warning: #f59e0b;
     }
 
     .page-wrapper {
@@ -170,7 +173,7 @@
     }
 
     .page-title i {
-        color: var(--cor-acento);
+        color: #fbbf24;
     }
 
     .page-subtitle {
@@ -241,11 +244,11 @@
         margin: 0;
     }
 
-    /* Grid de Imagens */
-    .images-grid {
+    /* Grid de Formulário */
+    .form-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
     }
 
     /* Form Groups */
@@ -276,84 +279,60 @@
         margin-top: 0.25rem;
     }
 
-    /* Upload de Imagens */
-    .image-upload-wrapper {
-        position: relative;
+    /* Select e Input */
+    .form-select {
+        width: 100%;
+        padding: 0.875rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 0.9375rem;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
     }
 
-    .image-input {
+    .form-select:focus {
+        outline: none;
+        border-color: var(--cor-acento);
+        box-shadow: 0 0 0 3px rgba(20, 135, 223, 0.1);
+    }
+
+    /* Rating Input */
+    .rating-input {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
+
+    .rating-input input[type="radio"] {
         display: none;
     }
 
-    .image-upload-area {
-        border: 2px dashed #cbd5e1;
-        border-radius: 12px;
-        padding: 3rem 2rem;
-        text-align: center;
+    .star-label {
         cursor: pointer;
+        font-size: 2rem;
+        color: #e2e8f0;
         transition: all 0.2s;
-        background: #f8fafc;
     }
 
-    .image-upload-area:hover {
-        border-color: var(--cor-acento);
-        background: #f0f9ff;
+    .rating-input input[type="radio"]:checked ~ .star-label,
+    .rating-input .star-label:hover,
+    .rating-input .star-label:hover ~ .star-label {
+        color: #fbbf24;
+        transform: scale(1.1);
     }
 
-    .image-upload-area i {
-        font-size: 3rem;
-        color: #94a3b8;
-        display: block;
-        margin-bottom: 1rem;
+    .rating-input input[type="radio"]:checked + .star-label {
+        color: #fbbf24;
     }
 
-    .image-upload-area span {
-        display: block;
+    .rating-text {
+        font-size: 0.9375rem;
         font-weight: 600;
         color: #334155;
-        margin-bottom: 0.5rem;
-    }
-
-    .image-upload-area small {
-        display: block;
-        color: #64748b;
-        font-size: 0.8125rem;
-    }
-
-    .image-preview {
-        position: relative;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 2px solid #e2e8f0;
-    }
-
-    .image-preview img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        display: block;
-    }
-
-    .btn-remove-image {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: rgba(239, 68, 68, 0.9);
-        color: white;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-    }
-
-    .btn-remove-image:hover {
-        background: var(--cor-danger);
-        transform: scale(1.1);
+        margin-top: 0.5rem;
+        min-height: 1.5rem;
     }
 
     /* Textarea */
@@ -433,7 +412,7 @@
 
     /* Responsivo */
     @media (max-width: 768px) {
-        .images-grid {
+        .form-grid {
             grid-template-columns: 1fr;
         }
 
@@ -460,68 +439,104 @@
 </style>
 
 <script>
-// Preview de Imagem
-function previewImage(input, previewId) {
-    const file = input.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById(previewId);
-            const uploadArea = preview.previousElementSibling;
-            
-            preview.querySelector('img').src = e.target.result;
-            uploadArea.style.display = 'none';
-            preview.style.display = 'block';
+// Sistema de Rating Interativo
+document.querySelectorAll('.rating-input input[type="radio"]').forEach((radio, index) => {
+    radio.addEventListener('change', function() {
+        const nota = this.value;
+        const textos = {
+            1: '⭐ Muito Ruim',
+            2: '⭐⭐ Ruim',
+            3: '⭐⭐⭐ Regular',
+            4: '⭐⭐⭐⭐ Bom',
+            5: '⭐⭐⭐⭐⭐ Excelente'
         };
-        reader.readAsDataURL(file);
-    }
-}
+        document.getElementById('nota_texto').textContent = textos[nota];
+        
+        // Marcar todas as estrelas anteriores
+        document.querySelectorAll('.star-label').forEach((label, i) => {
+            if (i < nota) {
+                label.style.color = '#fbbf24';
+            } else {
+                label.style.color = '#e2e8f0';
+            }
+        });
+    });
+});
 
-// Remover Imagem
-function removeImage(inputId, previewId) {
-    const input = document.getElementById(inputId);
-    const preview = document.getElementById(previewId);
-    const uploadArea = preview.previousElementSibling;
+// Efeito hover nas estrelas
+document.querySelectorAll('.star-label').forEach((label, index) => {
+    label.addEventListener('mouseenter', function() {
+        document.querySelectorAll('.star-label').forEach((l, i) => {
+            if (i <= index) {
+                l.style.color = '#fbbf24';
+            } else {
+                l.style.color = '#e2e8f0';
+            }
+        });
+    });
     
-    input.value = '';
-    preview.querySelector('img').src = '';
-    preview.style.display = 'none';
-    uploadArea.style.display = 'block';
-}
+    label.addEventListener('mouseleave', function() {
+        const checkedRadio = document.querySelector('.rating-input input[type="radio"]:checked');
+        const checkedValue = checkedRadio ? checkedRadio.value : 0;
+        
+        document.querySelectorAll('.star-label').forEach((l, i) => {
+            if (i < checkedValue) {
+                l.style.color = '#fbbf24';
+            } else {
+                l.style.color = '#e2e8f0';
+            }
+        });
+    });
+});
 
 // Contador de Caracteres
-document.getElementById('descricao_projeto').addEventListener('input', function() {
+document.getElementById('descricao_avaliacao').addEventListener('input', function() {
     const count = this.value.length;
     document.getElementById('charCount').textContent = count;
     
-    if (count > 500) {
+    if (count > 1000) {
         document.getElementById('charCount').style.color = 'var(--cor-danger)';
+    } else if (count > 800) {
+        document.getElementById('charCount').style.color = 'var(--cor-warning)';
     } else {
         document.getElementById('charCount').style.color = '#64748b';
     }
 });
 
 // Validação antes de enviar
-document.getElementById('formProjeto').addEventListener('submit', function(e) {
-    const fotoAntes = document.getElementById('foto_antes_projeto').files[0];
-    const fotoDepois = document.getElementById('foto_depois_projeto').files[0];
-    const descricao = document.getElementById('descricao_projeto').value;
+document.getElementById('formAvaliacao').addEventListener('submit', function(e) {
+    const cliente = document.getElementById('id_cliente').value;
+    const nota = document.querySelector('.rating-input input[type="radio"]:checked');
+    const status = document.getElementById('status_avaliacao').value;
+    const descricao = document.getElementById('descricao_avaliacao').value;
     
-    if (!fotoAntes || !fotoDepois) {
+    if (!cliente) {
         e.preventDefault();
-        alert('Por favor, adicione as duas fotos (ANTES e DEPOIS).');
+        alert('Por favor, selecione um cliente.');
+        return false;
+    }
+    
+    if (!nota) {
+        e.preventDefault();
+        alert('Por favor, selecione uma nota.');
+        return false;
+    }
+    
+    if (!status) {
+        e.preventDefault();
+        alert('Por favor, selecione o status.');
         return false;
     }
     
     if (descricao.length < 10) {
         e.preventDefault();
-        alert('A descrição deve ter no mínimo 10 caracteres.');
+        alert('A avaliação deve ter no mínimo 10 caracteres.');
         return false;
     }
     
-    if (descricao.length > 500) {
+    if (descricao.length > 1000) {
         e.preventDefault();
-        alert('A descrição deve ter no máximo 500 caracteres.');
+        alert('A avaliação deve ter no máximo 1000 caracteres.');
         return false;
     }
     

@@ -284,6 +284,52 @@
             <?php endif; ?>
         </div>
     </div>
+    <!-- Paginação -->
+    <?php if (isset($totalPaginas) && $totalPaginas > 1): ?>
+        <div class="pagination-wrapper">
+            <div class="pagination-info">
+                Mostrando <?= min((($paginaAtual ?? 1) - 1) * 10 + 1, $totalRegistros ?? 0) ?> 
+                a <?= min(($paginaAtual ?? 1) * 10, $totalRegistros ?? 0) ?> 
+                de <?= $totalRegistros ?? 0 ?> resultados
+            </div>
+            
+            <div class="pagination">
+                <?php if (($paginaAtual ?? 1) > 1): ?>
+                    <a href="?pagina=1<?= !empty($_GET['busca']) ? '&busca=' . urlencode($_GET['busca']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['nota']) ? '&nota=' . urlencode($_GET['nota']) : '' ?>" 
+                    class="pagination-btn">
+                        <i class="bi bi-chevron-double-left"></i>
+                    </a>
+                    <a href="?pagina=<?= ($paginaAtual ?? 1) - 1 ?><?= !empty($_GET['busca']) ? '&busca=' . urlencode($_GET['busca']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['nota']) ? '&nota=' . urlencode($_GET['nota']) : '' ?>" 
+                    class="pagination-btn">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                <?php endif; ?>
+                
+                <?php
+                $inicio = max(1, ($paginaAtual ?? 1) - 2);
+                $fim = min($totalPaginas ?? 1, ($paginaAtual ?? 1) + 2);
+                
+                for ($i = $inicio; $i <= $fim; $i++):
+                ?>
+                    <a href="?pagina=<?= $i ?><?= !empty($_GET['busca']) ? '&busca=' . urlencode($_GET['busca']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['nota']) ? '&nota=' . urlencode($_GET['nota']) : '' ?>" 
+                    class="pagination-btn <?= $i === ($paginaAtual ?? 1) ? 'active' : '' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+                
+                <?php if (($paginaAtual ?? 1) < ($totalPaginas ?? 1)): ?>
+                    <a href="?pagina=<?= ($paginaAtual ?? 1) + 1 ?><?= !empty($_GET['busca']) ? '&busca=' . urlencode($_GET['busca']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['nota']) ? '&nota=' . urlencode($_GET['nota']) : '' ?>" 
+                    class="pagination-btn">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                    <a href="?pagina=<?= $totalPaginas ?? 1 ?><?= !empty($_GET['busca']) ? '&busca=' . urlencode($_GET['busca']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['nota']) ? '&nota=' . urlencode($_GET['nota']) : '' ?>" 
+                    class="pagination-btn">
+                        <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <style>
@@ -785,6 +831,64 @@
         font-size: 0.9375rem;
         color: var(--cor-cinza);
         margin: 0 0 1.5rem 0;
+    }
+
+    /* Paginação */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        background: white;
+        border-top: 1px solid #f1f5f9;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .pagination-info {
+        font-size: 0.875rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .pagination-btn {
+        min-width: 40px;
+        height: 40px;
+        padding: 0 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .pagination-btn:hover:not(:disabled):not(.active) {
+        border-color: var(--cor-acento);
+        color: var(--cor-acento);
+        background: #f0f9ff;
+    }
+
+    .pagination-btn.active {
+        background: linear-gradient(135deg, var(--cor-primaria), var(--cor-acento));
+        color: white;
+        border-color: var(--cor-acento);
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
     }
 
     /* ==================== RESPONSIVIDADE ==================== */

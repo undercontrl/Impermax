@@ -1,18 +1,16 @@
 <?php
 namespace App\Impermax\Controllers;
 
+use App\Impermax\Controllers\Admin\AdminController;
 use App\Impermax\Models\Avaliacao;
-use App\Impermax\Models\Usuario;
 use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AvaliacaoValidador;
-use App\Impermax\Controllers\Admin\FuncionarioController;
 
-class AvaliacaoController extends FuncionarioController
+class AvaliacaoController extends AdminController
 {
     private $avaliacao;
-    private $usuario;
     private $db;
 
     public function __construct()
@@ -20,123 +18,170 @@ class AvaliacaoController extends FuncionarioController
         parent::__construct();
         $this->db = Database::getInstance();
         $this->avaliacao = new Avaliacao($this->db);
-        $this->usuario = new Usuario($this->db);
     }
 
-    // Página principal (debug ou API)
     public function index()
     {
-        $dados = $this->avaliacao->buscarAvaliacao();
-        var_dump($dados);
+        $this->viewListarAvaliacoes();
     }
 
-    // View listar COM FILTROS
-    public function viewListarAvaliacao()
+    /**
+     * Listar avaliações com filtros e paginação
+     */
+    public function viewListarAvaliacoes()
     {
-        // Captura os filtros da URL
         $filtros = [
             'busca' => $_GET['busca'] ?? '',
             'status' => $_GET['status'] ?? '',
             'nota' => $_GET['nota'] ?? '',
             'ordem_campo' => $_GET['ordem_campo'] ?? '',
-            'ordem_direcao' => $_GET['ordem_direcao'] ?? ''
+            'ordem_direcao' => $_GET['ordem_direcao'] ?? '',
+            'pagina' => (int)($_GET['pagina'] ?? 1)
         ];
-
-        // Busca avaliações com filtros
+        
         $avaliacoes = $this->avaliacao->buscarAvaliacoesComFiltros($filtros);
-
-        // Renderiza a view
+        $totalRegistros = $this->avaliacao->contarAvaliacoesComFiltros($filtros);
+        
+        $itensPorPagina = 10;
+        $totalPaginas = ceil($totalRegistros / $itensPorPagina);
+        $paginaAtual = $filtros['pagina'];
+        
         View::render("avaliacao/index", [
-            "avaliacoes" => $avaliacoes
+            "avaliacoes" => $avaliacoes,
+            "totalPaginas" => $totalPaginas,
+            "paginaAtual" => $paginaAtual,
+            "totalRegistros" => $totalRegistros
         ]);
     }
 
-    // View criar
-    public function viewCriarAvaliacao()
+    /**
+     * VIEW: Criar avaliação
+     */
+    public function viewCriarAvaliacoes()
     {
-        // Busca todos os clientes para o select
-        $clientes = $this->usuario->buscarUsuarios();
-        
-        View::render("avaliacao/create", [
-            "clientes" => $clientes
-        ]);
+        $clientes = $this->avaliacao->getClientes();
+        View::render("avaliacao/create", ["usuarios" => $clientes]);
     }
 
-    // View editar
-    public function viewEditarAvaliacao($id)
+    /**
+     * VIEW: Editar avaliação
+     */
+    public function viewEditarAvaliacoes($id)
     {
-        // Busca os dados da avaliação
-        $avaliacao = $this->avaliacao->buscarAvaliacaoPorId($id);
-        
-        // Busca todos os clientes para o select
-        $clientes = $this->usuario->buscarUsuarios();
-        
-        // Renderiza a view
-        View::render("avaliacao/edit", [
-            "avaliacao" => $avaliacao,
-            "clientes" => $clientes
-        ]);
-    }
-
-    // View excluir
-    public function viewExcluirAvaliacao($id)
-    {
-        View::render("avaliacao/delete", ["id_avaliacao" => $id]);
-    }
-
-    // POST - salvar avaliação
-    public function salvarAvaliacao()
-    {
-        $erros = AvaliacaoValidador::ValidarEntradas($_POST);
-
-        if (!empty($erros)) {
-            Redirect::redirecionarComMensagem("avaliacao/criar", "error", implode("<br>", $erros));
+        if (!$id) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID da avaliação não fornecido!");
+            return;
         }
 
-        $ok = $this->avaliacao->inserirAvaliacao(
+        $avaliacao = $this->avaliacao->buscarAvaliacaoPorId($id);
+        $clientes = $this->avaliacao->getClientes();
+        
+        if ($avaliacao) {
+            View::render("avaliacao/edit", [
+                "avaliacao" => $avaliacao,
+                "usuarios" => $clientes
+            ]);
+        } else {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Avaliação não encontrada!");
+        }
+    }
+
+    /**
+     * VIEW: Confirmar exclusão
+     */
+    public function viewExcluirAvaliacoes($id)
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID da avaliação não fornecido!");
+            return;
+        }
+
+        $avaliacao = $this->avaliacao->buscarAvaliacaoPorId($id);
+        
+        if ($avaliacao) {
+            View::render("avaliacao/delete", ["avaliacao" => $avaliacao]);
+        } else {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Avaliação não encontrada!");
+        }
+    }
+
+    /**
+     * Salvar nova avaliação
+     */
+    public function salvarAvaliacao()
+    {
+        $erros = AvaliacaoValidador::validarEntradas($_POST);
+        
+        if (!empty($erros)) {
+            Redirect::redirecionarComMensagem("avaliacao/criar", "error", implode("<br>", $erros));
+            return;
+        }
+
+        if ($this->avaliacao->inserirAvaliacao(
             $_POST["id_cliente"],
             $_POST["descricao_avaliacao"],
             $_POST["nota_avaliacao"],
             $_POST["status_avaliacao"]
-        );
-
-        if ($ok) {
+        )) {
             Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação cadastrada com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("avaliacao/criar", "error", "Erro ao cadastrar avaliação!");
         }
     }
 
-    // POST - atualizar
+    /**
+     * Atualizar avaliação
+     */
     public function atualizarAvaliacao()
     {
-        $ok = $this->avaliacao->atualizarAvaliacao(
-            $_POST["id_avaliacao"],
+        if (!isset($_POST['id_avaliacao'])) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID da avaliação não fornecido!");
+            return;
+        }
+
+        $id = (int)$_POST['id_avaliacao'];
+        $erros = AvaliacaoValidador::validarEntradas($_POST, true);
+        
+        if (!empty($erros)) {
+            Redirect::redirecionarComMensagem("avaliacao/editar/{$id}", "error", implode("<br>", $erros));
+            return;
+        }
+
+        if ($this->avaliacao->atualizarAvaliacao(
+            $id,
             $_POST["id_cliente"],
             $_POST["descricao_avaliacao"],
             $_POST["nota_avaliacao"],
             $_POST["status_avaliacao"]
-        );
-
-        if ($ok) {
+        )) {
             Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação atualizada com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("avaliacao/editar/{id}", "error", "Erro ao atualizar avaliação!");
+            Redirect::redirecionarComMensagem("avaliacao/editar/{$id}", "error", "Erro ao atualizar avaliação!");
         }
     }
 
-    // POST - deletar
+    /**
+     * Deletar avaliação (soft delete)
+     */
     public function deletarAvaliacao()
     {
-        $ok = $this->avaliacao->excluirAvaliacao($_POST["id_avaliacao"]);
+        if (!isset($_POST['id_avaliacao'])) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID da avaliação não fornecido!");
+            return;
+        }
 
-        if ($ok) {
+        $id = (int)$_POST['id_avaliacao'];
+        
+        if ($this->avaliacao->excluirAvaliacao($id)) {
             Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação excluída com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Erro ao excluir avaliação!");
         }
     }
 
+    /**
+     * Deletar múltiplas avaliações
+     */
     public function deletarMultiplos()
     {
         header('Content-Type: application/json');

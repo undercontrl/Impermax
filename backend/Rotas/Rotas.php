@@ -38,11 +38,11 @@ class Rotas
         "/agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "AgendamentoController@relatorioAgendamento",
         '/agendamento/deletar-multiplos' => 'AgendamentoController@deletarMultiplos',
         //avaliações
-        "/avaliacoes" => "AvaliacaoController@index",
-        "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacao",
-        "/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacao",
-        "/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacao",
-        "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacao",
+        "/avaliacao" => "AvaliacaoController@index",
+        "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
+        "/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacoes",
+        "/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacoes",
+        "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacoes",
         "/avaliacao/{id}/relatorio/{dataInicial}/{dataFinal}" => "AvaliacaoController@relatorioAvaliacao",
         "/avaliar" => "AvaliacaoPublicaController@viewFormularioPublico",
         // contatos
@@ -151,8 +151,8 @@ class Rotas
         "/agendamento/buscar-orcamentos-ajax" => "AgendamentoController@buscarOrcamentosPorClienteAjax",
         //avaliações
         "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
-        "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
-        "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
+        "/avaliacao/atualizar" => "AvaliacaoController@atualizarAvaliacao",
+        "/avaliacao/deletar" => "AvaliacaoController@deletarAvaliacao",
         "/avaliacao/deletar-multiplos" => "AvaliacaoController@deletarMultiplos",
         "/enviar-avaliacao" => "AvaliacaoPublicaController@enviarAvaliacaoPublica",
         // contatos
@@ -190,7 +190,7 @@ class Rotas
         "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         //pagamento
         "/pagamento/salvar" => "PagamentoController@salvarPagamento",
-        "/pagamento/atualizar/{id}" => "PagamentoController@atualizarPagamento",
+        "/pagamento/atualizar" => "PagamentoController@atualizarPagamento",
         "/pagamento/deletar" => "PagamentoController@deletarPagamento",
         "/pagamento/deletar-multiplos" => "PagamentoController@deletarMultiplos",
         //orcamento

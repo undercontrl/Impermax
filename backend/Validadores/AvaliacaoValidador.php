@@ -1,21 +1,43 @@
 <?php
 namespace App\Impermax\Validadores;
 
-class AvaliacaoValidador{
-    public static function ValidarEntradas($dados){
+class AvaliacaoValidador
+{
+    /**
+     * Valida entradas do formulário de avaliação
+     */
+    public static function validarEntradas(array $post, bool $isUpdate = false): array
+    {
         $erros = [];
-        if(isset($dados['id_avaliacao']) && empty($dados["id_avaliacao"])){
-            $erros[] = "O campo id avaliação é obrigatório.";
+        
+        // Validar Cliente
+        if (empty($post['id_cliente'])) {
+            $erros[] = "O cliente é obrigatório.";
         }
-        if(isset($dados['descricao_avaliacao']) && empty($dados["descricao_avaliacao"])){
-            $erros[] = "O campo descricao é obrigatório.";
+        
+        // Validar Nota
+        if (empty($post['nota_avaliacao'])) {
+            $erros[] = "A nota é obrigatória.";
+        } elseif (!in_array($post['nota_avaliacao'], ['1', '2', '3', '4', '5'])) {
+            $erros[] = "Nota inválida. Selecione entre 1 e 5 estrelas.";
         }
-        if(isset($dados['nota_avaliacao']) && empty($dados["nota_avaliacao"])){
-            $erros[] = "O campo nota da avaliação é obrigatório.";
+        
+        // Validar Status
+        if (empty($post['status_avaliacao'])) {
+            $erros[] = "O status é obrigatório.";
+        } elseif (!in_array($post['status_avaliacao'], ['publicada', 'pendente', 'oculta'])) {
+            $erros[] = "Status inválido.";
         }
-        if(isset($dados['status_avaliacao']) && empty($dados["status_avaliacao"])){
-            $erros[] = "O campo status da avaliação é obrigatório.";
+        
+        // Validar Descrição
+        if (empty($post['descricao_avaliacao'])) {
+            $erros[] = "A avaliação é obrigatória.";
+        } elseif (strlen($post['descricao_avaliacao']) < 10) {
+            $erros[] = "A avaliação deve ter no mínimo 10 caracteres.";
+        } elseif (strlen($post['descricao_avaliacao']) > 1000) {
+            $erros[] = "A avaliação deve ter no máximo 1000 caracteres.";
         }
+        
         return $erros;
     }
 }

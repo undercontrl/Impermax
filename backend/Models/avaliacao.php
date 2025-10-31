@@ -100,7 +100,27 @@ class Avaliacao{
         }
     }
 
-    public function buscarAvaliacoesComFiltros(array $filtros = []): array{
+    /**
+     * Busca lista de clientes para dropdown
+     */
+    public function getClientes(): array
+    {
+        $sql = "SELECT id_usuario, nome_usuario, email_usuario 
+                FROM tbl_usuario 
+                WHERE excluido_em IS NULL AND tipo_usuario = 'cliente'
+                ORDER BY nome_usuario ASC";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca avaliações com filtros, ordenação e paginação
+     */
+
+    public function buscarAvaliacoesComFiltros(array $filtros = []): array
+    {
         $sql = "SELECT av.*, usu.nome_usuario 
                 FROM tbl_avaliacao AS av
                 INNER JOIN tbl_usuario AS usu ON av.id_cliente = usu.id_usuario
@@ -108,7 +128,7 @@ class Avaliacao{
         
         $params = [];
         
-        // Filtro de busca (nome do cliente ou descrição)
+        // Filtro de busca
         if (!empty($filtros['busca'])) {
             $sql .= " AND (usu.nome_usuario LIKE :busca OR av.descricao_avaliacao LIKE :busca)";
             $params[':busca'] = '%' . $filtros['busca'] . '%';
@@ -132,7 +152,6 @@ class Avaliacao{
             $campo = in_array($filtros['ordem_campo'], $camposPermitidos) ? $filtros['ordem_campo'] : 'av.criado_em';
             $direcao = strtoupper($filtros['ordem_direcao']) === 'ASC' ? 'ASC' : 'DESC';
             
-            // Ajusta o campo se for nome_usuario
             if ($campo === 'nome_usuario') {
                 $campo = 'usu.nome_usuario';
             } elseif (strpos($campo, '.') === false) {
@@ -144,6 +163,53 @@ class Avaliacao{
             $sql .= " ORDER BY av.criado_em DESC";
         }
         
+        // PAGINAÇÃO - 10 por página
+        $itensPorPagina = 10;
+        $paginaAtual = $filtros['pagina'] ?? 1;
+        $offset = ($paginaAtual - 1) * $itensPorPagina;
+        
+        $sql .= " LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->db->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->bindValue(':limit', $itensPorPagina, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Conta total de avaliações com filtros
+     */
+    public function contarAvaliacoesComFiltros(array $filtros = []): int
+    {
+        $sql = "SELECT COUNT(*) as total
+                FROM tbl_avaliacao AS av
+                INNER JOIN tbl_usuario AS usu ON av.id_cliente = usu.id_usuario
+                WHERE av.excluido_em IS NULL";
+        
+        $params = [];
+        
+        if (!empty($filtros['busca'])) {
+            $sql .= " AND (usu.nome_usuario LIKE :busca OR av.descricao_avaliacao LIKE :busca)";
+            $params[':busca'] = '%' . $filtros['busca'] . '%';
+        }
+        
+        if (!empty($filtros['status'])) {
+            $sql .= " AND av.status_avaliacao = :status";
+            $params[':status'] = $filtros['status'];
+        }
+        
+        if (!empty($filtros['nota'])) {
+            $sql .= " AND av.nota_avaliacao = :nota";
+            $params[':nota'] = $filtros['nota'];
+        }
+        
         $stmt = $this->db->prepare($sql);
         
         foreach ($params as $key => $value) {
@@ -151,23 +217,7 @@ class Avaliacao{
         }
         
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    public function contarPorStatus(): array
-    {
-        $sql = "SELECT status_avaliacao, COUNT(*) as total
-                FROM tbl_avaliacao
-                WHERE excluido_em IS NULL
-                GROUP BY status_avaliacao";
-        
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        
-        $resultado = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $resultado[strtolower($row['status_avaliacao'])] = (int)$row['total'];
-        }
-        
-        return $resultado;
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$result['total'];
     }
 }

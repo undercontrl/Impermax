@@ -1,13 +1,13 @@
 <div class="page-wrapper">
-    <!-- Header da Página -->
+    <!-- Header -->
     <div class="page-header">
         <div class="page-header-content">
             <div class="page-title-group">
                 <h1 class="page-title">
-                    <i class="bi bi-star-fill me-2"></i>
+                    <i class="bi bi-plus-circle-fill me-2"></i>
                     Nova Avaliação
                 </h1>
-                <p class="page-subtitle">Cadastre uma nova avaliação de cliente</p>
+                <p class="page-subtitle">Adicione uma nova avaliação de cliente</p>
             </div>
             <a href="/backend/avaliacao/listar" class="btn-action-secondary">
                 <i class="bi bi-arrow-left me-2"></i>
@@ -19,91 +19,120 @@
     <!-- Formulário -->
     <div class="form-card">
         <form action="/backend/avaliacao/salvar" method="POST" id="formAvaliacao">
-            <div class="form-grid">
-                <!-- Cliente -->
-                <div class="form-group">
-                    <label for="id_cliente" class="form-label required">
-                        <i class="bi bi-person-fill me-2"></i>
-                        Cliente
-                    </label>
-                    <select name="id_cliente" id="id_cliente" class="form-control" required>
-                        <option value="">Selecione um cliente</option>
-                        <?php if (!empty($clientes)): ?>
-                            <?php foreach ($clientes as $cliente): ?>
-                                <option value="<?= $cliente['id_usuario'] ?>">
-                                    <?= htmlspecialchars($cliente['nome_usuario']) ?> 
-                                    (<?= htmlspecialchars($cliente['email_usuario']) ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                    <small class="form-hint">Selecione o cliente que fez a avaliação</small>
+            
+            <!-- Seção: Dados da Avaliação -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="bi bi-star-fill"></i>
+                        Dados da Avaliação
+                    </h3>
+                    <p class="section-subtitle">Selecione o cliente e a nota</p>
                 </div>
 
-                <!-- Nota -->
-                <div class="form-group">
-                    <label for="nota_avaliacao" class="form-label required">
-                        <i class="bi bi-star-fill me-2"></i>
-                        Nota
-                    </label>
-                    <div class="rating-input">
-                        <input type="hidden" name="nota_avaliacao" id="nota_avaliacao" value="5" required>
-                        <div class="star-rating" id="starRating">
-                            <i class="bi bi-star-fill star" data-value="1"></i>
-                            <i class="bi bi-star-fill star" data-value="2"></i>
-                            <i class="bi bi-star-fill star" data-value="3"></i>
-                            <i class="bi bi-star-fill star" data-value="4"></i>
-                            <i class="bi bi-star-fill star" data-value="5"></i>
-                        </div>
-                        <span class="rating-text">5 estrelas</span>
+                <div class="form-grid">
+                    <!-- Cliente -->
+                    <div class="form-group">
+                        <label for="id_cliente" class="form-label required">
+                            <i class="bi bi-person-fill"></i>
+                            Cliente
+                        </label>
+                        <select name="id_cliente" id="id_cliente" class="form-select" required>
+                            <option value="">Selecione um cliente</option>
+                            <?php 
+                            if (isset($usuarios) && is_array($usuarios)) {
+                                foreach ($usuarios as $usuario) {
+                                    echo '<option value="' . htmlspecialchars($usuario['id_usuario']) . '">';
+                                    echo htmlspecialchars($usuario['nome_usuario']);
+                                    if (!empty($usuario['email_usuario'])) {
+                                        echo ' - ' . htmlspecialchars($usuario['email_usuario']);
+                                    }
+                                    echo '</option>';
+                                }
+                            } else {
+                                echo '<option value="" disabled>Nenhum cliente disponível</option>';
+                            }
+                            ?>
+                        </select>
+                        <small class="form-hint">Selecione o cliente que fez a avaliação</small>
                     </div>
-                    <small class="form-hint">Clique nas estrelas para avaliar</small>
-                </div>
 
-                <!-- Status -->
-                <div class="form-group">
-                    <label for="status_avaliacao" class="form-label required">
-                        <i class="bi bi-eye-fill me-2"></i>
-                        Status
-                    </label>
-                    <select name="status_avaliacao" id="status_avaliacao" class="form-control" required>
-                        <option value="pendente">Pendente</option>
-                        <option value="publicada" selected>Publicada</option>
-                        <option value="oculta">Oculta</option>
-                    </select>
-                    <small class="form-hint">Status de visibilidade da avaliação</small>
+                    <!-- Nota -->
+                    <div class="form-group">
+                        <label for="nota_avaliacao" class="form-label required">
+                            <i class="bi bi-star-fill"></i>
+                            Nota
+                        </label>
+                        <div class="rating-input">
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <input type="radio" 
+                                       name="nota_avaliacao" 
+                                       id="nota_<?= $i ?>" 
+                                       value="<?= $i ?>" 
+                                       required>
+                                <label for="nota_<?= $i ?>" class="star-label">
+                                    <i class="bi bi-star-fill"></i>
+                                </label>
+                            <?php endfor; ?>
+                        </div>
+                        <div id="nota_texto" class="rating-text"></div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label for="status_avaliacao" class="form-label required">
+                            <i class="bi bi-eye-fill"></i>
+                            Status
+                        </label>
+                        <select name="status_avaliacao" id="status_avaliacao" class="form-select" required>
+                            <option value="">Selecione o status</option>
+                            <option value="publicada">Publicada</option>
+                            <option value="pendente" selected>Pendente</option>
+                            <option value="oculta">Oculta</option>
+                        </select>
+                        <small class="form-hint">Define se a avaliação será exibida publicamente</small>
+                    </div>
                 </div>
             </div>
 
-            <!-- Descrição (largura total) -->
-            <div class="form-group">
-                <label for="descricao_avaliacao" class="form-label required">
-                    <i class="bi bi-chat-left-text-fill me-2"></i>
-                    Descrição da Avaliação
-                </label>
-                <textarea 
-                    name="descricao_avaliacao" 
-                    id="descricao_avaliacao" 
-                    class="form-control" 
-                    rows="6" 
-                    required
-                    placeholder="Digite o comentário da avaliação..."
-                    maxlength="1000"></textarea>
-                <div class="char-counter">
-                    <span id="charCount">0</span>/1000 caracteres
+            <!-- Seção: Descrição -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="bi bi-chat-quote-fill"></i>
+                        Avaliação
+                    </h3>
+                    <p class="section-subtitle">Escreva o comentário do cliente</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao_avaliacao" class="form-label required">
+                        Comentário
+                    </label>
+                    <textarea name="descricao_avaliacao" 
+                              id="descricao_avaliacao" 
+                              class="form-textarea"
+                              rows="6"
+                              placeholder="Escreva aqui o comentário do cliente sobre o serviço..."
+                              required
+                              minlength="10"
+                              maxlength="1000"></textarea>
+                    <div class="char-counter">
+                        <span id="charCount">0</span> / 1000 caracteres
+                    </div>
                 </div>
             </div>
 
             <!-- Botões de Ação -->
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-check-circle me-2"></i>
-                    Salvar Avaliação
-                </button>
-                <a href="/backend/avaliacao/listar" class="btn btn-secondary">
-                    <i class="bi bi-x-circle me-2"></i>
+                <a href="/backend/avaliacao/listar" class="btn-form-cancel">
+                    <i class="bi bi-x-lg"></i>
                     Cancelar
                 </a>
+                <button type="submit" class="btn-form-submit">
+                    <i class="bi bi-check-lg"></i>
+                    Salvar Avaliação
+                </button>
             </div>
         </form>
     </div>
@@ -113,29 +142,19 @@
     :root {
         --cor-primaria: #5f7396;
         --cor-acento: #1487df;
-        --cor-clara: #ffffff;
-        --cor-cinza: #a7a7a7;
-        --cor-fundo: #f4f6f9;
         --cor-success: #22c55e;
-        --cor-warning: #f59e0b;
         --cor-danger: #ef4444;
-        --border-radius: 12px;
-        --spacing-md: 1rem;
-        --spacing-lg: 1.5rem;
-        --spacing-xl: 2rem;
-        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-        --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --cor-warning: #f59e0b;
     }
 
     .page-wrapper {
-        max-width: 900px;
+        max-width: 1200px;
         margin: 0 auto;
+        padding: 2rem 1rem;
     }
 
-    /* ==================== HEADER ==================== */
     .page-header {
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: 2rem;
     }
 
     .page-header-content {
@@ -143,7 +162,7 @@
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: var(--spacing-md);
+        gap: 1rem;
     }
 
     .page-title {
@@ -153,7 +172,6 @@
         margin: 0 0 0.25rem 0;
         display: flex;
         align-items: center;
-        letter-spacing: -0.025em;
     }
 
     .page-title i {
@@ -162,14 +180,14 @@
 
     .page-subtitle {
         font-size: 0.9375rem;
-        color: var(--cor-cinza);
+        color: #64748b;
         margin: 0;
     }
 
     .btn-action-secondary {
         background: white;
         color: #64748b;
-        border: 1.5px solid #e2e8f0;
+        border: 1px solid #e2e8f0;
         border-radius: 10px;
         padding: 0.75rem 1.5rem;
         font-weight: 600;
@@ -177,198 +195,225 @@
         display: inline-flex;
         align-items: center;
         text-decoration: none;
-        transition: var(--transition);
+        transition: all 0.2s;
     }
 
     .btn-action-secondary:hover {
         background: #f8fafc;
         border-color: #cbd5e1;
-        transform: translateY(-2px);
     }
 
-    /* ==================== FORMULÁRIO ==================== */
+    /* Card do Formulário */
     .form-card {
         background: white;
-        border-radius: var(--border-radius);
-        padding: 2rem;
-        box-shadow: var(--shadow-sm);
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         border: 1px solid #f1f5f9;
+        overflow: hidden;
     }
 
+    .form-section {
+        padding: 2rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.375rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-title i {
+        color: var(--cor-acento);
+        font-size: 1.25rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    /* Grid de Formulário */
     .form-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
     }
 
+    /* Form Groups */
     .form-group {
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
     }
 
     .form-label {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #334155;
         display: flex;
         align-items: center;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 0.5rem;
+        gap: 0.5rem;
     }
 
     .form-label.required::after {
-        content: '*';
+        content: "*";
         color: var(--cor-danger);
         margin-left: 0.25rem;
-        font-size: 1rem;
     }
 
-    .form-control {
+    .form-hint {
+        font-size: 0.8125rem;
+        color: #64748b;
+        margin-top: 0.25rem;
+    }
+
+    /* Select e Input */
+    .form-select {
         width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1.5px solid #e2e8f0;
+        padding: 0.875rem;
+        border: 1px solid #e2e8f0;
         border-radius: 10px;
         font-size: 0.9375rem;
-        transition: var(--transition);
         background: white;
+        cursor: pointer;
+        transition: all 0.2s;
     }
 
-    .form-control:focus {
+    .form-select:focus {
         outline: none;
         border-color: var(--cor-acento);
         box-shadow: 0 0 0 3px rgba(20, 135, 223, 0.1);
     }
 
-    .form-control:disabled {
-        background: #f8fafc;
-        color: #94a3b8;
-        cursor: not-allowed;
-    }
-
-    textarea.form-control {
-        resize: vertical;
-        min-height: 120px;
-        font-family: inherit;
-    }
-
-    .form-hint {
-        display: block;
-        margin-top: 0.5rem;
-        font-size: 0.8125rem;
-        color: #64748b;
-    }
-
-    /* ==================== RATING INPUT ==================== */
+    /* Rating Input */
     .rating-input {
         display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background: #f8fafc;
-        border-radius: 10px;
-        border: 1.5px solid #e2e8f0;
-    }
-
-    .star-rating {
-        display: flex;
         gap: 0.5rem;
+        align-items: center;
+        padding: 0.5rem 0;
     }
 
-    .star {
-        font-size: 1rem;
-        color: #e2e8f0;
+    .rating-input input[type="radio"] {
+        display: none;
+    }
+
+    .star-label {
         cursor: pointer;
-        transition: var(--transition);
+        font-size: 2rem;
+        color: #e2e8f0;
+        transition: all 0.2s;
     }
 
-    .star:hover,
-    .star.active {
+    .rating-input input[type="radio"]:checked ~ .star-label,
+    .rating-input .star-label:hover,
+    .rating-input .star-label:hover ~ .star-label {
         color: #fbbf24;
         transform: scale(1.1);
     }
 
-    .star.active {
-        animation: starPop 0.3s ease;
-    }
-
-    @keyframes starPop {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.2); }
+    .rating-input input[type="radio"]:checked + .star-label {
+        color: #fbbf24;
     }
 
     .rating-text {
-        font-weight: 600;
-        color: #1e293b;
         font-size: 0.9375rem;
+        font-weight: 600;
+        color: #334155;
+        margin-top: 0.5rem;
+        min-height: 1.5rem;
     }
 
-    /* ==================== CONTADOR DE CARACTERES ==================== */
+    /* Textarea */
+    .form-textarea {
+        width: 100%;
+        padding: 0.875rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 0.9375rem;
+        font-family: inherit;
+        resize: vertical;
+        transition: all 0.2s;
+    }
+
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--cor-acento);
+        box-shadow: 0 0 0 3px rgba(20, 135, 223, 0.1);
+    }
+
     .char-counter {
-        text-align: right;
         font-size: 0.8125rem;
         color: #64748b;
-        margin-top: 0.5rem;
+        text-align: right;
     }
 
-    .char-counter.warning {
-        color: var(--cor-warning);
-    }
-
-    .char-counter.danger {
-        color: var(--cor-danger);
-    }
-
-    /* ==================== BOTÕES ==================== */
+    /* Ações do Formulário */
     .form-actions {
+        padding: 1.5rem 2rem;
+        background: #f8fafc;
         display: flex;
+        justify-content: flex-end;
         gap: 1rem;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid #f1f5f9;
     }
 
-    .btn {
-        padding: 0.875rem 2rem;
+    .btn-form-cancel {
+        padding: 0.75rem 1.5rem;
+        border: 1px solid #e2e8f0;
         border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.9375rem;
-        border: none;
-        cursor: pointer;
-        transition: var(--transition);
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
-        justify-content: center;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, var(--cor-acento), #0e6eb8);
-        color: white;
-        box-shadow: 0 4px 12px rgba(20, 135, 223, 0.3);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
-    }
-
-    .btn-secondary {
         background: white;
         color: #64748b;
-        border: 1.5px solid #e2e8f0;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
     }
 
-    .btn-secondary:hover {
+    .btn-form-cancel:hover {
         background: #f8fafc;
         border-color: #cbd5e1;
     }
 
-    /* ==================== RESPONSIVIDADE ==================== */
-    @media (max-width: 768px) {
-        .form-card {
-            padding: 1.5rem;
-        }
+    .btn-form-submit {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--cor-acento), #0e6eb8);
+        color: white;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(20, 135, 223, 0.3);
+    }
 
+    .btn-form-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
         .form-grid {
             grid-template-columns: 1fr;
         }
@@ -387,122 +432,119 @@
             flex-direction: column;
         }
 
-        .btn {
+        .btn-form-cancel,
+        .btn-form-submit {
             width: 100%;
-        }
-
-        .rating-input {
-            flex-direction: column;
-            align-items: flex-start;
+            justify-content: center;
         }
     }
 </style>
 
 <script>
-// ==================== RATING STARS ====================
-document.addEventListener('DOMContentLoaded', function() {
-    const stars = document.querySelectorAll('.star');
-    const ratingInput = document.getElementById('nota_avaliacao');
-    const ratingText = document.querySelector('.rating-text');
-    
-    // Define nota inicial como 5
-    updateStars(5);
-    
-    stars.forEach(star => {
-        star.addEventListener('click', function() {
-            const value = parseInt(this.dataset.value);
-            ratingInput.value = value;
-            updateStars(value);
-            
-            // Atualiza texto
-            const textos = {
-                1: '1 estrela - Muito ruim',
-                2: '2 estrelas - Ruim',
-                3: '3 estrelas - Regular',
-                4: '4 estrelas - Bom',
-                5: '5 estrelas - Excelente'
-            };
-            ratingText.textContent = textos[value];
-        });
+// Sistema de Rating Interativo
+document.querySelectorAll('.rating-input input[type="radio"]').forEach((radio, index) => {
+    radio.addEventListener('change', function() {
+        const nota = this.value;
+        const textos = {
+            1: '⭐ Muito Ruim',
+            2: '⭐⭐ Ruim',
+            3: '⭐⭐⭐ Regular',
+            4: '⭐⭐⭐⭐ Bom',
+            5: '⭐⭐⭐⭐⭐ Excelente'
+        };
+        document.getElementById('nota_texto').textContent = textos[nota];
         
-        // Efeito hover
-        star.addEventListener('mouseenter', function() {
-            const value = parseInt(this.dataset.value);
-            stars.forEach((s, index) => {
-                if (index < value) {
-                    s.style.color = '#fbbf24';
-                } else {
-                    s.style.color = '#e2e8f0';
-                }
-            });
+        // Marcar todas as estrelas anteriores
+        document.querySelectorAll('.star-label').forEach((label, i) => {
+            if (i < nota) {
+                label.style.color = '#fbbf24';
+            } else {
+                label.style.color = '#e2e8f0';
+            }
+        });
+    });
+});
+
+// Efeito hover nas estrelas
+document.querySelectorAll('.star-label').forEach((label, index) => {
+    label.addEventListener('mouseenter', function() {
+        document.querySelectorAll('.star-label').forEach((l, i) => {
+            if (i <= index) {
+                l.style.color = '#fbbf24';
+            } else {
+                l.style.color = '#e2e8f0';
+            }
         });
     });
     
-    // Restaura estrelas ao sair
-    document.querySelector('.star-rating').addEventListener('mouseleave', function() {
-        const currentValue = parseInt(ratingInput.value);
-        updateStars(currentValue);
+    label.addEventListener('mouseleave', function() {
+        const checkedRadio = document.querySelector('.rating-input input[type="radio"]:checked');
+        const checkedValue = checkedRadio ? checkedRadio.value : 0;
+        
+        document.querySelectorAll('.star-label').forEach((l, i) => {
+            if (i < checkedValue) {
+                l.style.color = '#fbbf24';
+            } else {
+                l.style.color = '#e2e8f0';
+            }
+        });
     });
+});
+
+// Contador de Caracteres
+document.getElementById('descricao_avaliacao').addEventListener('input', function() {
+    const count = this.value.length;
+    document.getElementById('charCount').textContent = count;
     
-    function updateStars(value) {
-        stars.forEach((star, index) => {
-            if (index < value) {
-                star.classList.add('active');
-            } else {
-                star.classList.remove('active');
-            }
-        });
+    if (count > 1000) {
+        document.getElementById('charCount').style.color = 'var(--cor-danger)';
+    } else if (count > 800) {
+        document.getElementById('charCount').style.color = 'var(--cor-warning)';
+    } else {
+        document.getElementById('charCount').style.color = '#64748b';
     }
 });
 
-// ==================== CONTADOR DE CARACTERES ====================
-document.addEventListener('DOMContentLoaded', function() {
-    const textarea = document.getElementById('descricao_avaliacao');
-    const charCount = document.getElementById('charCount');
-    const counter = document.querySelector('.char-counter');
-    
-    if (textarea && charCount) {
-        textarea.addEventListener('input', function() {
-            const length = this.value.length;
-            charCount.textContent = length;
-            
-            // Muda cor baseado no limite
-            if (length > 900) {
-                counter.classList.add('danger');
-                counter.classList.remove('warning');
-            } else if (length > 800) {
-                counter.classList.add('warning');
-                counter.classList.remove('danger');
-            } else {
-                counter.classList.remove('warning', 'danger');
-            }
-        });
-    }
-});
-
-// ==================== VALIDAÇÃO DO FORMULÁRIO ====================
+// Validação antes de enviar
 document.getElementById('formAvaliacao').addEventListener('submit', function(e) {
-    const idCliente = document.getElementById('id_cliente').value;
-    const descricao = document.getElementById('descricao_avaliacao').value.trim();
-    const nota = document.getElementById('nota_avaliacao').value;
+    const cliente = document.getElementById('id_cliente').value;
+    const nota = document.querySelector('.rating-input input[type="radio"]:checked');
+    const status = document.getElementById('status_avaliacao').value;
+    const descricao = document.getElementById('descricao_avaliacao').value;
     
-    let erros = [];
-    
-    if (!idCliente) {
-        erros.push('Selecione um cliente');
-    }
-    
-    if (!descricao || descricao.length < 10) {
-        erros.push('A descrição deve ter no mínimo 10 caracteres');
-    }
-    
-    if (!nota || nota < 1 || nota > 5) {
-        erros.push('Selecione uma nota válida (1 a 5 estrelas)');
-    }
-    
-    if (erros.length > 0) {
+    if (!cliente) {
         e.preventDefault();
-        alert('Erros encontrados:\n\n' + erros.join('\n'));
+        alert('Por favor, selecione um cliente.');
+        return false;
     }
+    
+    if (!nota) {
+        e.preventDefault();
+        alert('Por favor, selecione uma nota.');
+        return false;
+    }
+    
+    if (!status) {
+        e.preventDefault();
+        alert('Por favor, selecione o status.');
+        return false;
+    }
+    
+    if (descricao.length < 10) {
+        e.preventDefault();
+        alert('A avaliação deve ter no mínimo 10 caracteres.');
+        return false;
+    }
+    
+    if (descricao.length > 1000) {
+        e.preventDefault();
+        alert('A avaliação deve ter no máximo 1000 caracteres.');
+        return false;
+    }
+    
+    // Mostrar loading
+    const btnSubmit = this.querySelector('.btn-form-submit');
+    btnSubmit.innerHTML = '<i class="bi bi-hourglass-split"></i> Salvando...';
+    btnSubmit.disabled = true;
 });
 </script>
