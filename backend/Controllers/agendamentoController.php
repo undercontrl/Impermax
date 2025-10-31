@@ -10,7 +10,7 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AgendamentoValidador;
 
-class AgendamentoController extends AdminController
+class AgendamentoController
 {
     private $agendamento;
     private $usuario;
@@ -18,7 +18,6 @@ class AgendamentoController extends AdminController
 
     public function __construct()
     {
-        parent::__construct();
         $this->db = Database::getInstance();
         $this->agendamento = new Agendamento($this->db);
         $this->usuario = new Usuario($this->db);

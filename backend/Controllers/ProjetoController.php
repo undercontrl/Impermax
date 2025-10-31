@@ -9,7 +9,7 @@ use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ProjetoValidador;
 use App\Impermax\Core\FileManager;
 
-class ProjetoController extends AdminController
+class ProjetoController
 {
     private $projeto;
     private $db;
@@ -17,7 +17,6 @@ class ProjetoController extends AdminController
 
     public function __construct()
     {
-        parent::__construct();
         $this->db = Database::getInstance();
         $this->projeto = new Projeto($this->db);
         // CORREÇÃO: Caminho correto para o diretório de uploads

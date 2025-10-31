@@ -8,7 +8,7 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 
-class ContatoController extends AdminController
+class ContatoController
 {
     private $contato;
     private $usuario;
@@ -16,7 +16,6 @@ class ContatoController extends AdminController
 
     public function __construct()
     {
-        parent::__construct();
         $this->db = Database::getInstance();
         $this->contato = new Contato($this->db);
         $this->usuario = new Usuario($this->db);

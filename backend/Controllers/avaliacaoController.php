@@ -8,14 +8,13 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AvaliacaoValidador;
 
-class AvaliacaoController extends AdminController
+class AvaliacaoController
 {
     private $avaliacao;
     private $db;
 
     public function __construct()
     {
-        parent::__construct();
         $this->db = Database::getInstance();
         $this->avaliacao = new Avaliacao($this->db);
     }

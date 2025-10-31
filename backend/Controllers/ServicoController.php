@@ -8,11 +8,10 @@ use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ServicoValidador;
 use App\Impermax\Controllers\Admin\AdminController;
 
-class ServicoController extends AdminController {
+class ServicoController {
     private $servico;
 
     public function __construct() {
-        parent::__construct();
         $db = Database::getInstance();
         $this->servico = new Servico($db);
     }
