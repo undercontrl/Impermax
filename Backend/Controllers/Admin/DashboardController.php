@@ -16,7 +16,7 @@ class DashboardController extends AuthenticatedController {
     private $contato;
 
     public function __construct() {
-        parent::__construct();
+        parent::__construct(['admin']); // garante acesso só ao admin
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
         $this->agendamento = new Agendamento($this->db);
@@ -25,18 +25,134 @@ class DashboardController extends AuthenticatedController {
     }
 
     public function index(): void {
-        $usuarios = $this->usuario->buscarUsuarios() ?? [];
-        $totalAgendamentos = count($this->agendamento->buscarAgendamentos() ?? []);
-        $totalOrcamentos = method_exists($this->orcamento, 'buscarOrcamentos') ? count($this->orcamento->buscarOrcamentos()) : 0;
-        $totalContatos = count($this->contato->buscarContatos() ?? []);
+        // Dados para o dashboard
+        $periodo = $_GET['periodo'] ?? 'mes';
+        $dataFim = date('Y-m-d 23:59:59');
+        
+        switch ($periodo) {
+            case '3meses':
+                $dataInicio = date('Y-m-d 00:00:00', strtotime('-3 months'));
+                $periodoTexto = 'Últimos 3 Meses';
+                break;
+            case 'ano':
+                $dataInicio = date('Y-m-d 00:00:00', strtotime('-1 year'));
+                $periodoTexto = 'Último Ano';
+                break;
+            default:
+                $dataInicio = date('Y-m-d 00:00:00', strtotime('-1 month'));
+                $periodoTexto = 'Último Mês';
+                $periodo = 'mes';
+                break;
+        }
 
+        // Buscar dados
+        $usuarios = $this->usuario->buscarUsuarios() ?? [];
+        $totalAgendamentos = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
+        $totalOrcamentos = $this->orcamento->contarPorPeriodo($dataInicio, $dataFim);
+        $totalContatos = $this->contato->contarPorPeriodo($dataInicio, $dataFim);
+
+        // Estatísticas
+        $estatisticas = $this->calcularEstatisticas($dataInicio, $dataFim, $periodo);
+
+        // Gráficos
+        $graficoTendencia = $this->prepararGraficoTendencia();
+        $graficoStatusAdmin = $this->agendamento->buscarDistribuicaoPorStatus($dataInicio, $dataFim);
+
+        // Atividades
+        $atividadesRecentes = $this->buscarAtividadesRecentes();
+
+        // Renderizar
         View::render('admin/dashboard/index', [
-            'nomeUsuario' => $this->session->get('usuario_nome'),
-            'tipo' => $this->session->get('usuario_tipo'),
-            'usuarios' => $usuarios,
-            'totalAgendamentos' => $totalAgendamentos,
-            'totalOrcamentos' => $totalOrcamentos,
-            'totalContatos' => $totalContatos
-        ]);
+                'nomeUsuario' => $this->session->get('usuario_nome') ?? 'Admin',
+                'tipo' => $this->session->get('usuario_tipo') ?? 'admin',
+                'usuarios' => $usuarios,
+                'totalUsuarios' => count($usuarios),
+                'totalAgendamentos' => $totalAgendamentos,
+                'totalOrcamentos' => $totalOrcamentos,
+                'totalContatos' => $totalContatos,
+                'periodo' => $periodo,
+                'periodoTexto' => $periodoTexto,
+                'dataInicio' => date('d/m/Y', strtotime($dataInicio)),
+                'dataFim' => date('d/m/Y', strtotime($dataFim)),
+                'estatisticas' => $estatisticas,
+                'graficoTendencia' => json_encode($graficoTendencia),
+                'graficoStatusAdmin' => json_encode($graficoStatusAdmin),
+                'atividadesRecentes' => $atividadesRecentes
+            ]);
+        }
+
+    // Exemplo de função para calcular estatísticas
+    private function calcularEstatisticas($dataInicio, $dataFim, $periodo) {
+        // Você deve definir como obter $atual e $anterior
+        $atual = $this->agendamento->contarPorPeriodo($dataInicio, $dataFim);
+        // Exemplo: calcula $anterior com base no período
+        switch ($periodo) {
+            case '3meses':
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-6 months'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-3 months'));
+                break;
+            case 'ano':
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 year'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 year'));
+                break;
+            default:
+                $dataInicioAnterior = date('Y-m-d 00:00:00', strtotime('-2 month'));
+                $dataFimAnterior = date('Y-m-d 23:59:59', strtotime('-1 month'));
+                break;
+        }
+        $anterior = $this->agendamento->contarPorPeriodo($dataInicioAnterior, $dataFimAnterior);
+
+        // Calcula diferença e percentual
+        $diferenca = $atual - $anterior;
+        $percentual = $anterior != 0 ? round(($diferenca / $anterior) * 100, 1) : 0;
+        
+        // Define tendência (up/down/neutral)
+        if ($diferenca > 0) {
+            $tendencia = 'up';
+        } elseif ($diferenca < 0) {
+            $tendencia = 'down';
+        } else {
+            $tendencia = 'neutral';
+        }
+
+        return [
+            'percentual' => abs($percentual),
+            'diferenca' => abs($diferenca),
+            'tendencia' => $tendencia
+        ];
+    }
+
+    // Adiciona o método prepararGraficoTendencia
+    private function prepararGraficoTendencia(): array
+    {
+        $dados = [];
+        
+        // Últimos 6 meses
+        for ($i = 5; $i >= 0; $i--) {
+            $dataFim = date('Y-m-d 23:59:59', strtotime("-{$i} months"));
+            $dataInicio = date('Y-m-01 00:00:00', strtotime("-{$i} months"));
+            
+            // Formatar mês em português
+            $meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            $mesNum = (int)date('n', strtotime($dataInicio)) - 1;
+            $mes = $meses[$mesNum];
+
+            $dados[] = [
+                'mes' => $mes,
+                'agendamentos' => (int)$this->agendamento->contarPorPeriodo($dataInicio, $dataFim),
+                'orcamentos' => (int)$this->orcamento->contarPorPeriodo($dataInicio, $dataFim),
+                'contatos' => (int)$this->contato->contarPorPeriodo($dataInicio, $dataFim)
+            ];
+        }
+
+        return $dados;
+    }
+
+    // Implementa o método buscarAtividadesRecentes
+    private function buscarAtividadesRecentes() {
+        // Exemplo: busca os últimos 10 agendamentos
+        $atividades = $this->agendamento->buscarRecentes(10);
+        // Se necessário, pode adicionar outros tipos de atividades
+        return $atividades;
     }
 }

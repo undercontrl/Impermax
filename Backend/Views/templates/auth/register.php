@@ -105,7 +105,7 @@
 
 <body>
   <div class="register-card">
-    <img src="/assets/logo/impermax-LOGO.svg" alt="Impermax" />
+    <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax" />
     <h3>Criar Nova Conta</h3>
 
     <?php
