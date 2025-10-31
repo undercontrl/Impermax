@@ -715,7 +715,7 @@ if (in_array($currentPath, $rotasPublicas)) {
     <!-- Menu lateral -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <a href="index.php">
+            <a href="/../../index.php">
                 <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
             </a>
         </div>
