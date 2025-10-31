@@ -50,9 +50,11 @@ class Rotas
         "/contato/editar/{id}" => "ContatoController@viewEditarContato",
         "/contato/excluir/{id}" => "ContatoController@viewExcluirContato",
         "/contato/{id}/relatorio/{dataInicial}/{dataFinal}" => "ContatoController@relatorioContato",
+        "/endereco/buscar-cep" => "EnderecoController@buscarCep",
         // enderecos
         "/enderecos" => "EnderecoController@index",
         "/endereco/listar" => "EnderecoController@viewListarEnderecos",
+        "/endereco/visualizar/{id}" => "EnderecoController@viewVisualizarEndereco",
         "/endereco/criar" => "EnderecoController@viewCriarEndereco",
         "/endereco/editar/{id}" => "EnderecoController@viewEditarEndereco",
         "/endereco/excluir/{id}" => "EnderecoController@viewExcluirEndereco",
@@ -142,6 +144,7 @@ class Rotas
         "/endereco/salvar" => "EnderecoController@salvarEndereco",
         "/endereco/atualizar/{id}" => "EnderecoController@atualizarEndereco",
         "/endereco/deletar/{id}" => "EnderecoController@deletarEndereco",
+        "/endereco/excluir-massa" => "EnderecoController@excluirEmMassa",
         // itens de agendamento
         "/item_agendamento/salvar" => "ItemAgendamentoController@salvarItemAgendamento",
         "/item_agendamento/atualizar/{id}" => "ItemAgendamentoController@atualizarItemAgendamento",

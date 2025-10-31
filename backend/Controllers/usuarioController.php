@@ -137,6 +137,26 @@ class UsuarioController extends AdminController
             Redirect::redirecionarComMensagem("usuario/listar", "error", "Erro ao excluir!");
         }
     }
+    public function alterarStatus($id)
+    {
+        $novoStatus = $_POST['novo_status'] ?? 'Ativo';
+        
+        $ok = $this->usuario->alterarStatusUsuario($id, $novoStatus);
+        
+        if ($ok) {
+            Redirect::redirecionarComMensagem(
+                "usuario/visualizar/{$id}", 
+                "success", 
+                "Status alterado com sucesso!"
+            );
+        } else {
+            Redirect::redirecionarComMensagem(
+                "usuario/visualizar/{$id}", 
+                "error", 
+                "Erro ao alterar status!"
+            );
+        }
+    }
 
     // ========== CRUD ORIGINAL ==========
     public function index()

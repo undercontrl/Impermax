@@ -1122,6 +1122,7 @@
         font-weight: 600;
         letter-spacing: 0.025em;
         white-space: nowrap;
+        margin-top: 20px;
     }
 
     .status-realizada {

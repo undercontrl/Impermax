@@ -241,6 +241,21 @@ class Usuario{
         return (int)$resultado['total'];
     }
 
+    public function alterarStatusUsuario(int $id, string $novoStatus): bool
+    {
+        $sql = "UPDATE tbl_usuario 
+                SET status_usuario = :status, 
+                    atualizado_em = NOW() 
+                WHERE id_usuario = :id 
+                AND excluido_em IS NULL";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':status', $novoStatus);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        
+        return $stmt->execute();
+    }
+
     /**
      * Calcula estatísticas (cards no topo)
      */
