@@ -1,3 +1,14 @@
+<?php
+require __DIR__.'/vendor/autoload.php';
+use App\Impermax\Core\CSRF;
+use App\Impermax\Core\Session;
+session_start();
+$codigoToken = CSRF::generate();
+$secao= new Session();
+$secao->set('csrf_token', $codigoToken);
+?>
+ 
+ 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -92,20 +103,26 @@
         <div class="bloco-contato">
                 <div id="caixa-orcamento2">
                     <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                    <form id="form-contato3">
-                        <input type="text" name="nome" placeholder="Nome" required id="nome3">
-                        <input type="tel" name="telefone" placeholder="Telefone" required id="telefone3">
-                        <input type="email" name="email" placeholder="E-mail" required id="email3">
-                        <select name="servico" required id="servico3">
-                            <option value="">Escolha o tipo de serviço solicitado</option>
+                    <form action="backend/enviar-contato" method="POST" id="form-contato-topo4">
+                        <!-- CSRF TOKEN -->
+                        <input type="hidden" name="csrf_token" value="<?= $codigoToken; ?>">
+ 
+                        <!-- HONEYPOT (escondido) -->
+                        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+ 
+                        <input type="text" name="nome" placeholder="Nome" required>
+                        <input type="tel" name="telefone" placeholder="Telefone" required>
+                        <input type="email" name="email" placeholder="E-mail" required>
+                        <select name="servico" required>
+                            <option value="">Escolha o tipo de serviço</option>
                             <option value="residencial">Impermeabilização Residencial</option>
                             <option value="comercial">Impermeabilização Comercial</option>
                             <option value="telhado">Impermeabilização de Telhado</option>
                             <option value="laje">Impermeabilização de Laje</option>
                         </select>
                         <button type="submit">Enviar solicitação de orçamento</button>
-                    </form>
-                    <div id="status-mensagem3"></div>
+                        </form>
+                    <div id="mensagem-flash-topo4"></div>
                 </div>
                 <div class="whatsapp-contato">
                     <h2>Prefere falar direto pelo WhatsApp?</h2>
@@ -135,6 +152,6 @@
     </footer>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="js/script-form.js"></script>
+    <script src="js/formulario.js"></script>
 </body>
 </html>
