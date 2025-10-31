@@ -18,83 +18,96 @@ class Servico{
         $this->db = $db;
     }
 
-    // Buscar todos os serviços ativos
-    public function buscarServicos()
-    {
-        $sql = "SELECT * FROM tbl_servico WHERE excluido_em IS NULL";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // Lista serviços para uso interno (sem foto, foco em valor)
+public function listarInternos($pagina = 1, $porPagina = 10) {
+    $offset = ($pagina - 1) * $porPagina;
 
-    // Buscar um serviço por ID
-    public function buscarServicoPorID(int $id)
-    {
-        $sql = "SELECT * FROM tbl_servico WHERE id_servico = :id AND excluido_em IS NULL";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+    // REMOVA qualquer filtro de status_servico aqui!
+    $sql = "SELECT id_servico, nome_servico, descricao_servico, valor_base_servico
+            FROM tbl_servico 
+            WHERE excluido_em IS NULL
+            ORDER BY id_servico ASC
+            LIMIT :offset, :porPagina";
 
-    // Buscar por nome
-    public function buscarServicosPorNome($nome)
-    {
-        $sql = "SELECT * FROM tbl_servico WHERE nome_servico LIKE :nome AND excluido_em IS NULL";
-        $stmt = $this->db->prepare($sql);
-        $nome = "%{$nome}%";
-        $stmt->bindParam(':nome', $nome);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+    $stmt->execute();
+    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Inserir novo serviço
-    public function inserirServico($nome, $descricao, $valor, $foto_servico, $status)
-    {
-        $sql = "INSERT INTO tbl_servico (nome_servico, descricao_servico, valor_base_servico, foto_servico, status_servico)
-                VALUES (:nome, :descricao, :valor, :foto, :status)";
+    $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_servico WHERE excluido_em IS NULL");
+    $total = $totalStmt->fetchColumn();
+    $totalPaginas = ceil($total / $porPagina);
+
+    return [
+        'data' => $dados,
+        'total' => (int)$total,
+        'por_pagina' => (int)$porPagina,
+        'pagina_atual' => (int)$pagina,
+        'total_paginas' => (int)$totalPaginas
+    ];
+}
+
+// Exclusão interna (soft delete)
+public function deletarServicoInterno($id) {
+    $dataExclusao = date('Y-m-d H:i:s');
+    $sql = "UPDATE tbl_servico 
+            SET excluido_em = :excluido_em, status_servico = 'Inativo'
+            WHERE id_servico = :id AND excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':excluido_em', $dataExclusao);
+    return $stmt->execute();
+}
+
+// Busca por nome (para interno)
+public function buscarServicosPorNome($nome) {
+    $sql = "SELECT id_servico, nome_servico, descricao_servico, valor_base_servico
+            FROM tbl_servico 
+            WHERE nome_servico LIKE :nome AND excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $nome = "%{$nome}%";
+    $stmt->bindParam(':nome', $nome);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
+// === CRUD (mantém os existentes, mas ajusta inserção) ===
+public function inserirServico($nome, $descricao, $valor) {
+        $sql = "INSERT INTO tbl_servico 
+                (nome_servico, descricao_servico, valor_base_servico, status_servico)
+                VALUES (:nome, :descricao, :valor, 'Inativo')";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);
-        $stmt->bindParam(':foto', $foto_servico);
-        $stmt->bindParam(':status', $status);
         return $stmt->execute();
     }
 
-    // Atualizar serviço existente
-    public function atualizaServico($id, $nome, $descricao, $valor, $foto_servico, $status)
-    {
-        $dataAtual = date('Y-m-d H:i:s');
+public function atualizarServico($id, $nome, $descricao, $valor) {
         $sql = "UPDATE tbl_servico 
                 SET nome_servico = :nome,
                     descricao_servico = :descricao,
                     valor_base_servico = :valor,
-                    foto_servico = :foto,
-                    status_servico = :status,
-                    atualizado_em = :atualizado
-                WHERE id_servico = :id";
+                    atualizado_em = NOW()
+                WHERE id_servico = :id AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);
-        $stmt->bindParam(':foto', $foto_servico);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':atualizado', $dataAtual);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
 
-    // Marcar serviço como excluído
-    public function excluirServico($id)
-    {
-        $dataAtual = date('Y-m-d H:i:s');
-        $sql = "UPDATE tbl_servico 
-                SET excluido_em = :excluido 
-                WHERE id_servico = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':excluido', $dataAtual);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
-    }
+
+// Buscar um serviço (mantém)
+public function buscarServicoPorID(int $id) {
+    $sql = "SELECT * FROM tbl_servico WHERE id_servico = :id AND excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 }

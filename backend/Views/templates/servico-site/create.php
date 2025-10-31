@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/backend/dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="/backend/servico/listar">Serviços Internos</a></li>
+            <li class="breadcrumb-item"><a href="/backend/servico-site/listar">Serviços do Site</a></li>
             <li class="breadcrumb-item active" aria-current="page">Novo Serviço</li>
         </ol>
     </nav>
@@ -14,20 +14,20 @@
             <div class="page-title-group">
                 <h1 class="page-title">
                     <i class="bi bi-plus-circle-fill me-2"></i>
-                    Novo Serviço Interno
+                    Novo Serviço para o Site
                 </h1>
-                <p class="page-subtitle">Cadastre um novo serviço com nome, descrição e valor base</p>
+                <p class="page-subtitle">Adicione um serviço com foto para exibição no site público</p>
             </div>
         </div>
     </div>
 
     <!-- Formulário -->
     <div class="form-card">
-        <form action="/backend/servico/salvar" method="POST" id="formServico">
+        <form action="/backend/servico-site/salvar" method="POST" enctype="multipart/form-data" id="formServicoSite">
             
             <div class="form-section">
                 <h3 class="section-title">
-                    <i class="bi bi-tools"></i>
+                    <i class="bi bi-globe"></i>
                     Informações do Serviço
                 </h3>
                 
@@ -42,12 +42,12 @@
                                    id="nome_servico" 
                                    name="nome_servico" 
                                    class="form-control" 
-                                   placeholder="Ex: Instalação Elétrica Residencial"
+                                   placeholder="Ex: Impermeabilização de Laje"
                                    minlength="3"
                                    maxlength="255"
                                    required>
                         </div>
-                        <small class="form-hint">Nome que identificará o serviço internamente</small>
+                        <small class="form-hint">Nome que será exibido no site para os visitantes</small>
                     </div>
 
                     <div class="form-group full-width">
@@ -59,8 +59,8 @@
                             <textarea id="descricao_servico" 
                                       name="descricao_servico" 
                                       class="form-control form-textarea" 
-                                      rows="5"
-                                      placeholder="Descreva os detalhes do serviço, o que está incluído, materiais utilizados, etc..."
+                                      rows="6"
+                                      placeholder="Descreva o serviço de forma atrativa para os visitantes do site. Destaque os benefícios e diferenciais..."
                                       minlength="10"
                                       maxlength="1000"
                                       required></textarea>
@@ -69,21 +69,44 @@
                             <span id="char-count">0</span>/1000 caracteres
                         </small>
                     </div>
+                </div>
+            </div>
 
-                    <div class="form-group full-width">
-                        <label for="valor_base_servico" class="form-label">
-                            Valor Base do Serviço <span class="required">*</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <i class="bi bi-cash-coin input-icon"></i>
-                            <input type="text" 
-                                   id="valor_base_servico" 
-                                   name="valor_base_servico" 
-                                   class="form-control" 
-                                   placeholder="R$ 0,00"
-                                   required>
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="bi bi-image"></i>
+                    Imagem do Serviço
+                </h3>
+                
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" 
+                           id="foto_servico" 
+                           name="foto_servico" 
+                           class="file-input" 
+                           accept="image/jpeg,image/png,image/webp"
+                           required>
+                    
+                    <div class="upload-content" id="uploadContent">
+                        <div class="upload-icon">
+                            <i class="bi bi-cloud-arrow-up"></i>
                         </div>
-                        <small class="form-hint">Valor base usado como referência para orçamentos</small>
+                        <div class="upload-text">
+                            <strong>Clique para selecionar</strong> ou arraste a imagem aqui
+                        </div>
+                        <div class="upload-info">
+                            JPG, PNG ou WEBP • Máximo 5MB • Tamanho ideal: 800x600px
+                        </div>
+                    </div>
+
+                    <!-- Preview da imagem -->
+                    <div class="preview-container" id="previewContainer" style="display: none;">
+                        <img id="imagePreview" src="" alt="Preview">
+                        <div class="preview-overlay">
+                            <button type="button" class="btn-change-image" onclick="document.getElementById('foto_servico').click()">
+                                <i class="bi bi-pencil"></i>
+                                Alterar Imagem
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,20 +117,21 @@
                     <i class="bi bi-info-circle-fill"></i>
                 </div>
                 <div class="info-content">
-                    <strong>Dica:</strong> Este serviço será usado apenas internamente para gestão e controle de valores. 
-                    Para exibir serviços no site, use a seção "Serviços do Site".
+                    <strong>Dica:</strong> Use imagens de alta qualidade e que representem bem o serviço. 
+                    A imagem será redimensionada automaticamente para o tamanho ideal. 
+                    O serviço será criado como <strong>Inativo</strong> por padrão - você pode ativá-lo depois na listagem.
                 </div>
             </div>
 
             <!-- Botões de Ação -->
             <div class="form-actions">
-                <a href="/backend/servico/listar" class="btn-secondary">
+                <a href="/backend/servico-site/listar" class="btn-secondary">
                     <i class="bi bi-arrow-left"></i>
                     Voltar
                 </a>
                 <button type="submit" class="btn-primary">
                     <i class="bi bi-check-lg"></i>
-                    Cadastrar Serviço
+                    Criar Serviço
                 </button>
             </div>
         </form>
@@ -283,7 +307,7 @@
     }
 
     .form-textarea {
-        min-height: 120px;
+        min-height: 150px;
         resize: vertical;
         line-height: 1.6;
     }
@@ -298,6 +322,118 @@
         font-size: 0.8125rem;
         color: #94a3b8;
         margin-top: 0.375rem;
+    }
+
+    /* Upload Area */
+    .upload-area {
+        position: relative;
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+        background: #f8fafc;
+    }
+
+    .upload-area:hover {
+        border-color: var(--cor-acento);
+        background: #eff6ff;
+    }
+
+    .upload-area.dragover {
+        border-color: var(--cor-acento);
+        background: #eff6ff;
+        transform: scale(1.02);
+    }
+
+    .file-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-content {
+        pointer-events: none;
+    }
+
+    .upload-icon {
+        font-size: 4rem;
+        color: var(--cor-acento);
+        margin-bottom: 1rem;
+    }
+
+    .upload-text {
+        font-size: 1rem;
+        color: #334155;
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-text strong {
+        color: var(--cor-acento);
+    }
+
+    .upload-info {
+        font-size: 0.8125rem;
+        color: #94a3b8;
+    }
+
+    /* Preview */
+    .preview-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .preview-container img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+    }
+
+    .preview-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .preview-container:hover .preview-overlay {
+        opacity: 1;
+    }
+
+    .btn-change-image {
+        padding: 0.75rem 1.5rem;
+        background: white;
+        color: #1e293b;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .btn-change-image:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     /* Info Box */
@@ -361,6 +497,12 @@
         box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
     }
 
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
     .btn-secondary {
         background: white;
         color: #64748b;
@@ -378,6 +520,14 @@
             grid-template-columns: 1fr;
         }
 
+        .upload-area {
+            padding: 2rem 1rem;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+        }
+
         .form-actions {
             flex-direction: column-reverse;
         }
@@ -391,13 +541,6 @@
 </style>
 
 <script>
-// Máscara de moeda para o valor
-document.getElementById('valor_base_servico').addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    value = (value / 100).toFixed(2);
-    e.target.value = 'R$ ' + value.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-});
-
 // Contador de caracteres
 const textarea = document.getElementById('descricao_servico');
 const charCount = document.getElementById('char-count');
@@ -406,30 +549,84 @@ textarea.addEventListener('input', function() {
     charCount.textContent = this.value.length;
 });
 
-// Validação do formulário
-document.getElementById('formServico').addEventListener('submit', function(e) {
-    const valorInput = document.getElementById('valor_base_servico');
-    const valorLimpo = valorInput.value.replace(/[R$\s.]/g, '').replace(',', '.');
+// Upload de imagem com preview
+const fileInput = document.getElementById('foto_servico');
+const uploadArea = document.getElementById('uploadArea');
+const uploadContent = document.getElementById('uploadContent');
+const previewContainer = document.getElementById('previewContainer');
+const imagePreview = document.getElementById('imagePreview');
+
+fileInput.addEventListener('change', function(e) {
+    handleFile(this.files[0]);
+});
+
+// Drag and drop
+uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('dragover');
+});
+
+uploadArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+});
+
+uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
     
-    // Valida se o valor é maior que zero
-    if (parseFloat(valorLimpo) <= 0) {
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        // Simula a seleção do arquivo
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+        
+        handleFile(file);
+    }
+});
+
+function handleFile(file) {
+    if (!file) return;
+    
+    // Valida tipo de arquivo
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        alert('Por favor, selecione uma imagem JPG, PNG ou WEBP.');
+        return;
+    }
+    
+    // Valida tamanho (5MB)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+        alert('A imagem deve ter no máximo 5MB.');
+        return;
+    }
+    
+    // Mostra preview
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        uploadContent.style.display = 'none';
+        previewContainer.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+// Validação do formulário
+document.getElementById('formServicoSite').addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('foto_servico');
+    
+    if (!fileInput.files || fileInput.files.length === 0) {
         e.preventDefault();
-        alert('O valor do serviço deve ser maior que zero.');
-        valorInput.focus();
+        alert('Por favor, selecione uma imagem para o serviço.');
         return false;
     }
     
-    // Cria input hidden com valor numérico
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'valor_base_servico';
-    hiddenInput.value = valorLimpo;
-    
-    // Remove name do input original
-    valorInput.removeAttribute('name');
-    
-    // Adiciona hidden ao form
-    this.appendChild(hiddenInput);
+    // Desabilita botão de submit para evitar duplo clique
+    const submitBtn = this.querySelector('.btn-primary');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
 });
 
 // Auto-focus no primeiro campo

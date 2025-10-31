@@ -4,12 +4,12 @@
         <div class="page-header-content">
             <div class="page-title-group">
                 <h1 class="page-title">
-                    <i class="bi bi-tools me-2"></i>
-                    Serviços Internos
+                    <i class="bi bi-globe me-2"></i>
+                    Serviços do Site
                 </h1>
-                <p class="page-subtitle">Gerencie os serviços e valores base</p>
+                <p class="page-subtitle">Gerencie a exibição de serviços no site público</p>
             </div>
-            <a href="/backend/servico/criar" class="btn-action-primary">
+            <a href="/backend/servico-site/criar" class="btn-action-primary">
                 <i class="bi bi-plus-lg me-2"></i>
                 Novo Serviço
             </a>
@@ -18,456 +18,251 @@
 
     <!-- Abas de Navegação -->
     <div class="tabs-navigation">
-        <a href="/backend/servico/listar" class="tab-btn active">
+        <a href="/backend/servico/listar" class="tab-btn">
             <i class="bi bi-gear-fill me-2"></i>
             Serviços Internos
-            <span class="tab-badge"><?= $paginacao['total'] ?? count($servicos) ?></span>
         </a>
-        <a href="/backend/servico-site/listar" class="tab-btn">
+        <a href="/backend/servico-site/listar" class="tab-btn active">
             <i class="bi bi-globe me-2"></i>
             Serviços do Site
+            <span class="tab-badge"><?= $paginacao['total'] ?? count($servicos) ?></span>
         </a>
     </div>
 
-    <!-- Filtros e Barra de Ações -->
+    <!-- Filtros -->
     <div class="filters-section">
         <div class="filters-group">
-            <!-- Busca com Sugestões -->
-            <div class="search-box position-relative">
-                <i class="bi bi-search"></i>
-                <input type="text" 
-                       id="busca-servico"
-                       placeholder="Buscar por nome do serviço..." 
-                       class="search-input"
-                       value="<?= htmlspecialchars($termo ?? '') ?>"
-                       autocomplete="off">
-                
-                <!-- Dropdown de sugestões -->
-                <div id="sugestoes" class="suggestions-dropdown" style="display:none;"></div>
-            </div>
+            <select class="filter-select" onchange="filtrarPorStatus(this.value)">
+                <option value="">Todos os Status</option>
+                <option value="ativo" <?= (($_GET['status'] ?? '') === 'ativo') ? 'selected' : '' ?>>Ativos</option>
+                <option value="inativo" <?= (($_GET['status'] ?? '') === 'inativo') ? 'selected' : '' ?>>Inativos</option>
+            </select>
             
-            <?php if (!empty($termo)): ?>
-                <a href="/backend/servico/listar" class="btn-filter-reset">
+            <?php if (!empty($_GET['status'])): ?>
+                <a href="/backend/servico-site/listar" class="btn-filter-reset">
                     <i class="bi bi-arrow-counterclockwise"></i>
-                    Limpar Busca
+                    Limpar Filtros
                 </a>
             <?php endif; ?>
-        </div>
-
-        <div class="view-options">
-            <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'list') === 'list' ? 'active' : '' ?>" 
-                    onclick="changeView('list')" title="Visualização em Lista">
-                <i class="bi bi-list-ul"></i>
-            </button>
-            <button type="button" class="view-toggle <?= ($_GET['view'] ?? 'list') === 'grid' ? 'active' : '' ?>" 
-                    onclick="changeView('grid')" title="Visualização em Grade">
-                <i class="bi bi-grid-3x3-gap"></i>
-            </button>
         </div>
     </div>
 
     <!-- Cards de Estatísticas -->
     <?php
     $total = $paginacao['total'] ?? count($servicos);
-    $valorTotal = array_sum(array_column($servicos, 'valor_base_servico'));
-    $valorMedio = $total > 0 ? $valorTotal / $total : 0;
-    $menorValor = $total > 0 ? min(array_column($servicos, 'valor_base_servico')) : 0;
-    $maiorValor = $total > 0 ? max(array_column($servicos, 'valor_base_servico')) : 0;
+    $ativos = count(array_filter($servicos, fn($s) => strcasecmp($s['status_servico'], 'Ativo') === 0));
+    $inativos = $total - $ativos;
+    $comFotos = count(array_filter($servicos, fn($s) => !empty($s['foto_servico'])));
     ?>
     <div class="quick-stats">
-        <div class="stat-card stat-total">
-            <div class="stat-icon">
-                <i class="bi bi-list-check"></i>
-            </div>
-            <div class="stat-info">
-                <span class="stat-label">Total de Serviços</span>
-                <span class="stat-value"><?= $total ?></span>
-            </div>
-        </div>
-
         <div class="stat-card stat-agendada">
             <div class="stat-icon">
-                <i class="bi bi-cash-stack"></i>
+                <i class="bi bi-globe"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Valor Médio</span>
-                <span class="stat-value">R$ <?= number_format($valorMedio, 2, ',', '.') ?></span>
+                <span class="stat-label">Total no Site</span>
+                <span class="stat-value"><?= $total ?></span>
             </div>
         </div>
 
         <div class="stat-card stat-realizada">
             <div class="stat-icon">
-                <i class="bi bi-arrow-down-circle"></i>
+                <i class="bi bi-check-circle"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Menor Valor</span>
-                <span class="stat-value">R$ <?= number_format($menorValor, 2, ',', '.') ?></span>
+                <span class="stat-label">Ativos</span>
+                <span class="stat-value"><?= $ativos ?></span>
             </div>
         </div>
 
         <div class="stat-card stat-pendente">
             <div class="stat-icon">
-                <i class="bi bi-arrow-up-circle"></i>
+                <i class="bi bi-x-circle"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Maior Valor</span>
-                <span class="stat-value">R$ <?= number_format($maiorValor, 2, ',', '.') ?></span>
+                <span class="stat-label">Inativos</span>
+                <span class="stat-value"><?= $inativos ?></span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-total">
+            <div class="stat-icon">
+                <i class="bi bi-images"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Com Fotos</span>
+                <span class="stat-value"><?= $comFotos ?></span>
             </div>
         </div>
     </div>
 
-    <!-- Conteúdo Principal -->
+    <!-- Grid de Serviços do Site -->
     <div class="content-card">
-        <!-- VISUALIZAÇÃO EM TABELA -->
-        <div class="table-container" id="tableView" style="<?= ($_GET['view'] ?? 'list') === 'list' ? 'display: block;' : 'display: none;' ?>">
-            <?php if (!empty($servicos)): ?>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th width="80">ID</th>
-                            <th>Nome do Serviço</th>
-                            <th>Descrição</th>
-                            <th width="150">Valor Base</th>
-                            <th width="200" class="text-end">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($servicos as $servico): ?>
-                            <tr class="table-row">
-                                <td>
-                                    <span class="table-id">#<?= htmlspecialchars($servico['id_servico']) ?></span>
-                                </td>
-                                <td>
-                                    <div class="service-info">
-                                        <div class="service-icon">
-                                            <i class="bi bi-tools"></i>
-                                        </div>
-                                        <span class="service-name"><?= htmlspecialchars($servico['nome_servico']) ?></span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="service-description">
-                                        <?= htmlspecialchars(substr($servico['descricao_servico'], 0, 80)) ?>
-                                        <?= strlen($servico['descricao_servico']) > 80 ? '...' : '' ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="table-amount">R$ <?= number_format($servico['valor_base_servico'], 2, ',', '.') ?></span>
-                                </td>
-                                <td class="text-end">
-                                    <div class="action-buttons">
-                                        <a href="/backend/servico/editar/<?= $servico['id_servico'] ?>" 
-                                           class="btn-action btn-action-edit" 
-                                           title="Editar">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="/backend/servico/excluir/<?= $servico['id_servico'] ?>" 
-                                           class="btn-action btn-action-delete" 
-                                           title="Excluir"
-                                           onclick="return confirm('Tem certeza que deseja excluir este serviço?')">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-
-                <!-- Paginação -->
-                <?php if ($paginacao && $paginacao['total_paginas'] > 1): ?>
-                    <div class="table-footer">
-                        <div class="table-info">
-                            Mostrando <strong><?= ($paginacao['pagina_atual'] - 1) * $paginacao['por_pagina'] + 1 ?></strong> 
-                            a <strong><?= min($paginacao['pagina_atual'] * $paginacao['por_pagina'], $paginacao['total']) ?></strong> 
-                            de <strong><?= $paginacao['total'] ?></strong> serviços
-                        </div>
-                        <div class="pagination">
-                            <?php if ($paginacao['pagina_atual'] > 1): ?>
-                                <a href="/backend/servico/listar/<?= $paginacao['pagina_atual'] - 1 ?><?= !empty($termo) ? '?termo=' . urlencode($termo) : '' ?>" class="pagination-btn">
-                                    <i class="bi bi-chevron-left"></i>
-                                </a>
+        <?php if (!empty($servicos)): ?>
+            <div class="servicos-site-grid">
+                <?php foreach ($servicos as $servico): ?>
+                    <?php 
+                        $isAtivo = strcasecmp($servico['status_servico'], 'Ativo') === 0;
+                        $statusTexto = $isAtivo ? 'Ativo' : 'Inativo';
+                        $statusClass = $isAtivo ? 'status-ativo' : 'status-inativo';
+                        $btnTexto = $isAtivo ? 'Desativar' : 'Ativar';
+                        $btnClass = $isAtivo ? 'btn-deactivate' : 'btn-activate';
+                    ?>
+                    <div class="servico-site-card">
+                        <!-- Imagem do Serviço -->
+                        <div class="servico-site-image">
+                            <?php if (!empty($servico['foto_servico'])): ?>
+                                <img src="/backend/upload/<?= htmlspecialchars($servico['foto_servico']) ?>" 
+                                     alt="<?= htmlspecialchars($servico['nome_servico']) ?>">
                             <?php else: ?>
-                                <button class="pagination-btn" disabled>
-                                    <i class="bi bi-chevron-left"></i>
-                                </button>
-                            <?php endif; ?>
-
-                            <?php 
-                            $inicio = max(1, $paginacao['pagina_atual'] - 2);
-                            $fim = min($paginacao['total_paginas'], $paginacao['pagina_atual'] + 2);
-                            
-                            if ($inicio > 1): ?>
-                                <a href="/backend/servico/listar/1<?= !empty($termo) ? '?termo=' . urlencode($termo) : '' ?>" class="pagination-btn">1</a>
-                                <?php if ($inicio > 2): ?>
-                                    <span class="pagination-dots">...</span>
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            <?php for ($i = $inicio; $i <= $fim; $i++): ?>
-                                <?php if ($i == $paginacao['pagina_atual']): ?>
-                                    <button class="pagination-btn active"><?= $i ?></button>
-                                <?php else: ?>
-                                    <a href="/backend/servico/listar/<?= $i ?><?= !empty($termo) ? '?termo=' . urlencode($termo) : '' ?>" class="pagination-btn"><?= $i ?></a>
-                                <?php endif; ?>
-                            <?php endfor; ?>
-
-                            <?php if ($fim < $paginacao['total_paginas']): ?>
-                                <?php if ($fim < $paginacao['total_paginas'] - 1): ?>
-                                    <span class="pagination-dots">...</span>
-                                <?php endif; ?>
-                                <a href="/backend/servico/listar/<?= $paginacao['total_paginas'] ?><?= !empty($termo) ? '?termo=' . urlencode($termo) : '' ?>" class="pagination-btn"><?= $paginacao['total_paginas'] ?></a>
-                            <?php endif; ?>
-
-                            <?php if ($paginacao['pagina_atual'] < $paginacao['total_paginas']): ?>
-                                <a href="/backend/servico/listar/<?= $paginacao['pagina_atual'] + 1 ?><?= !empty($termo) ? '?termo=' . urlencode($termo) : '' ?>" class="pagination-btn">
-                                    <i class="bi bi-chevron-right"></i>
-                                </a>
-                            <?php else: ?>
-                                <button class="pagination-btn" disabled>
-                                    <i class="bi bi-chevron-right"></i>
-                                </button>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
-
-            <?php else: ?>
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="bi bi-tools"></i>
-                    </div>
-                    <h3 class="empty-title">Nenhum serviço encontrado</h3>
-                    <p class="empty-description">
-                        <?php if (!empty($termo)): ?>
-                            Nenhum resultado para "<?= htmlspecialchars($termo) ?>". Tente ajustar sua busca.
-                        <?php else: ?>
-                            Comece criando seu primeiro serviço interno
-                        <?php endif; ?>
-                    </p>
-                    <a href="/backend/servico/criar" class="btn-action-primary">
-                        <i class="bi bi-plus-lg me-2"></i>
-                        Criar Primeiro Serviço
-                    </a>
-                </div>
-            <?php endif; ?>
-        </div>
-
-        <!-- VISUALIZAÇÃO EM GRADE -->
-        <div class="grid-container" id="gridView" style="<?= ($_GET['view'] ?? 'list') === 'grid' ? 'display: block;' : 'display: none;' ?>">
-            <?php if (!empty($servicos)): ?>
-                <div class="servicos-grid">
-                    <?php foreach ($servicos as $servico): ?>
-                        <div class="servico-card">
-                            <div class="card-header">
-                                <div class="card-id">
-                                    <i class="bi bi-tools"></i>
-                                    #<?= htmlspecialchars($servico['id_servico']) ?>
+                                <div class="servico-site-no-image">
+                                    <i class="bi bi-image"></i>
+                                    <span>Sem Foto</span>
                                 </div>
-                                <span class="card-value">R$ <?= number_format($servico['valor_base_servico'], 2, ',', '.') ?></span>
+                            <?php endif; ?>
+                            
+                            <!-- Badge de Status -->
+                            <div class="servico-site-status">
+                                <span class="status-badge-site <?= $statusClass ?>">
+                                    <i class="bi bi-<?= $isAtivo ? 'check-circle-fill' : 'x-circle-fill' ?>"></i>
+                                    <?= $statusTexto ?>
+                                </span>
                             </div>
+                        </div>
 
-                            <div class="card-service-info">
-                                <h3 class="service-name-card"><?= htmlspecialchars($servico['nome_servico']) ?></h3>
-                                <p class="service-description-card">
-                                    <?= htmlspecialchars(substr($servico['descricao_servico'], 0, 100)) ?>
-                                    <?= strlen($servico['descricao_servico']) > 100 ? '...' : '' ?>
-                                </p>
-                            </div>
+                        <!-- Conteúdo do Card -->
+                        <div class="servico-site-content">
+                            <h3 class="servico-site-title"><?= htmlspecialchars($servico['nome_servico']) ?></h3>
+                            <p class="servico-site-description">
+                                <?= htmlspecialchars(substr($servico['descricao_servico'], 0, 120)) ?>
+                                <?= strlen($servico['descricao_servico']) > 120 ? '...' : '' ?>
+                            </p>
 
-                            <div class="card-actions">
-                                <a href="/backend/servico/editar/<?= $servico['id_servico'] ?>" 
-                                   class="btn-card-action btn-card-edit">
+                            <!-- Ações do Card -->
+                            <div class="servico-site-actions">
+                                <button onclick="toggleStatus(<?= $servico['id_servico'] ?>, '<?= $btnTexto ?>')" 
+                                        class="btn-toggle-status <?= $btnClass ?>">
+                                    <i class="bi bi-<?= $isAtivo ? 'eye-slash' : 'eye' ?>"></i>
+                                    <?= $btnTexto ?>
+                                </button>
+                                <a href="/backend/servico-site/editar/<?= $servico['id_servico'] ?>" 
+                                   class="btn-edit-photo">
                                     <i class="bi bi-pencil"></i>
                                     Editar
                                 </a>
-                                <a href="/backend/servico/excluir/<?= $servico['id_servico'] ?>" 
-                                   class="btn-card-action btn-card-delete"
-                                   onclick="return confirm('Tem certeza que deseja excluir este serviço?')">
-                                    <i class="bi bi-trash"></i>
-                                    Excluir
-                                </a>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="bi bi-tools"></i>
                     </div>
-                    <h3 class="empty-title">Nenhum serviço encontrado</h3>
-                    <p class="empty-description">Comece criando seu primeiro serviço interno</p>
-                    <a href="/backend/servico/criar" class="btn-action-primary">
-                        <i class="bi bi-plus-lg me-2"></i>
-                        Criar Primeiro Serviço
-                    </a>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Paginação -->
+            <?php if ($paginacao && $paginacao['total_paginas'] > 1): ?>
+                <div class="table-footer">
+                    <div class="table-info">
+                        Mostrando <strong><?= ($paginacao['pagina_atual'] - 1) * $paginacao['por_pagina'] + 1 ?></strong> 
+                        a <strong><?= min($paginacao['pagina_atual'] * $paginacao['por_pagina'], $paginacao['total']) ?></strong> 
+                        de <strong><?= $paginacao['total'] ?></strong> serviços
+                    </div>
+                    <div class="pagination">
+                        <?php 
+                        $queryString = !empty($_GET['status']) ? '?status=' . urlencode($_GET['status']) : '';
+                        ?>
+                        
+                        <?php if ($paginacao['pagina_atual'] > 1): ?>
+                            <a href="/backend/servico-site/listar/<?= $paginacao['pagina_atual'] - 1 ?><?= $queryString ?>" class="pagination-btn">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        <?php else: ?>
+                            <button class="pagination-btn" disabled>
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                        <?php endif; ?>
+
+                        <?php 
+                        $inicio = max(1, $paginacao['pagina_atual'] - 2);
+                        $fim = min($paginacao['total_paginas'], $paginacao['pagina_atual'] + 2);
+                        
+                        if ($inicio > 1): ?>
+                            <a href="/backend/servico-site/listar/1<?= $queryString ?>" class="pagination-btn">1</a>
+                            <?php if ($inicio > 2): ?>
+                                <span class="pagination-dots">...</span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php for ($i = $inicio; $i <= $fim; $i++): ?>
+                            <?php if ($i == $paginacao['pagina_atual']): ?>
+                                <button class="pagination-btn active"><?= $i ?></button>
+                            <?php else: ?>
+                                <a href="/backend/servico-site/listar/<?= $i ?><?= $queryString ?>" class="pagination-btn"><?= $i ?></a>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                        <?php if ($fim < $paginacao['total_paginas']): ?>
+                            <?php if ($fim < $paginacao['total_paginas'] - 1): ?>
+                                <span class="pagination-dots">...</span>
+                            <?php endif; ?>
+                            <a href="/backend/servico-site/listar/<?= $paginacao['total_paginas'] ?><?= $queryString ?>" class="pagination-btn"><?= $paginacao['total_paginas'] ?></a>
+                        <?php endif; ?>
+
+                        <?php if ($paginacao['pagina_atual'] < $paginacao['total_paginas']): ?>
+                            <a href="/backend/servico-site/listar/<?= $paginacao['pagina_atual'] + 1 ?><?= $queryString ?>" class="pagination-btn">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        <?php else: ?>
+                            <button class="pagination-btn" disabled>
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 </div>
             <?php endif; ?>
-        </div>
+
+        <?php else: ?>
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-globe"></i>
+                </div>
+                <h3 class="empty-title">Nenhum serviço encontrado</h3>
+                <p class="empty-description">
+                    <?php if (!empty($_GET['status'])): ?>
+                        Nenhum serviço com este status. Ajuste os filtros.
+                    <?php else: ?>
+                        Adicione serviços com fotos para exibir no site
+                    <?php endif; ?>
+                </p>
+                <a href="/backend/servico-site/criar" class="btn-action-primary">
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Adicionar Serviço
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
 <!-- JavaScript -->
 <script>
-// Função para trocar visualização (lista/grade)
-function changeView(view) {
-    const url = new URL(window.location);
-    url.searchParams.set('view', view);
-    window.location.href = url.toString();
+// Função para alternar status do serviço
+function toggleStatus(id, acao) {
+    if (confirm(`Tem certeza que deseja ${acao.toLowerCase()} este serviço?`)) {
+        window.location.href = `/backend/servico-site/alternar/${id}`;
+    }
 }
 
-// === SISTEMA DE BUSCA COM AUTOCOMPLETE ===
-let debounceTimer;
-const inputBusca = document.getElementById('busca-servico');
-const dropdown = document.getElementById('sugestoes');
-
-inputBusca.addEventListener('input', function(e) {
-    clearTimeout(debounceTimer);
-    const termo = e.target.value.trim();
-    
-    if (termo.length < 2) {
-        dropdown.style.display = 'none';
-        return;
+// Função para filtrar por status
+function filtrarPorStatus(status) {
+    const url = new URL(window.location);
+    if (status) {
+        url.searchParams.set('status', status);
+    } else {
+        url.searchParams.delete('status');
     }
-
-    debounceTimer = setTimeout(() => {
-        fetch(`/backend/servico/sugestoes?termo=${encodeURIComponent(termo)}`)
-            .then(r => r.json())
-            .then(data => {
-                dropdown.innerHTML = '';
-                
-                if (data.length === 0) {
-                    dropdown.innerHTML = '<div class="suggestion-item-empty">Nenhum resultado encontrado</div>';
-                } else {
-                    data.forEach(servico => {
-                        const item = document.createElement('div');
-                        item.className = 'suggestion-item';
-                        item.innerHTML = `
-                            <div class="suggestion-icon">
-                                <i class="bi bi-tools"></i>
-                            </div>
-                            <div class="suggestion-content">
-                                <div class="suggestion-name">${servico.nome_servico}</div>
-                                <div class="suggestion-meta">ID: ${servico.id_servico} • R$ ${parseFloat(servico.valor_base_servico).toFixed(2).replace('.', ',')}</div>
-                            </div>
-                        `;
-                        item.onclick = () => {
-                            inputBusca.value = servico.nome_servico;
-                            dropdown.style.display = 'none';
-                            window.location.href = `/backend/servico/listar/1?termo=${encodeURIComponent(servico.nome_servico)}`;
-                        };
-                        dropdown.appendChild(item);
-                    });
-                }
-                
-                dropdown.style.display = 'block';
-            })
-            .catch(err => {
-                console.error('Erro na busca:', err);
-                dropdown.style.display = 'none';
-            });
-    }, 300);
-});
-
-// Fecha dropdown ao clicar fora
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search-box')) {
-        dropdown.style.display = 'none';
-    }
-});
-
-// Permite busca com Enter
-inputBusca.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        const termo = this.value.trim();
-        if (termo.length >= 2) {
-            window.location.href = `/backend/servico/listar/1?termo=${encodeURIComponent(termo)}`;
-        }
-    }
-});
+    window.location.href = url.toString();
+}
 </script>
 
 <style>
-/* Estilos para o sistema de busca com sugestões */
-.suggestions-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-height: 400px;
-    overflow-y: auto;
-    z-index: 1000;
-    margin-top: 4px;
-}
-
-.suggestion-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-bottom: 1px solid #f3f4f6;
-}
-
-.suggestion-item:last-child {
-    border-bottom: none;
-}
-
-.suggestion-item:hover {
-    background: #f9fafb;
-}
-
-.suggestion-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
-    color: white;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.suggestion-content {
-    flex: 1;
-}
-
-.suggestion-name {
-    font-weight: 600;
-    color: #1f2937;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.suggestion-meta {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-.suggestion-item-empty {
-    padding: 20px;
-    text-align: center;
-    color: #9ca3af;
-    font-size: 14px;
-}
-
-
-
-
-
-
-
-
-
-/* ========================================
+    /* ========================================
    SISTEMA DE GERENCIAMENTO DE SERVIÇOS
    Arquivo CSS Completo e Padronizado
    ======================================== */

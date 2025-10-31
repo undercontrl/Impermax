@@ -6,63 +6,91 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ServicoValidador;
-use App\Impermax\Core\FileManager;
+use App\Impermax\Controllers\Admin\AdminController;
 
-class ServicoController
-{
+class ServicoController extends AdminController {
     private $servico;
-    private $gerenciarImagem;
 
-    public function __construct()
-    {
+    public function __construct() {
+        parent::__construct();
         $db = Database::getInstance();
         $this->servico = new Servico($db);
-        $this->gerenciarImagem = new FileManager('upload');
     }
 
-    // Listar serviços
-    public function viewListarServicos()
-    {
-        $dados = $this->servico->buscarServicos();
-        View::render("servico/index", ["servicos" => $dados]);
+    public function index() {
+        $this->viewListarServicos(1);
     }
 
-    // Exibir formulário de criação
-    public function viewCriarServicos()
-    {
+    /**
+     * Lista serviços internos com paginação e busca
+     */
+    public function viewListarServicos($pagina = 1) {
+        $pagina = max(1, (int)$pagina);
+        $termo = $_GET['termo'] ?? '';
+        
+        if (!empty($termo)) {
+            // Busca por termo
+            $dados = $this->servico->buscarServicosPorNome($termo);
+            $paginacao = [
+                'total' => count($dados),
+                'por_pagina' => count($dados),
+                'pagina_atual' => 1,
+                'total_paginas' => 1
+            ];
+        } else {
+            // Listagem normal com paginação
+            $resultado = $this->servico->listarInternos($pagina, 10);
+            $dados = $resultado['data'];
+            $paginacao = $resultado;
+        }
+
+        View::render("servico/index", [
+            "servicos" => $dados,
+            'paginacao' => $paginacao,
+            'termo' => $termo
+        ]);
+    }
+
+    /**
+     * Rota de busca (usa o mesmo método de listagem)
+     */
+    public function buscar() {
+        $this->viewListarServicos(1);
+    }
+
+    /**
+     * Exibe formulário de criação
+     */
+    public function viewCriarServicos() {
         View::render("servico/create");
     }
 
-    // Salvar novo serviço
-    public function salvarServico()
-    {
+    /**
+     * Salva novo serviço
+     */
+    public function salvarServico() {
         $erros = ServicoValidador::ValidarEntradas($_POST);
         if (!empty($erros)) {
             Redirect::redirecionarComMensagem("servico/criar", "error", implode("<br>", $erros));
         }
 
-        $foto_servico = $this->gerenciarImagem->salvarArquivo($_FILES['foto_servico'], 'servicos');
-
         $sucesso = $this->servico->inserirServico(
             $_POST["nome_servico"],
             $_POST["descricao_servico"],
-            $_POST["valor_base_servico"],
-            $foto_servico,
-            "Ativo"
+            $_POST["valor_base_servico"]
         );
 
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço cadastrado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico/criar", "error", "Erro ao cadastrar serviço!");
-        }
+        $msg = $sucesso ? "Serviço cadastrado com sucesso!" : "Erro ao cadastrar serviço.";
+        $tipo = $sucesso ? "success" : "error";
+        Redirect::redirecionarComMensagem("servico/listar", $tipo, $msg);
     }
 
-    // Exibir formulário de edição
-    public function viewEditarServicos($id = null)
-    {
+    /**
+     * Exibe formulário de edição
+     */
+    public function viewEditarServicos($id = null) {
         if (!$id) {
-            Redirect::redirecionarComMensagem("servico/listar", "error", "ID do serviço não fornecido.");
+            Redirect::redirecionarComMensagem("servico/listar", "error", "ID não fornecido.");
         }
 
         $servico = $this->servico->buscarServicoPorID($id);
@@ -73,37 +101,31 @@ class ServicoController
         View::render("servico/edit", ["servico" => $servico]);
     }
 
-    // Atualizar serviço
-    public function atualizarServico($id)
-    {
+    /**
+     * Atualiza serviço existente
+     */
+    public function atualizarServico($id) {
         $erros = ServicoValidador::ValidarEntradas($_POST);
         if (!empty($erros)) {
             Redirect::redirecionarComMensagem("servico/editar/$id", "error", implode("<br>", $erros));
         }
 
-        $foto_servico = !empty($_FILES['foto_servico']['name'])
-            ? $this->gerenciarImagem->salvarArquivo($_FILES['foto_servico'], 'servicos')
-            : $_POST['foto_servico_atual'];
-
-        $sucesso = $this->servico->atualizaServico(
+        $sucesso = $this->servico->atualizarServico(
             $id,
             $_POST["nome_servico"],
             $_POST["descricao_servico"],
-            $_POST["valor_base_servico"],
-            $foto_servico,
-            $_POST["status_servico"]
+            $_POST["valor_base_servico"]
         );
 
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço atualizado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico/editar/$id", "error", "Erro ao atualizar o serviço!");
-        }
+        $msg = $sucesso ? "Serviço atualizado com sucesso!" : "Erro ao atualizar serviço.";
+        $tipo = $sucesso ? "success" : "error";
+        Redirect::redirecionarComMensagem("servico/listar", $tipo, $msg);
     }
 
-    // Exibir confirmação de exclusão
-    public function viewExcluirServicos($id)
-    {
+    /**
+     * Exibe confirmação de exclusão
+     */
+    public function viewExcluirServicos($id) {
         $servico = $this->servico->buscarServicoPorID($id);
         if (!$servico) {
             Redirect::redirecionarComMensagem("servico/listar", "error", "Serviço não encontrado.");
@@ -112,14 +134,40 @@ class ServicoController
         View::render("servico/delete", ["servico" => $servico]);
     }
 
-    // Executar exclusão
-    public function deletarServico($id)
-    {
-        $sucesso = $this->servico->excluirServico($id);
-        if ($sucesso) {
-            Redirect::redirecionarComMensagem("servico/listar", "success", "Serviço excluído com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("servico/listar", "error", "Erro ao excluir o serviço!");
+    /**
+     * Executa exclusão (soft delete)
+     */
+    public function deletarServico($id) {
+        $id = (int) ($id ?: $_POST['id_servico'] ?? 0);
+        if ($id <= 0) {
+            Redirect::redirecionarComMensagem("servico/listar", "error", "ID inválido.");
         }
+
+        $sucesso = $this->servico->deletarServicoInterno($id);
+
+        $msg = $sucesso ? "Serviço removido com sucesso!" : "Erro ao remover serviço.";
+        $tipo = $sucesso ? "success" : "error";
+        Redirect::redirecionarComMensagem("servico/listar", $tipo, $msg);
+    }
+
+    /**
+     * API: Retorna sugestões para autocomplete
+     */
+    public function sugestoes() {
+        $termo = $_GET['termo'] ?? '';
+        
+        if (strlen($termo) < 2) {
+            header('Content-Type: application/json');
+            echo json_encode([]);
+            exit;
+        }
+
+        $resultados = $this->servico->buscarServicosPorNome($termo);
+        $limitados = array_slice($resultados, 0, 8);
+
+        header('Content-Type: application/json');
+        echo json_encode($limitados);
+        exit;
     }
 }
+?>

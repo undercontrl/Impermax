@@ -82,7 +82,22 @@ $secao->set('csrf_token', $codigoToken);
             <a class="botao-saiba-mais" href="sobre.php">Saiba Mais</a>
         </section>
         <section>
-            <section class="servicos">
+
+         <section class="servicos">
+            <div class="container-servicos">
+                <h3 class="titulo-servico">Serviços</h3>
+                <div class="cards" id="cards-container">
+                    <!-- Cards serão inseridos aqui via JS -->
+                    <p class="loading">Carregando serviços...</p>
+                </div>
+                <div class="titulo-externo" id="titulos-externos">
+                    <!-- Títulos externos serão gerados dinamicamente -->
+                </div>
+            </div>
+        </section>
+
+
+            <!-- <section class="servicos">
                <div class="container-servicos">
                    <h3 class="titulo-servico">Serviços</h3>
                    <div class="cards">
@@ -127,7 +142,7 @@ $secao->set('csrf_token', $codigoToken);
                    </div>
    
                </div>
-       </section>
+       </section> -->
         <section class="antes-depois">
             <div class="img-comp-container">
                 <div class="img-comp-img">
@@ -197,5 +212,72 @@ $secao->set('csrf_token', $codigoToken);
 </footer>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="js/formulario.js"></script>
+
+<!-- Aba de serviços - carregamento dinâmico via JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const cardsContainer = document.getElementById('cards-container');
+    const titulosContainer = document.getElementById('titulos-externos');
+
+    if (!cardsContainer || !titulosContainer) return;
+
+    cardsContainer.innerHTML = '<p class="loading">Carregando serviços...</p>';
+
+    fetch('/backend/api/servicos')
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(json => {
+            if (json.status !== 'success' || !Array.isArray(json.data)) {
+                throw new Error('Dados inválidos');
+            }
+
+            const servicos = json.data;
+            if (servicos.length === 0) {
+                cardsContainer.innerHTML = '<p style="color:#ccc;text-align:center;">Nenhum serviço ativo.</p>';
+                titulosContainer.innerHTML = '';
+                return;
+            }
+
+            // Limpa
+            cardsContainer.innerHTML = '';
+            titulosContainer.innerHTML = '';
+
+            servicos.forEach(servico => {
+                // CARD
+                const cardHtml = `
+                    <div class="card-servico">
+                        <a href="servicos.html?id=${servico.id_servico}">
+                            <figure>
+                                <img src="${servico.caminho_imagem}" 
+                                     alt="${servico.nome_servico}" 
+                                     class="servico-imagem"
+                                     onerror="this.onerror=null; this.src='assets/cards/default.jpg';">
+                                <figcaption class="figcaption-servico">
+                                    <p class="titulo-interno">
+                                        ${servico.descricao_servico.replace(/<span[^>]*>([^<]+)<\/span>/g, '<span class="texto-destaque">$1</span>')}
+                                    </p>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+                `;
+                cardsContainer.insertAdjacentHTML('beforeend', cardHtml);
+
+                // TÍTULO EXTERNO
+                const tituloHtml = `<h3 class="titulo-externo-item">${servico.nome_servico}</h3>`;
+                titulosContainer.insertAdjacentHTML('beforeend', tituloHtml);
+            });
+
+            // Ajusta gap
+            titulosContainer.style.gap = '100px';
+        })
+        .catch(err => {
+            console.error(err);
+            cardsContainer.innerHTML = '<p style="color:#ff6b6b">Erro ao carregar.</p>';
+        });
+});
+</script>
 </body>
 </html>

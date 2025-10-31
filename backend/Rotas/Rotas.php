@@ -76,10 +76,23 @@ class Rotas
         "/item_orcamento/excluir/{id}" => "ItemOrcamentoController@viewExcluirItemOrcamento",
         //servico
         "/servico" => "ServicoController@index",
-        "/servico/criar" => "servicoController@viewCriarServicos",
-        "/servico/listar" => "servicoController@viewListarServicos",
-        "/servico/editar/{id}" => "servicoController@viewEditarServicos",
+       "/servico/criar" => "ServicoController@viewCriarServicos",
+       "/servico/listar" => "ServicoController@viewListarServicos",
+        "/servico/listar/{pagina}" => "ServicoController@viewListarServicos",
+        "/servico/buscar" => "ServicoController@buscar",
+        "api/servicos" => "PublicApiController@getServicos",
+        "/servico/editar/{id}" => "ServicoController@viewEditarServicos",
         "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
+
+        "/servico/sugestoes" => "ServicoController@sugestoes",
+
+        // Dashboard do Site
+        "/servico-site" => "ServicoSiteController@index",                   
+        "/servico-site/listar" => "ServicoSiteController@listar",           
+        "/servico-site/listar/{pagina}" => "ServicoSiteController@listar",  
+        "/servico-site/criar" => "ServicoSiteController@criar",             
+        "/servico-site/editar/{id}" => "ServicoSiteController@editar",      
+        "/servico-site/alternar/{id}" => "ServicoSiteController@alternar",
         //projeto
         "/projeto" => "ProjetoController@index",
         "/projeto/criar" => "ProjetoController@viewCriarProjetos",
@@ -161,9 +174,12 @@ class Rotas
         "/item_orcamento/atualizar/{id}" => "ItemOrcamentoController@atualizarItemOrcamento",
         "/item_orcamento/deletar/{id}" => "ItemOrcamentoController@deletarItemOrcamento",
         //servico
-        "/servico/salvar" => "ServicoController@salvarServico",
+       "/servico/salvar" => "ServicoController@salvarServico",
         "/servico/atualizar/{id}" => "ServicoController@atualizarServico",
         "/servico/deletar/{id}" => "ServicoController@deletarServico",
+        //Servico Site
+        "/servico-site/salvar" => "ServicoSiteController@salvar",
+        "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
         //projeto
         "/projeto/salvar" => "ProjetoController@salvarProjeto",
         "/projeto/atualizar/{id}" => "ProjetoController@atualizarProjeto",
