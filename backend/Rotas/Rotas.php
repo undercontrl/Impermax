@@ -31,18 +31,20 @@ class Rotas
         //agendamentos
         "/agendamentos" => "AgendamentoController@index",
         "/agendamento/criar" => "AgendamentoController@viewCriarAgendamentos",
+        "/agendamento/criar-publico" => "AgendamentoController@viewCriarAgendamentos",
         "/agendamento/listar" => "AgendamentoController@viewListarAgendamentos",
         "/agendamento/editar/{id}" => "AgendamentoController@viewEditarAgendamentos",
         "/agendamento/excluir/{id}" => "AgendamentoController@viewExcluirAgendamentos",
         "/agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "AgendamentoController@relatorioAgendamento",
         '/agendamento/deletar-multiplos' => 'AgendamentoController@deletarMultiplos',
         //avaliações
-        "/avaliacoes" => "AvaliacaoController@index",
-        "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacao",
-        "/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacao",
-        "/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacao",
-        "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacao",
+        "/avaliacao" => "AvaliacaoController@index",
+        "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
+        "/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacoes",
+        "/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacoes",
+        "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacoes",
         "/avaliacao/{id}/relatorio/{dataInicial}/{dataFinal}" => "AvaliacaoController@relatorioAvaliacao",
+        "/avaliar" => "AvaliacaoPublicaController@viewFormularioPublico",
         // contatos
         "/contatos" => "ContatoController@index",
         "/contato" => "ContatoController@viewListarContatos",
@@ -76,10 +78,23 @@ class Rotas
         "/item_orcamento/excluir/{id}" => "ItemOrcamentoController@viewExcluirItemOrcamento",
         //servico
         "/servico" => "ServicoController@index",
-        "/servico/criar" => "servicoController@viewCriarServicos",
-        "/servico/listar" => "servicoController@viewListarServicos",
-        "/servico/editar/{id}" => "servicoController@viewEditarServicos",
+       "/servico/criar" => "ServicoController@viewCriarServicos",
+       "/servico/listar" => "ServicoController@viewListarServicos",
+        "/servico/listar/{pagina}" => "ServicoController@viewListarServicos",
+        "/servico/buscar" => "ServicoController@buscar",
+        "api/servicos" => "PublicApiController@getServicos",
+        "/servico/editar/{id}" => "ServicoController@viewEditarServicos",
         "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
+
+        "/servico/sugestoes" => "ServicoController@sugestoes",
+
+        // Dashboard do Site
+        "/servico-site" => "ServicoSiteController@index",                   
+        "/servico-site/listar" => "ServicoSiteController@listar",           
+        "/servico-site/listar/{pagina}" => "ServicoSiteController@listar",  
+        "/servico-site/criar" => "ServicoSiteController@criar",             
+        "/servico-site/editar/{id}" => "ServicoSiteController@editar",      
+        "/servico-site/alternar/{id}" => "ServicoSiteController@alternar",
         //projeto
         "/projeto" => "ProjetoController@index",
         "/projeto/criar" => "ProjetoController@viewCriarProjetos",
@@ -136,9 +151,10 @@ class Rotas
         "/agendamento/buscar-orcamentos-ajax" => "AgendamentoController@buscarOrcamentosPorClienteAjax",
         //avaliações
         "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
-        "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
-        "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
+        "/avaliacao/atualizar" => "AvaliacaoController@atualizarAvaliacao",
+        "/avaliacao/deletar" => "AvaliacaoController@deletarAvaliacao",
         "/avaliacao/deletar-multiplos" => "AvaliacaoController@deletarMultiplos",
+        "/enviar-avaliacao" => "AvaliacaoPublicaController@enviarAvaliacaoPublica",
         // contatos
         "/contato/salvar" => "ContatoController@salvar",
         "/contato/atualizar/(\d+)" => "ContatoController@atualizar",
@@ -161,17 +177,20 @@ class Rotas
         "/item_orcamento/atualizar/{id}" => "ItemOrcamentoController@atualizarItemOrcamento",
         "/item_orcamento/deletar/{id}" => "ItemOrcamentoController@deletarItemOrcamento",
         //servico
-        "/servico/salvar" => "ServicoController@salvarServico",
+       "/servico/salvar" => "ServicoController@salvarServico",
         "/servico/atualizar/{id}" => "ServicoController@atualizarServico",
         "/servico/deletar/{id}" => "ServicoController@deletarServico",
+        //Servico Site
+        "/servico-site/salvar" => "ServicoSiteController@salvar",
+        "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
         //projeto
         "/projeto/salvar" => "ProjetoController@salvarProjeto",
-        "/projeto/atualizar/{id}" => "ProjetoController@atualizarProjeto",
+        "/projeto/atualizar" => "ProjetoController@atualizarProjeto",
         "/projeto/deletar" => "ProjetoController@deletarProjeto",
         "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         //pagamento
         "/pagamento/salvar" => "PagamentoController@salvarPagamento",
-        "/pagamento/atualizar/{id}" => "PagamentoController@atualizarPagamento",
+        "/pagamento/atualizar" => "PagamentoController@atualizarPagamento",
         "/pagamento/deletar" => "PagamentoController@deletarPagamento",
         "/pagamento/deletar-multiplos" => "PagamentoController@deletarMultiplos",
         //orcamento
@@ -184,6 +203,7 @@ class Rotas
         "/material/salvar" => "materialController@salvarMaterial",
         "/material/atualizar/{id}" => "materialController@atualizarMaterial",
         "/material/deletar/{id}" => "materialController@deletarMaterial",
+        "/material/deletar-multiplos" => "MaterialController@deletarMultiplos"
     ]
         ];
     }

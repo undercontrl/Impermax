@@ -9,7 +9,7 @@ use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\ProjetoValidador;
 use App\Impermax\Core\FileManager;
 
-class ProjetoController extends AdminController
+class ProjetoController
 {
     private $projeto;
     private $db;
@@ -17,7 +17,6 @@ class ProjetoController extends AdminController
 
     public function __construct()
     {
-        parent::__construct();
         $this->db = Database::getInstance();
         $this->projeto = new Projeto($this->db);
         // CORREÇÃO: Caminho correto para o diretório de uploads
@@ -179,6 +178,7 @@ class ProjetoController extends AdminController
     /**
      * Atualizar projeto existente
      */
+    
     public function atualizarProjeto()
     {
         $id = $_POST['id_projeto'] ?? null;
@@ -188,37 +188,62 @@ class ProjetoController extends AdminController
             return;
         }
 
-        $erros = ProjetoValidador::ValidarEntradas($_POST, $_FILES, true);
+        // Buscar projeto atual
+        $projetoAtual = $this->projeto->buscarProjetoPorID($id);
+        
+        if (!$projetoAtual) {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "Projeto não encontrado!");
+            return;
+        }
 
-        if (!empty($erros)) {
-            Redirect::redirecionarComMensagem("projeto/editar/$id", "error", implode("<br>", $erros));
+        // Validar apenas descrição (imagens são opcionais na edição)
+        $errosDescricao = [];
+        
+        if (empty($_POST['descricao_projeto'])) {
+            $errosDescricao[] = "A descrição é obrigatória";
+        } elseif (strlen($_POST['descricao_projeto']) < 10) {
+            $errosDescricao[] = "A descrição deve ter no mínimo 10 caracteres";
+        } elseif (strlen($_POST['descricao_projeto']) > 500) {
+            $errosDescricao[] = "A descrição deve ter no máximo 500 caracteres";
+        }
+        
+        if (!empty($errosDescricao)) {
+            Redirect::redirecionarComMensagem("projeto/editar/$id", "error", implode("<br>", $errosDescricao));
             return;
         }
 
         try {
-            // Buscar projeto atual para manter imagens se não houver novas
-            $projetoAtual = $this->projeto->buscarProjetoPorID($id);
-            
-            // Verifica se há novas imagens ou mantém as atuais
+            // Manter imagens atuais por padrão
             $foto_antes_projeto = $projetoAtual['foto_antes_projeto'];
             $foto_depois_projeto = $projetoAtual['foto_depois_projeto'];
             
-            if (!empty($_FILES['foto_antes_projeto']['name'])) {
-                // Deletar imagem antiga
+            // Verificar se há nova imagem ANTES
+            if (isset($_FILES['foto_antes_projeto']) && $_FILES['foto_antes_projeto']['error'] === UPLOAD_ERR_OK) {
+                // Deletar imagem antiga se existir
                 if (!empty($projetoAtual['foto_antes_projeto'])) {
-                    $this->gerenciarImagem->delete($projetoAtual['foto_antes_projeto']);
+                    $caminhoAntigo = $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $projetoAtual['foto_antes_projeto'];
+                    if (file_exists($caminhoAntigo)) {
+                        @unlink($caminhoAntigo);
+                    }
                 }
+                // Upload nova imagem
                 $foto_antes_projeto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_antes_projeto'], 'projeto');
             }
             
-            if (!empty($_FILES['foto_depois_projeto']['name'])) {
-                // Deletar imagem antiga
+            // Verificar se há nova imagem DEPOIS
+            if (isset($_FILES['foto_depois_projeto']) && $_FILES['foto_depois_projeto']['error'] === UPLOAD_ERR_OK) {
+                // Deletar imagem antiga se existir
                 if (!empty($projetoAtual['foto_depois_projeto'])) {
-                    $this->gerenciarImagem->delete($projetoAtual['foto_depois_projeto']);
+                    $caminhoAntigo = $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $projetoAtual['foto_depois_projeto'];
+                    if (file_exists($caminhoAntigo)) {
+                        @unlink($caminhoAntigo);
+                    }
                 }
+                // Upload nova imagem
                 $foto_depois_projeto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_depois_projeto'], 'projeto');
             }
 
+            // Atualizar no banco
             $sucesso = $this->projeto->atualizarProjeto(
                 $id,
                 $foto_antes_projeto,
@@ -229,12 +254,14 @@ class ProjetoController extends AdminController
             if ($sucesso) {
                 Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto atualizado com sucesso!");
             } else {
-                Redirect::redirecionarComMensagem("projeto/editar/$id", "error", "Erro ao atualizar o projeto!");
+                Redirect::redirecionarComMensagem("projeto/editar/$id", "error", "Erro ao atualizar o projeto no banco!");
             }
         } catch (\Exception $e) {
-            Redirect::redirecionarComMensagem("projeto/editar/$id", "error", "Erro ao fazer upload: " . $e->getMessage());
+            error_log("Erro ao atualizar projeto: " . $e->getMessage());
+            Redirect::redirecionarComMensagem("projeto/editar/$id", "error", "Erro ao atualizar: " . $e->getMessage());
         }
     }
+
 
     /**
      * Deletar projeto (soft delete)
