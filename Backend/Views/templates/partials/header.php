@@ -715,7 +715,7 @@ if (in_array($currentPath, $rotasPublicas)) {
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <a href="/backend/admin/dashboard">
-                <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
+                <img src="/assets/logo/impermax-LOGO.svg" alt="Impermax Logo">
             </a>
         </div>
 

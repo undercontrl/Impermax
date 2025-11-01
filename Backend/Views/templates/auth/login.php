@@ -109,7 +109,7 @@
 </head>
 <body>
     <div class="login-card">
-        <img src="/assets/icons/impermax-LOGO.svg" alt="Logo Impermax">
+        <img src="/assets/logo/impermax-LOGO.svg" alt="Logo Impermax">
         <h3>Acesso ao Sistema</h3>
 
         <form action="/backend/authenticar" method="POST">

@@ -10,14 +10,14 @@
                     <span class="wave-premium">👋</span> 
                     Bem-vindo, <span class="highlight-premium"><?= htmlspecialchars($nomeUsuario ?? 'Administrador'); ?></span>!
                 </h1>
-                <p class="dashboard-subtitle-premium">
+                <!-- <p class="dashboard-subtitle-premium">
                     <i class="bi bi-calendar3"></i>
                     <?php
                         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf8', 'portuguese');
                         date_default_timezone_set('America/Sao_Paulo');
                         echo ucfirst(strftime('%A, %d de %B de %Y'));
                     ?>
-                </p>
+                </p> -->
             </div>
             <div class="header-actions-premium">
                 <form method="GET" class="periodo-selector-premium">
