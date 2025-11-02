@@ -746,7 +746,7 @@
     }
 
     .image-after {
-        clip-path: inset(0 50% 0 0);
+        clip-path: inset(0 0 0 50%);
     }
 
     .slider-handle {
@@ -997,7 +997,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const position = Math.max(0, Math.min(x - rect.left, rect.width));
             const percentage = (position / rect.width) * 100;
             
-            afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            // CORREÇÃO: clip-path correto
+            afterImage.style.clipPath = `inset(0 0 0 ${percentage}%)`;
             handle.style.left = `${percentage}%`;
         }
         
@@ -1035,7 +1036,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ==================== SELEÇÃO DE CHECKBOXES ====================
-selectedIds = selectedIds || new Set();
+let selectedIds = new Set();
+
 function updateSelection() {
     const checkboxes = document.querySelectorAll('.row-checkbox:checked');
     selectedIds.clear();
@@ -1107,72 +1109,4 @@ function autoSubmitFilter() {
     }, 500);
 }
 </script>
-<script>
-// ==================== COMPARADOR BEFORE/AFTER ====================
-document.addEventListener('DOMContentLoaded', function() {
-    const sliders = document.querySelectorAll('.before-after-slider');
-    
-    sliders.forEach(slider => {
-        let isDragging = false;
-        const afterImage = slider.querySelector('.image-after');
-        const handle = slider.querySelector('.slider-handle');
-        
-        function updateSlider(x) {
-            const rect = slider.getBoundingClientRect();
-            const position = Math.max(0, Math.min(x - rect.left, rect.width));
-            const percentage = (position / rect.width) * 100;
-            
-            afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
-            handle.style.left = `${percentage}%`;
-        }
-        
-        slider.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            updateSlider(e.clientX);
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                updateSlider(e.clientX);
-            }
-        });
-        
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-        
-        // Touch support
-        slider.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            updateSlider(e.touches[0].clientX);
-        });
-        
-        document.addEventListener('touchmove', (e) => {
-            if (isDragging) {
-                updateSlider(e.touches[0].clientX);
-            }
-        });
-        
-        document.addEventListener('touchend', () => {
-            isDragging = false;
-        });
-    });
-});
-// ==================== SELEÇÃO DE CHECKBOXES ====================
-let selectedIds = new Set();
-function updateSelection() {
-    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-    selectedIds.clear();
-    checkboxes.forEach(cb => selectedIds.add(cb.value));
-    
-    const bulkBar = document.getElementById('bulkActionsBar');
-    const selectedCount = document.getElementById('selectedCount');
-    
-    if (selectedIds.size > 0) {
-        bulkBar.style.display = 'flex';
-        selectedCount.textContent = selectedIds.size;
-    } else {
-        bulkBar.style.display = 'none';
-    }
-}
 </script>

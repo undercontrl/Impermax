@@ -162,7 +162,9 @@ class ProjetoController
             $ok = $this->projeto->inserirProjeto(
                 $foto_antes_projeto,
                 $foto_depois_projeto,
-                $_POST["descricao_projeto"]
+                $_POST["descricao_projeto"],
+                'Inativo'
+
             );
 
             if ($ok) {
@@ -248,7 +250,8 @@ class ProjetoController
                 $id,
                 $foto_antes_projeto,
                 $foto_depois_projeto,
-                $_POST["descricao_projeto"]
+                $_POST["descricao_projeto"],
+                $_POST['status_servico'] ?? 'Inativo'
             );
 
             if ($sucesso) {
