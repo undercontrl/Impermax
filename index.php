@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Ajusta gap
-            titulosContainer.style.gap = '100px';
+            titulosContainer.style.gap = '130px';
         })
         .catch(err => {
             console.error(err);
