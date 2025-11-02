@@ -143,7 +143,7 @@ $secao->set('csrf_token', $codigoToken);
    
                </div>
        </section> -->
-        <section class="antes-depois">
+        <!-- <section class="antes-depois">
             <div class="img-comp-container">
                 <div class="img-comp-img">
                   <img src="assets/antes e depois/dpois.png" width="500" height="350">
@@ -158,7 +158,65 @@ $secao->set('csrf_token', $codigoToken);
                 A impermeabilização é fundamental para preservar a integridade da piscina e evitar futuros problemas com umidade.</p>
         </section>
         <script src="js/javascript.js"></script>
-        <script>initComparisons();</script>
+        <script>initComparisons();</script> -->
+
+<section class="antes-depois" id="projetos-container">
+    <div class="texto-content">
+        <h1 class="titulo-antes-depois">Confira Nossos Resultados</h1>
+        <h2 class="subtitulo-antes-depois">Impermeabilização de Piscina</h2>
+        <p class="texto-antes-depois">
+            Nesta etapa da obra, executamos a <span class="texto-destaque">impermeabilização completa da estrutura da piscina</span>, 
+            aplicando técnicas especializadas para garantir máxima proteção contra infiltrações e vazamentos. O serviço foi realizado sobre base de concreto, preparando a área para receber o acabamento final com total segurança e durabilidade.
+                A impermeabilização é fundamental para preservar a integridade da piscina e evitar futuros problemas com umidade.
+        </p>
+    </div>
+    
+    <div id="comparisons-container">
+        <!-- SERÁ PREENCHIDO DINAMICAMENTE -->
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/backend/api/projetos')
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === 'success' && result.data.length > 0) {
+                const container = document.getElementById('comparisons-container');
+                container.innerHTML = ''; // Limpa
+
+                result.data.forEach(projeto => {
+                    const div = document.createElement('div');
+                    div.className = 'img-comp-container';
+                    div.innerHTML = `
+                        <div class="img-comp-img">
+                            <img src="${projeto.depois}" width="500" height="350" alt="Depois">
+                        </div>
+                        <div class="img-comp-img img-comp-overlay">
+                            <img src="${projeto.antes}" width="500" height="350" alt="Antes">
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+
+                // Reinicar comparações
+                setTimeout(initComparisons, 100);
+            } else {
+                container.innerHTML = '';
+            
+            }
+        })
+        .catch(err => {
+            console.error('Erro ao carregar projetos:', err);
+            document.getElementById('comparisons-container').innerHTML = '';
+        });
+});
+</script>
+
+<script src="js/javascript.js"></script>
+<script>initComparisons();</script>
+
+
         <section class="parallax" id="contato">
             <div class="bloco-contato">
                 <div id="caixa-orcamento2">

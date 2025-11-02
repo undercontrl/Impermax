@@ -317,4 +317,18 @@ public function buscarRecentes($limite = 6)
         {
             return $this->alterarStatusProjeto($id, 'Inativo');
         }
+
+
+    public function listarAtivos()
+{
+    $sql = "SELECT foto_antes_projeto, foto_depois_projeto 
+            FROM tbl_projeto 
+            WHERE status_projeto = 'Ativo' 
+              AND excluido_em IS NULL 
+            ORDER BY criado_em DESC";
+    
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }

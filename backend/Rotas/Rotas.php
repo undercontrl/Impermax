@@ -104,6 +104,7 @@ class Rotas
         "/projeto/excluir/{id}" => "ProjetoController@viewExcluirProjetos",
         "/projeto/ativar/{id}" => "ProjetoController@ativarProjeto",
         "/projeto/desativar/{id}" => "ProjetoController@desativarProjeto",
+        "api/projetos" => "PublicProjetoController@getProjetos",
         //pagamento
         "/pagamento" => "PagamentoController@index",
         "/pagamento/criar" => "PagamentoController@viewCriarPagamentos",
