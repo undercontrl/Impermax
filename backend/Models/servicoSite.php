@@ -1,6 +1,5 @@
 <?php
 namespace App\Impermax\Models;
-
 use PDO;
 
 class ServicoSite {
@@ -84,19 +83,19 @@ class ServicoSite {
         return $stmt->execute();
     }
 
-    public function inserir($nome, $descricao, $foto, $status = 'Inativo') {
+    public function inserir($nome, $descricao, $foto_servico, $status = 'Inativo') {
     $sql = "INSERT INTO tbl_servico 
             (nome_servico, descricao_servico, foto_servico, status_servico)
             VALUES (:nome, :descricao, :foto, :status)";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':descricao', $descricao);
-    $stmt->bindParam(':foto', $foto);
+    $stmt->bindParam(':foto', $foto_servico);
     $stmt->bindParam(':status', $status);
     return $stmt->execute();
 }
 
-public function atualizar($id, $nome, $descricao, $foto, $status) {
+public function atualizar($id, $nome, $descricao, $foto_servico, $status) {
     $sql = "UPDATE tbl_servico 
             SET nome_servico = :nome,
                 descricao_servico = :descricao,
@@ -108,7 +107,7 @@ public function atualizar($id, $nome, $descricao, $foto, $status) {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':descricao', $descricao);
-    $stmt->bindParam(':foto', $foto);
+    $stmt->bindParam(':foto', $foto_servico);
     $stmt->bindParam(':status', $status);
     return $stmt->execute();
 }

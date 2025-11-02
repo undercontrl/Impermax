@@ -12,15 +12,16 @@ use App\Impermax\Core\FileManager;
 class ServicoSiteController extends AdminController 
 {
     private $model;
-    private $fileManager;
+    private $db;
+    private $gerenciarImagem;
 
     public function __construct() 
     {
         parent::__construct();
-        $db = Database::getInstance();
-        $this->model = new ServicoSite($db);
+        $this->db = Database::getInstance();
+        $this->model = new ServicoSite($this->db);
         // Usar caminho absoluto como no ProjetoController
-        $this->fileManager = new FileManager($_SERVER['DOCUMENT_ROOT'] . '/upload');
+       $this->gerenciarImagem = new FileManager($_SERVER['DOCUMENT_ROOT'] . '/upload');
     }
 
     // ==================== VIEWS ====================
@@ -109,9 +110,9 @@ class ServicoSiteController extends AdminController
 
         try {
             // Upload da foto
-            $foto = $this->fileManager->salvarArquivo($_FILES['foto_servico'], 'servicos');
+            $foto_servico = $this->gerenciarImagem->salvarArquivo($_FILES['foto_servico'], 'servico');
             
-            if (!$foto) {
+            if (!$foto_servico) {
                 Redirect::redirecionarComMensagem(
                     "servico-site/criar",
                     "error",
@@ -124,7 +125,7 @@ class ServicoSiteController extends AdminController
             $sucesso = $this->model->inserir(
                 $_POST['nome_servico'],
                 $_POST['descricao_servico'],
-                $foto,
+                $foto_servico,
                 'Inativo' // Status padrão
             );
 
@@ -136,7 +137,7 @@ class ServicoSiteController extends AdminController
                 );
             } else {
                 // Se falhou ao inserir no banco, deletar a imagem
-                $caminhoCompleto = $_SERVER['DOCUMENT_ROOT'] . '/upload/servicos/' . $foto;
+                $caminhoCompleto = $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $foto_servico['foto_servico'];
                 if (file_exists($caminhoCompleto)) {
                     @unlink($caminhoCompleto);
                 }
@@ -189,22 +190,22 @@ class ServicoSiteController extends AdminController
 
         try {
             // Manter foto atual por padrão
-            $foto = $servicoAtual['foto_servico'];
+            $foto_servico = $servicoAtual['foto_servico'];
             
             // Verificar se há nova foto
             if (isset($_FILES['foto_servico']) && $_FILES['foto_servico']['error'] === UPLOAD_ERR_OK) {
                 // Upload da nova foto
-                $novaFoto = $this->fileManager->salvarArquivo($_FILES['foto_servico'], 'servicos');
+                $novaFoto = $this->gerenciarImagem->salvarArquivo($_FILES['foto_servico'], 'servico');
                 
                 if ($novaFoto) {
                     // Deletar foto antiga se existir
                     if (!empty($servicoAtual['foto_servico'])) {
-                        $caminhoAntigo = $_SERVER['DOCUMENT_ROOT'] . '/upload/servicos/' . $servicoAtual['foto_servico'];
+                        $caminhoAntigo = $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $servicoAtual['foto_servico'];
                         if (file_exists($caminhoAntigo)) {
                             @unlink($caminhoAntigo);
                         }
                     }
-                    $foto = $novaFoto;
+                    $foto_servico = $novaFoto;
                 } else {
                     Redirect::redirecionarComMensagem(
                         "servico-site/editar/$id",
@@ -220,7 +221,7 @@ class ServicoSiteController extends AdminController
                 $id,
                 $_POST['nome_servico'],
                 $_POST['descricao_servico'],
-                $foto,
+                $foto_servico,
                 $_POST['status_servico'] ?? 'Inativo'
             );
 

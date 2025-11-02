@@ -112,8 +112,9 @@
                         <!-- Imagem do Serviço -->
                         <div class="servico-site-image">
                             <?php if (!empty($servico['foto_servico'])): ?>
-                                <img src="/backend/upload/<?= htmlspecialchars($servico['foto_servico']) ?>" 
-                                     alt="<?= htmlspecialchars($servico['nome_servico']) ?>">
+                                <img src="/upload/<?= htmlspecialchars($servico['foto_servico']) ?>" 
+                                    alt="<?= htmlspecialchars($servico['nome_servico']) ?>"
+                                    onerror="this.parentElement.innerHTML='<div class=\'servico-site-no-image\'><i class=\'bi bi-image\'></i><span>Erro ao carregar</span></div>'">
                             <?php else: ?>
                                 <div class="servico-site-no-image">
                                     <i class="bi bi-image"></i>

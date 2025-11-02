@@ -117,9 +117,9 @@
                 <div class="current-image-section">
                     <label class="form-label">Imagem Atual</label>
                     <div class="current-image-wrapper">
-                        <img src="/backend/upload/<?= htmlspecialchars($servico['foto_servico']) ?>" 
-                             alt="<?= htmlspecialchars($servico['nome_servico']) ?>"
-                             id="currentImage">
+                       <img src="/upload/servicos/<?= htmlspecialchars($servico['foto_servico']) ?>" 
+                         alt="<?= htmlspecialchars($servico['nome_servico']) ?>"
+                          onerror="this.parentElement.innerHTML='<div class=\'servico-site-no-image\'><i class=\'bi bi-image\'></i><span>Erro ao carregar</span></div>'">
                         <div class="current-image-info">
                             <i class="bi bi-check-circle-fill"></i>
                             <span>Imagem carregada</span>
