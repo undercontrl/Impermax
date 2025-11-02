@@ -40,7 +40,7 @@ class ServicoSiteController extends AdminController
         $statusFiltro = $_GET['status'] ?? '';
         
         // Busca os dados
-        $resultado = $this->model->listarTodos($pagina, 12);
+        $resultado = $this->model->listarTodos($pagina, 10);
         $servicos = $resultado['data'];
         
         // Aplica filtro de status se necessário
