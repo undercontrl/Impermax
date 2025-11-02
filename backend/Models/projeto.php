@@ -8,6 +8,7 @@ class Projeto
     private $foto_antes_projeto;
     private $foto_depois_projeto;
     private $descricao_projeto;
+    private $status_projeto;
     private $criado_em;
     private $atualizado_em;
     private $excluido_em;
@@ -23,7 +24,7 @@ class Projeto
     // Buscar todos os projetos
     public function buscarProjetos()
     {
-        $sql = 'SELECT * FROM tbl_projeto WHERE excluido_em IS NULL ORDER BY criado_em DESC';
+        $sql = 'SELECT *, status_projeto FROM tbl_projeto WHERE excluido_em IS NULL ORDER BY criado_em DESC';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -55,51 +56,52 @@ class Projeto
     /**
      * Buscar projetos com filtros, ordenação e paginação
      */
-    public function buscarProjetosFiltrados($busca = '', $ordemCampo = 'criado_em', $ordemDirecao = 'DESC', $limite = 12, $offset = 0)
-    {
-        $sql = 'SELECT 
-                    id_projeto,
-                    foto_antes_projeto,
-                    foto_depois_projeto,
-                    descricao_projeto,
-                    criado_em,
-                    atualizado_em
-                FROM tbl_projeto
-                WHERE excluido_em IS NULL';
-        
-        $params = [];
-        
-        // Filtro de busca
-        if (!empty($busca)) {
-            $sql .= ' AND (descricao_projeto LIKE :busca OR id_projeto LIKE :busca)';
-            $params[':busca'] = "%$busca%";
-        }
-        
-        // Ordenação
-        $camposValidos = ['id_projeto', 'descricao_projeto', 'criado_em', 'atualizado_em'];
-        if (!in_array($ordemCampo, $camposValidos)) {
-            $ordemCampo = 'criado_em';
-        }
-        
-        $ordemDirecao = strtoupper($ordemDirecao) === 'ASC' ? 'ASC' : 'DESC';
-        $sql .= " ORDER BY $ordemCampo $ordemDirecao";
-        
-        // Paginação
-        $sql .= ' LIMIT :limite OFFSET :offset';
-        
-        $statement = $this->db->prepare($sql);
-        
-        foreach ($params as $key => $value) {
-            $statement->bindValue($key, $value);
-        }
-        
-        $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
-        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
-        
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+public function buscarProjetosFiltrados($busca = '', $ordemCampo = 'criado_em', $ordemDirecao = 'DESC', $limite = 12, $offset = 0)
+{
+    $sql = 'SELECT 
+                id_projeto,
+                foto_antes_projeto,
+                foto_depois_projeto,
+                descricao_projeto,
+                status_projeto,
+                criado_em,
+                atualizado_em
+            FROM tbl_projeto
+            WHERE excluido_em IS NULL';
+    
+    $params = [];
+    
+    // Filtro de busca
+    if (!empty($busca)) {
+        $sql .= ' AND (descricao_projeto LIKE :busca OR id_projeto LIKE :busca)';
+        $params[':busca'] = "%$busca%";
     }
     
+    // Ordenação
+    $camposValidos = ['id_projeto', 'descricao_projeto', 'criado_em', 'atualizado_em'];
+    if (!in_array($ordemCampo, $camposValidos)) {
+        $ordemCampo = 'criado_em';
+    }
+    
+    $ordemDirecao = strtoupper($ordemDirecao) === 'ASC' ? 'ASC' : 'DESC';
+    $sql .= " ORDER BY $ordemCampo $ordemDirecao";
+    
+    // Paginação
+    $sql .= ' LIMIT :limite OFFSET :offset';
+    
+    $statement = $this->db->prepare($sql);
+    
+    foreach ($params as $key => $value) {
+        $statement->bindValue($key, $value);
+    }
+    
+    $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
+    $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+    
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
     /**
      * Contar total de projetos filtrados (para paginação)
      */
@@ -163,16 +165,17 @@ class Projeto
     /**
      * Inserir novo projeto
      */
-    public function inserirProjeto($foto_antes_projeto, $foto_depois_projeto, $descricao)
+    public function inserirProjeto($foto_antes_projeto, $foto_depois_projeto, $descricao, $status_projeto = 'Inativo')
     {
         $dataAtual = date('Y-m-d H:i:s');
-        $sql = 'INSERT INTO tbl_projeto (foto_antes_projeto, foto_depois_projeto, descricao_projeto, criado_em) 
-                VALUES (:foto_antes, :foto_depois, :descricao, :criado)';
+        $sql = 'INSERT INTO tbl_projeto (foto_antes_projeto, foto_depois_projeto, descricao_projeto, status_projeto, criado_em) 
+                VALUES (:foto_antes, :foto_depois, :descricao, :status_projeto, :criado)';
         
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':foto_antes', $foto_antes_projeto);
         $stmt->bindParam(':foto_depois', $foto_depois_projeto);
         $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':status_projeto', $status_projeto);
         $stmt->bindParam(':criado', $dataAtual);
         
         return $stmt->execute();
@@ -181,13 +184,14 @@ class Projeto
     /**
      * Atualizar projeto existente
      */
-    public function atualizarProjeto($id, $foto_antes, $foto_depois, $descricao)
+    public function atualizarProjeto($id, $foto_antes, $foto_depois, $descricao, $status_projeto)
     {
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_projeto 
                 SET foto_antes_projeto = :foto_antes,
                     foto_depois_projeto = :foto_depois,
                     descricao_projeto = :descricao,
+                    status_projeto = :status_projeto,
                     atualizado_em = :atualizado
                 WHERE id_projeto = :id';
         
@@ -196,6 +200,7 @@ class Projeto
         $stmt->bindParam(':foto_antes', $foto_antes);
         $stmt->bindParam(':foto_depois', $foto_depois);
         $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':status_projeto', $status_projeto);
         $stmt->bindParam(':atualizado', $dataAtual);
         
         return $stmt->execute();
@@ -221,25 +226,27 @@ class Projeto
     /**
      * Buscar projetos recentes (últimos X)
      */
-    public function buscarRecentes($limite = 6)
-    {
-        $sql = 'SELECT 
-                    id_projeto,
-                    foto_antes_projeto,
-                    foto_depois_projeto,
-                    descricao_projeto,
-                    criado_em
-                FROM tbl_projeto
-                WHERE excluido_em IS NULL
-                ORDER BY criado_em DESC
-                LIMIT :limite';
-        
-        $statement = $this->db->prepare($sql);
-        $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
-        $statement->execute();
-        
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
+public function buscarRecentes($limite = 6)
+{
+    $sql = 'SELECT 
+                id_projeto,
+                foto_antes_projeto,
+                foto_depois_projeto,
+                descricao_projeto,
+                status_projeto,
+                criado_em
+            FROM tbl_projeto
+            WHERE excluido_em IS NULL
+            ORDER BY criado_em DESC
+            LIMIT :limite';
+    
+    $statement = $this->db->prepare($sql);
+    $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
+    $statement->execute();
+    
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
     
     /**
      * Contar total de projetos
@@ -286,4 +293,28 @@ class Projeto
         
         return $dados;
     }
+
+    // ==================== STATUS DO PROJETO ====================
+
+
+    public function alterarStatusProjeto($id, $status)
+        {
+            $sql = 'UPDATE tbl_projeto SET status_projeto = :status WHERE id_projeto = :id AND excluido_em IS NULL';
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+
+        public function ativarProjeto($id)
+        {
+            return $this->alterarStatusProjeto($id, 'Ativo');
+        }
+
+        public function desativarProjeto($id)
+        {
+            return $this->alterarStatusProjeto($id, 'Inativo');
+        }
 }

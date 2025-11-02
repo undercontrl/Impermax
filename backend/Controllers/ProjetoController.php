@@ -318,4 +318,39 @@ class ProjetoController
         }
         exit;
     }
+
+
+    /**
+     * Ativar projeto
+     */
+    public function ativarProjeto($id)
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "ID não informado!");
+            return;
+        }
+
+        if ($this->projeto->ativarProjeto($id)) {
+            Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto ativado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "Erro ao ativar projeto!");
+        }
+    }
+
+    /**
+     * Desativar projeto
+     */
+    public function desativarProjeto($id)
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "ID não informado!");
+            return;
+        }
+
+        if ($this->projeto->desativarProjeto($id)) {
+            Redirect::redirecionarComMensagem("projeto/listar", "success", "Projeto desativado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("projeto/listar", "error", "Erro ao desativar projeto!");
+        }
+    }
 }

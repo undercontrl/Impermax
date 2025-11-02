@@ -148,6 +148,13 @@
                         <div class="projeto-info">
                             <div class="projeto-header">
                                 <span class="projeto-id">#<?= htmlspecialchars($projeto['id_projeto']) ?></span>
+                                <!-- STATUS -->
+                                <?php $statusProjeto = trim($projeto['status_projeto'] ?? 'Inativo'); ?>
+                                <?php if ($statusProjeto === 'Ativo'): ?>
+                                    <span class="badge bg-success px-2 py-1">Ativo</span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger px-2 py-1">Inativo</span>
+                                <?php endif; ?>
                                 <span class="projeto-data">
                                     <i class="bi bi-calendar3"></i>
                                     <?= date('d/m/Y', strtotime($projeto['criado_em'])) ?>
@@ -165,6 +172,22 @@
                                     <i class="bi bi-eye"></i>
                                     Ver
                                 </a> -->
+                                <?php $statusProjeto = isset($projeto['status_projeto']) ? trim($projeto['status_projeto']) : 'Inativo'; ?>
+                                <?php if ($statusProjeto === 'Ativo'): ?>
+                                    <a href="/backend/projeto/desativar/<?= $projeto['id_projeto'] ?>" 
+                                    class="btn-projeto-action btn-projeto-disable"
+                                    style="background:#ffb3b3;">
+                                        <i class="bi bi-toggle-off"></i>
+                                        Desativar
+                                    </a>
+                                <?php else: ?>
+                                    <a href="/backend/projeto/ativar/<?= $projeto['id_projeto'] ?>" 
+                                    class="btn-projeto-action btn-projeto-enable"
+                                    style="background:#b3ffb3;">
+                                        <i class="bi bi-toggle-on"></i>
+                                        Ativar
+                                    </a>
+                                <?php endif; ?>
                                 <a href="/backend/projeto/editar/<?= $projeto['id_projeto'] ?>" 
                                    class="btn-projeto-action btn-projeto-edit">
                                     <i class="bi bi-pencil"></i>
