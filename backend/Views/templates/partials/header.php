@@ -40,6 +40,9 @@ if (in_array($currentPath, $rotasPublicas)) {
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="/public/css/status-badges.css">
 
+    <!-- Favicon -->
+    <link rel="icon" type="images/png" href="assets/icons/water.png">
+
     <style>
         :root {
             --cor-primaria: #5f7396;

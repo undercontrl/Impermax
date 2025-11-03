@@ -18,6 +18,7 @@ $secao->set('csrf_token', $codigoToken);
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="images/png" href="assets/icons/water.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" type="images/png" href="assets/icons/water.png">
 </head>
 <body>
    <header>
