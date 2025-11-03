@@ -42,7 +42,7 @@ $secao->set('csrf_token', $codigoToken);
             <li><a href="sobre.php">SOBRE</a></li>
             <li><a href="servicos.php">SERVIÇOS</a></li>
             <li><a href="projetos.php">PROJETOS</a></li>
-            <li><a href="#contato">CONTATO</a></li>
+            <li><a href="contato.php">CONTATO</a></li>
         </ul>
     </nav>
    </header>
