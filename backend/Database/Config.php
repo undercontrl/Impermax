@@ -16,7 +16,7 @@ class Config
     'username' => 'faust537_time3_ti29',
     'password' => 'r*u2gS0QkVL9',
     'charset' => 'utf8',
-    'port' =>  NULL,
+    'port' =>  '3306',
   ),
 )
         ];
