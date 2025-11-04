@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // CARD
                 const cardHtml = `
                     <div class="card-servico">
-                        <a href="servicos.html?id=${servico.id_servico}">
+                        <a href="servicos.php">
                             <figure>
                                 <img src="${servico.caminho_imagem}" 
                                      alt="${servico.nome_servico}" 
