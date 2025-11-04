@@ -39,134 +39,135 @@
         </section>
 
         <section class="projetos">
-
             <div class="container-projetos">
-                <div class="cards-projetos">
-
-                    <div class="linha-projetos">
-                        <div class="card-projeto">
-                            <figure>
-                                <img src="assets/img/projeto1.jpg" alt="projeto 1 " class="projeto-imagem">
-                                <figcaption class="figcaption-projeto">
-                                    <h3 class="titulo-projeto">Regularização de Laje com Argamassa</h3>
-                                    <p class="texto-interno-projeto">Execução de contrapiso com argamassa sobre laje exposta, nivelando a superfície antes da aplicação do sistema de impermeabilização. 
-                                        Etapa essencial para garantir aderência e durabilidade do serviço.</p>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        
-                        <div class="card-projeto">
-                            <figure>
-                                <img src="assets/img/projeto2.webp" alt="projeto 2 " class="projeto-imagem">
-                                <figcaption class="figcaption-projeto">
-                                    <h3 class="titulo-projeto">Aplicação de Manta Asfáltica com Maçarico</h3>
-                                    <p class="texto-interno-projeto">Impermeabilização de cobertura utilizando manta asfáltica aplicada com maçarico. 
-                                        Esse método cria uma barreira eficiente contra infiltrações e é ideal para áreas expostas às intempéries.</p>
-                                </figcaption>
-                            </figure>
-                        </div>   
-
-                        <div class="card-projeto">
-                            <figure>
-                                <img src="assets/img/projeto3.jpg" alt="projeto 3 " class="projeto-imagem">
-                                <figcaption class="figcaption-projeto">
-                                    <h3 class="titulo-projeto">Aplicação de Primer Impermeabilizante</h3>
-                                    <p class="texto-interno-projeto">Aplicação de primer impermeabilizante com rolo sobre superfície de concreto, preparando a base para receber manta asfáltica ou outro sistema de vedação. 
-                                        Etapa crucial para maior aderência do material.</p>
-                                </figcaption>
-                            </figure>
-                        </div>
+                <div class="grid-projetos">
+                    <div class="card-projeto">
+                        <figure>
+                            <span class="badge-projeto">Laje</span>
+                            <img src="https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=800" alt="projeto 1" class="projeto-imagem">
+                            <figcaption class="figcaption-projeto">
+                                <h3 class="titulo-projeto">Regularização de Laje com Argamassa</h3>
+                                <p class="texto-interno-projeto">Execução de contrapiso com argamassa sobre laje exposta, nivelando a superfície antes da aplicação do sistema de impermeabilização. Etapa essencial para garantir aderência e durabilidade do serviço.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
                     
+                    <div class="card-projeto">
+                        <figure>
+                            <span class="badge-projeto">Cobertura</span>
+                            <img src="https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800" alt="projeto 2" class="projeto-imagem">
+                            <figcaption class="figcaption-projeto">
+                                <h3 class="titulo-projeto">Aplicação de Manta Asfáltica com Maçarico</h3>
+                                <p class="texto-interno-projeto">Impermeabilização de cobertura utilizando manta asfáltica aplicada com maçarico. Esse método cria uma barreira eficiente contra infiltrações e é ideal para áreas expostas às intempéries.</p>
+                            </figcaption>
+                        </figure>
+                    </div>   
+
+                    <div class="card-projeto">
+                        <figure>
+                            <span class="badge-projeto">Preparação</span>
+                            <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800" alt="projeto 3" class="projeto-imagem">
+                            <figcaption class="figcaption-projeto">
+                                <h3 class="titulo-projeto">Aplicação de Primer Impermeabilizante</h3>
+                                <p class="texto-interno-projeto">Aplicação de primer impermeabilizante com rolo sobre superfície de concreto, preparando a base para receber manta asfáltica ou outro sistema de vedação. Etapa crucial para maior aderência do material.</p>
+                            </figcaption>
+                        </figure>
                     </div>
 
-                    <div class="linha-projetos">
-                        <div class="card-projeto">
+                    <div class="card-projeto">
                         <figure>
-                            <img src="assets/img/projeto4.jpg" alt="projeto 4 " class="projeto-imagem">
+                            <span class="badge-projeto">Térmica</span>
+                            <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800" alt="projeto 4" class="projeto-imagem">
                             <figcaption class="figcaption-projeto">
                                 <h3 class="titulo-projeto">Instalação de Manta Asfáltica com Alumínio</h3>
                                 <p class="texto-interno-projeto">Aplicação de manta aluminizada sobre laje exposta. Esse tipo de impermeabilização, além de vedar totalmente a superfície, reflete o calor solar, reduzindo a temperatura interna do ambiente.</p>
                             </figcaption>
                         </figure>
-                      </div> 
+                    </div>
 
-
-                        <div class="card-projeto">
+                    <div class="card-projeto">
                         <figure>
-                            <img src="assets/img/projeto5.jpg" alt="projeto 5 " class="projeto-imagem">
+                            <span class="badge-projeto">Condomínio</span>
+                            <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800" alt="projeto 5" class="projeto-imagem">
                             <figcaption class="figcaption-projeto">
                                 <h3 class="titulo-projeto">Impermeabilização de Laje Técnica em Condomínio</h3>
                                 <p class="texto-interno-projeto">Remoção da antiga impermeabilização e preparação da laje para aplicação de novo sistema de vedação. Serviço realizado em condomínio residencial, garantindo proteção duradoura contra infiltrações.</p>
                             </figcaption>
                         </figure>
-                        </div> 
+                    </div>
 
-
-                       <div class="card-projeto">
+                    <div class="card-projeto">
                         <figure>
-                            <img src="assets/img/projeto6.jpg" alt="projeto 6 " class="projeto-imagem">
+                            <span class="badge-projeto">Subsolo</span>
+                            <img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800" alt="projeto 6" class="projeto-imagem">
                             <figcaption class="figcaption-projeto">
                                 <h3 class="titulo-projeto">Impermeabilização de Contenção Subterrânea</h3>
                                 <p class="texto-interno-projeto">Serviço especializado em impermeabilização de parede de contenção subterrânea com manta asfáltica. Essa aplicação é essencial para evitar infiltrações em estruturas abaixo do nível do solo.</p>
                             </figcaption>
                         </figure>
-                       </div> 
-
                     </div>
                 </div>
-
             </div>
-
         </section>
 
-
-    <section class="depoimentos">
-        <div id="titulo-depoimento">
-        <h2 >Testemunhos </h2></div>
+        <section class="depoimentos">
+            <div id="titulo-depoimento">
+                <h2>Testemunhos</h2>
+            </div>
 
             <div class="container-depoimentos">
                 <div class="carrossel-wrapper">
                     <button class="btn-esquerda">&#9664;</button>
                     <div class="carrossel">
-                        <article class="card-depoimento card-depoimento1">
-                        <div class="texto-depoimento" >
-                            <h2 class="titulo-interno-depo">Carla Mendonça</h2>
-                            <p class="texto-interno-depo">“Tive problemas sérios de infiltração no meu banheiro e a equipe da Impermax resolveu tudo com rapidez e muita atenção. 
-                                O serviço ficou impecável e não tive mais dor de cabeça. Super indico!”</p>
-                
-                        </div>
+                        <article class="card-depoimento">
+                            <div class="texto-depoimento">
+                                <h2 class="titulo-interno-depo">Carla Mendonça</h2>
+                                <div class="estrelas-depoimento">
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                </div>
+                                <p class="texto-interno-depo">Tive problemas sérios de infiltração no meu banheiro e a equipe da Impermax resolveu tudo com rapidez e muita atenção. O serviço ficou impecável e não tive mais dor de cabeça. Super indico!</p>
+                            </div>
                         </article>
 
-                        <article class="card-depoimento card-depoimento2">
-                        <div class="texto-depoimento"> 
-                            <h2 class="titulo-interno-depo">Rodrigo Antunes</h2>
-                            <p class="texto-interno-depo">“Sou engenheiro e já trabalhei com diversas empresas de impermeabilização, mas a Impermax se destaca pelo cuidado, capricho e cumprimento de prazos.”</p>
-                        </div>
+                        <article class="card-depoimento">
+                            <div class="texto-depoimento">
+                                <h2 class="titulo-interno-depo">Rodrigo Antunes</h2>
+                                <div class="estrelas-depoimento">
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                </div>
+                                <p class="texto-interno-depo">Sou engenheiro e já trabalhei com diversas empresas de impermeabilização, mas a Impermax se destaca pelo cuidado, capricho e cumprimento de prazos.</p>
+                            </div>
                         </article>
 
-                        <article class="card-depoimento card-depoimento3">
-                        <div class="texto-depoimento"> 
-                            <h2 class="titulo-interno-depo">Sílvio Rocha</h2>
-                            <p class="texto-interno-depo">“Contratamos a Impermax para impermeabilizar a laje do prédio e ficamos muito satisfeitos. Equipe organizada, pontual e com excelente custo-benefício. Resultado profissional e duradouro.”</p>
-                        </div>
+                        <article class="card-depoimento">
+                            <div class="texto-depoimento">
+                                <h2 class="titulo-interno-depo">Sílvio Rocha</h2>
+                                <div class="estrelas-depoimento">
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                    <span class="estrela">★</span>
+                                </div>                                
+                                <p class="texto-interno-depo">Contratamos a Impermax para impermeabilizar a laje do prédio e ficamos muito satisfeitos. Equipe organizada, pontual e com excelente custo-benefício. Resultado profissional e duradouro.</p>
+                            </div>
                         </article>
-
-                     </div>
-                </div>
+                    </div>
                     <button class="btn-direita">&#9654;</button>
+                </div>
+                <div class="adicionar-depoimento">
+                    <a href="avaliacao.php"><button class="btn-adicionar-depoimento">Adicionar Depoimento</button></a>
+                </div>
             </div>
-            <div class="adicionar-depoimento">
-                <a href="avaliacao.php"><button class="btn-adicionar-depoimento">Adicionar Depoimento</button></a> 
-            </div>
-
-
-    </section>
-
-
-
-
-
-
+        </section>
    </main>
 
 
@@ -194,15 +195,13 @@
         const carrossel = document.querySelector('.carrossel');
         const btnDireita = document.querySelector('.btn-direita');
         const btnEsquerda = document.querySelector('.btn-esquerda');
-        const cardWidth = 450; // mesmo valor do min-width do card
+        const cardWidth = 450;
          
-        // Ajusta o carrossel para começar no depoimento 2
         document.addEventListener('DOMContentLoaded', () => {
-            carrossel.scrollLeft = cardWidth; // Move para o início do card2
+            carrossel.scrollLeft = cardWidth;
         });
          
         btnDireita.onclick = () => {
-            // Se estiver no final, volta para o início
             if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
                 carrossel.scrollTo({ left: 0, behavior: 'smooth' });
             } else {
@@ -211,7 +210,7 @@
         };
          
         btnEsquerda.onclick = () => {
-              carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+            carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
         };
     </script>
 

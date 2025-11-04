@@ -1,0 +1,29 @@
+@media (max-width: 768px) {
+            .header-secundario {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .menu-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .titulo-projetos {
+                font-size: 36px;
+            }
+
+            .grid-projetos {
+                grid-template-columns: 1fr;
+            }
+
+            .card-depoimento {
+                min-width: 320px;
+            }
+
+            .footer-conteudo {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
