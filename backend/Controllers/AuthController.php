@@ -52,7 +52,9 @@ class AuthController {
                 Redirect::redirecionarPara('admin/dashboard');
             } elseif ($tipo === 'funcionario') {
                 Redirect::redirecionarPara('funcionario/dashboard');
-            } else {
+            } elseif ($tipo === 'cliente') {
+                Redirect::redirecionarPara('avaliacao.php'); //arrumar depois
+            }else {
                 // 🚫 bloqueia acesso de outros tipos (ex: 'usuario')
                 $this->session->destroy();
                 Redirect::redirecionarComMensagem('login', 'error', 'Acesso restrito. Apenas administradores e funcionários podem entrar.');
@@ -82,7 +84,7 @@ class AuthController {
             Redirect::redirecionarComMensagem('register', 'error', 'E-mail já cadastrado.');
         }
 
-        $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', 'Ativo', null);
+        $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'cliente', 'Ativo', null);
 
         if ($novoUsuarioId) {
             Redirect::redirecionarComMensagem('login', 'success', 'Cadastro realizado! Faça o login.');
