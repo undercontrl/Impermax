@@ -66,7 +66,7 @@ $secao->set('csrf_token', $codigoToken);
                 <form action="/enviar-avaliacao" method="POST" id="formAvaliacao" class="avaliacao-form">
                     
                     <!-- Nome -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-person-fill"></i>
                             Seu Nome <span class="required">*</span>
@@ -79,10 +79,10 @@ $secao->set('csrf_token', $codigoToken);
                             placeholder="Digite seu nome completo"
                             required
                         >
-                    </div>
+                    </div> -->
 
                     <!-- Email -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-envelope-fill"></i>
                             Seu E-mail <span class="required">*</span>
@@ -96,7 +96,7 @@ $secao->set('csrf_token', $codigoToken);
                             required
                         >
                         <small class="form-hint">Não será exibido publicamente</small>
-                    </div>
+                    </div> -->
 
                     <!-- Avaliação em Estrelas -->
                     <div class="form-group">

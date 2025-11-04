@@ -28,6 +28,9 @@ $secao->set('csrf_token', $codigoToken);
             <a href="https://www.facebook.com/aleimpermax" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/facebook.svg" alt="Facebook" class="icon-redes"></a>
             <a href="https://www.instagram.com/impermax_servicos?igsh=cHM2MW82a3lqOHNl" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/instagram.svg" alt="Instagram" class="icon-redes"></a>
             <a href="https://wa.me/+5511999734979" target="_blank" class="ancora-header-secundaria"><img src="assets/icons/whatsapp.svg" alt="WhatsApp" class="icon-redes"></a>
+            <a href="/backend/login" class="ancora-header-secundaria btn-admin" title="Acesso Administrativo">
+                <img src="assets/icons/user-lock.svg" alt="Admin" class="icon-redes">
+            </a>
         </div>
     </div>
     <nav class="header-primario">
