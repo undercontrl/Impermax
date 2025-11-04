@@ -113,18 +113,18 @@ class Rotas
         "/pagamento/editar/{id}" => "PagamentoController@viewEditarPagamentos",
         "/pagamento/excluir/{id}" => "PagamentoController@viewExcluirPagamentos",
         //orcamento
-        "/orcamento" => "orcamentoController@index",
-        "/orcamento/criar" => "orcamentoController@viewCriarOrcamentos",
-        "/orcamento/listar" => "orcamentoController@viewListarOrcamentos",
+        "/orcamento" => "OrcamentoController@index",
+        "/orcamento/criar" => "OrcamentoController@viewCriarOrcamentos",
+        "/orcamento/listar" => "OrcamentoController@viewListarOrcamentos",
         "/orcamento/visualizar/{id}" => "OrcamentoController@viewVisualizarOrcamento",
-        "/orcamento/editar/{id}" => "orcamentoController@viewEditarOrcamentos",
-        "/orcamento/excluir/{id}" => "orcamentoController@viewExcluirOrcamentos",
+        "/orcamento/editar/{id}" => "OrcamentoController@viewEditarOrcamentos",
+        "/orcamento/excluir/{id}" => "OrcamentoController@viewExcluirOrcamentos",
         //material
-        "/material" => "materialController@index",
-        "/material/criar" => "materialController@viewCriarMateriais",
-        "/material/listar" => "materialController@viewListarMateriais",
-        "/material/editar/{id}" => "materialController@viewEditarMateriais",
-        "/material/excluir/{id}" => "materialController@viewExcluirMateriais",
+        "/material" => "MaterialController@index",
+        "/material/criar" => "MaterialController@viewCriarMateriais",
+        "/material/listar" => "MaterialController@viewListarMateriais",
+        "/material/editar/{id}" => "MaterialController@viewEditarMateriais",
+        "/material/excluir/{id}" => "MaterialController@viewExcluirMateriais",
 
         
     ],
@@ -197,15 +197,15 @@ class Rotas
         "/pagamento/deletar" => "PagamentoController@deletarPagamento",
         "/pagamento/deletar-multiplos" => "PagamentoController@deletarMultiplos",
         //orcamento
-        "/orcamento/salvar" => "orcamentoController@salvarOrcamento",
-        "/orcamento/atualizar/{id}" => "orcamentoController@atualizarOrcamento",
-        "/orcamento/deletar/{id}" => "orcamentoController@deletarOrcamento",
-        "/orcamento/alterar-status-massa" => "orcamentoController@alterarStatusEmMassa",
-        "/orcamento/excluir-massa" => "orcamentoController@excluirEmMassa",
+        "/orcamento/salvar" => "OrcamentoController@salvarOrcamento",
+        "/orcamento/atualizar/{id}" => "OrcamentoController@atualizarOrcamento",
+        "/orcamento/deletar/{id}" => "OrcamentoController@deletarOrcamento",
+        "/orcamento/alterar-status-massa" => "OrcamentoController@alterarStatusEmMassa",
+        "/orcamento/excluir-massa" => "OrcamentoController@excluirEmMassa",
         //material 
-        "/material/salvar" => "materialController@salvarMaterial",
-        "/material/atualizar/{id}" => "materialController@atualizarMaterial",
-        "/material/deletar/{id}" => "materialController@deletarMaterial",
+        "/material/salvar" => "MaterialController@salvarMaterial",
+        "/material/atualizar/{id}" => "MaterialController@atualizarMaterial",
+        "/material/deletar/{id}" => "MaterialController@deletarMaterial",
         "/material/deletar-multiplos" => "MaterialController@deletarMultiplos"
     ]
         ];
