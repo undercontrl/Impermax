@@ -133,6 +133,57 @@
         
 
 
+        /* LOADING DOS PROJETOS */
+.loading-projetos {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+}
+
+.loading-projetos i {
+    font-size: 48px;
+    color: var(--primary-blue);
+    margin-bottom: 16px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-projetos p {
+    font-size: 16px;
+    margin-top: 12px;
+}
+
+/* ESTADO VAZIO */
+.empty-projetos {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-projetos i {
+    font-size: 64px;
+    color: var(--text-light);
+    opacity: 0.3;
+    margin-bottom: 20px;
+}
+
+.empty-projetos h3 {
+    color: var(--primary-blue);
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.empty-projetos p {
+    color: var(--text-light);
+    font-size: 16px;
+}
+
+
 
 
 

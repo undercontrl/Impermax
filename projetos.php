@@ -41,7 +41,7 @@
             <h1 class="titulo-projetos">Projetos</h1>
         </section>
 
-        <section class="projetos">
+        <!-- <section class="projetos">
             <div class="container-projetos">
                 <div class="grid-projetos">
                     <div class="card-projeto">
@@ -111,7 +111,27 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
+>
+
+            <section class="projetos">
+                <div class="container-projetos">
+                    <div class="grid-projetos" id="grid-projetos">
+                        <!-- Os projetos serão carregados aqui via JavaScript -->
+                        <div class="loading-projetos">
+                            <i class="bi bi-hourglass-split"></i>
+                            <p>Carregando projetos...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+
+
 
         <section class="depoimentos">
             <div id="titulo-depoimento">
@@ -220,6 +240,6 @@
 
 
 
-
+<script src = "js/paginaProjeto.js"></script>
 </body>
 </html>

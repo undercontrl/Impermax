@@ -112,6 +112,7 @@ class Rotas
         "/pagina-projeto/criar" => "PaginaProjetoController@criar",             
         "/pagina-projeto/editar/{id}" => "PaginaProjetoController@editar",      
         "/pagina-projeto/alternar/{id}" => "PaginaProjetoController@alternar",
+        "api/pagina-projeto" => "PublicPaginaProjetoController@getProjetos",
         //pagamento
         "/pagamento" => "PagamentoController@index",
         "/pagamento/criar" => "PagamentoController@viewCriarPagamentos",
