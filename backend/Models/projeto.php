@@ -319,12 +319,18 @@ public function buscarRecentes($limite = 6)
         }
 
 
-    public function listarAtivos()
+   
+
+public function listarAtivosAntesDepois()
 {
     $sql = "SELECT foto_antes_projeto, foto_depois_projeto 
             FROM tbl_projeto 
             WHERE status_projeto = 'Ativo' 
-              AND excluido_em IS NULL 
+              AND excluido_em IS NULL
+              AND foto_antes_projeto IS NOT NULL 
+              AND foto_antes_projeto != ''
+              AND foto_depois_projeto IS NOT NULL
+              AND foto_depois_projeto != ''
             ORDER BY criado_em DESC";
     
     $stmt = $this->db->prepare($sql);

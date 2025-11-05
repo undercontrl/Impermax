@@ -16,7 +16,8 @@ class PublicProjetoController
 
     public function getProjetos()
     {
-        $projetos = $this->projetoModel->listarAtivos();
+        // Busca apenas projetos com fotos antes/depois preenchidas
+        $projetos = $this->projetoModel->listarAtivosAntesDepois();
 
         // Montar URLs corretas (raiz do site)
         foreach ($projetos as &$p) {

@@ -105,6 +105,13 @@ class Rotas
         "/projeto/ativar/{id}" => "ProjetoController@ativarProjeto",
         "/projeto/desativar/{id}" => "ProjetoController@desativarProjeto",
         "api/projetos" => "PublicProjetoController@getProjetos",
+        //pagina projeto 
+        "/pagina-projeto" => "PaginaProjetoController@index",                   
+        "/pagina-projeto/listar" => "PaginaProjetoController@listar",           
+        "/pagina-projeto/listar/{pagina}" => "PaginaProjetoController@listar",  
+        "/pagina-projeto/criar" => "PaginaProjetoController@criar",             
+        "/pagina-projeto/editar/{id}" => "PaginaProjetoController@editar",      
+        "/pagina-projeto/alternar/{id}" => "PaginaProjetoController@alternar",
         //pagamento
         "/pagamento" => "PagamentoController@index",
         "/pagamento/criar" => "PagamentoController@viewCriarPagamentos",
@@ -191,6 +198,9 @@ class Rotas
         "/projeto/atualizar" => "ProjetoController@atualizarProjeto",
         "/projeto/deletar" => "ProjetoController@deletarProjeto",
         "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
+        //pagina projeto 
+        "/pagina-projeto/salvar" => "PaginaProjetoController@salvar",
+        "/pagina-projeto/atualizar/{id}" => "PaginaProjetoController@atualizar",
         //pagamento
         "/pagamento/salvar" => "PagamentoController@salvarPagamento",
         "/pagamento/atualizar" => "PagamentoController@atualizarPagamento",

@@ -16,6 +16,19 @@
         </div>
     </div>
 
+        <!-- Abas de Navegação -->
+    <div class="tabs-navigation">
+        <a href="/backend/projeto/listar" class="tab-btn active">
+            <i class="bi bi-gear-fill me-2"></i>
+            Antes e Depois
+            <span class="tab-badge"><?= $paginacao['total'] ?? count($projetos) ?></span>
+        </a>
+        <a href="/backend/pagina-projeto/listar" class="tab-btn">
+            <i class="bi bi-globe me-2"></i>
+            Página Projeto
+        </a>
+    </div>
+
     <!-- Filtros e Barra de Ações -->
     <form method="GET" action="/backend/projeto/listar" id="filterForm">
         <input type="hidden" name="ordem_campo" id="ordem_campo" value="<?= htmlspecialchars($_GET['ordem_campo'] ?? '') ?>">
@@ -305,6 +318,26 @@
         --cor-warning: #f59e0b;
         --cor-danger: #ef4444;
         --cor-info: #3b82f6;
+            --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --success-color: #10b981;
+    --success-hover: #059669;
+    --danger-color: #ef4444;
+    --danger-hover: #dc2626;
+    --warning-color: #f59e0b;
+    --info-color: #6366f1;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
     }
 
     .page-wrapper {
@@ -667,6 +700,90 @@
     .btn-bulk-cancel:hover {
         background: rgba(255, 255, 255, 0.3);
     }
+
+    .btn-action-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.btn-action-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+
+    /* ========== SISTEMA DE ABAS ========== */
+.tabs-navigation {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 0;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--gray-500);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    bottom: -2px;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+    background: var(--gray-50);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: #eff6ff;
+}
+
+.tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 8px;
+    background: var(--gray-200);
+    color: var(--gray-700);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.tab-btn.active .tab-badge {
+    background: var(--primary-color);
+    color: white;
+}
+
+
+
+
 
     /* Card de Conteúdo */
     .content-card {
