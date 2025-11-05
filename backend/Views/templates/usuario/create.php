@@ -175,7 +175,6 @@
 </div>
 
 <style>
-    /* Use o mesmo CSS do orcamento/create.php */
     :root {
         --cor-primaria: #5f7396;
         --cor-acento: #1487df;
