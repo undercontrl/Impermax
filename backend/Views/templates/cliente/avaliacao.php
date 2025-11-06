@@ -15,7 +15,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* background: var(--bg-color, #f1f5f9); */
+            background: linear-gradient(180deg, #5f7396,rgb(40, 73, 129));
             min-height: 100vh;
             padding: 20px;
         }
@@ -234,7 +235,7 @@
         .btn-submit {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg,rgb(118, 123, 138),rgb(13, 41, 102));
             color: white;
             border: none;
             border-radius: 12px;
@@ -325,6 +326,151 @@
                 font-size: 36px;
             }
         }
+        /* Footer */
+        .cliente-footer {
+            background: white;
+            border-radius: 16px;
+            margin-top: 30px;
+            padding: 40px 30px 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .footer-logo {
+            height: 50px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            transition: all 0.3s;
+        }
+
+        .footer-logo:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .footer-tagline {
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-redes-sociais {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .footer-social-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5f7396;
+            font-size: 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .footer-social-link:hover {
+            background: linear-gradient(135deg, #5f7396, #284981);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(95, 115, 150, 0.3);
+        }
+
+        .footer-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .footer-contato {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .footer-contato-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #64748b;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .footer-contato-item i {
+            font-size: 16px;
+            color: #5f7396;
+            width: 20px;
+            text-align: center;
+        }
+
+        .footer-contato-item:hover {
+            color: #284981;
+            transform: translateX(3px);
+        }
+
+        .footer-servicos {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .footer-copy {
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .footer-heart {
+            color: #ef4444;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .cliente-footer {
+                padding: 30px 20px 20px;
+            }
+
+            .footer-servicos {
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -332,7 +478,9 @@
         <!-- Header -->
         <header class="cliente-header">
             <div class="header-content">
-                <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax" class="logo">
+                <a href="/index.php">
+                    <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax" class="logo">
+                </a>
                 <div class="user-info">
                     <span class="user-name"><?= htmlspecialchars($nome_cliente ?? 'Cliente') ?></span>
                     <a href="/backend/logout" class="btn-logout">
@@ -454,8 +602,59 @@
                 </div>
             <?php endif; ?>
         </main>
-    </div>
+        <footer class="cliente-footer">
+            <div class="footer-content">
+                    <!-- Logo e Tagline -->
+                    <div class="footer-logo-section">
+                        <a href="/index.php">
+                            <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax" class="footer-logo">
+                        </a>
+                        <p class="footer-tagline">Proteção e qualidade para o seu patrimônio</p>
+                    </div>
 
+                    <!-- Redes Sociais -->
+                    <div class="footer-redes-sociais">
+                        <a href="https://www.facebook.com/aleimpermax" target="_blank" class="footer-social-link" title="Facebook">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/impermax_servicos" target="_blank" class="footer-social-link" title="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/+5511999734979" target="_blank" class="footer-social-link" title="WhatsApp">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </div>
+
+                    <!-- Informações de Contato -->
+                    <div class="footer-info">
+                        <div class="footer-contato">
+                            <a href="tel:+5511943961031" class="footer-contato-item">
+                                <i class="bi bi-telephone-fill"></i>
+                                <span>(11) 9 4396-1031</span>
+                            </a>
+                            <a href="mailto:aleimpermax@gmail.com" class="footer-contato-item">
+                                <i class="bi bi-envelope-fill"></i>
+                                <span>aleimpermax@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Serviços -->
+                    <div class="footer-servicos">
+                        Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas<br>
+                        Caixas d'água • Manta asfáltica • Tratamento de umidade
+                    </div>
+
+                    <!-- Copyright -->
+                    <div class="footer-bottom">
+                        <p class="footer-copy">
+                            Desenvolvido com <i class="bi bi-heart-fill footer-heart"></i> por Ctrl+Ari+Malu<br>
+                            © 2025 Impermax Impermeabilização. Todos os direitos reservados.
+                        </p>
+                    </div>
+            </div>
+        </footer>
+    </div>
     <script>
         // Atualizar texto da avaliação
         const ratingText = document.getElementById('ratingText');
@@ -464,7 +663,7 @@
             4: '⭐ Muito Bom! Obrigado!',
             3: '⭐ Bom! Agradecemos!',
             2: '⭐ Regular. Como podemos melhorar?',
-            1: '⭐ Ruim. Sentimos muito!'
+            1: '⭐ Ruim. Sentimos muito! Diga-nos em o que podemos melhorar'
         };
 
         document.querySelectorAll('input[name="nota_avaliacao"]').forEach(input => {

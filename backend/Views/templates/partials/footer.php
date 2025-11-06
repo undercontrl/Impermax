@@ -1,6 +1,6 @@
 <?php
 // Caminhos onde o footer não deve aparecer
-$rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar'];
+$rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar', '/backend/cliente/avaliacao'];
 
 // Pega o caminho atual sem query string
 $currentPath = strtok($_SERVER['REQUEST_URI'], '?');
