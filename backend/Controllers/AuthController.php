@@ -36,33 +36,34 @@ class AuthController {
     public function authenticar(): void {
         $email = $_POST['email_usuario'] ?? null;
         $senha = $_POST['senha_usuario'] ?? null;
-    
+
         $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
-    
+
         if ($usuario) {
             session_regenerate_id(true);
             $this->session->set('usuario_id', $usuario['id_usuario']);
             $this->session->set('usuario_nome', $usuario['nome_usuario']);
             $this->session->set('usuario_tipo', $usuario['tipo_usuario']);
-    
+
             // 🔐 Redireciona conforme o tipo de usuário
             $tipo = strtolower($usuario['tipo_usuario']);
-    
+
             if ($tipo === 'admin') {
                 Redirect::redirecionarPara('admin/dashboard');
             } elseif ($tipo === 'funcionario') {
                 Redirect::redirecionarPara('funcionario/dashboard');
             } elseif ($tipo === 'cliente') {
-                Redirect::redirecionarPara('avaliacao.php'); //arrumar depois
-            }else {
-                // 🚫 bloqueia acesso de outros tipos (ex: 'usuario')
+                // ✅ CLIENTE VAI PARA A PÁGINA DE AVALIAÇÃO
+                Redirect::redirecionarPara('cliente/avaliacao');
+            } else {
+                // 🚫 bloqueia acesso de outros tipos
                 $this->session->destroy();
-                Redirect::redirecionarComMensagem('login', 'error', 'Acesso restrito. Apenas administradores e funcionários podem entrar.');
+                Redirect::redirecionarComMensagem('login', 'error', 'Acesso não autorizado.');
             }
         } else {
             Redirect::redirecionarComMensagem('login', 'error', 'E-mail ou senha incorretos.');
         }
-    }    
+    }   
 
     public function cadastrarUsuario(): void {
         $erros = UsuarioValidador::ValidarEntradas($_POST);

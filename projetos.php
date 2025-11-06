@@ -142,7 +142,7 @@
                 <div class="carrossel-wrapper">
                     <button class="btn-esquerda">&#9664;</button>
                     <div class="carrossel">
-                        <article class="card-depoimento">
+                        <!-- <article class="card-depoimento">
                             <div class="texto-depoimento">
                                 <h2 class="titulo-interno-depo">Carla Mendonça</h2>
                                 <div class="estrelas-depoimento">
@@ -182,12 +182,12 @@
                                 </div>                                
                                 <p class="texto-interno-depo">Contratamos a Impermax para impermeabilizar a laje do prédio e ficamos muito satisfeitos. Equipe organizada, pontual e com excelente custo-benefício. Resultado profissional e duradouro.</p>
                             </div>
-                        </article>
+                        </article> -->
                     </div>
                     <button class="btn-direita">&#9654;</button>
                 </div>
                 <div class="adicionar-depoimento">
-                    <a href="avaliacao.php"><button class="btn-adicionar-depoimento">Adicionar Depoimento</button></a>
+                    <a href="/backend/login"><button class="btn-adicionar-depoimento">Adicionar Depoimento</button></a>
                 </div>
             </div>
         </section>
@@ -210,11 +210,7 @@
         <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
         <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
     </footer>
-
-
-
-
-    <script>
+    <!-- <script>
         const carrossel = document.querySelector('.carrossel');
         const btnDireita = document.querySelector('.btn-direita');
         const btnEsquerda = document.querySelector('.btn-esquerda');
@@ -235,11 +231,77 @@
         btnEsquerda.onclick = () => {
             carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
         };
-    </script>
+    </script> -->
+    <script src = "js/paginaProjeto.js"></script>
+    <script>
+        // Carregar avaliações aprovadas do banco
+        document.addEventListener('DOMContentLoaded', function() {
+            const carrossel = document.querySelector('.carrossel');
+            
+            if (!carrossel) return;
+            
+            // Mostrar loading
+            carrossel.innerHTML = '<p style="color:#fff;text-align:center;padding:40px;">Carregando avaliações...</p>';
+            
+            fetch('/backend/api/avaliacoes')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && data.data.length > 0) {
+                        carrossel.innerHTML = '';
+                        
+                        data.data.forEach(avaliacao => {
+                            const card = document.createElement('article');
+                            card.className = 'card-depoimento';
+                            
+                            // Gerar estrelas
+                            let estrelas = '';
+                            for (let i = 1; i <= 5; i++) {
+                                estrelas += `<span class="estrela${i > avaliacao.nota_avaliacao ? ' vazia' : ''}">★</span>`;
+                            }
+                            
+                            card.innerHTML = `
+                                <div class="texto-depoimento">
+                                    <h2 class="titulo-interno-depo">${avaliacao.nome_usuario}</h2>
+                                    <div class="estrelas-depoimento">
+                                        ${estrelas}
+                                    </div>
+                                    <p class="texto-interno-depo">${avaliacao.descricao_avaliacao}</p>
+                                </div>
+                            `;
+                            
+                            carrossel.appendChild(card);
+                        });
+                        
+                        // Reposicionar carrossel
+                        carrossel.scrollLeft = 450;
+                    } else {
+                        carrossel.innerHTML = '<p style="color:#fff;text-align:center;padding:40px;">Nenhuma avaliação disponível no momento.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar avaliações:', error);
+                    carrossel.innerHTML = '<p style="color:#fff;text-align:center;padding:40px;">Erro ao carregar avaliações.</p>';
+                });
+        });
 
+        // Manter os scripts do carrossel existentes
+        const btnDireita = document.querySelector('.btn-direita');
+        const btnEsquerda = document.querySelector('.btn-esquerda');
+        const cardWidth = 450;
 
+        btnDireita.onclick = () => {
+            const carrossel = document.querySelector('.carrossel');
+            if (carrossel.scrollLeft + carrossel.offsetWidth >= carrossel.scrollWidth - 1) {
+                carrossel.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                carrossel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            }
+        };
 
-
-<script src = "js/paginaProjeto.js"></script>
+        btnEsquerda.onclick = () => {
+            const carrossel = document.querySelector('.carrossel');
+            carrossel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+        };
+        </script>
 </body>
 </html>

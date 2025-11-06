@@ -239,11 +239,31 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="action-buttons">
+                                        <?php
+                                        $status = strtolower(trim($avaliacao['status_avaliacao']));
+                                        if ($status === 'aprovado'): 
+                                        ?>
+                                            <a href="/backend/avaliacao/desativar/<?= $avaliacao['id_avaliacao'] ?>" 
+                                            class="btn-action btn-action-disable" 
+                                            title="Desativar"
+                                            style="color: #f59e0b;">
+                                                <i class="bi bi-eye-slash"></i>
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="/backend/avaliacao/ativar/<?= $avaliacao['id_avaliacao'] ?>" 
+                                            class="btn-action btn-action-enable" 
+                                            title="Ativar"
+                                            style="color: #22c55e;">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                        
                                         <a href="/backend/avaliacao/editar/<?= $avaliacao['id_avaliacao'] ?>" 
-                                           class="btn-action btn-action-edit" 
-                                           title="Editar">
+                                        class="btn-action btn-action-edit" 
+                                        title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </a>
+                                        
                                         <button onclick="confirmarExclusao(<?= $avaliacao['id_avaliacao'] ?>)" 
                                                 class="btn-action btn-action-delete" 
                                                 title="Excluir">
@@ -799,6 +819,24 @@
     .btn-action-delete:hover {
         background: #fee2e2;
         color: #991b1b;
+    }
+
+    .btn-action-enable {
+        color: #22c55e;
+    }
+
+    .btn-action-enable:hover {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .btn-action-disable {
+        color: #f59e0b;
+    }
+
+    .btn-action-disable:hover {
+        background: #fef3c7;
+        color: #92400e;
     }
 
     /* ==================== ESTADO VAZIO ==================== */

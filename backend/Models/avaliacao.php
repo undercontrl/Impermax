@@ -220,4 +220,75 @@ class Avaliacao{
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return (int)$result['total'];
     }
+
+    /**
+     * Ativar avaliação (tornar visível no site)
+     */
+    public function ativarAvaliacao($id_avaliacao)
+    {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = 'UPDATE tbl_avaliacao 
+                SET status_avaliacao = "Aprovado", atualizado_em = :atualizado 
+                WHERE id_avaliacao = :id AND excluido_em IS NULL';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id', $id_avaliacao, PDO::PARAM_INT);
+        $statement->bindParam(':atualizado', $dataAtual);
+        
+        return $statement->execute();
+    }
+
+    /**
+     * Desativar avaliação (ocultar do site)
+     */
+    public function desativarAvaliacao($id_avaliacao)
+    {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = 'UPDATE tbl_avaliacao 
+                SET status_avaliacao = "Oculto", atualizado_em = :atualizado 
+                WHERE id_avaliacao = :id AND excluido_em IS NULL';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id', $id_avaliacao, PDO::PARAM_INT);
+        $statement->bindParam(':atualizado', $dataAtual);
+        
+        return $statement->execute();
+    }
+
+    /**
+     * Buscar avaliações aprovadas (para exibição pública)
+     */
+    public function buscarAvaliacoesAprovadas($limite = 10)
+    {
+        $sql = 'SELECT av.*, usu.nome_usuario 
+                FROM tbl_avaliacao AS av
+                INNER JOIN tbl_usuario AS usu ON av.id_cliente = usu.id_usuario
+                WHERE av.status_avaliacao = "Aprovado" 
+                AND av.excluido_em IS NULL
+                ORDER BY av.criado_em DESC
+                LIMIT :limite';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Buscar avaliação por ID do cliente (para verificar se já avaliou)
+     */
+    public function buscarAvaliacoesPorClienteAtivo($id_cliente)
+    {
+        $sql = 'SELECT * FROM tbl_avaliacao 
+                WHERE id_cliente = :id_cliente 
+                AND excluido_em IS NULL
+                ORDER BY criado_em DESC';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id_cliente', $id_cliente, PDO::PARAM_INT);
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

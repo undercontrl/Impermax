@@ -212,4 +212,38 @@ class AvaliacaoController
         }
         exit;
     }
+
+    /**
+     * Ativar avaliação
+     */
+    public function ativarAvaliacao($id)
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID não fornecido!");
+            return;
+        }
+        
+        if ($this->avaliacao->ativarAvaliacao($id)) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação ativada com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Erro ao ativar avaliação!");
+        }
+    }
+
+    /**
+     * Desativar avaliação
+     */
+    public function desativarAvaliacao($id)
+    {
+        if (!$id) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID não fornecido!");
+            return;
+        }
+        
+        if ($this->avaliacao->desativarAvaliacao($id)) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação desativada com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Erro ao desativar avaliação!");
+        }
+    }
 }

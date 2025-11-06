@@ -45,6 +45,10 @@ class Rotas
         "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacoes",
         "/avaliacao/{id}/relatorio/{dataInicial}/{dataFinal}" => "AvaliacaoController@relatorioAvaliacao",
         "/avaliar" => "AvaliacaoPublicaController@viewFormularioPublico",
+        "/avaliacao/ativar/{id}" => "AvaliacaoController@ativarAvaliacao",
+        "/avaliacao/desativar/{id}" => "AvaliacaoController@desativarAvaliacao",
+        "/cliente/avaliacao" => "ClienteAvaliacaoController@index",
+        "api/avaliacoes" => "PublicApiController@getAvaliacoes",
         // contatos
         "/contatos" => "ContatoController@index",
         "/contato" => "ContatoController@viewListarContatos",
@@ -78,8 +82,8 @@ class Rotas
         "/item_orcamento/excluir/{id}" => "ItemOrcamentoController@viewExcluirItemOrcamento",
         //servico
         "/servico" => "ServicoController@index",
-       "/servico/criar" => "ServicoController@viewCriarServicos",
-       "/servico/listar" => "ServicoController@viewListarServicos",
+        "/servico/criar" => "ServicoController@viewCriarServicos",
+        "/servico/listar" => "ServicoController@viewListarServicos",
         "/servico/listar/{pagina}" => "ServicoController@viewListarServicos",
         "/servico/buscar" => "ServicoController@buscar",
         "api/servicos" => "PublicApiController@getServicos",
@@ -162,10 +166,11 @@ class Rotas
         "/agendamento/buscar-orcamentos-ajax" => "AgendamentoController@buscarOrcamentosPorClienteAjax",
         //avaliações
         "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
-        "/avaliacao/atualizar" => "AvaliacaoController@atualizarAvaliacao",
-        "/avaliacao/deletar" => "AvaliacaoController@deletarAvaliacao",
+        "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
+        "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
         "/avaliacao/deletar-multiplos" => "AvaliacaoController@deletarMultiplos",
         "/enviar-avaliacao" => "AvaliacaoPublicaController@enviarAvaliacaoPublica",
+        "/cliente/avaliacao/salvar" => "ClienteAvaliacaoController@salvarAvaliacao",
         // contatos
         "/contato/salvar" => "ContatoController@salvar",
         "/contato/atualizar/(\d+)" => "ContatoController@atualizar",
@@ -196,16 +201,16 @@ class Rotas
         "/servico-site/atualizar/{id}" => "ServicoSiteController@atualizar",
         //projeto
         "/projeto/salvar" => "ProjetoController@salvarProjeto",
-        "/projeto/atualizar" => "ProjetoController@atualizarProjeto",
-        "/projeto/deletar" => "ProjetoController@deletarProjeto",
+        "/projeto/atualizar/{id}" => "ProjetoController@atualizarProjeto",
+        "/projeto/deletar/{id}" => "ProjetoController@deletarProjeto",
         "/projeto/deletar-multiplos" => "ProjetoController@deletarMultiplos",
         //pagina projeto 
         "/pagina-projeto/salvar" => "PaginaProjetoController@salvar",
         "/pagina-projeto/atualizar/{id}" => "PaginaProjetoController@atualizar",
         //pagamento
         "/pagamento/salvar" => "PagamentoController@salvarPagamento",
-        "/pagamento/atualizar" => "PagamentoController@atualizarPagamento",
-        "/pagamento/deletar" => "PagamentoController@deletarPagamento",
+        "/pagamento/atualizar/{id}" => "PagamentoController@atualizarPagamento",
+        "/pagamento/deletar/{id}" => "PagamentoController@deletarPagamento",
         "/pagamento/deletar-multiplos" => "PagamentoController@deletarMultiplos",
         //orcamento
         "/orcamento/salvar" => "OrcamentoController@salvarOrcamento",
