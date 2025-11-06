@@ -4,7 +4,12 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Caminhos onde o menu não deve aparecer
-$rotasPublicas = ['/backend/login', '/backend/register', '/backend/authenticar'];
+$rotasPublicas = [
+    '/backend/login', 
+    '/backend/register', 
+    '/backend/authenticar',
+    '/backend/cliente/avaliacao'
+];
 
 use App\Impermax\Core\Permissions;
 

@@ -253,21 +253,21 @@ document.addEventListener("DOMContentLoaded", function() {
         </section>
    </main>
    <footer id="footer-impermax">
-    <div class="footer-conteudo">
-        <div class="logo-footer">
-            <a href="index.php">
-                <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
-            </a>
+        <div class="footer-conteudo">
+            <div class="logo-footer">
+                <a href="index.php">
+                    <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
+                </a>
+            </div>
+            <div class="redes-sociais">
+                <a href="https://www.facebook.com/aleimpermax" target="_blank"><img src="assets/icons/facebook.svg" alt="Facebook"></a>
+                <a href="https://www.instagram.com/impermax_servicos?igsh=cHM2MW82a3lqOHNl" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+                <a href="https://wa.me/+5511999734979" target="_blank"><img src="assets/icons/whatsapp.svg" alt="WhatsApp"></a>
+            </div>
         </div>
-        <div class="redes-sociais">
-            <a href="https://www.facebook.com/aleimpermax" target="_blank"><img src="assets/icons/facebook.svg" alt="Facebook"></a>
-            <a href="https://www.instagram.com/impermax_servicos?igsh=cHM2MW82a3lqOHNl" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
-            <a href="https://wa.me/+5511999734979" target="_blank"><img src="assets/icons/whatsapp.svg" alt="WhatsApp"></a>
-        </div>
-    </div>
-    <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
-    <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
-</footer>
+        <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
+        <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
+    </footer>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="js/formulario.js"></script>
 

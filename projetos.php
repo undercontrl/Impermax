@@ -197,7 +197,7 @@
     <footer id="footer-impermax">
         <div class="footer-conteudo">
             <div class="logo-footer">
-                <a href="index.html">
+                <a href="index.php">
                     <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
                 </a>
             </div>
