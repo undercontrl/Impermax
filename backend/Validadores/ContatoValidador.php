@@ -13,6 +13,11 @@ class ContatoValidador{
         if(isset($dados['telefone_contato']) && empty($dados["telefone_contato"])){
             $erros[] = "O campo telefone do contato é obrigatório.";
         }
+        if(isset($dados['email_contato']) && empty($dados['email_contato'])){
+            $erros[] = "O campo email é obrigatório.";
+        } elseif(!filter_var($dados['email_contato'], FILTER_VALIDATE_EMAIL)){
+            $erros[] = "O campo email deve conter um endereço de email válido.";
+        }
         if(isset($dados['status_contato']) && empty($dados["status_contato"])){
             $erros[] = "O campo status do contato é obrigatório.";
         }
