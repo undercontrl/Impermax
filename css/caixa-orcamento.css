@@ -74,21 +74,21 @@
     color: white;
     padding: 25px 30px;
     border-radius: 10px;
-    width: 470px;
-    height: 470px;
+    width: 400px;
+    height: 400px;
     font-family: Arial, sans-serif;
     position: absolute;
-    top: 50%;
-    right: 22%;
+    top: 55%;
+    right: 25%;
     transform: translateY(-50%);
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   }
   
   #caixa-orcamento h3 {
-    font-size: 18px;
+    font-size: 15px;
     text-align: center;
-    margin-top: 25px;
-    margin-bottom: 35px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     font-weight: bold;
     line-height: 1.4;
   }

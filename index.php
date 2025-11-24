@@ -7,8 +7,6 @@ $codigoToken = CSRF::generate();
 $secao= new Session();
 $secao->set('csrf_token', $codigoToken);
 ?>
- 
- 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -36,7 +34,12 @@ $secao->set('csrf_token', $codigoToken);
         <a href="index.php">
             <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo">
         </a>
-        <ul class="menu-nav">
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        <ul class="menu-nav" id="menuNav">
             <li><a href="index.php">INICIO</a></li>
             <li><a href="sobre.php">SOBRE</a></li>
             <li><a href="servicos.php">SERVIÇOS</a></li>
@@ -337,5 +340,64 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 });
 </script>
+
+
+
+<script>
+       const menuToggle = document.getElementById('menuToggle');
+       const menuNav = document.getElementById('menuNav');
+       
+       // Toggle do menu
+       menuToggle.addEventListener('click', function(e) {
+           e.stopPropagation();
+           this.classList.toggle('active');
+           menuNav.classList.toggle('active');
+       });
+       
+       // Fechar ao clicar nos links
+       const menuLinks = menuNav.querySelectorAll('a');
+       menuLinks.forEach(link => {
+           link.addEventListener('click', function() {
+               menuToggle.classList.remove('active');
+               menuNav.classList.remove('active');
+           });
+       });
+       
+       // Fechar ao clicar fora do menu
+       document.addEventListener('click', function(event) {
+           const isClickInsideMenu = menuNav.contains(event.target);
+           const isClickOnToggle = menuToggle.contains(event.target);
+           
+           if (!isClickInsideMenu && !isClickOnToggle && menuNav.classList.contains('active')) {
+               menuToggle.classList.remove('active');
+               menuNav.classList.remove('active');
+           }
+       });
+       
+       // Fechar ao pressionar ESC
+       document.addEventListener('keydown', function(event) {
+           if (event.key === 'Escape' && menuNav.classList.contains('active')) {
+               menuToggle.classList.remove('active');
+               menuNav.classList.remove('active');
+           }
+       });
+       
+       // Prevenir scroll do body quando menu está aberto
+       const observer = new MutationObserver(function(mutations) {
+           mutations.forEach(function(mutation) {
+               if (mutation.attributeName === 'class') {
+                   if (menuNav.classList.contains('active')) {
+                       document.body.style.overflow = 'hidden';
+                   } else {
+                       document.body.style.overflow = '';
+                   }
+               }
+           });
+       });
+       
+       observer.observe(menuNav, { attributes: true });
+   </script>
+
+   
 </body>
 </html>

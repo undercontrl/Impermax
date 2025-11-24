@@ -44,6 +44,79 @@
 }
 
 
+@media (max-width: 768px) {
+    .quem-somos{
+        position: relative;
+        height: 300px;
+        text-align: center;
+        background-color: var(--cor-fonte-hero-primaria);
+        top: 10%;
+        bottom: 45px;
+    }
+
+    .titulo-quem-somos{
+    margin-top: 200px;
+    font-size: 20px;
+    color: var(--cor-fonte-destaque-primaria);
+    font-weight: bold;
+}
+.subtitulo-quem-somos{
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--cor-fonte-terciaria);
+}
+.texto-quem-somos{
+    color: var(--cor-fonte-hero-secundaria);
+    font-size: 17px;
+    font-weight: 600;
+    margin-right: 29%;
+    margin-left: 29%;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    max-width: 1900px;
+    text-align: center;
+    flex-wrap: wrap;
+    line-height: 1.5;
+    text-align: center;
+}
+.botao-saiba-mais{
+    padding: 10px;
+    max-width: 200px;
+    font-size: 15px;
+    border-radius: 15px;
+    background-color: var(--cor-de-fundo-primaria);
+    color: var(--cor-fonte-hero-primaria);
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ==================== PARALLAX SOBRE (MANTER) ==================== */
 .parallax-sobre {

@@ -1,4 +1,3 @@
-
 :root {
     --cor-primaria: #5f7396;
     --cor-acento: #1487df;
@@ -40,7 +39,7 @@
     }
 }
 
-.span-header{
+/* .span-header{
     position: relative;
     display: flex;
     flex-direction: column;
@@ -111,7 +110,7 @@
     gap: 20px;
     color: var(--cor-de-fundo-primaria);
     font-weight: 750;
-}
+} */
 
 
 
@@ -465,9 +464,9 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
-    body {
+    /* body {
         padding: 1rem;
-    }
+    } */
 
     .avaliacao-card {
         padding: 2rem 1.5rem;
