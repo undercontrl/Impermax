@@ -1,0 +1,396 @@
+
+.quem-somos{
+    height: 320px;
+    text-align: center;
+    top: 80px;
+    background-color: var(--cor-fonte-hero-primaria);
+}
+.titulo-quem-somos{
+    margin-top: 200px;
+    font-size: 30px;
+    color: var(--cor-fonte-destaque-primaria);
+    font-weight: bold;
+}
+.subtitulo-quem-somos{
+    margin-top: 10px;
+    font-size: 25px;
+    color: var(--cor-fonte-terciaria);
+}
+.texto-quem-somos{
+    color: var(--cor-fonte-hero-secundaria);
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 29%;
+    margin-left: 29%;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    max-width: 1900px;
+    text-align: center;
+    flex-wrap: wrap;
+    line-height: 1.5;
+    text-align: center;
+}
+.botao-saiba-mais{
+    padding: 10px;
+    max-width: 200px;
+    font-size: 20px;
+    border-radius: 15px;
+    background-color: var(--cor-de-fundo-primaria);
+    color: var(--cor-fonte-hero-primaria);
+}
+.botao-saiba-mais:hover{
+    background-color: var(--cor-fonte-terciaria);
+    color: var(--cor-fonte-hero-primaria);
+}
+
+
+
+/* ==================== PARALLAX SOBRE (MANTER) ==================== */
+.parallax-sobre {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    top: 120px;
+    background-image: url("../assets/banner/banner\ 6.png");
+    background-size: cover;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* .parallax-sobre::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(95, 115, 150, 0.85), rgba(40, 73, 129, 0.85));
+    z-index: 1;
+} */
+
+.titulo-sobre {
+    font-size: 80px;
+    color: white;
+    position: relative;
+    top: 40%;
+    justify-content: center;
+    display: flex;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== SEÇÃO HISTÓRIA ==================== */
+.historia {
+    margin-top: 135px;
+    position: relative;
+    padding: 100px 5%;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.container-historia {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+    flex-direction: row-reverse;
+}
+
+.container-sobre {
+    flex: 1;
+    max-width: 600px;
+}
+
+.titulo-historia {
+    font-size: 42px;
+    color: #1e293b;
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-block;
+}
+
+.titulo-historia::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #5f7396, #284981);
+    border-radius: 2px;
+}
+
+.texto-historia {
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1.8;
+    font-weight: 400;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.texto-destaque {
+    color: #284981;
+    font-weight: 700;
+    position: relative;
+    padding: 0 4px;
+}
+
+.logo-historia {
+    height: 180px;
+    width: auto;
+    filter: drop-shadow(0 8px 24px rgba(95, 115, 150, 0.2));
+    transition: all 0.4s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+.logo-historia:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 12px 32px rgba(95, 115, 150, 0.3));
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ==================== SEÇÃO ÍCONES (MISSÃO, VISÃO, VALORES) ==================== */
+.icones {
+    padding: 100px 5%;
+    background: linear-gradient(135deg, #5f7396 0%, #284981 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.icones::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: movePattern 20s linear infinite;
+}
+
+@keyframes movePattern {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.container-icones {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.card-sobre {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-sobre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #5f7396, #284981);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.card-sobre:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.card-sobre:hover::before {
+    transform: scaleX(1);
+}
+
+.icons-sobre {
+    height: 80px;
+    width: 80px;
+    margin-bottom: 25px;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 4px 12px rgba(95, 115, 150, 0.3));
+}
+
+.card-sobre:hover .icons-sobre {
+    transform: scale(1.15) rotateY(180deg);
+    filter: drop-shadow(0 8px 20px rgba(95, 115, 150, 0.5));
+}
+
+.titulo-missao {
+    font-size: 24px;
+    color: #1e293b;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+.texto-missao {
+    font-size: 15px;
+    color: #64748b;
+    line-height: 1.7;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ==================== SEÇÃO HISTÓRIA 2 ==================== */
+.historia2 {
+    padding: 100px 5%;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.container-historia2 {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+}
+
+.logo-historia2 {
+    height: 320px;
+    width: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease;
+    object-fit: cover;
+}
+
+.logo-historia2:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* ==================== RESPONSIVIDADE ==================== */
+@media (max-width: 1024px) {
+    .container-historia,
+    .container-historia2 {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .container-sobre {
+        max-width: 100%;
+    }
+
+    .logo-historia {
+        height: 140px;
+    }
+
+    .logo-historia2 {
+        height: 280px;
+    }
+
+    .titulo-sobre {
+        font-size: 60px;
+    }
+
+    .titulo-historia {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .parallax-sobre {
+        height: 400px;
+        background-attachment: scroll;
+    }
+
+    .titulo-sobre {
+        font-size: 42px;
+        letter-spacing: 1px;
+    }
+
+    .historia,
+    .historia2,
+    .icones {
+        padding: 60px 5%;
+    }
+
+    .titulo-historia {
+        font-size: 28px;
+    }
+
+    .texto-historia {
+        font-size: 15px;
+    }
+
+    .container-icones {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .card-sobre {
+        padding: 40px 30px;
+    }
+
+    .icons-sobre {
+        height: 70px;
+        width: 70px;
+    }
+
+    .logo-historia {
+        height: 100px;
+    }
+
+    .logo-historia2 {
+        height: 220px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-sobre {
+        font-size: 32px;
+    }
+
+    .titulo-historia {
+        font-size: 24px;
+    }
+
+    .texto-historia {
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .container-historia,
+    .container-historia2 {
+        gap: 30px;
+    }
+}

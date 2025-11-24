@@ -1,3 +1,74 @@
+/* === ESTILO PERSONALIZADO PARA MENSAGENS NO FORMULÁRIO === */
+#mensagem-flash-topo {
+  text-align: center;
+  width: 100%;
+  margin-top: 8px;
+
+ 
+}
+#mensagem-flash-topo2 {
+  text-align: center;
+  width: 100%;
+  margin-top: 8px;
+
+}
+
+#mensagem-flash-topo3 {
+  text-align: center;
+  width: 100%;
+  margin-top: 8px;
+
+}
+
+  #mensagem-flash-topo4 {
+  text-align: center;
+  width: 100%;
+  margin-top: 8px;
+
+}
+
+  #mensagem-flash-topo5 {
+  text-align: center;
+  width: 100%;
+  margin-top: 8px;
+
+}
+
+.alert {
+  padding: 12px 16px;
+  margin-bottom: 0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: none;
+  transition: all 0.3s ease;
+  word-wrap: break-word;
+}
+
+.alert-success {
+  background-color: #2f89647a;
+  color: #ffffff;
+}
+
+.alert-error {
+  background-color: #b53c3c8f;
+  color: #ffffff;
+}
+
+/* Animação suave de entrada */
+.alert {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeInDown 0.4s ease forwards;
+}
+
+@keyframes fadeInDown {
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
 #caixa-orcamento {
     background-color: #2e2e2ebb;
     color: white;
