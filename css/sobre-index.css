@@ -1,46 +1,53 @@
 
-.quem-somos{
-    height: 320px;
+.quem-somos {
+    margin-top: 5%;
+    padding: 100px 5%;
     text-align: center;
-    top: 80px;
-    background-color: var(--cor-fonte-hero-primaria);
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
 }
-.titulo-quem-somos{
-    margin-top: 200px;
-    font-size: 30px;
-    color: var(--cor-fonte-destaque-primaria);
-    font-weight: bold;
+
+.titulo-quem-somos {
+    font-size: 42px;
+    color: #1e293b;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
 }
-.subtitulo-quem-somos{
-    margin-top: 10px;
-    font-size: 25px;
+
+.subtitulo-quem-somos {
+    font-size: 24px;
     color: var(--cor-fonte-terciaria);
+    font-weight: 500;
+    margin-bottom: 30px;
 }
-.texto-quem-somos{
-    color: var(--cor-fonte-hero-secundaria);
-    font-size: 18px;
-    font-weight: 600;
-    margin-right: 29%;
-    margin-left: 29%;
-    margin-top: 20px;
-    margin-bottom: 25px;
-    max-width: 1900px;
-    text-align: center;
-    flex-wrap: wrap;
-    line-height: 1.5;
-    text-align: center;
+
+.texto-quem-somos {
+    color: #64748b;
+    font-size: 17px;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto 35px;
+    line-height: 1.8;
 }
-.botao-saiba-mais{
-    padding: 10px;
-    max-width: 200px;
-    font-size: 20px;
-    border-radius: 15px;
-    background-color: var(--cor-de-fundo-primaria);
-    color: var(--cor-fonte-hero-primaria);
+
+.botao-saiba-mais {
+    display: inline-block;
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--cor-de-fundo-primaria), #284981);
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(95, 115, 150, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
-.botao-saiba-mais:hover{
-    background-color: var(--cor-fonte-terciaria);
-    color: var(--cor-fonte-hero-primaria);
+
+.botao-saiba-mais:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(95, 115, 150, 0.4);
 }
 
 

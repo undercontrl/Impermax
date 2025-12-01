@@ -4,7 +4,6 @@
   position: relative;
   height: 350px;
   width: 500px;
-
 }
 
 .img-comp-img {
@@ -30,59 +29,44 @@
 }
 
 /* MUDANÇAS PRINCIPAIS */
-.antes-depois{
-    padding: 80px 100px; /* Padding uniforme e reduzido */
-    /* Reduzi a margem superior */
-    position: relative;
-    max-width: 1920px;
-    width: 85%;
-    height: auto; /* Altura automática */
-    max-height: 600px; /* Altura máxima como você pediu */
-    background-color: var(--cor-fonte-hero-primaria);
+.antes-depois {
+    padding: 100px 5%;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
     display: flex;
-    flex-direction: row;
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: space-between;
-    gap: 80px; /* Reduzi o gap */
-    
+    align-items: center;
+    gap: 80px;
+    max-width: 100%;
+    margin: 0 auto;
+    justify-content: space-around;
 }
 
 /* Container para o conteúdo de texto */
 .texto-content {
-    flex: 0 1 450px; /* Largura máxima de 450px */
-    padding: 0;
-    text-align: center;
-    position: relative;
-    margin-left: 20%;
-  }
-
-.titulo-antes-depois{
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 25px;
-    color: var(--cor-fonte-destaque-primaria);
-    font-weight: 600;
+    flex: 1;
+    max-width: 500px;
 }
 
-.subtitulo-antes-depois{
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 20px;
-    color: var(--cor-fonte-secundaria);
+.titulo-antes-depois {
+    font-size: 38px;
+    color: #1e293b;
     font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
 }
 
-.texto-antes-depois{
-    font-size: 16px; /* Reduzi um pouco o tamanho da fonte */
-    margin: 0;
-    font-weight: bold; /* Reduzi o peso da fonte */
+.subtitulo-antes-depois {
+    font-size: 22px;
+    color: var(--cor-fonte-secundaria);
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.texto-antes-depois {
+    font-size: 16px;
+    font-weight: 400;
     text-align: justify;
-    line-height: 1.5;
-    color: var(--cor-fonte-hero-secundaria);
-}
-
-.texto-destaque {
-    font-weight: 700; /* Mantém o destaque em negrito */
+    line-height: 1.8;
+    color: #64748b;
 }
 
 /* Container para as comparações de imagens */
@@ -94,6 +78,8 @@
     align-items: center;
     flex-shrink: 0; /* Impede que as imagens encolham */
 }
+
+
 
 /* Responsividade */
 @media (max-width: 1200px) {

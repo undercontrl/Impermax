@@ -1,0 +1,738 @@
+/* ==================== VARIÁVEIS (MANTER) ==================== */
+:root {
+    --cor-de-fundo-primaria: #5f7396;
+    --cor-de-fundo-secundaria: #ffffff;
+    --cor-de-fundo-terciaria: #4b4b4b;
+    --cor-de-fundo-quaternaria: #2b2b2b;
+    --cor-fonte-hero-primaria: #fefefe;
+    --cor-fonte-hero-secundaria: #868585;
+    --cor-fonte-primaria: #a7a7a7;
+    --cor-fonte-secundaria: #5f7396;
+    --cor-fonte-terciaria: #1487df;
+    --cor-fonte-destaque-primaria: #474a4f;
+    --cor-fonte-destaque-secundaria: #474a4f;
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 700px;
+    margin-top: 107px;
+    background-image: url("../assets/banner/banner\ 6.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8%;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(95, 115, 150, 0.92) 0%, 
+        rgba(40, 73, 129, 0.88) 100%);
+    z-index: 1;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 20% 50%, 
+        rgba(20, 135, 223, 0.15), 
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 80% 50%, 
+        rgba(14, 110, 184, 0.15), 
+        transparent 50%
+    );
+    z-index: 1;
+}
+
+/* Hero Content - Lado Esquerdo */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    color: white;
+    animation: fadeInLeft 1s ease;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.titulo-hero {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.texto-hero {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #e0f2fe;
+    margin-bottom: 35px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Formulário de Orçamento - Modernizado */
+#caixa-orcamento {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    color: #1e293b;
+    padding: 40px 35px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;   
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInRight 1s ease;
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+#caixa-orcamento h3 {
+    font-size: 20px;
+    text-align: center;
+    margin: 0 0 30px 0;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--cor-de-fundo-primaria);
+    letter-spacing: 0.5px;
+}
+
+#caixa-orcamento form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#caixa-orcamento input,
+#caixa-orcamento select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#caixa-orcamento input:focus,
+#caixa-orcamento select:focus {
+    outline: none;
+    border-color: var(--cor-fonte-terciaria);
+    box-shadow: 0 0 0 3px rgba(20, 135, 223, 0.1);
+}
+
+#caixa-orcamento button {
+    background: linear-gradient(135deg, var(--cor-de-fundo-primaria), #284981);
+    width: 100%;
+    color: white;
+    padding: 16px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(95, 115, 150, 0.3);
+}
+
+#caixa-orcamento button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(95, 115, 150, 0.4);
+}
+
+/* ==================== QUEM SOMOS ==================== */
+.quem-somos {
+    padding: 100px 5%;
+    text-align: center;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.titulo-quem-somos {
+    font-size: 42px;
+    color: #1e293b;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+.subtitulo-quem-somos {
+    font-size: 24px;
+    color: var(--cor-fonte-terciaria);
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.texto-quem-somos {
+    color: #64748b;
+    font-size: 17px;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto 35px;
+    line-height: 1.8;
+}
+
+.botao-saiba-mais {
+    display: inline-block;
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--cor-de-fundo-primaria), #284981);
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(95, 115, 150, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.botao-saiba-mais:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(95, 115, 150, 0.4);
+}
+
+/* ==================== SERVIÇOS ==================== */
+.servicos {
+    background: linear-gradient(135deg, #5f7396 0%, #284981 100%);
+    padding: 100px 5%;
+    position: relative;
+    overflow: hidden;
+}
+
+.servicos::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: movePattern 20s linear infinite;
+}
+
+.container-servicos {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.titulo-servico {
+    font-size: 42px;
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    margin-bottom: 60px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.card-servico {
+    position: relative;
+    height: 380px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.card-servico::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(95, 115, 150, 0.1), 
+        rgba(40, 73, 129, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+.card-servico:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.card-servico:hover::before {
+    opacity: 1;
+}
+
+.servico-imagem {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.card-servico:hover .servico-imagem {
+    transform: scale(1.1);
+}
+
+.figcaption-servico {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    padding: 30px;
+    background: linear-gradient(to top, 
+        rgba(30, 41, 59, 0.95) 0%, 
+        rgba(30, 41, 59, 0.7) 50%,
+        transparent 100%);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 17px;
+    font-weight: 500;
+    transform: translateY(calc(100% - 80px));
+    transition: transform 0.4s ease;
+    z-index: 2;
+}
+
+.card-servico:hover .figcaption-servico {
+    transform: translateY(0);
+}
+
+.titulo-interno {
+    text-align: center;
+    line-height: 1.6;
+    font-size: 18px;
+}
+
+.titulo-externo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+}
+
+.titulo-externo-item {
+    padding: 0 20px;
+}
+
+/* ==================== ANTES/DEPOIS ==================== */
+.antes-depois {
+    padding: 100px 5%;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.texto-content {
+    flex: 1;
+    max-width: 500px;
+}
+
+.titulo-antes-depois {
+    font-size: 38px;
+    color: #1e293b;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+.subtitulo-antes-depois {
+    font-size: 22px;
+    color: var(--cor-fonte-secundaria);
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.texto-antes-depois {
+    font-size: 16px;
+    font-weight: 400;
+    text-align: justify;
+    line-height: 1.8;
+    color: #64748b;
+}
+
+#comparisons-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.img-comp-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.img-comp-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.img-comp-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-comp-slider {
+    position: absolute;
+    z-index: 9;
+    cursor: ew-resize;
+    width: 50px;
+    height: 50px;
+    background: white;
+    opacity: 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.img-comp-slider::before {
+    content: '↔';
+    font-size: 20px;
+    color: var(--cor-de-fundo-primaria);
+    font-weight: bold;
+}
+
+/* ==================== PARALLAX CONTATO ==================== */
+.parallax {
+    padding: 100px 5%;
+    background-image: url("../assets/banner/parallax\ 2.png");
+    min-height: 600px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parallax::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(95, 115, 150, 0.92), 
+        rgba(40, 73, 129, 0.92));
+}
+
+.bloco-contato {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    max-width: 1400px;
+    position: relative;
+    z-index: 1;
+}
+
+#caixa-orcamento2 {
+    position: relative;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    color: #1e293b;
+    padding: 40px 35px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+#caixa-orcamento2 h3 {
+    font-size: 20px;
+    text-align: center;
+    margin: 0 0 30px 0;
+    font-weight: 700;
+    color: var(--cor-de-fundo-primaria);
+}
+
+#caixa-orcamento2 form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#caixa-orcamento2 input,
+#caixa-orcamento2 select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+#caixa-orcamento2 input:focus,
+#caixa-orcamento2 select:focus {
+    outline: none;
+    border-color: var(--cor-fonte-terciaria);
+    box-shadow: 0 0 0 3px rgba(20, 135, 223, 0.1);
+}
+
+#caixa-orcamento2 button {
+    background: linear-gradient(135deg, var(--cor-de-fundo-primaria), #284981);
+    width: 100%;
+    color: white;
+    padding: 16px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(95, 115, 150, 0.3);
+}
+
+#caixa-orcamento2 button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(95, 115, 150, 0.4);
+}
+
+.whatsapp-contato {
+    color: white;
+    max-width: 500px;
+}
+
+.whatsapp-contato h2 {
+    color: #60a5fa;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.whatsapp-contato p {
+    font-size: 16px;
+    margin-bottom: 15px;
+    line-height: 1.7;
+}
+
+.whatsapp-contato strong {
+    color: #60a5fa;
+}
+
+/* ==================== MENSAGENS FLASH ==================== */
+#mensagem-flash-topo,
+#mensagem-flash-topo2,
+#mensagem-flash-topo3,
+#mensagem-flash-topo4,
+#mensagem-flash-topo5 {
+    text-align: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.alert {
+    padding: 14px 18px;
+    margin-bottom: 0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+    animation: fadeInDown 0.4s ease forwards;
+}
+
+.alert-success {
+    background-color: #dcfce7;
+    color: #166534;
+    border-left: 4px solid #22c55e;
+}
+
+.alert-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== RESPONSIVIDADE ==================== */
+@media (max-width: 1200px) {
+    .hero {
+        flex-direction: column;
+        justify-content: center;
+        padding: 60px 5%;
+        gap: 40px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    #caixa-orcamento {
+        max-width: 600px;
+    }
+
+    .antes-depois {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .texto-content {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .texto-antes-depois {
+        text-align: left;
+    }
+
+    .bloco-contato {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    #caixa-orcamento2 {
+        max-width: 600px;
+    }
+
+    .whatsapp-contato {
+        max-width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        background-attachment: scroll;
+        margin-top: 97px;
+    }
+
+    .titulo-hero {
+        font-size: 36px;
+    }
+
+    .texto-hero {
+        font-size: 18px;
+    }
+
+    .titulo-quem-somos {
+        font-size: 32px;
+    }
+
+    .subtitulo-quem-somos {
+        font-size: 20px;
+    }
+
+    .titulo-servico {
+        font-size: 32px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .titulo-externo {
+        grid-template-columns: 1fr;
+    }
+
+    .titulo-antes-depois {
+        font-size: 28px;
+    }
+
+    .subtitulo-antes-depois {
+        font-size: 18px;
+    }
+
+    .img-comp-container {
+        height: 300px;
+    }
+
+    .parallax {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-hero {
+        font-size: 28px;
+    }
+
+    .texto-hero {
+        font-size: 16px;
+    }
+
+    #caixa-orcamento,
+    #caixa-orcamento2 {
+        padding: 30px 25px;
+    }
+}
