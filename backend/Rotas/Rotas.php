@@ -21,8 +21,8 @@ class Rotas
        
        //usuarios
         "/usuarios" => "UsuarioController@index",
-        "/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios",
-        "/api/usuarios' => 'APIUsuarioController@getUsuarios",
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
         "/usuario/listar" => "UsuarioController@viewListarUsuarios",
         "/agendamento/ver/{id}" => "AgendamentoController@viewVerAgendamento",
