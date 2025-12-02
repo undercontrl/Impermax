@@ -6,7 +6,7 @@ use App\Impermax\Models\Usuario;
 
 class APIUsuarioController{
     private $usuarioModel;
-    private $chaveAPI = "997ADF04E5D6735917E28883A77845C172000DEE8D13A75666662B700215883E";
+    private $chaveAPI = "E9768D4706F9FF10385A01F911CBA67EDA01ED1FEDE37DDF46B40FC39A9F789B";
     public function __construct(){
         $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
