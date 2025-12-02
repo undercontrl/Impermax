@@ -248,7 +248,7 @@ header{
         }
         
         /* MOBILE PEQUENO - 480PX E ABAIXO */
-        @media (max-width: 480px) {
+        @media (max-width: 425px) {
    .header-secundario {
        flex-direction: column;
        align-items: center;
