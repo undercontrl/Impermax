@@ -28,6 +28,8 @@ class Rotas
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
         "/usuario/visualizar/{id}" => "UsuarioController@viewVisualizarUsuario",
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
         //agendamentos
         "/agendamentos" => "AgendamentoController@index",
         "/agendamento/criar" => "AgendamentoController@viewCriarAgendamentos",
