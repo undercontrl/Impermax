@@ -3,28 +3,19 @@
 namespace App\Impermax\Controllers;
 use App\Impermax\Database\Database;
 use App\Impermax\Models\Usuario;
+use App\Impermax\Core\ValidaToken;
 
 class APIUsuarioController{
     private $usuarioModel;
-    private $chaveAPI = "DDCD52416070FBE28CDB1EB00FA806F54729B060621B3CFE8A4AE8B6B283EF6A";
+    private $chaveAPI;
     public function __construct(){
         $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
+        $this->chaveAPI = new ValidaToken();
     }
-    private function buscaChaveAPI(){
-        $headers = getallheaders();
-        $token = explode(" ", $headers['Authorization'])[1];
-        return $token === $this->chaveAPI;
-    }
-
+    
     public function getUsuarios($pagina=0){
-        if (!$this->buscaChaveAPI()) {
-             http_response_code(500);
-            echo json_encode([
-                'staus' => 'error', 'message' => 'Chave de API inválida.'
-            ]);
-            exit;
-        } 
+         $this->chaveAPI->ValidaToken();
         //condição ternaria é igual if else
         $registros_por_pagina = $pagina===0 ? 200 : 5;
         $pagina = $pagina===0 ? 1 : (int)$pagina;

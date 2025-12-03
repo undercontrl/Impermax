@@ -126,6 +126,8 @@ class Rotas
         "/pagamento/ver/{id}" => "PagamentoController@viewVerPagamento",
         "/pagamento/editar/{id}" => "PagamentoController@viewEditarPagamentos",
         "/pagamento/excluir/{id}" => "PagamentoController@viewExcluirPagamentos",
+        '/api/pagamento/{pagina}' => 'APIPagamentoController@getPagamentos',
+        '/api/pagamentos' => 'APIPagamentoController@getPagamentos',
         //orcamento
         "/orcamento" => "OrcamentoController@index",
         "/orcamento/criar" => "OrcamentoController@viewCriarOrcamentos",
