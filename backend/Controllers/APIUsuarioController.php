@@ -1,32 +1,22 @@
 <?php
 namespace App\Impermax\Controllers;
 
+use App\Impermax\Core\ChaveApi;
 use App\Impermax\Database\Database;
 use App\Impermax\Models\Usuario;
 
 class APIUsuarioController{
     private $usuarioModel;
-    private $chaveAPI = "E9768D4706F9FF10385A01F911CBA67EDA01ED1FEDE37DDF46B40FC39A9F789B";
+    private $chaveApi;
     public function __construct(){
+        $this->chaveApi = new ChaveApi();
+        $this->chaveApi->validarChave();
         $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
     }
 
-    private function buscaChaveAPI(){
-        $headers = getallheaders();
-        $token = explode(' ', $headers['Authorization'] ?? '')[1] ?? null;
-        return $token === $this->chaveAPI;
-    }
-
     public function getUsuarios($pagina=0) {
-        if(!$this->buscaChaveAPI()){
-            http_response_code(500);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Acesso não autorizado. Chave API inválida.'
-            ]);
-            exit;
-        }
+        // $this->chaveApi->validarChave();
         $registros_por_pagina = $pagina===0 ? 100 : 5;
         $pagina = $pagina===0 ? 1 : (int)$pagina;
         $dados = $this->usuarioModel->paginacaoAPI($pagina, $registros_por_pagina);
