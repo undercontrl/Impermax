@@ -8,15 +8,18 @@ use App\Impermax\Models\Usuario;
 use App\Impermax\Database\Database;
 use App\Impermax\Core\Session;
 use App\Impermax\Validadores\UsuarioValidador;
+use App\Impermax\Core\EmailNotification;
 
 class AuthController {
     private Usuario $usuarioModel;
     private Session $session;
+    private EmailNotification $emailNotification;
 
     public function __construct(){
         $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
         $this->session = new Session();
+        $this->emailNotification = new EmailNotification();
     }
 
     public function login(): void {
@@ -81,13 +84,14 @@ class AuthController {
             Redirect::redirecionarComMensagem('register', 'error', 'As senhas não conferem.');
         }
 
-        if(!empty($this->usuarioModel->buscarUsuariosPorEmail($email))){
+        if(!empty($this->usuarioModel->buscarUsuariosPorEmail($email))){    
             Redirect::redirecionarComMensagem('register', 'error', 'E-mail já cadastrado.');
         }
 
         $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'cliente', 'Ativo', null);
 
         if ($novoUsuarioId) {
+            $this->emailNotification->boasVindas($email, $nome);
             Redirect::redirecionarComMensagem('login', 'success', 'Cadastro realizado! Faça o login.');
         } else {
             Redirect::redirecionarComMensagem('register', 'error', 'Erro no servidor. Tente novamente.');
