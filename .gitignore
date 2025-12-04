@@ -1,3 +1,4 @@
 vendor
 backend/Database/Config.php
 backend/Database/Config-antigo.php
+backend/Config/Mail.php
