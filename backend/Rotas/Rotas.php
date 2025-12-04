@@ -30,6 +30,8 @@ class Rotas
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
         "/usuario/visualizar/{id}" => "UsuarioController@viewVisualizarUsuario",
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
         //agendamentos
         "/agendamentos" => "AgendamentoController@index",
         "/agendamento/criar" => "AgendamentoController@viewCriarAgendamentos",
@@ -126,6 +128,8 @@ class Rotas
         "/pagamento/ver/{id}" => "PagamentoController@viewVerPagamento",
         "/pagamento/editar/{id}" => "PagamentoController@viewEditarPagamentos",
         "/pagamento/excluir/{id}" => "PagamentoController@viewExcluirPagamentos",
+        '/api/pagamento/{pagina}' => 'APIPagamentoController@getPagamentos',
+        '/api/pagamentos' => 'APIPagamentoController@getPagamentos',
         //orcamento
         "/orcamento" => "OrcamentoController@index",
         "/orcamento/criar" => "OrcamentoController@viewCriarOrcamentos",
