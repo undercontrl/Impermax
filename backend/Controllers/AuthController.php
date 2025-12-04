@@ -8,15 +8,18 @@ use App\Impermax\Models\Usuario;
 use App\Impermax\Database\Database;
 use App\Impermax\Core\Session;
 use App\Impermax\Validadores\UsuarioValidador;
+use App\Impermax\Core\NotificacaoEmail;
 
 class AuthController {
     private Usuario $usuarioModel;
     private Session $session;
+    private NotificacaoEmail $NotificacaoEmail;
 
     public function __construct(){
         $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
         $this->session = new Session();
+        $this->NotificacaoEmail = new NotificacaoEmail();
     }
 
     public function login(): void {
@@ -88,6 +91,7 @@ class AuthController {
         $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'cliente', 'Ativo', null);
 
         if ($novoUsuarioId) {
+            $this->NotificacaoEmail->boasVindas($email, $nome);
             Redirect::redirecionarComMensagem('login', 'success', 'Cadastro realizado! Faça o login.');
         } else {
             Redirect::redirecionarComMensagem('register', 'error', 'Erro no servidor. Tente novamente.');

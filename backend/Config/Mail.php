@@ -9,8 +9,8 @@ class Mail{
             'username'=> 'arianerosadasilva142@gmail.com',
             'password'=> 'ctbi hipk abuy sefu',
             'encryption'=> 'tls',
-            'from_address'=> 'noreply@kipedreiro.com',
-            'from_name'=> 'Kipedreiro',
+            'from_address'=> 'noreply@impermax.com',
+            'from_name'=> 'Impermax',
             
         ];
     }
