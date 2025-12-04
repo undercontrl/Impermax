@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'app/impermax',
+        'name' => 'ariane.rsilva14/impermax',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '95dec2a5ee53fdf69f36d0370daae79a203d4156',
+        'reference' => 'e7bc586565942516106847fce67de16dcd2f8cc4',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'app/impermax' => array(
+        'ariane.rsilva14/impermax' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '95dec2a5ee53fdf69f36d0370daae79a203d4156',
+            'reference' => 'e7bc586565942516106847fce67de16dcd2f8cc4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -25,6 +25,15 @@
             'reference' => '55657b76da8a0a509250fb55b9dd24e1aa237eba',
             'type' => 'library',
             'install_path' => __DIR__ . '/../bramus/router',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v7.0.1',
+            'version' => '7.0.1.0',
+            'reference' => '360ae911ce62e25e11249f6140fa58939f556ebe',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
