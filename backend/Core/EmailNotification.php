@@ -9,8 +9,8 @@ class EmailNotification {
     
     public function __construct() {
         $this->emailService = new EmailService();
-        $this->baseUrl = 'http://localhost:5050'; // Altere para sua URL em produção
-        $this->logoUrl = $this->baseUrl . 'assets/icon/impermax-LOGO.svg';   
+        $this->baseUrl = 'http://localhost:5050/'; // Alterar URL posteriormente quando a gente tiver o site e etc sabe -- possivelmente a imagem vai funcionar quando mudar pro site de vdd
+        $this->logoUrl = $this->baseUrl . 'assets/icons/impermax-LOGO.svg'; 
     }
 
     /**
@@ -95,10 +95,10 @@ class EmailNotification {
         }
 
         /**
-         * 🔐 Email: Esqueci a Senha
+         * 🔐 Email: Esqueci a Senha -- acho q o professor vai fazer com a gente ? - deixar por último
          */
         public function esqueciASenha(string $email, string $token): void {
-            $resetUrl = $this->baseUrl . '/backend/redefinir-senha?token=' . urlencode($token);
+            $resetUrl = $this->baseUrl . '/backend/redefinir-senha?token=' . urlencode($token); // criar view de redefinição de senha ⚠️
             
             $conteudo = <<<HTML
     <h2 style="margin: 0 0 20px 0; color: #1e293b; font-size: 24px;">Redefinição de Senha</h2>
@@ -142,10 +142,10 @@ class EmailNotification {
         }
 
         /**
-         * 👋 Email: Boas-vindas (Novo Cadastro)
+         * 👋 Email: Boas-vindas (Novo Cadastro) -- feito! ✅
          */
         public function boasVindas(string $email, string $nome): void {
-            $loginUrl = $this->baseUrl . '/login';
+            $loginUrl = $this->baseUrl . 'backend/login';
             $siteUrl = $this->baseUrl;
             
             $conteudo = <<<HTML
@@ -196,7 +196,7 @@ class EmailNotification {
         }
 
         /**
-         * ✅ Email: Avaliação Aprovada
+         * ✅ Email: Avaliação Aprovada -- aaaaaaaaaaaaaaa
          */
         public function avaliacaoAprovada(string $email, string $nome): void {
             $siteUrl = $this->baseUrl;
@@ -237,7 +237,7 @@ class EmailNotification {
         }
 
         /**
-         * 📅 Email: Confirmação de Agendamento
+         * 📅 Email: Confirmação de Agendamento -- mesma coisa de orcamentoaprovado - não sei fazer, pesquisar depois
          */
         public function agendamentoConfirmado(string $email, string $nome, string $dataAgendamento, string $servico): void {
             $conteudo = <<<HTML
@@ -280,7 +280,7 @@ class EmailNotification {
         }
 
         /**
-         * 💰 Email: Orçamento Aprovado
+         * 💰 Email: Orçamento Aprovado -- não sei como fazer funcionar isso aqui -> pesquisar depois
          */
         public function orcamentoAprovado(string $email, string $nome, string $numeroOrcamento, string $valor): void {
             $conteudo = <<<HTML
@@ -313,11 +313,12 @@ class EmailNotification {
     HTML;
 
             $html = $this->getEmailTemplate('Orçamento Aprovado', $conteudo, '#22c55e');
+            
             $this->emailService->send($email, 'Orçamento Aprovado - Impermax 💰', $html);
         }
 
         /**
-         * 📧 Email: Contato Recebido (Confirmação)
+         * 📧 Email: Contato Recebido (Confirmação) -- feito! ✅
          */
         public function contatoRecebido(string $email, string $nome): void {
             $whatsappUrl = 'https://wa.me/5511999734979';

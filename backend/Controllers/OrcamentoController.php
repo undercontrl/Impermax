@@ -6,16 +6,19 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\OrcamentoValidador;
+use App\Impermax\Core\EmailNotification;
 
 class OrcamentoController
 {
     private $orcamento;
     private $db;
+    private EmailNotification $emailNotification;
 
     public function __construct()
     {
         $this->db = Database::getInstance();
         $this->orcamento = new Orcamento($this->db);
+        $this->emailNotification = new EmailNotification();
     }
 
     // ========== LISTAR COM FILTROS E PAGINAÇÃO ==========
@@ -223,11 +226,56 @@ class OrcamentoController
             $_POST["valor_orcamento"],
             $_POST["total_item_orcamento"]
         )) {
+            if($_POST["status_orcamento"] === 'aprovado') {
+                // aqui a função de notificação de email
+                $orcamento = $this->orcamento->buscarOrcamentoPorID($id);
+                $email = $orcamento['email_usuario'] ?? '';
+                $nome = $orcamento['nome_cliente'] ?? '';
+                $numeroOrcamento = $orcamento['id_orcamento'] ?? '';
+                $valor = $orcamento['valor_orcamento'] ?? 0;
+                
+                $this->emailNotification->orcamentoAprovado($email, $nome, $numeroOrcamento, $valor);
+            }
             Redirect::redirecionarComMensagem("orcamento/listar", "success", "Orçamento atualizado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("orcamento/editar/{$id}", "error", "Erro ao atualizar orçamento!");
         }
     }
+
+    // public function atualizarOrcamentoComNotificacao(int $id)
+    // {
+    //     $erros = OrcamentoValidador::ValidarEntradas($_POST);
+    //     if (!empty($erros)) {
+    //         Redirect::redirecionarComMensagem("orcamento/editar/{$id}", "error", implode("<br>", $erros));
+    //         return;
+    //     }
+
+    //     $statusAtualizado = $_POST["status_orcamento"] ?? '';
+
+    //     if ($this->orcamento->atualizarOrcamento(
+    //         $id,
+    //         $_POST["id_cliente"],
+    //         $_POST["descricao_orcamento"],
+    //         $statusAtualizado,
+    //         $_POST["data_orcamento"],
+    //         $_POST["valor_orcamento"],
+    //         $_POST["total_item_orcamento"]
+    //     )) {
+    //         if ($statusAtualizado === 'aprovado') {
+    //             // aqui a função de notificação de email
+    //             $orcamento = $this->orcamento->buscarOrcamentoPorID($id);
+    //             $email = $orcamento['email_cliente'] ?? '';
+    //             $nome = $orcamento['nome_cliente'] ?? '';
+    //             $numeroOrcamento = $orcamento['id_orcamento'] ?? '';
+    //             $valor = $orcamento['valor_orcamento'] ?? 0;
+
+    //             $this->emailNotification->orcamentoAprovado($email, $nome, $numeroOrcamento, $valor);
+    //         }
+    //         Redirect::redirecionarComMensagem("orcamento/listar", "success", "Orçamento atualizado com sucesso!");
+    //     } else {
+    //         Redirect::redirecionarComMensagem("orcamento/editar/{$id}", "error", "Erro ao atualizar orçamento!");
+    //     }
+    // }
 
     public function deletarOrcamento(int $id)
     {

@@ -37,7 +37,7 @@ class EmailService{
             return $this->mailer->send();
 
         } catch (Exception $e) {
-            return false;
+            var_dump($e);exit;
         }
     }
 }
