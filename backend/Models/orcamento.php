@@ -34,7 +34,7 @@ class Orcamento{
 
     // ✅ BUSCAR 1 POR ID
     public function buscarOrcamentoPorID(int $id) {
-        $sql = 'SELECT o.*, u.nome_usuario as cliente_nome 
+        $sql = 'SELECT o.*, u.nome_usuario as cliente_nome, u.email_usuario 
                 FROM tbl_orcamento o 
                 LEFT JOIN tbl_usuario u ON o.id_cliente = u.id_usuario 
                 WHERE o.id_orcamento = :id AND o.excluido_em IS NULL';

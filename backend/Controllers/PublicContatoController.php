@@ -3,15 +3,18 @@ namespace App\Impermax\Controllers;
 use App\Impermax\Core\Session;
 use App\Impermax\Models\Contato;
 use App\Impermax\Database\Database;
+use App\Impermax\Core\EmailNotification;
 
 class PublicContatoController
 {
     private $model;
     private $secao;
+    private EmailNotification $emailNotification;
     public function __construct()
     {
         $this->model = new Contato(Database::getInstance());
         $this->secao = new Session();
+        $this->emailNotification = new EmailNotification();
     }
 
    public function enviar()
@@ -119,6 +122,7 @@ class PublicContatoController
 
         if ($isAjax) {
             header('Content-Type: application/json; charset=utf-8');
+            $this->emailNotification->contatoRecebido($email, $nome);
             echo json_encode(['status' => 'success', 'message' => 'Orçamento solicitado com sucesso!'], JSON_UNESCAPED_UNICODE);
             exit;
         }
