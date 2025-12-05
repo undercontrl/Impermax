@@ -6,8 +6,8 @@ class Mail{
         return [
             'host' => 'smtp.gmail.com',
             'port' => 587,
-            'username'=> 'arianerosadasilva142@gmail.com',
-            'password'=> 'ctbi hipk abuy sefu',
+            'username'=> 'alessandro.impermax@gmail.com',
+            'password'=> 'bhfd vgtl yblp jxoi',
             'encryption'=> 'tls',
             'from_address'=> 'noreply@impermax.com',
             'from_name'=> 'Impermax',
