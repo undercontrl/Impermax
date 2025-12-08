@@ -98,7 +98,7 @@ class EmailNotification {
          * 🔐 Email: Esqueci a Senha -- acho q o professor vai fazer com a gente ? - deixar por último
          */
         public function esqueciASenha(string $email, string $token): void {
-            $resetUrl = $this->baseUrl . '/backend/redefinir-senha?token=' . urlencode($token); // criar view de redefinição de senha ⚠️
+            $resetUrl = $this->baseUrl . '/backend/redefinir-senha?token=' . urlencode($token); // criei a view mas preciso fazer ela funcionar agora, checar model usuario e authcontroller ⚠️
             
             $conteudo = <<<HTML
     <h2 style="margin: 0 0 20px 0; color: #1e293b; font-size: 24px;">Redefinição de Senha</h2>
@@ -280,7 +280,7 @@ class EmailNotification {
         }
 
         /**
-         * 💰 Email: Orçamento Aprovado -- não sei como fazer funcionar isso aqui -> pesquisar depois
+         * 💰 Email: Orçamento Aprovado -- feito! ✅
          */
         public function orcamentoAprovado(string $email, string $nome, string $numeroOrcamento, string $valor): void {
             $conteudo = <<<HTML

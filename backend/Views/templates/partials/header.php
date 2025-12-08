@@ -8,7 +8,9 @@ $rotasPublicas = [
     '/backend/login', 
     '/backend/register', 
     '/backend/authenticar',
-    '/backend/cliente/avaliacao'
+    '/backend/cliente/avaliacao',
+    '/backend/esqueci-senha',
+    '/backend/redefinir-senha'
 ];
 
 use App\Impermax\Core\Permissions;

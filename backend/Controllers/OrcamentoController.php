@@ -216,7 +216,6 @@ class OrcamentoController
             Redirect::redirecionarComMensagem("orcamento/editar/{$id}", "error", implode("<br>", $erros));
             return;
         }
-
         if ($this->orcamento->atualizarOrcamento(
             $id,
             $_POST["id_cliente"],

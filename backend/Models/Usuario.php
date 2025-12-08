@@ -457,4 +457,20 @@ class Usuario{
         ];
     }
 
+    public function salvarTokenRedefinicao(){
+        //tem q criar essa model q esta refletindo no AuthController
+    }
+
+    public function buscarUsuarioPorToken(){
+        //tem q criar essa model q esta refletindo no AuthController
+    }
+
+    public function atualizarSenha(){
+        //tem q criar essa model q esta refletindo no AuthController
+    }
+
+    public function limparTokenRedefinicao(){
+        //tem q criar essa model q esta refletindo no AuthController
+    }
+
 }

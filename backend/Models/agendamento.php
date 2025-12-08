@@ -334,14 +334,15 @@ class Agendamento
         return $statement->execute();
     }
     
-    function atualizarAgendamento($id_agendamento, $id_cliente, $data_solicitada, $total_agendamento, $status_agendamento)
+    function atualizarAgendamento(int $id, $id_cliente, $data_solicitada, $total_agendamento, $status_agendamento)
     {
         $dataAtual = date('Y-m-d H:i:s');
         $sql = 'UPDATE tbl_agendamento SET id_cliente = :id_cliente, data_solicitada = :data_solicitada, 
         total_agendamento = :total_agendamento, status_agendamento = :status_agendamento, atualizado_em = :atualizado 
-        WHERE id_agendamento = :id_agendamento';
+        WHERE id_agendamento = :id';
         $statement = $this->db->prepare($sql);
-        $statement->bindParam(':id_agendamento', $id_agendamento);
+        $statement->bindParam(':id', $id);
+        // $statement->bindParam(':id_agendamento', $id_agendamento);
         $statement->bindParam(':id_cliente', $id_cliente);
         $statement->bindParam(':data_solicitada', $data_solicitada);
         $statement->bindParam(':total_agendamento', $total_agendamento);
