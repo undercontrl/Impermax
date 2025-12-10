@@ -141,6 +141,8 @@ class Rotas
         "/material/listar" => "MaterialController@viewListarMateriais",
         "/material/editar/{id}" => "MaterialController@viewEditarMateriais",
         "/material/excluir/{id}" => "MaterialController@viewExcluirMateriais",
+        '/api/materiais/{pagina}' => 'MaterialController@getMateriais',
+        '/api/materiais' => 'MaterialController@getMateriais',
 
         
     ],

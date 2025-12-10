@@ -5,15 +5,32 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\MaterialValidador;
+use App\Impermax\Core\ValidaToken;
 use PDO;
 
 class MaterialController {
     private $material;
     private $db;
+     private $chaveAPI;
 
     public function __construct() {
         $this->db = Database::getInstance();
         $this->material = new Material($this->db);
+         $this->chaveAPI = new ValidaToken();
+    }
+
+        public function getMateriais($pagina=0){
+         $this->chaveAPI->ValidaToken();
+        //condição ternaria é igual if else
+        $registros_por_pagina = $pagina===0 ? 200 : 5;
+        $pagina = $pagina===0 ? 1 : (int)$pagina;
+        $dados = $this->material->paginacaoAPI($pagina, $registros_por_pagina);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'success',
+            'data' => $dados
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        exit;
     }
 
     public function index() {
