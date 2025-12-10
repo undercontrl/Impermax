@@ -196,7 +196,7 @@ class EmailNotification {
         }
 
         /**
-         * ✅ Email: Avaliação Aprovada -- aaaaaaaaaaaaaaa
+         * ✅ Email: Avaliação Aprovada -- nao ta funcionando fazer quando der kkkkkk
          */
         public function avaliacaoAprovada(string $email, string $nome): void {
             $siteUrl = $this->baseUrl;

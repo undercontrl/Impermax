@@ -203,15 +203,18 @@ class AgendamentoController
             $_POST["total_agendamento"],
             $_POST["status_agendamento"]
         )) {
-            if($_POST["status_agendamento"] === 'agendada'){
-                $agendamento = $this->agendamento->buscarAgendamentos($id);
-                $email = $agendamento['email_usuario'] ?? '';
-                $nome = $agendamento ['nome_cliente'] ?? '';
-                $dataAgendamento = $agendamento ['data_solicitada'] ?? '';
-                $servico = $agendamento ['descricao_servico'] ?? '';
 
-                $this->emailNotification->agendamentoConfirmado($email, $nome, $dataAgendamento, $servico);
-            }
+            // arrumar essa parte do email depois
+            
+            // if($_POST["status_agendamento"] === 'agendada'){
+            //     $agendamento = $this->agendamento->buscarAgendamentos($id);
+            //     $email = $agendamento['email_usuario'] ?? '';
+            //     $nome = $agendamento ['nome_cliente'] ?? '';
+            //     $dataAgendamento = $agendamento ['data_solicitada'] ?? '';
+            //     $servico = $agendamento ['descricao_servico'] ?? '';
+
+            //     $this->emailNotification->agendamentoConfirmado($email, $nome, $dataAgendamento, $servico);
+            // }
             Redirect::redirecionarComMensagem("agendamento/listar", "success", "Agendamento atualizado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("agendamento/editar/{$id}", "error", "Erro ao atualizar agendamento!");
