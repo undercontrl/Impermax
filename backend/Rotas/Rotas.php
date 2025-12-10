@@ -41,6 +41,8 @@ class Rotas
         "/agendamento/excluir/{id}" => "AgendamentoController@viewExcluirAgendamentos",
         "/agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "AgendamentoController@relatorioAgendamento",
         '/agendamento/deletar-multiplos' => 'AgendamentoController@deletarMultiplos',
+        '/api/agendamentos/{pagina}' => 'AgendamentoController@getAgendamentos',
+        '/api/agendamentos' => 'AgendamentoController@getAgendamentos',
         //avaliações
         "/avaliacao" => "AvaliacaoController@index",
         "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",

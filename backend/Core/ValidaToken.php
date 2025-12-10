@@ -10,6 +10,9 @@ class ValidaToken{
     }
 private function buscaChaveAPI(){
         $headers = getallheaders();
+        if (!isset($headers['Authorization'])) {
+            return false;
+        }
         $token = explode(" ", $headers['Authorization'])[1];
         return $token === $this->chaveAPI;
     }

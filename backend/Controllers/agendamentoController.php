@@ -10,12 +10,14 @@ use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AgendamentoValidador;
 use App\Impermax\Core\EmailNotification;
+use App\Impermax\Core\ValidaToken;
 
 class AgendamentoController
 {
     private $agendamento;
     private $usuario;
     private $db;
+    private $chaveAPI;
     private EmailNotification $emailNotification;
 
     public function __construct()
@@ -23,8 +25,23 @@ class AgendamentoController
         $this->db = Database::getInstance();
         $this->agendamento = new Agendamento($this->db);
         $this->usuario = new Usuario($this->db);
+        $this->chaveAPI = new ValidaToken();
         // $this->orcamento = new Orcamento($this->db);
         $this->emailNotification = new EmailNotification();
+    }
+    
+    public function getAgendamentos($pagina=0){
+         $this->chaveAPI->ValidaToken();
+        //condição ternaria é igual if else
+        $registros_por_pagina = $pagina===0 ? 200 : 5;
+        $pagina = $pagina===0 ? 1 : (int)$pagina;
+        $dados = $this->agendamento->paginacaoAPI($pagina, $registros_por_pagina);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'success',
+            'data' => $dados
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        exit;
     }
 
     // Listar todos os agendamentos com filtros, busca, ordenação e paginação
