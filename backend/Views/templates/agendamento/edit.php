@@ -14,7 +14,7 @@
             <div class="page-title-group">
                 <h1 class="page-title">
                     <i class="bi bi-pencil-square me-2"></i>
-                    Editar Agendamento
+                    Editar Agendamento #<?= htmlspecialchars($agendamento['id_agendamento']) ?>
                 </h1>
                 <p class="page-subtitle">Atualize as informações do agendamento #<?= $agendamento['id_agendamento'] ?></p>
             </div>
@@ -23,7 +23,7 @@
 
     <!-- Formulário -->
     <div class="form-card">
-        <form action="/backend/agendamento/atualizar" method="POST" id="formAgendamento">
+        <form action="/backend/agendamento/atualizar/<?= htmlspecialchars($agendamento['id_agendamento']) ?>" method="POST" id="formAgendamento">
             <input type="hidden" name="id_agendamento" value="<?= $agendamento['id_agendamento'] ?>">
             
             <!-- Seção: Informações do Cliente -->

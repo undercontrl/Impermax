@@ -13,6 +13,8 @@ class Rotas
        '/register' => 'AuthController@register',
        '/login' => 'AuthController@login',
        '/logout' => 'AuthController@logout',
+       "/esqueci-senha" => "AuthController@viewEsqueciSenha",
+       "/redefinir-senha" => "AuthController@viewRedefinirSenha",
        '/admin/dashboard' => 'Admin\DashboardController@index',
        '/funcionario/dashboard' => 'Funcionario\DashboardController@index',
        
@@ -23,7 +25,6 @@ class Rotas
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
         "/usuario/listar" => "UsuarioController@viewListarUsuarios",
-        "/agendamento/ver/{id}" => "AgendamentoController@viewVerAgendamento",
         "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
@@ -34,6 +35,7 @@ class Rotas
         "/agendamentos" => "AgendamentoController@index",
         "/agendamento/criar" => "AgendamentoController@viewCriarAgendamentos",
         "/agendamento/criar-publico" => "AgendamentoController@viewCriarAgendamentos",
+        "/agendamento/ver/{id}" => "AgendamentoController@viewVerAgendamento",
         "/agendamento/listar" => "AgendamentoController@viewListarAgendamentos",
         "/agendamento/editar/{id}" => "AgendamentoController@viewEditarAgendamentos",
         "/agendamento/excluir/{id}" => "AgendamentoController@viewExcluirAgendamentos",
@@ -151,6 +153,8 @@ class Rotas
         '/register' => 'AuthController@cadastrarUsuario',
         '/login' => 'AuthController@authenticar',
         "/authenticar" => "AuthController@authenticar",
+        "/processar-esqueci-senha" => "AuthController@processarEsqueciSenha",
+        "/processar-redefinir-senha" => "AuthController@processarRedefinirSenha",
         
         //perfil
         '/perfil/atualizar' => 'PerfilController@atualizar',

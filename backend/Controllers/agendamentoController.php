@@ -9,12 +9,14 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AgendamentoValidador;
+use App\Impermax\Core\EmailNotification;
 
 class AgendamentoController
 {
     private $agendamento;
     private $usuario;
     private $db;
+    private EmailNotification $emailNotification;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class AgendamentoController
         $this->agendamento = new Agendamento($this->db);
         $this->usuario = new Usuario($this->db);
         // $this->orcamento = new Orcamento($this->db);
+        $this->emailNotification = new EmailNotification();
     }
 
     // Listar todos os agendamentos com filtros, busca, ordenação e paginação
@@ -185,26 +188,36 @@ class AgendamentoController
     }
 
     // Atualizar agendamento existente
-    public function atualizarAgendamento()
+    public function atualizarAgendamento(int $id)
     {
         $erros = AgendamentoValidador::ValidarEntradas($_POST);
-
         if (!empty($erros)) {
-            Redirect::redirecionarComMensagem("agendamento/editar/{$_POST['id_agendamento']}", "error", implode("<br>", $erros));
+            Redirect::redirecionarComMensagem("agendamento/editar/{$id}", "error", implode("<br>", $erros));
+            return;
         }
-
-        $ok = $this->agendamento->atualizarAgendamento(
-            $_POST["id_agendamento"],
+        if ($this->agendamento->atualizarAgendamento(
+            $id,
+            // $_POST["id_agendamento"],
             $_POST["id_cliente"],
             $_POST["data_solicitada"],
             $_POST["total_agendamento"],
             $_POST["status_agendamento"]
-        );
+        )) {
 
-        if ($ok) {
+            // arrumar essa parte do email depois
+            
+            // if($_POST["status_agendamento"] === 'agendada'){
+            //     $agendamento = $this->agendamento->buscarAgendamentos($id);
+            //     $email = $agendamento['email_usuario'] ?? '';
+            //     $nome = $agendamento ['nome_cliente'] ?? '';
+            //     $dataAgendamento = $agendamento ['data_solicitada'] ?? '';
+            //     $servico = $agendamento ['descricao_servico'] ?? '';
+
+            //     $this->emailNotification->agendamentoConfirmado($email, $nome, $dataAgendamento, $servico);
+            // }
             Redirect::redirecionarComMensagem("agendamento/listar", "success", "Agendamento atualizado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("agendamento/editar/{$_POST['id_agendamento']}", "error", "Erro ao atualizar agendamento!");
+            Redirect::redirecionarComMensagem("agendamento/editar/{$id}", "error", "Erro ao atualizar agendamento!");
         }
     }
 

@@ -97,4 +97,46 @@ class AuthController {
             Redirect::redirecionarComMensagem('register', 'error', 'Erro no servidor. Tente novamente.');
         }
     }
+
+    public function viewEsqueciSenha(): void {
+        View::render('auth/esqueci-senha');
+    }
+
+    public function viewRedefinirSenha(): void {
+        View::render('auth/redefinir-senha');
+    }
+
+    public function processarEsqueciSenha(): void {
+        $email = $_POST['email_usuario'] ?? null;
+        $usuario = $this->usuarioModel->buscarUsuariosPorEmail($email);
+
+        if ($usuario) {
+            $token = bin2hex(random_bytes(16));
+            $expiracao = date('Y-m-d H:i:s', strtotime('+1 hour'));
+            $this->usuarioModel->salvarTokenRedefinicao($usuario['id_usuario'], $token, $expiracao);
+            $this->emailNotification->esqueciASenha($email, $token);
+        }
+
+        Redirect::redirecionarComMensagem('esqueci-senha', 'success', 'Se o e-mail existir em nosso sistema, um link de redefinição foi enviado.');
+    }
+
+    public function processarRedefinirSenha(): void {
+        $token = $_POST['token'] ?? null;
+        $novaSenha = $_POST['nova_senha'] ?? null;
+        $confirmarSenha = $_POST['confirmar_senha'] ?? null;
+
+        if ($novaSenha !== $confirmarSenha) {
+            Redirect::redirecionarComMensagem("redefinir-senha?token=$token", 'error', 'As senhas não conferem.');
+        }
+
+        $usuario = $this->usuarioModel->buscarUsuarioPorToken($token);
+
+        if ($usuario && strtotime($usuario['token_expiracao']) > time()) {
+            $this->usuarioModel->atualizarSenha($usuario['id_usuario'], $novaSenha);
+            $this->usuarioModel->limparTokenRedefinicao($usuario['id_usuario']);
+            Redirect::redirecionarComMensagem('login', 'success', 'Senha redefinida com sucesso! Faça o login.');
+        } else {
+            Redirect::redirecionarComMensagem('esqueci-senha', 'error', 'Token inválido ou expirado. Solicite um novo link.');
+        }
+    }
 }

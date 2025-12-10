@@ -7,16 +7,20 @@ use App\Impermax\Database\Database;
 use App\Impermax\Core\View;
 use App\Impermax\Core\Redirect;
 use App\Impermax\Validadores\AvaliacaoValidador;
+use App\Impermax\Core\EmailNotification;
 
 class AvaliacaoController
 {
     private $avaliacao;
     private $db;
+    private EmailNotification $emailNotification;
 
     public function __construct()
     {
         $this->db = Database::getInstance();
         $this->avaliacao = new Avaliacao($this->db);
+        $this->emailNotification = new EmailNotification();
+        
     }
 
     public function index()
@@ -153,6 +157,14 @@ class AvaliacaoController
             $_POST["nota_avaliacao"],
             $_POST["status_avaliacao"]
         )) {
+            if($_POST["status_avaliacao"] === 'Aprovado') {
+                // aqui a função de notificação de email
+                $avaliacao = $this->avaliacao->buscarAvaliacaoPorID($id);
+                $email = $avaliacao['email_usuario'] ?? '';
+                $nome = $avaliacao['nome_cliente'] ?? '';
+                
+                $this->emailNotification->avaliacaoAprovada($email, $nome);
+            }
             Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação atualizada com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("avaliacao/editar/{$id}", "error", "Erro ao atualizar avaliação!");
@@ -221,8 +233,7 @@ class AvaliacaoController
         if (!$id) {
             Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID não fornecido!");
             return;
-        }
-        
+        }       
         if ($this->avaliacao->ativarAvaliacao($id)) {
             Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação ativada com sucesso!");
         } else {
