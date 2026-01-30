@@ -9,18 +9,27 @@ class Rotas
     return [
     "GET" => [
        // O caminho da url   O nome do controller que e o metodo do controller
-       //login
-       '/register' => 'AuthController@register',
+       // ============================
+       //       ÁREA PÚBLICA / WEB
+       // ============================
        '/login' => 'AuthController@login',
+       '/register' => 'AuthController@register',
        '/logout' => 'AuthController@logout',
        "/esqueci-senha" => "AuthController@viewEsqueciSenha",
        "/redefinir-senha" => "AuthController@viewRedefinirSenha",
+
+       // ============================
+       //          DASHBOARDS
+       // ============================
        '/admin/dashboard' => 'Admin\DashboardController@index',
        '/funcionario/dashboard' => 'Funcionario\DashboardController@index',
        
        //perfil
        '/perfil' => 'PerfilController@index',
        
+       // ============================
+       //        ADMINISTRAÇÃO
+       // ============================
        //usuarios
         "/usuarios" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
@@ -29,8 +38,25 @@ class Rotas
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
         "/usuario/{id}/relatorio/{dataInicial}/{dataFinal}" => "UsuarioController@relatorioUsuario",
         "/usuario/visualizar/{id}" => "UsuarioController@viewVisualizarUsuario",
+        // ============================
+        //            APIs
+        // ============================
         '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
         '/api/usuarios' => 'APIUsuarioController@getUsuarios',
+        '/api/agendamentos/{pagina}' => 'AgendamentoController@getAgendamentos',
+        '/api/agendamentos' => 'AgendamentoController@getAgendamentos',
+        "api/avaliacoes" => "PublicApiController@getAvaliacoes",
+        "api/servicos" => "PublicApiController@getServicos",
+        "api/projetos" => "PublicProjetoController@getProjetos",
+        "api/pagina-projeto" => "PublicPaginaProjetoController@getProjetos",
+        '/api/pagamento/{pagina}' => 'APIPagamentoController@getPagamentos',
+        '/api/pagamentos' => 'APIPagamentoController@getPagamentos',
+        '/api/materiais/{pagina}' => 'MaterialController@getMateriais',
+        '/api/materiais' => 'MaterialController@getMateriais',
+
+       // ============================
+       //     OUTROS CONTROLLERS
+       // ============================
         //agendamentos
         "/agendamentos" => "AgendamentoController@index",
         "/agendamento/criar" => "AgendamentoController@viewCriarAgendamentos",
@@ -41,8 +67,7 @@ class Rotas
         "/agendamento/excluir/{id}" => "AgendamentoController@viewExcluirAgendamentos",
         "/agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "AgendamentoController@relatorioAgendamento",
         '/agendamento/deletar-multiplos' => 'AgendamentoController@deletarMultiplos',
-        '/api/agendamentos/{pagina}' => 'AgendamentoController@getAgendamentos',
-        '/api/agendamentos' => 'AgendamentoController@getAgendamentos',
+        
         //avaliações
         "/avaliacao" => "AvaliacaoController@index",
         "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
@@ -54,7 +79,7 @@ class Rotas
         "/avaliacao/ativar/{id}" => "AvaliacaoController@ativarAvaliacao",
         "/avaliacao/desativar/{id}" => "AvaliacaoController@desativarAvaliacao",
         "/cliente/avaliacao" => "ClienteAvaliacaoController@index",
-        "api/avaliacoes" => "PublicApiController@getAvaliacoes",
+
         // contatos
         "/contatos" => "ContatoController@index",
         "/contato" => "ContatoController@viewListarContatos",
@@ -92,7 +117,6 @@ class Rotas
         "/servico/listar" => "ServicoController@viewListarServicos",
         "/servico/listar/{pagina}" => "ServicoController@viewListarServicos",
         "/servico/buscar" => "ServicoController@buscar",
-        "api/servicos" => "PublicApiController@getServicos",
         "/servico/editar/{id}" => "ServicoController@viewEditarServicos",
         "/servico/excluir/{id}" => "ServicoController@viewExcluirServicos",
 
@@ -114,7 +138,6 @@ class Rotas
         "/projeto/excluir/{id}" => "ProjetoController@viewExcluirProjetos",
         "/projeto/ativar/{id}" => "ProjetoController@ativarProjeto",
         "/projeto/desativar/{id}" => "ProjetoController@desativarProjeto",
-        "api/projetos" => "PublicProjetoController@getProjetos",
         //pagina projeto 
         "/pagina-projeto" => "PaginaProjetoController@index",                   
         "/pagina-projeto/listar" => "PaginaProjetoController@listar",           
@@ -122,7 +145,6 @@ class Rotas
         "/pagina-projeto/criar" => "PaginaProjetoController@criar",             
         "/pagina-projeto/editar/{id}" => "PaginaProjetoController@editar",      
         "/pagina-projeto/alternar/{id}" => "PaginaProjetoController@alternar",
-        "api/pagina-projeto" => "PublicPaginaProjetoController@getProjetos",
         //pagamento
         "/pagamento" => "PagamentoController@index",
         "/pagamento/criar" => "PagamentoController@viewCriarPagamentos",
@@ -130,8 +152,6 @@ class Rotas
         "/pagamento/ver/{id}" => "PagamentoController@viewVerPagamento",
         "/pagamento/editar/{id}" => "PagamentoController@viewEditarPagamentos",
         "/pagamento/excluir/{id}" => "PagamentoController@viewExcluirPagamentos",
-        '/api/pagamento/{pagina}' => 'APIPagamentoController@getPagamentos',
-        '/api/pagamentos' => 'APIPagamentoController@getPagamentos',
         //orcamento
         "/orcamento" => "OrcamentoController@index",
         "/orcamento/criar" => "OrcamentoController@viewCriarOrcamentos",
@@ -145,8 +165,6 @@ class Rotas
         "/material/listar" => "MaterialController@viewListarMateriais",
         "/material/editar/{id}" => "MaterialController@viewEditarMateriais",
         "/material/excluir/{id}" => "MaterialController@viewExcluirMateriais",
-        '/api/materiais/{pagina}' => 'MaterialController@getMateriais',
-        '/api/materiais' => 'MaterialController@getMateriais',
 
         
     ],
