@@ -26,7 +26,7 @@ public function listarInternos($pagina = 1, $porPagina = 10) {
     $sql = "SELECT id_servico, nome_servico, descricao_servico, valor_base_servico
             FROM tbl_servico 
             WHERE excluido_em IS NULL
-            ORDER BY id_servico ASC
+            ORDER BY id_servico DESC
             LIMIT :offset, :porPagina";
 
     $stmt = $this->db->prepare($sql);
@@ -110,4 +110,51 @@ public function buscarServicoPorID(int $id) {
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+    public function paginacaoAPI(int $pagina = 1, int $por_pagina = 10): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_servico`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_servico` ORDER BY id_servico DESC LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Remove campos que não devem ser expostos se necessário, similar ao usuário
+        // mas servico geralmente é público ou menos sensível.
+        
+        return [
+            'data' => $dados
+        ];
+    }
+
+    public function inserirServicoAPI($nome, $descricao, $valor, $status) {
+        // Verifica se já existe um serviço com o mesmo nome para evitar duplicidade
+        $checkSql = "SELECT id_servico FROM tbl_servico WHERE nome_servico = :nome AND excluido_em IS NULL";
+        $checkStmt = $this->db->prepare($checkSql);
+        $checkStmt->bindParam(':nome', $nome);
+        $checkStmt->execute();
+        $existing = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($existing) {
+            // Se já existe, retorna o ID existente (comportamento de sync idempotente)
+            return $existing['id_servico'];
+        }
+
+        $sql = "INSERT INTO tbl_servico 
+                (nome_servico, descricao_servico, valor_base_servico, status_servico)
+                VALUES (:nome, :descricao, :valor, :status)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $descricao);
+        $stmt->bindParam(':valor', $valor);
+        $stmt->bindParam(':status', $status);
+        if ($stmt->execute()) {
+            return $this->db->lastInsertId();
+        }
+        return false;
+    }
 }

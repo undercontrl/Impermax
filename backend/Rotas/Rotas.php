@@ -43,6 +43,8 @@ class Rotas
         // ============================
         '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
         '/api/usuarios' => 'APIUsuarioController@getUsuarios',
+        '/api/servico-sync/{pagina}' => 'APIServicoController@getServicos',
+        '/api/servico-sync' => 'APIServicoController@getServicos',
         '/api/agendamentos/{pagina}' => 'AgendamentoController@getAgendamentos',
         '/api/agendamentos' => 'AgendamentoController@getAgendamentos',
         "api/avaliacoes" => "PublicApiController@getAvaliacoes",
@@ -189,6 +191,7 @@ class Rotas
         "/usuario/alterar-status-massa" => "UsuarioController@alterarStatusEmMassa",
         "/usuario/excluir-massa" => "UsuarioController@excluirEmMassa",
         '/api/usuarios' => 'APIUsuarioController@salvarUsuario',
+        '/api/servico-sync' => 'APIServicoController@salvarServico',
         //agendamentos
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",
         "/agendamento/atualizar/{id}" => "AgendamentoController@atualizarAgendamento",

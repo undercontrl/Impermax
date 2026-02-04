@@ -21,7 +21,7 @@ class ServicoSite {
                     status_servico
                 FROM tbl_servico
                 WHERE excluido_em IS NULL
-                ORDER BY id_servico ASC
+                ORDER BY id_servico DESC
                 LIMIT :offset, :porPagina";
 
         $stmt = $this->db->prepare($sql);

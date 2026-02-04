@@ -24,7 +24,7 @@ class AssetHelper
      * @param string $filename Nome do arquivo
      * @return string
      */
-    public static function upload(string $filename): string
+    public static function upload(?string $filename): string
     {
         // Se filename for vazio ou null, retorna placeholder
         if (empty($filename)) {
