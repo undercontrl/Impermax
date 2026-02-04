@@ -170,6 +170,7 @@ class Rotas
         "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
         "/usuario/alterar-status-massa" => "UsuarioController@alterarStatusEmMassa",
         "/usuario/excluir-massa" => "UsuarioController@excluirEmMassa",
+        '/api/usuarios' => 'APIUsuarioController@salvarUsuario',
         //agendamentos
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",
         "/agendamento/atualizar/{id}" => "AgendamentoController@atualizarAgendamento",
