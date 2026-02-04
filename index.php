@@ -189,11 +189,18 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch('/backend/api/projetos')
         .then(response => response.json())
         .then(result => {
+            console.log('Projetos API result:', result); // Debug
+            
+            const container = document.getElementById('comparisons-container');
+            
             if (result.status === 'success' && result.data.length > 0) {
-                const container = document.getElementById('comparisons-container');
                 container.innerHTML = ''; // Limpa
 
                 result.data.forEach(projeto => {
+                    console.log('Projeto:', projeto); // Debug - mostra o objeto completo
+                    console.log('Antes:', projeto.antes); // Debug - caminho da imagem antes
+                    console.log('Depois:', projeto.depois); // Debug - caminho da imagem depois
+                    
                     const div = document.createElement('div');
                     div.className = 'img-comp-container';
                     div.innerHTML = `
@@ -207,16 +214,75 @@ document.addEventListener("DOMContentLoaded", function() {
                     container.appendChild(div);
                 });
 
-                // Reinicar comparações
-                setTimeout(initComparisons, 100);
+                // Aguardar todas as imagens carregarem antes de iniciar comparações
+                const images = container.querySelectorAll('img');
+                let loadedCount = 0;
+                const totalImages = images.length;
+                
+                if (totalImages === 0) {
+                    setTimeout(initComparisons, 100);
+                } else {
+                    images.forEach(img => {
+                        if (img.complete) {
+                            loadedCount++;
+                            if (loadedCount === totalImages) {
+                                console.log('Todas as imagens carregadas, iniciando comparações');
+                                setTimeout(initComparisons, 200);
+                            }
+                        } else {
+                            img.addEventListener('load', () => {
+                                loadedCount++;
+                                console.log(`Imagem carregada: ${loadedCount}/${totalImages}`);
+                                if (loadedCount === totalImages) {
+                                    console.log('Todas as imagens carregadas, iniciando comparações');
+                                    setTimeout(initComparisons, 200);
+                                }
+                            });
+                            img.addEventListener('error', () => {
+                                loadedCount++;
+                                console.error('Erro ao carregar imagem:', img.src);
+                                if (loadedCount === totalImages) {
+                                    setTimeout(initComparisons, 200);
+                                }
+                            });
+                        }
+                    });
+                }
             } else {
-                container.innerHTML = '';
-            
+                // Fallback: usar imagem estática se API não retornar dados
+                console.warn('Nenhum projeto encontrado, usando imagem estática');
+                container.innerHTML = `
+                    <div class="img-comp-container">
+                        <div class="img-comp-img">
+                            <img src="assets/projetos/piscina-depois.jpg" width="500" height="350" alt="Depois" 
+                                 onerror="this.src='assets/banner/banner 6.png'">
+                        </div>
+                        <div class="img-comp-img img-comp-overlay">
+                            <img src="assets/projetos/piscina-antes.jpg" width="500" height="350" alt="Antes"
+                                 onerror="this.src='assets/banner/banner 6.png'">
+                        </div>
+                    </div>
+                `;
+                setTimeout(initComparisons, 100);
             }
         })
         .catch(err => {
             console.error('Erro ao carregar projetos:', err);
-            document.getElementById('comparisons-container').innerHTML = '';
+            // Fallback em caso de erro
+            const container = document.getElementById('comparisons-container');
+            container.innerHTML = `
+                <div class="img-comp-container">
+                    <div class="img-comp-img">
+                        <img src="assets/projetos/piscina-depois.jpg" width="500" height="350" alt="Depois"
+                             onerror="this.src='assets/banner/banner 6.png'">
+                    </div>
+                    <div class="img-comp-img img-comp-overlay">
+                        <img src="assets/projetos/piscina-antes.jpg" width="500" height="350" alt="Antes"
+                             onerror="this.src='assets/banner/banner 6.png'">
+                    </div>
+                </div>
+            `;
+            setTimeout(initComparisons, 100);
         });
 });
 </script>
@@ -359,33 +425,32 @@ document.addEventListener('DOMContentLoaded', function () {
             titulosContainer.innerHTML = '';
 
             servicos.forEach(servico => {
-                // CARD
+                // CARD com título integrado
                 const cardHtml = `
-                    <div class="card-servico">
-                        <a href="servicos.php">
-                            <figure>
-                                <img src="${servico.caminho_imagem}" 
-                                     alt="${servico.nome_servico}" 
-                                     class="servico-imagem"
-                                     onerror="this.onerror=null; this.src='assets/cards/default.jpg';">
-                                <figcaption class="figcaption-servico">
-                                    <p class="titulo-interno">
-                                        ${servico.descricao_servico.replace(/<span[^>]*>([^<]+)<\/span>/g, '<span class="texto-destaque">$1</span>')}
-                                    </p>
-                                </figcaption>
-                            </figure>
-                        </a>
+                    <div class="card-servico-wrapper">
+                        <div class="card-servico">
+                            <a href="servicos.php">
+                                <figure>
+                                    <img src="${servico.caminho_imagem}" 
+                                         alt="${servico.nome_servico}" 
+                                         class="servico-imagem"
+                                         onerror="this.onerror=null; this.src='assets/cards/default.jpg';">
+                                    <figcaption class="figcaption-servico">
+                                        <p class="titulo-interno">
+                                            ${servico.descricao_servico.replace(/<span[^>]*>([^<]+)<\/span>/g, '<span class="texto-destaque">$1</span>')}
+                                        </p>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                        </div>
+                        <h3 class="titulo-servico-card">${servico.nome_servico}</h3>
                     </div>
                 `;
                 cardsContainer.insertAdjacentHTML('beforeend', cardHtml);
-
-                // TÍTULO EXTERNO
-                const tituloHtml = `<h3 class="titulo-externo-item">${servico.nome_servico}</h3>`;
-                titulosContainer.insertAdjacentHTML('beforeend', tituloHtml);
             });
 
-            // Ajusta gap
-            titulosContainer.style.gap = '130px';
+            // Ajusta gap (não precisa mais do titulosContainer)
+            titulosContainer.style.display = 'none';
         })
         .catch(err => {
             console.error(err);

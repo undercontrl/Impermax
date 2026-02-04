@@ -202,9 +202,9 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        margin-top: 120px !important;
+        margin-top: 0 !important;
+        padding-top: 140px !important;
         /* Space for fixed header */
-        /* Adjust based on header */
     }
 
     .titulo-hero,
@@ -217,6 +217,47 @@
         padding: 0 20px;
     }
 
+    /* QUEM SOMOS SECTION - Adjust container width for mobile */
+    .quem-somos {
+        height: auto !important;
+        padding: 140px 20px 40px 20px !important;
+        /* Increased top padding for header clearance */
+        top: 0 !important;
+        margin-top: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    .titulo-quem-somos {
+        margin-top: 20px !important;
+        font-size: 24px !important;
+    }
+
+    .subtitulo-quem-somos {
+        font-size: 18px !important;
+    }
+
+    .texto-quem-somos {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+        padding: 0 25px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        font-size: 15px !important;
+        text-align: center;
+        box-sizing: border-box !important;
+        line-height: 1.6 !important;
+    }
+
+    .botao-saiba-mais {
+        font-size: 16px !important;
+        padding: 12px 20px !important;
+    }
+
     /* RESET SERVICES */
     .servicos {
         height: auto !important;
@@ -227,7 +268,23 @@
         flex-direction: column;
         gap: 40px;
         top: 0 !important;
-        /* Remove relative top offset */
+    }
+
+    /* Card wrapper to group image and title */
+    .card-servico-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .titulo-servico-card {
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        font-size: 16px;
+        margin: 0;
+        padding: 0 10px;
     }
 
     .titulo-servico {
@@ -235,24 +292,99 @@
         margin-bottom: 20px;
     }
 
-    /* Adjust Titles for Services (External) to stack closer */
+    /* Hide external titles container */
     .titulo-externo {
-        margin-top: 30px !important;
-        flex-direction: column;
-        gap: 20px !important;
-        margin-left: 0 !important;
+        display: none !important;
     }
 
-    .titulo-externo h3 {
-        padding: 0 !important;
+    /* ANTES E DEPOIS SECTION - Fix text and images for mobile */
+    .antes-depois {
+        flex-direction: column !important;
+        padding: 40px 20px !important;
+        width: 100% !important;
+        max-height: none !important;
+        gap: 30px !important;
+    }
+
+    .texto-content {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100% !important;
+        padding: 0 10px !important;
+    }
+
+    .titulo-antes-depois {
+        font-size: 22px !important;
+    }
+
+    .subtitulo-antes-depois {
+        font-size: 18px !important;
+    }
+
+    .texto-antes-depois {
+        text-align: center !important;
+        /* Remove justify */
+        font-size: 15px !important;
+        padding: 0 10px !important;
+    }
+
+    /* Image comparison container */
+    .img-comp-container {
+        width: 100% !important;
+        max-width: 350px !important;
+        height: 250px !important;
+        /* Fixed height for slider to work */
+        margin: 0 auto !important;
+        overflow: visible !important;
+        position: relative !important;
+    }
+
+    .img-comp-img {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
         top: 0 !important;
+        left: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .img-comp-img img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        /* Cover to fill the container */
+        object-position: center !important;
+        display: block !important;
+    }
+
+    /* Ensure slider button is visible */
+    .img-comp-slider {
+        position: absolute !important;
+        z-index: 9 !important;
+        cursor: ew-resize !important;
+        width: 40px !important;
+        height: 40px !important;
+        background-color: #5f7396 !important;
+        opacity: 0.9 !important;
+        border-radius: 50% !important;
+        border: 3px solid white !important;
+    }
+
+    #comparisons-container {
+        width: 100% !important;
+        padding: 0 0 20px 0 !important;
+        /* Bottom padding to separate from next section */
+        margin-bottom: 20px !important;
     }
 
     /* RESET PROJECTS */
     .projetos {
         height: auto !important;
         top: 0 !important;
-        padding: 40px 20px;
+        padding: 120px 20px 40px 20px !important;
+        /* Increased top padding for header clearance */
+        margin-bottom: 0 !important;
+        /* Remove bottom margin to reduce white space */
     }
 
     .parallax-projetos {
@@ -262,15 +394,24 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 80px 20px !important;
+        /* Add padding for better spacing */
     }
 
     .titulo-projetos {
         top: 0 !important;
         font-size: 40px !important;
+        margin-top: 0 !important;
     }
 
     .grid-projetos {
         grid-template-columns: 1fr !important;
+    }
+
+    /* DEPOIMENTOS SECTION - Reduce top margin */
+    .depoimentos {
+        margin-top: 0 !important;
+        padding-top: 40px !important;
     }
 
     /* RESET CONTACT FORM - HERO */
@@ -316,6 +457,44 @@
     .whatsapp-contato p {
         font-size: 16px !important;
         line-height: 1.5;
+    }
+
+    /* PARALLAX CONTACT SECTION - Fix layout */
+    .parallax {
+        height: auto !important;
+        min-height: auto !important;
+        padding: 40px 0 !important;
+        background-attachment: scroll !important;
+        /* Fixed backgrounds don't work well on mobile */
+    }
+
+    .bloco-contato {
+        flex-direction: column !important;
+        margin-left: 0 !important;
+        /* Remove desktop margin */
+        margin-right: 0 !important;
+        padding: 20px !important;
+        gap: 30px !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .whatsapp-contato {
+        padding-left: 0 !important;
+        /* Remove desktop padding */
+        padding-right: 0 !important;
+        margin-top: 0 !important;
+        /* Remove desktop margin */
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+    }
+
+    .whatsapp-contato h2 {
+        margin-top: 0 !important;
+        /* Remove desktop margin */
+        font-size: 22px !important;
+        margin-bottom: 15px !important;
     }
 
     .footer-conteudo {

@@ -36,7 +36,15 @@ $secao->set('csrf_token', $codigoToken);
         <a href="index.php">
             <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo">
         </a>
-        <ul class="menu-nav">
+        
+        <!-- Hamburger Menu Button (Mobile Only) -->
+        <button class="hamburger-menu" id="hamburger-btn" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <ul class="menu-nav" id="menu-nav">
             <li><a href="index.php">INICIO</a></li>
             <li><a href="sobre.php">SOBRE</a></li>
             <li><a href="servicos.php">SERVIÇOS</a></li>
@@ -98,6 +106,47 @@ $secao->set('csrf_token', $codigoToken);
         <div class="linha-servicos">Impermeabilização de lajes • Piscinas • Banheiros • Paredes • Fachadas • Caixas d’água • Manta asfáltica • Tratamento de umidade</div>
         <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
     </footer>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const menuNav = document.getElementById('menu-nav');
+            const menuOverlay = document.getElementById('menu-overlay');
+            
+            if (hamburgerBtn && menuNav && menuOverlay) {
+                hamburgerBtn.addEventListener('click', function() {
+                    hamburgerBtn.classList.toggle('active');
+                    menuNav.classList.toggle('active');
+                    menuOverlay.classList.toggle('active');
+                    
+                    if (menuNav.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                menuOverlay.addEventListener('click', function() {
+                    hamburgerBtn.classList.remove('active');
+                    menuNav.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+                
+                const menuLinks = menuNav.querySelectorAll('a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburgerBtn.classList.remove('active');
+                        menuNav.classList.remove('active');
+                        menuOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+        });
+    </script>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/formulario.js"></script>
