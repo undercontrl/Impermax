@@ -1,9 +1,10 @@
-header{
+header {
     position: fixed;
     z-index: 1000;
     width: 100%;
 }
-.span-header{
+
+.span-header {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -15,14 +16,16 @@ header{
     padding: 10px;
     gap: 10px;
 }
-.ancora-header-secundaria{
+
+.ancora-header-secundaria {
     position: relative;
     padding: 5px;
     gap: 5px;
     display: flex;
     flex-wrap: wrap;
 }
-.header-secundario{
+
+.header-secundario {
     height: 27px;
     background-color: var(--cor-de-fundo-primaria);
     color: var(--cor-de-fundo-quaternaria);
@@ -33,15 +36,18 @@ header{
     font-weight: bold;
     display: flex;
 }
-.icon{
+
+.icon {
     width: 22px;
     height: 22px;
 }
-.icon-redes{
+
+.icon-redes {
     width: 20px;
     height: 20px;
 }
-.container-header-secundario{
+
+.container-header-secundario {
     max-width: 1200px;
     margin: 0 0 0 660px;
     display: flex;
@@ -50,10 +56,12 @@ header{
     align-items: center;
     padding: 5px 0px 5px 0;
 }
-.logo{
+
+.logo {
     height: 69px;
 }
-.header-primario{
+
+.header-primario {
     width: 100%;
     margin: 0 auto;
     display: flex;
@@ -66,7 +74,8 @@ header{
     background-color: var(--cor-de-fundo-secundaria);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.menu-nav{
+
+.menu-nav {
     display: flex;
     flex-direction: row;
     justify-content: center;

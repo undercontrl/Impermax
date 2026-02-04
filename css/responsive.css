@@ -1,29 +1,345 @@
+/* =========================================
+   RESPONSIVE OVERRIDES
+   These styles apply ONLY to smaller screens
+   to preserve the desktop design integrity.
+   ========================================= */
+
+/* --- Tablet / Notebook L (Max 1200px) --- */
+@media (max-width: 1200px) {
+
+    /* Header: Remove the large left margin that breaks on smaller screens */
+    .container-header-secundario {
+        margin: 0 auto !important;
+        justify-content: center !important;
+        padding: 5px 20px !important;
+        width: 100%;
+    }
+
+    /* Hero: Adjust text sizes slightly */
+    .titulo-hero {
+        font-size: 32px !important;
+        width: 100%;
+    }
+
+    .texto-hero {
+        font-size: 20px !important;
+        width: 100%;
+        max-width: 90%;
+    }
+
+    /* Hide hamburger on desktop */
+    .hamburger-menu {
+        display: none;
+    }
+}
+
+/* --- Tablet Portrait / Large Mobile (Max 768px) --- */
 @media (max-width: 768px) {
-            .header-secundario {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
 
-            .menu-nav {
-                flex-direction: column;
-                gap: 15px;
-            }
+    /* RESET HEADER LAYOUT */
+    header {
+        position: fixed !important;
+        /* Keep fixed for better UX */
+        z-index: 1000;
+    }
 
-            .titulo-projetos {
-                font-size: 36px;
-            }
+    .header-secundario {
+        height: auto !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 8px 15px !important;
+        gap: 10px;
+    }
 
-            .grid-projetos {
-                grid-template-columns: 1fr;
-            }
+    .span-header {
+        font-size: 11px !important;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 
-            .card-depoimento {
-                min-width: 320px;
-            }
+    .icon {
+        width: 16px !important;
+        height: 16px !important;
+    }
 
-            .footer-conteudo {
-                flex-direction: column;
-                gap: 20px;
-            }
-        }
+    .container-header-secundario {
+        flex-direction: row !important;
+        gap: 8px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        justify-content: flex-end !important;
+    }
+
+    .icon-redes {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .header-primario {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        height: auto !important;
+        padding: 10px 15px !important;
+    }
+
+    .menu-nav {
+        flex-direction: column !important;
+        /* Force stack */
+        gap: 15px;
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-nav li {
+        width: 100%;
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+
+    /* HAMBURGER MENU BUTTON - Show on mobile */
+    .hamburger-menu {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 35px;
+        height: 30px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1001;
+        position: relative;
+    }
+
+    .hamburger-line {
+        width: 100%;
+        height: 3px;
+        background-color: var(--cor-de-fundo-primaria);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    /* Hamburger Animation when open */
+    .hamburger-menu.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(8px, -8px);
+    }
+
+    /* MOBILE MENU - Hidden by default, slides in when active */
+    .menu-nav {
+        position: fixed !important;
+        top: 0;
+        right: -100% !important;
+        /* Hidden off-screen */
+        width: 70% !important;
+        max-width: 300px;
+        height: 100vh;
+        background-color: white;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        padding: 80px 20px 20px !important;
+        gap: 0 !important;
+        margin: 0 !important;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .menu-nav.active {
+        right: 0 !important;
+        /* Slide in */
+    }
+
+    .menu-nav li {
+        width: 100%;
+        text-align: left;
+        padding: 15px 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .menu-nav li a {
+        display: block;
+        font-size: 18px;
+        color: var(--cor-de-fundo-primaria);
+    }
+
+    /* Overlay when menu is open */
+    .menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .menu-overlay.active {
+        display: block;
+    }
+
+    /* RESET HERO SECTON - remove absolute centering */
+    .hero {
+        height: auto !important;
+        min-height: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 120px !important;
+        /* Space for fixed header */
+        /* Adjust based on header */
+    }
+
+    .titulo-hero,
+    .texto-hero {
+        position: static !important;
+        transform: none !important;
+        margin: 10px 0;
+        text-align: center;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    /* RESET SERVICES */
+    .servicos {
+        height: auto !important;
+        padding: 40px 0;
+    }
+
+    .cards {
+        flex-direction: column;
+        gap: 40px;
+        top: 0 !important;
+        /* Remove relative top offset */
+    }
+
+    .titulo-servico {
+        top: 0 !important;
+        margin-bottom: 20px;
+    }
+
+    /* Adjust Titles for Services (External) to stack closer */
+    .titulo-externo {
+        margin-top: 30px !important;
+        flex-direction: column;
+        gap: 20px !important;
+        margin-left: 0 !important;
+    }
+
+    .titulo-externo h3 {
+        padding: 0 !important;
+        top: 0 !important;
+    }
+
+    /* RESET PROJECTS */
+    .projetos {
+        height: auto !important;
+        top: 0 !important;
+        padding: 40px 20px;
+    }
+
+    .parallax-projetos {
+        top: 0 !important;
+        min-height: 300px;
+        height: auto !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .titulo-projetos {
+        top: 0 !important;
+        font-size: 40px !important;
+    }
+
+    .grid-projetos {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* RESET CONTACT FORM - HERO */
+    #caixa-orcamento {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        transform: none !important;
+        margin: 20px auto !important;
+        width: 100% !important;
+        max-width: 90%;
+        height: auto !important;
+    }
+
+    /* RESET CONTACT FORM - FOOTER/CONTACT */
+    #caixa-orcamento2 {
+        position: relative !important;
+        margin-top: 20px !important;
+        left: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 90%;
+        height: auto !important;
+        margin: 20px auto !important;
+    }
+
+    /* WHATSAPP CONTACT SECTION - Fix text cutoff */
+    .whatsapp-contato {
+        width: 100% !important;
+        margin: 20px auto !important;
+        padding: 20px !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        text-align: center;
+    }
+
+    .whatsapp-contato h2 {
+        font-size: 24px !important;
+    }
+
+    .whatsapp-contato p {
+        font-size: 16px !important;
+        line-height: 1.5;
+    }
+
+    .footer-conteudo {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+/* --- Mobile (Max 480px) --- */
+@media (max-width: 480px) {
+    .span-header {
+        font-size: 12px;
+    }
+
+    .titulo-hero {
+        font-size: 24px !important;
+    }
+
+    .card-servico {
+        width: 100% !important;
+        max-width: 320px;
+    }
+
+    .titulo-externo-item {
+        font-size: 14px;
+    }
+}
