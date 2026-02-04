@@ -16,22 +16,31 @@ class PublicApiController
 
     public function getServicos()
     {
-        $model = $this->servicoModel;
-        
-        // Usa o método que já filtra por 'Ativo'
-        $dados = $model->listarAtivos();
-        
-        // CORREÇÃO: Caminho correto sem /backend/
-        foreach($dados as &$s) {
-            $s['caminho_imagem'] = '/upload/' . $s['foto_servico'];
+        header('Content-Type: application/json; charset=utf-8');
+        try {
+            $model = $this->servicoModel;
+            
+            // Usa o método que já filtra por 'Ativo'
+            $dados = $model->listarAtivos();
+            
+            // Usa o Helper para gerar URL correta
+            foreach($dados as &$s) {
+                $s['caminho_imagem'] = \App\Impermax\Core\Helpers\AssetHelper::upload($s['foto_servico']);
+            }
+            unset($s);
+            
+            echo json_encode([
+                'status' => 'success',
+                'data' => $dados
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Erro interno ao carregar serviços'
+            ], JSON_UNESCAPED_UNICODE);
         }
-        unset($s);
-        
-        header('Content-Type: application/json');
-        echo json_encode([
-            'status' => 'success',
-            'data' => $dados
-        ], JSON_UNESCAPED_SLASHES);
         exit;
     }
 

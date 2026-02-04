@@ -40,13 +40,15 @@ class Database {
                     break;
             }
 
-            if (in_array($driver, ['mysql', 'sqlite', 'sqlsrv', 'pgsql'])) {
+            if (isset($this->conn) && in_array($driver, ['mysql', 'sqlite', 'sqlsrv', 'pgsql'])) {
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
         } catch(PDOException $exception) {
-            echo "Erro de conexão: " . $exception->getMessage();
+            error_log("Impermax DB Error: " . $exception->getMessage());
+            throw new Exception("Erro interno de conexão com o banco de dados.");
         } catch(Exception $exception) {
-            echo "Erro de conexão : " . $exception->getMessage();
+            error_log("Impermax Generic Error: " . $exception->getMessage());
+            throw new Exception("Erro interno no sistema.");
         }
     }
 
