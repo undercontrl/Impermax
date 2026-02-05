@@ -80,7 +80,16 @@
     font-size: 16px;
     overflow: hidden;
     margin-left: 40px;
+}
 
+/* Ensure titulo-externo is visible on desktop */
+@media (min-width: 769px) {
+    .titulo-externo {
+        display: flex !important;
+        color: white !important;
+        font-weight: bold !important;
+        text-align: center !important;
+    }
 }
 
 #titulo-externo1 {
@@ -115,9 +124,24 @@
     font-weight: bold;
 }
 
+/* Card wrapper for desktop - groups image and title */
+.card-servico-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
 
-
-
+/* Service card title - appears below the image */
+.titulo-servico-card {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    margin: 0;
+    padding: 0 10px;
+    max-width: 300px;
+}
 
 .titulo-servico {
     font-size: 36px;

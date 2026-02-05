@@ -193,6 +193,20 @@
         display: block;
     }
 
+    /* Ensure scrolling works on all pages */
+    html,
+    body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100vh !important;
+    }
+
+    main {
+        overflow: visible !important;
+        height: auto !important;
+    }
+
     /* RESET HERO SECTON - remove absolute centering */
     .hero {
         height: auto !important;
@@ -468,6 +482,17 @@
         /* Fixed backgrounds don't work well on mobile */
     }
 
+    .parallax-contato {
+        height: auto !important;
+        min-height: auto !important;
+        /* Let content determine height */
+        padding: 120px 20px 60px 20px !important;
+        /* Top padding for header clearance, bottom for spacing */
+        display: flex !important;
+        align-items: flex-start !important;
+        /* Align to top instead of center */
+    }
+
     .bloco-contato {
         flex-direction: column !important;
         margin-left: 0 !important;
@@ -477,6 +502,7 @@
         gap: 30px !important;
         align-items: center !important;
         justify-content: center !important;
+        width: 100% !important;
     }
 
     .whatsapp-contato {

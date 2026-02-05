@@ -46,6 +46,7 @@ if (in_array($currentPath, $rotasPublicas)) {
 
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="/public/css/status-badges.css">
+    <link rel="stylesheet" href="/public/css/dashboard-responsive.css">
 
     <!-- Favicon -->
     <link rel="icon" type="images/png" href="assets/icons/water.png">
@@ -645,6 +646,25 @@ if (in_array($currentPath, $rotasPublicas)) {
             content: '\f623';
         }
 
+        /* ==================== SIDEBAR OVERLAY (MOBILE) ==================== */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
         /* ==================== RESPONSIVIDADE ==================== */
         @media (max-width: 1024px) {
             :root {
@@ -661,20 +681,25 @@ if (in_array($currentPath, $rotasPublicas)) {
         }
 
         @media (max-width: 768px) {
+            /* SIDEBAR */
             .sidebar {
                 transform: translateX(-100%);
+                z-index: 1001; /* Above overlay */
             }
 
             .sidebar.active {
                 transform: translateX(0);
+                box-shadow: 8px 0 40px rgba(0, 0, 0, 0.3);
             }
 
+            /* TOPBAR */
             .topbar {
                 left: 0;
             }
 
             .content {
                 margin-left: 0;
+                padding: 1.25rem 1rem;
             }
 
             .topbar-title {
@@ -692,6 +717,115 @@ if (in_array($currentPath, $rotasPublicas)) {
             .mobile-menu-btn {
                 display: flex;
             }
+
+            /* RESPONSIVE TABLES */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 8px;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            /* RESPONSIVE FORMS */
+            .form-group {
+                margin-bottom: 1.25rem;
+            }
+
+            .form-control,
+            .form-select {
+                width: 100% !important;
+                min-height: 44px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .btn {
+                min-height: 48px;
+                font-size: 1rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn-group .btn {
+                width: 100%;
+            }
+
+            /* RESPONSIVE CARDS */
+            .card {
+                margin-bottom: 1rem;
+            }
+
+            .card-body {
+                padding: 1.25rem;
+            }
+
+            /* RESPONSIVE MODALS */
+            .modal-dialog {
+                margin: 0;
+                max-width: 100%;
+                height: 100vh;
+            }
+
+            .modal-content {
+                height: 100%;
+                border-radius: 0;
+            }
+
+            .modal-header,
+            .modal-footer {
+                padding: 1rem 1.25rem;
+            }
+
+            .modal-body {
+                padding: 1.25rem;
+                overflow-y: auto;
+            }
+
+            /* RESPONSIVE STATS CARDS */
+            .stats-card {
+                margin-bottom: 1rem;
+            }
+
+            .stats-number {
+                font-size: 2rem !important;
+            }
+
+            /* ACTION BUTTONS */
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            /* Extra small devices */
+            .content {
+                padding: 1rem 0.75rem;
+            }
+
+            .topbar {
+                padding: 0 1rem;
+            }
+
+            .topbar-title {
+                font-size: 1rem;
+            }
+
+            /* Single column layout */
+            .row > [class*='col-'] {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-bottom: 1rem;
+            }
         }
 
         .mobile-menu-btn {
@@ -706,6 +840,12 @@ if (in_array($currentPath, $rotasPublicas)) {
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn:hover {
+            background: #f1f5f9;
+            color: var(--cor-acento);
         }
 
         /* ==================== ANIMAÇÕES ==================== */
@@ -858,6 +998,9 @@ if (in_array($currentPath, $rotasPublicas)) {
         </div>
     </nav>
 
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Topbar -->
     <div class="topbar">
         <div class="topbar-left">
@@ -970,6 +1113,26 @@ if (in_array($currentPath, $rotasPublicas)) {
         // Toggle Mobile Sidebar
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
             sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when sidebar is open
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         }
+
+        // Close sidebar when clicking overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('sidebarOverlay');
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    toggleSidebar();
+                });
+            }
+        });
         </script>
