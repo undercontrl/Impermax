@@ -916,19 +916,27 @@ class Agendamento
     public function buscarDesempenhoSemanal(): array
     {
         $sql = 'SELECT 
-                    CONCAT("Semana ", WEEK(data_solicitada)) as semana,
+                    YEAR(data_solicitada) as ano,
+                    WEEK(data_solicitada, 1) as numero_semana,
                     COUNT(*) as total
                 FROM tbl_agendamento
                 WHERE excluido_em IS NULL
                 AND status_agendamento = "realizada"
                 AND data_solicitada >= DATE_SUB(CURDATE(), INTERVAL 4 WEEK)
-                GROUP BY WEEK(data_solicitada)
-                ORDER BY WEEK(data_solicitada) ASC';
+                GROUP BY YEAR(data_solicitada), WEEK(data_solicitada, 1)
+                ORDER BY YEAR(data_solicitada) ASC, WEEK(data_solicitada, 1) ASC';
         
         $statement = $this->db->prepare($sql);
         $statement->execute();
         
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        $resultados = $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Adicionar o label "semana" no PHP ao invés do SQL
+        foreach ($resultados as &$row) {
+            $row['semana'] = 'Semana ' . $row['numero_semana'];
+        }
+        
+        return $resultados;
     }
 
     /**

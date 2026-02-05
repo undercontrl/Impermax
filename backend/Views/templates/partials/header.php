@@ -47,23 +47,87 @@ if (in_array($currentPath, $rotasPublicas)) {
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="/public/css/status-badges.css">
     <link rel="stylesheet" href="/public/css/dashboard-responsive.css">
+    <link rel="stylesheet" href="/public/css/dark-mode.css">
 
     <!-- Favicon -->
     <link rel="icon" type="images/png" href="assets/icons/water.png">
 
     <style>
         :root {
+            /* Legacy variables (kept for compatibility) */
             --cor-primaria: #5f7396;
             --cor-acento: #1487df;
             --cor-clara: #ffffff;
             --cor-cinza: #a7a7a7;
             --cor-fundo: #f4f6f9;
+            
+            /* Layout */
             --sidebar-width: 280px;
             --topbar-height: 70px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Light Mode Theme Variables */
+            --bg-primary: #f4f6f9;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-color: rgba(0, 0, 0, 0.1);
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --sidebar-gradient-start: #1a202c;
+            --sidebar-gradient-end: #062f77c9;
+            --topbar-bg: #ffffff;
+            --topbar-border: #f1f5f9;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --input-bg: #ffffff;
+            --input-border: #e2e8f0;
+            --input-focus-border: #1487df;
+            --accent-color: #1487df;
+            --accent-hover: #0c6cb8;
+            --accent-light: rgba(20, 135, 223, 0.1);
+            --success-color: #22c55e;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+        }
+
+        /* Dark Mode Theme */
+        [data-theme="dark"] {
+            /* Dark Mode Variables */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #334155;
+            --border-light: #334155;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --sidebar-gradient-start: #0f172a;
+            --sidebar-gradient-end: #1e293b;
+            --topbar-bg: #1e293b;
+            --topbar-border: #334155;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --input-bg: #0f172a;
+            --input-border: #334155;
+            --input-focus-border: #38bdf8;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --accent-light: rgba(56, 189, 248, 0.1);
+            --success-color: #34d399;
+            --danger-color: #f87171;
+            --warning-color: #fbbf24;
+            --info-color: #60a5fa;
         }
 
         * {
@@ -73,18 +137,19 @@ if (in_array($currentPath, $rotasPublicas)) {
         }
 
         body {
-            background-color: var(--cor-fundo);
+            background-color: var(--bg-primary);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #1e293b;
+            color: var(--text-primary);
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* ==================== SIDEBAR ==================== */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(135deg, #1a202c 0%, #062f77c9 100%);
+            background: linear-gradient(135deg, var(--sidebar-gradient-start) 0%, var(--sidebar-gradient-end) 100%);
             color: var(--cor-clara);
             flex-shrink: 0;
             display: flex;
@@ -94,7 +159,7 @@ if (in_array($currentPath, $rotasPublicas)) {
             left: 0;
             top: 0;
             z-index: 1000;
-            box-shadow: 4px 0 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 0 40px var(--shadow-color);
             transition: var(--transition);
         }
 
@@ -386,14 +451,15 @@ if (in_array($currentPath, $rotasPublicas)) {
             left: var(--sidebar-width);
             right: 0;
             height: var(--topbar-height);
-            background: white;
+            background: var(--topbar-bg);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 2rem;
             box-shadow: var(--shadow-sm);
             z-index: 999;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--topbar-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .topbar-left {
@@ -405,7 +471,7 @@ if (in_array($currentPath, $rotasPublicas)) {
         .topbar-title {
             font-size: 1.375rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-primary);
             margin: 0;
             letter-spacing: -0.025em;
         }
@@ -474,6 +540,79 @@ if (in_array($currentPath, $rotasPublicas)) {
             background: #ef4444;
             border-radius: 50%;
             border: 2px solid white;
+        }
+
+        /* ==================== THEME TOGGLE BUTTON ==================== */
+        .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--accent-color);
+        }
+
+        .theme-icon-dark,
+        .theme-icon-light {
+            position: absolute;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Light mode - show moon icon */
+        .theme-icon-dark {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        .theme-icon-light {
+            opacity: 0;
+            transform: rotate(180deg) scale(0);
+        }
+
+        /* Dark mode - show sun icon */
+        [data-theme="dark"] .theme-icon-dark {
+            opacity: 0;
+            transform: rotate(-180deg) scale(0);
+        }
+
+        [data-theme="dark"] .theme-icon-light {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        /* Ripple effect */
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        .ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
         }
 
         /* ==================== USER MENU DROPDOWN ==================== */
@@ -606,7 +745,6 @@ if (in_array($currentPath, $rotasPublicas)) {
             margin-top: var(--topbar-height);
             flex-grow: 1;
             padding: 2rem 2.5rem;
-            background-color: var(--cor-fundo);
             min-height: calc(100vh - var(--topbar-height));
         }
 
@@ -1029,6 +1167,12 @@ if (in_array($currentPath, $rotasPublicas)) {
                 <i class="bi bi-gear"></i>
             </a> -->
             
+            <!-- Theme Toggle Button -->
+            <button class="theme-toggle-btn" id="themeToggle" title="Alternar Modo Escuro">
+                <i class="bi bi-moon-stars theme-icon-dark"></i>
+                <i class="bi bi-sun theme-icon-light"></i>
+            </button>
+            
             <!-- User Menu com Dropdown -->
             <div class="user-menu-wrapper">
                 <button class="user-menu" id="userMenuBtn">
@@ -1135,4 +1279,63 @@ if (in_array($currentPath, $rotasPublicas)) {
                 });
             }
         });
+
+        // ==================== THEME TOGGLE ====================
+        (function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            
+            // Apply saved theme on page load (before DOMContentLoaded to prevent flash)
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // Toggle theme on button click
+            themeToggle?.addEventListener('click', function(e) {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                // Apply new theme
+                if (newTheme === 'dark') {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                } else {
+                    htmlElement.removeAttribute('data-theme');
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('theme', newTheme);
+                
+                // Add ripple effect
+                createRipple(this, e);
+            });
+            
+            // Ripple effect for button click
+            function createRipple(button, event) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                
+                // Position ripple at click point
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = event.clientX - rect.left - size / 2;
+                const y = event.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                button.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            }
+            
+            // Optional: Keyboard shortcut (Ctrl/Cmd + Shift + D)
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+                    e.preventDefault();
+                    themeToggle?.click();
+                }
+            });
+        })();
         </script>
