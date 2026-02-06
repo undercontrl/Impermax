@@ -25,6 +25,13 @@ class FileManager{
             throw new \Exception("Falha ao mover o arquivo enviado.");
         }
 
+        // Tentar comprimir se for imagem
+        try {
+            ImageCompressor::compress($diretorioFinal, $diretorioFinal);
+        } catch (\Exception $e) {
+            // Silenciosamente ignorar erro de compressão e manter original
+        }
+
         return trim($subDiretorio, '/') . '/' . $novoNome;
     }
 
