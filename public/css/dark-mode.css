@@ -1529,3 +1529,305 @@ pre {
 [data-theme="dark"] .chart-body-func canvas {
     filter: brightness(0.9);
 }
+
+/* =========================================
+   CRUD VIEWS (CREATE, EDIT, VIEW)
+   Dark mode for all form-based CRUD operations
+   ========================================= */
+
+/* Form Cards */
+[data-theme="dark"] .form-card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+/* Form Sections */
+[data-theme="dark"] .form-section {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-section-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-section-title i {
+    color: var(--accent-color);
+}
+
+/* Form Labels and Inputs */
+[data-theme="dark"] .form-label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-label.required::after {
+    color: var(--danger-color);
+}
+
+[data-theme="dark"] .form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .form-control:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+[data-theme="dark"] .form-control:disabled,
+[data-theme="dark"] .form-control[readonly] {
+    background-color: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    border-color: var(--border-color);
+}
+
+/* Input Icons */
+[data-theme="dark"] .input-icon i {
+    color: var(--text-tertiary);
+}
+
+/* Form Hints */
+[data-theme="dark"] .form-hint {
+    color: var(--text-tertiary);
+}
+
+/* Select Dropdowns */
+[data-theme="dark"] select.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] select.form-control option {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* Textarea */
+[data-theme="dark"] textarea.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+}
+
+/* Permission Cards */
+[data-theme="dark"] .permission-card {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .permission-card i {
+    color: var(--accent-color);
+}
+
+[data-theme="dark"] .permission-card strong {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .permission-card p {
+    color: var(--text-secondary);
+}
+
+/* Form Summary */
+[data-theme="dark"] .form-summary {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(14, 165, 233, 0.1) 100%);
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+[data-theme="dark"] .summary-label {
+    color: var(--accent-color);
+}
+
+[data-theme="dark"] .summary-value {
+    color: var(--text-primary);
+}
+
+/* Form Actions */
+[data-theme="dark"] .form-actions {
+    border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] .btn-secondary {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+    background-color: var(--bg-secondary);
+    border-color: var(--text-tertiary);
+}
+
+/* File Inputs */
+[data-theme="dark"] input[type="file"].form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] input[type="file"].form-control::file-selector-button {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Checkboxes and Radio Buttons */
+[data-theme="dark"] input[type="checkbox"],
+[data-theme="dark"] input[type="radio"] {
+    accent-color: var(--accent-color);
+    border-color: var(--border-color);
+}
+
+/* Form Validation States */
+[data-theme="dark"] .form-control.is-valid {
+    border-color: var(--success-color);
+}
+
+[data-theme="dark"] .form-control.is-invalid {
+    border-color: var(--danger-color);
+}
+
+[data-theme="dark"] .valid-feedback {
+    color: var(--success-color);
+}
+
+[data-theme="dark"] .invalid-feedback {
+    color: var(--danger-color);
+}
+
+/* View/Detail Pages */
+[data-theme="dark"] .detail-section {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+[data-theme="dark"] .detail-label {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .detail-value {
+    color: var(--text-primary);
+}
+
+/* Info Boxes */
+[data-theme="dark"] .info-box {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .info-box.info-primary {
+    background-color: rgba(56, 189, 248, 0.1);
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+[data-theme="dark"] .info-box.info-success {
+    background-color: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+[data-theme="dark"] .info-box.info-warning {
+    background-color: rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+[data-theme="dark"] .info-box.info-danger {
+    background-color: rgba(248, 113, 113, 0.1);
+    border-color: rgba(248, 113, 113, 0.3);
+}
+
+/* Helper Text */
+[data-theme="dark"] .help-text {
+    color: var(--text-tertiary);
+}
+
+/* Required Field Indicator */
+[data-theme="dark"] .required-indicator {
+    color: var(--danger-color);
+}
+
+/* Form Groups */
+[data-theme="dark"] .form-group-inline {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+/* Input Groups */
+[data-theme="dark"] .input-group-text {
+    background-color: var(--bg-tertiary);
+    border-color: var(--input-border);
+    color: var(--text-secondary);
+}
+
+/* Date and Time Inputs */
+[data-theme="dark"] input[type="date"].form-control,
+[data-theme="dark"] input[type="time"].form-control,
+[data-theme="dark"] input[type="datetime-local"].form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+    color-scheme: dark;
+}
+
+/* Number Inputs */
+[data-theme="dark"] input[type="number"].form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+}
+
+/* Search Inputs */
+[data-theme="dark"] input[type="search"].form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+}
+
+/* Form Switch (Toggle) */
+[data-theme="dark"] .form-switch .form-check-input {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-switch .form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Form Check Labels */
+[data-theme="dark"] .form-check-label {
+    color: var(--text-primary);
+}
+
+/* Fieldsets */
+[data-theme="dark"] fieldset {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] legend {
+    color: var(--text-primary);
+}
+
+/* Form Floating Labels */
+[data-theme="dark"] .form-floating>label {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .form-floating>.form-control:focus~label,
+[data-theme="dark"] .form-floating>.form-control:not(:placeholder-shown)~label {
+    color: var(--accent-color);
+}
+
+/* Range Inputs */
+[data-theme="dark"] input[type="range"].form-range {
+    accent-color: var(--accent-color);
+}
+
+/* Color Inputs */
+[data-theme="dark"] input[type="color"].form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+}
