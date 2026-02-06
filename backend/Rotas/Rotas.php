@@ -53,8 +53,8 @@ class Rotas
         "api/pagina-projeto" => "PublicPaginaProjetoController@getProjetos",
         '/api/pagamento/{pagina}' => 'APIPagamentoController@getPagamentos',
         '/api/pagamentos' => 'APIPagamentoController@getPagamentos',
-        '/api/materiais/{pagina}' => 'MaterialController@getMateriais',
-        '/api/materiais' => 'MaterialController@getMateriais',
+        '/api/materiais/{pagina}' => 'APIMaterialController@getMateriais',
+        '/api/materiais' => 'APIMaterialController@getMateriais',
 
        // ============================
        //     OUTROS CONTROLLERS
@@ -192,6 +192,7 @@ class Rotas
         "/usuario/excluir-massa" => "UsuarioController@excluirEmMassa",
         '/api/usuarios' => 'APIUsuarioController@salvarUsuario',
         '/api/servico-sync' => 'APIServicoController@salvarServico',
+        '/api/materiais' => 'APIMaterialController@salvarMaterial',
         //agendamentos
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",
         "/agendamento/atualizar/{id}" => "AgendamentoController@atualizarAgendamento",
