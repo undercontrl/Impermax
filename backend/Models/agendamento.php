@@ -351,6 +351,24 @@ class Agendamento
         return $statement->execute();
     }
     
+    // Atualizar apenas o status do agendamento
+    public function atualizarStatus(int $id, string $status)
+    {
+        $dataAtual = date('Y-m-d H:i:s');
+        $sql = 'UPDATE tbl_agendamento 
+                SET status_agendamento = :status, 
+                    atualizado_em = :atualizado 
+                WHERE id_agendamento = :id 
+                AND excluido_em IS NULL';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':id', $id);
+        $statement->bindParam(':status', $status);
+        $statement->bindParam(':atualizado', $dataAtual);
+        
+        return $statement->execute();
+    }
+    
     function excluirAgendamento($id_agendamento)
     {
         $dataAtual = date('Y-m-d H:i:s');

@@ -102,8 +102,20 @@ class EnderecoController
             return;
         }
         
-        View::render("endereco/view", ["endereco" => $endereco]);
+        // Geocodifica o endereço para obter coordenadas
+        $coordenadas = $this->endereco->geocodificarEndereco(
+            $endereco['logadouro_endereco'],
+            $endereco['numero_endereco'],
+            $endereco['cidade_endereco'],
+            $endereco['uf_endereco']
+        );
+        
+        View::render("endereco/view", [
+            "endereco" => $endereco,
+            "coordenadas" => $coordenadas
+        ]);
     }
+
 
     public function viewCriarEndereco()
     {

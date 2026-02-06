@@ -1831,3 +1831,135 @@ pre {
     background-color: var(--input-bg);
     border-color: var(--input-border);
 }
+
+/* =========================================
+   DASHBOARD IMPROVEMENTS
+   Quick actions, revenue card, action buttons
+   ========================================= */
+
+/* Quick Actions Bar */
+.quick-actions-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn-quick-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.75rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(20, 135, 223, 0.3);
+}
+
+.btn-quick-action.btn-quick-primary {
+    background: linear-gradient(135deg, #1487df, #0e6eb8);
+    color: white;
+}
+
+.btn-quick-action.btn-quick-success {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+}
+
+.btn-quick-action.btn-quick-info {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.btn-quick-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(20, 135, 223, 0.4);
+}
+
+.btn-quick-action:active {
+    transform: translateY(0);
+}
+
+/* Revenue Card */
+.card-revenue .metric-blob-premium {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.icon-revenue {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Dark Mode for Quick Actions */
+[data-theme="dark"] .btn-quick-action.btn-quick-primary {
+    background: linear-gradient(135deg, var(--accent-color), #0284c7);
+}
+
+[data-theme="dark"] .btn-quick-action.btn-quick-success {
+    background: linear-gradient(135deg, var(--success-color), #16a34a);
+}
+
+[data-theme="dark"] .btn-quick-action.btn-quick-info {
+    background: linear-gradient(135deg, var(--info-color), #2563eb);
+}
+
+/* Modal Dark Mode */
+[data-theme="dark"] .modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border-color: var(--card-border);
+}
+
+[data-theme="dark"] .modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal-footer {
+    border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal-title {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="dark"] .list-group-item {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Action Buttons Dark Mode */
+[data-theme="dark"] .btn-action.btn-success {
+    background: var(--success-color);
+}
+
+[data-theme="dark"] .btn-action.btn-primary {
+    background: var(--accent-color);
+}
+
+[data-theme="dark"] .btn-action.btn-warning {
+    background: var(--warning-color);
+}
+
+/* Clickable Calendar Days Dark Mode */
+[data-theme="dark"] .clickable-day:hover {
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+/* Responsive Quick Actions */
+@media (max-width: 768px) {
+    .quick-actions-bar {
+        flex-direction: column;
+    }
+
+    .btn-quick-action {
+        width: 100%;
+        justify-content: center;
+    }
+}
