@@ -38,16 +38,21 @@ class APIMaterialController{
             echo json_encode(['status' => 'error', 'message' => 'Nenhum item recebido no material.']);
             exit;
         }
+        isset($material['id_material']) 
+        ? 
+        $this->materialModel->excluirMaterial($material['id_material']) 
+        : 
+        $novoMaterialId =  $this->materialModel->inserirMaterial($material['nome_material'], $material['qtd_material'], $material['descricao_material'], $material['id_servico']);
         
         // Adapting to Material model parameters: nome_material, qtd_material, descricao_material, id_servico
-        $novoMaterialId = $this->materialModel->inserirMaterial(
-            $material["nome_material"],
-            $material["qtd_material"],
-            $material["descricao_material"],
-            $material["id_servico"] ?? null
-        );
+        // $novoMaterialId = $this->materialModel->inserirMaterial(
+        //     $material["nome_material"],
+        //     $material["qtd_material"],
+        //     $material["descricao_material"],
+        //     $material["id_servico"] ?? null
+        // );
 
-        if ($novoMaterialId) {
+        if (isset($novoMaterialId)) {
             http_response_code(201);
             echo json_encode([
                 'staus' => 'success', 'message' => 'cadastrado com sucesso!', 'id_material' => $novoMaterialId
