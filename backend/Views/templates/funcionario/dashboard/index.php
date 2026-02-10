@@ -126,6 +126,30 @@
                                         <?= htmlspecialchars(ucfirst($status)) ?>
                                     </span>
                                 </div>
+                                <div class="agenda-actions">
+                                    <?php if ($status !== 'realizada'): ?>
+                                        <button class="btn-action btn-success" 
+                                                title="Marcar como realizada" 
+                                                aria-label="Marcar atendimento de <?= htmlspecialchars($ag['nome_cliente']) ?> como realizado"
+                                                onclick="markAsCompleted(<?= $ag['id_agendamento'] ?>, '<?= htmlspecialchars($ag['nome_cliente']) ?>')">
+                                            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                    <button class="btn-action btn-primary" 
+                                            title="Ver detalhes" 
+                                            aria-label="Ver detalhes do agendamento de <?= htmlspecialchars($ag['nome_cliente']) ?>"
+                                            onclick="window.location.href='/backend/agendamento/ver/<?= $ag['id_agendamento'] ?>'">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                    <?php if ($status !== 'realizada'): ?>
+                                        <button class="btn-action btn-warning" 
+                                                title="Reagendar" 
+                                                aria-label="Reagendar atendimento de <?= htmlspecialchars($ag['nome_cliente']) ?>"
+                                                onclick="window.location.href='/backend/agendamento/editar/<?= $ag['id_agendamento'] ?>'">
+                                            <i class="bi bi-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -157,8 +181,17 @@
                             <?php
                                 $isToday = $data === date('Y-m-d');
                                 $countAgend = count($info['agendamentos']);
+                                // Encode agendamentos as JSON for JavaScript
+                                $agendamentosJson = htmlspecialchars(json_encode($info['agendamentos']), ENT_QUOTES, 'UTF-8');
                             ?>
-                            <div class="calendar-day-func <?= $isToday ? 'day-today' : '' ?>">
+                            <div class="calendar-day-func <?= $isToday ? 'day-today' : '' ?> clickable-day" 
+                                 data-date="<?= htmlspecialchars($data) ?>"
+                                 data-count="<?= $countAgend ?>"
+                                 data-agendamentos='<?= $agendamentosJson ?>'
+                                 role="button"
+                                 tabindex="0"
+                                 aria-label="<?= htmlspecialchars($info['diaSemana']) ?>, <?= htmlspecialchars($info['dia']) ?> - <?= $countAgend ?> agendamento(s)"
+                                 onclick="showDayDetails(this, '<?= htmlspecialchars($info['diaSemana']) ?>', '<?= htmlspecialchars($info['dia']) ?>')">
                                 <div class="day-header-func">
                                     <span class="day-name-func"><?= htmlspecialchars($info['diaSemana']) ?></span>
                                     <span class="day-number-func"><?= htmlspecialchars($info['dia']) ?></span>
@@ -1117,4 +1150,202 @@ if (document.getElementById('chartStatus')) {
 .calendar-week-func::-webkit-scrollbar-thumb:hover {
     background: var(--color-text-muted);
 }
+
+/* Clickable calendar days */
+.clickable-day {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clickable-day:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Action buttons in agenda */
+.agenda-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.btn-action.btn-success {
+    background: #22c55e;
+    color: white;
+}
+
+.btn-action.btn-primary {
+    background: #1487df;
+    color: white;
+}
+
+.btn-action.btn-warning {
+    background: #f59e0b;
+    color: white;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-action:active {
+    transform: scale(0.95);
+}
 </style>
+
+<!-- Modal for Day Details -->
+<div class="modal fade" id="dayDetailsModal" tabindex="-1" aria-labelledby="dayDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dayDetailsModalLabel">
+                    <i class="bi bi-calendar-day"></i>
+                    Agendamentos - <span id="modalDate"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" id="modalAgendamentos">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/backend/agendamento/criar'">
+                    <i class="bi bi-plus-circle"></i> Novo Agendamento
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show day details in modal
+function showDayDetails(element, dayName, dayNumber) {
+    const modal = new bootstrap.Modal(document.getElementById('dayDetailsModal'));
+    const modalDate = document.getElementById('modalDate');
+    const modalBody = document.getElementById('modalAgendamentos');
+    
+    // Set modal title
+    modalDate.textContent = `${dayName}, ${dayNumber}`;
+    
+    // Get agendamentos from data attribute
+    const agendamentosData = element.getAttribute('data-agendamentos');
+    let agendamentos = [];
+    
+    try {
+        agendamentos = JSON.parse(agendamentosData);
+    } catch (e) {
+        console.error('Erro ao parsear agendamentos:', e);
+        agendamentos = [];
+    }
+    
+    // Show modal
+    modal.show();
+    
+    // Display agendamentos
+    if (agendamentos && agendamentos.length > 0) {
+        let html = '<div class="list-group">';
+        agendamentos.forEach(ag => {
+            // Extract time from data_solicitada
+            let hora = 'N/A';
+            if (ag.data_solicitada) {
+                const dateObj = new Date(ag.data_solicitada);
+                hora = dateObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+            }
+            
+            const status = ag.status_agendamento || 'pendente';
+            const statusClass = status === 'realizada' ? 'success' : 
+                               (status === 'agendada' ? 'primary' : 'warning');
+            
+            html += `
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">${ag.nome_cliente || 'Cliente não informado'}</h6>
+                            <p class="mb-1 text-muted small">
+                                <i class="bi bi-clock"></i> ${hora}
+                            </p>
+                        </div>
+                        <span class="badge bg-${statusClass}">${status}</span>
+                    </div>
+                    <div class="mt-2">
+                        <a href="/backend/agendamento/ver/${ag.id_agendamento}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i> Ver detalhes
+                        </a>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        modalBody.innerHTML = html;
+    } else {
+        modalBody.innerHTML = `
+            <div class="text-center py-4">
+                <i class="bi bi-calendar-x" style="font-size: 3rem; color: var(--color-text-muted);"></i>
+                <p class="mt-3 text-muted">Nenhum agendamento para este dia</p>
+            </div>
+        `;
+    }
+}
+
+// Mark agendamento as completed
+function markAsCompleted(id, clientName) {
+    if (confirm(`Marcar atendimento de ${clientName} como realizado?`)) {
+        // Create a form to submit the status update
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/backend/agendamento/atualizar-status/${id}`;
+        
+        // Add CSRF token if available
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (csrfToken) {
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = csrfToken.content;
+            form.appendChild(tokenInput);
+        }
+        
+        // Add status field
+        const statusInput = document.createElement('input');
+        statusInput.type = 'hidden';
+        statusInput.name = 'status_agendamento';
+        statusInput.value = 'realizada';
+        form.appendChild(statusInput);
+        
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Keyboard navigation for calendar days
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarDays = document.querySelectorAll('.clickable-day');
+    calendarDays.forEach(day => {
+        day.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+});
+</script>

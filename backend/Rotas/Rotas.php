@@ -70,6 +70,10 @@ class Rotas
         "/agendamento/{id}/relatorio/{dataInicial}/{dataFinal}" => "AgendamentoController@relatorioAgendamento",
         '/agendamento/deletar-multiplos' => 'AgendamentoController@deletarMultiplos',
         
+        // Suporte e Termos
+        "/suporte" => "SuporteController@index",
+        "/termos" => "TermosController@index",
+        
         //avaliações
         "/avaliacao" => "AvaliacaoController@index",
         "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
@@ -199,6 +203,7 @@ class Rotas
         "/agendamento/deletar/{id}" => "AgendamentoController@deletarAgendamento",
         "/agendamento/deletar-multiplos" => "AgendamentoController@deletarMultiplos",
         "/agendamento/buscar-orcamentos-ajax" => "AgendamentoController@buscarOrcamentosPorClienteAjax",
+        "/agendamento/atualizar-status/{id}" => "AgendamentoController@atualizarStatus",
         //avaliações
         "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
         "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",

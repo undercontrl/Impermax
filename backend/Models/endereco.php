@@ -350,4 +350,72 @@ class Endereco{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    /**
+     * Geocodifica um endereço para obter coordenadas (latitude/longitude)
+     * Usa a API Nominatim do OpenStreetMap
+     * 
+     * @param string $logradouro
+     * @param string $numero
+     * @param string $cidade
+     * @param string $uf
+     * @return array|null Array com 'lat' e 'lon' ou null se falhar
+     */
+    public function geocodificarEndereco(
+        string $logradouro,
+        string $numero,
+        string $cidade,
+        string $uf
+    ): ?array {
+        try {
+            // Monta o endereço completo para busca
+            $enderecoCompleto = sprintf(
+                "%s, %s, %s, %s, Brasil",
+                $logradouro,
+                $numero,
+                $cidade,
+                $uf
+            );
+            
+            // URL da API Nominatim
+            $url = 'https://nominatim.openstreetmap.org/search?' . http_build_query([
+                'q' => $enderecoCompleto,
+                'format' => 'json',
+                'limit' => 1,
+                'addressdetails' => 1
+            ]);
+            
+            // Configura contexto HTTP com User-Agent (obrigatório para Nominatim)
+            $context = stream_context_create([
+                'http' => [
+                    'header' => "User-Agent: Impermax-Backend/1.0\r\n",
+                    'timeout' => 5
+                ]
+            ]);
+            
+            // Faz requisição
+            $response = @file_get_contents($url, false, $context);
+            
+            if ($response === false) {
+                return null;
+            }
+            
+            $data = json_decode($response, true);
+            
+            // Verifica se obteve resultados
+            if (empty($data) || !isset($data[0]['lat']) || !isset($data[0]['lon'])) {
+                return null;
+            }
+            
+            return [
+                'lat' => (float)$data[0]['lat'],
+                'lon' => (float)$data[0]['lon'],
+                'display_name' => $data[0]['display_name'] ?? ''
+            ];
+            
+        } catch (\Exception $e) {
+            // Em caso de erro, retorna null
+            return null;
+        }
+    }
 }

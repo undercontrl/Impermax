@@ -238,6 +238,42 @@ class AgendamentoController
         }
     }
 
+    // Atualizar apenas o status do agendamento (usado no dashboard)
+    public function atualizarStatus(int $id)
+    {
+        // Verificar se o status foi enviado
+        if (!isset($_POST['status_agendamento'])) {
+            Redirect::redirecionarComMensagem("funcionario/dashboard", "error", "Status não informado!");
+            return;
+        }
+
+        $novoStatus = $_POST['status_agendamento'];
+        
+        // Validar status
+        $statusValidos = ['pendente', 'agendada', 'realizada', 'cancelada'];
+        if (!in_array($novoStatus, $statusValidos)) {
+            Redirect::redirecionarComMensagem("funcionario/dashboard", "error", "Status inválido!");
+            return;
+        }
+
+        // Buscar agendamento para verificar se existe
+        $agendamento = $this->agendamento->buscarAgendamentoPorId($id);
+        if (!$agendamento) {
+            Redirect::redirecionarComMensagem("funcionario/dashboard", "error", "Agendamento não encontrado!");
+            return;
+        }
+
+        // Atualizar status
+        if ($this->agendamento->atualizarStatus($id, $novoStatus)) {
+            $mensagem = $novoStatus === 'realizada' 
+                ? "Atendimento marcado como realizado com sucesso!" 
+                : "Status atualizado com sucesso!";
+            Redirect::redirecionarComMensagem("funcionario/dashboard", "success", $mensagem);
+        } else {
+            Redirect::redirecionarComMensagem("funcionario/dashboard", "error", "Erro ao atualizar status!");
+        }
+    }
+
     // Deletar agendamento (soft delete)
     public function deletarAgendamento()
     {

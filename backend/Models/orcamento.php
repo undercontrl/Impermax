@@ -438,4 +438,26 @@ class Orcamento{
         return $statement->execute($params);
     }
 
+    /**
+     * Calcula receita total por período
+     * Soma os valores de orçamentos aprovados no período especificado
+     */
+    public function calcularReceitaPorPeriodo($dataInicio, $dataFim)
+    {
+        $sql = 'SELECT SUM(valor_orcamento) as receita_total
+                FROM tbl_orcamento
+                WHERE excluido_em IS NULL
+                AND status_orcamento = "aprovado"
+                AND data_orcamento BETWEEN :dataInicio AND :dataFim';
+        
+        $statement = $this->db->prepare($sql);
+        $statement->bindParam(':dataInicio', $dataInicio);
+        $statement->bindParam(':dataFim', $dataFim);
+        $statement->execute();
+        
+        $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return (float)($resultado['receita_total'] ?? 0);
+    }
+
 }

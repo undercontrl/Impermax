@@ -277,6 +277,13 @@ class PerfilController extends AuthenticatedController
             $stmt->bindParam(':id', $idUsuario);
             
             if ($stmt->execute()) {
+                // Tentar comprimir a imagem
+                try {
+                    \App\Impermax\Core\ImageCompressor::compress($caminhoCompleto, $caminhoCompleto);
+                } catch (\Exception $e) {
+                    // Ignorar erro de compressão
+                }
+
                 // Atualiza sessão
                 $_SESSION['foto_usuario'] = $nomeArquivo;
                 Flash::set('success', 'Foto atualizada com sucesso!');

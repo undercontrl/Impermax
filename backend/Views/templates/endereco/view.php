@@ -1,3 +1,5 @@
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
     .view-container {
         padding: 2rem 0;
@@ -274,13 +276,26 @@
             </div>
         </div>
 
-        <!-- Mapa (Placeholder) -->
+
+        <!-- Mapa Interativo -->
         <div class="map-section">
-            <div class="map-placeholder">
-                <i class="bi bi-geo-alt"></i>
-                <p>Mapa de localização (integração futura)</p>
-                <small><?= htmlspecialchars($endereco['logadouro_endereco']) ?>, <?= htmlspecialchars($endereco['numero_endereco']) ?> - <?= htmlspecialchars($endereco['cidade_endereco']) ?>/<?= htmlspecialchars($endereco['uf_endereco']) ?></small>
-            </div>
+            <?php if (isset($coordenadas) && $coordenadas): ?>
+                <div id="map" style="height: 450px; border-radius: 12px; overflow: hidden;"></div>
+            <?php else: ?>
+                <div class="map-placeholder">
+                    <i class="bi bi-geo-alt"></i>
+                    <p>Não foi possível carregar o mapa para este endereço</p>
+                    <small><?= htmlspecialchars($endereco['logadouro_endereco']) ?>, <?= htmlspecialchars($endereco['numero_endereco']) ?> - <?= htmlspecialchars($endereco['cidade_endereco']) ?>/<?= htmlspecialchars($endereco['uf_endereco']) ?></small>
+                    <br><br>
+                    <a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($endereco['logadouro_endereco'] . ', ' . $endereco['numero_endereco'] . ', ' . $endereco['cidade_endereco'] . ', ' . $endereco['uf_endereco']) ?>" 
+                       target="_blank" 
+                       class="btn btn-primary" 
+                       style="display: inline-flex; margin-top: 1rem;">
+                        <i class="bi bi-map"></i>
+                        Ver no Google Maps
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
 
         <!-- Informações -->
@@ -359,3 +374,32 @@
         </div>
     </div>
 </div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (isset($coordenadas) && $coordenadas): ?>
+            // Coordenadas do endereço
+            const lat = <?= $coordenadas['lat'] ?>;
+            const lng = <?= $coordenadas['lon'] ?>;
+            const address = "<?= addslashes($endereco['logadouro_endereco'] . ', ' . $endereco['numero_endereco'] . ' - ' . $endereco['cidade_endereco']) ?>";
+            
+            // Inicializa o mapa
+            const map = L.map('map').setView([lat, lng], 16);
+            
+            // Adiciona camada do OpenStreetMap
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            
+            // Adiciona marcador
+            const marker = L.marker([lat, lng]).addTo(map);
+            
+            // Adiciona popup
+            marker.bindPopup(`<b>Localização Aproximada</b><br>${address}`).openPopup();
+        <?php endif; ?>
+    });
+</script>

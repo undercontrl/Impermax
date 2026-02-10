@@ -53,6 +53,9 @@ class DashboardController extends AuthenticatedController {
 
         // Estatísticas
         $estatisticas = $this->calcularEstatisticas($dataInicio, $dataFim, $periodo);
+        
+        // Adicionar receita às estatísticas
+        $estatisticas['receita'] = $this->calcularReceitaMensal();
 
         // Gráficos
         $graficoTendencia = $this->prepararGraficoTendencia();
@@ -60,6 +63,10 @@ class DashboardController extends AuthenticatedController {
 
         // Atividades
         $atividadesRecentes = $this->buscarAtividadesRecentes();
+        
+        // NOVOS: Calendário e Agenda
+        $calendarioSemanal = $this->obterCalendarioSemanal();
+        $agendamentosHoje = $this->obterAgendamentosHoje();
 
         // Renderizar
         View::render('admin/dashboard/index', [
@@ -77,7 +84,9 @@ class DashboardController extends AuthenticatedController {
                 'estatisticas' => $estatisticas,
                 'graficoTendencia' => json_encode($graficoTendencia),
                 'graficoStatusAdmin' => json_encode($graficoStatusAdmin),
-                'atividadesRecentes' => $atividadesRecentes
+                'atividadesRecentes' => $atividadesRecentes,
+                'calendarioSemanal' => $calendarioSemanal,
+                'agendamentosHoje' => $agendamentosHoje
             ]);
         }
 
@@ -154,5 +163,78 @@ class DashboardController extends AuthenticatedController {
         $atividades = $this->agendamento->buscarRecentes(10);
         // Se necessário, pode adicionar outros tipos de atividades
         return $atividades;
+    }
+    
+    // Obter calendário semanal (7 dias a partir de hoje)
+    private function obterCalendarioSemanal(): array
+    {
+        $calendario = [];
+        $hoje = date('Y-m-d');
+        
+        // Gerar 7 dias a partir de hoje
+        for ($i = 0; $i < 7; $i++) {
+            $data = date('Y-m-d', strtotime("+{$i} days"));
+            $diaSemana = $this->obterDiaSemanaAbreviado($data);
+            $dia = date('d', strtotime($data));
+            
+            // Buscar agendamentos para este dia
+            $agendamentos = $this->agendamento->buscarAgendamentosPorData($data);
+            
+            $calendario[$data] = [
+                'diaSemana' => $diaSemana,
+                'dia' => $dia,
+                'agendamentos' => $agendamentos ?? []
+            ];
+        }
+        
+        return $calendario;
+    }
+    
+    // Obter agendamentos de hoje
+    private function obterAgendamentosHoje(): array
+    {
+        $agendamentos = $this->agendamento->buscarAgendamentosHoje();
+        return array_slice($agendamentos ?? [], 0, 10); // Limitar a 10 itens
+    }
+    
+    // Calcular receita mensal
+    private function calcularReceitaMensal(): array
+    {
+        // Mês atual
+        $mesAtual = date('Y-m-01 00:00:00');
+        $mesFim = date('Y-m-t 23:59:59');
+        $receitaAtual = $this->orcamento->calcularReceitaPorPeriodo($mesAtual, $mesFim);
+        
+        // Mês anterior
+        $mesAnteriorInicio = date('Y-m-01 00:00:00', strtotime('-1 month'));
+        $mesAnteriorFim = date('Y-m-t 23:59:59', strtotime('-1 month'));
+        $receitaAnterior = $this->orcamento->calcularReceitaPorPeriodo($mesAnteriorInicio, $mesAnteriorFim);
+        
+        // Calcular diferença e percentual
+        $diferenca = $receitaAtual - $receitaAnterior;
+        $percentual = $receitaAnterior != 0 ? round(($diferenca / $receitaAnterior) * 100, 1) : 0;
+        
+        // Determinar tendência
+        if ($diferenca > 0) {
+            $tendencia = 'up';
+        } elseif ($diferenca < 0) {
+            $tendencia = 'down';
+        } else {
+            $tendencia = 'neutral';
+        }
+        
+        return [
+            'total' => $receitaAtual,
+            'percentual' => abs($percentual),
+            'tendencia' => $tendencia
+        ];
+    }
+    
+    // Helper para obter dia da semana abreviado em português
+    private function obterDiaSemanaAbreviado(string $data): string
+    {
+        $diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        $diaSemanaNum = date('w', strtotime($data));
+        return $diasSemana[$diaSemanaNum];
     }
 }

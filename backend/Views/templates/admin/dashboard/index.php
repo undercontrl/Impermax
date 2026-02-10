@@ -1,5 +1,6 @@
 <!-- Dashboard Premium - Versão Corrigida -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/public/css/admin-dashboard.css">
 
 <div class="dashboard-wrapper-premium">
     <!-- Header Premium -->
@@ -29,6 +30,22 @@
                 </form>
             </div>
         </div>
+    </div>
+
+    <!-- Quick Actions Bar -->
+    <div class="quick-actions-bar">
+        <button onclick="location.href='/backend/usuario/criar'" class="btn-quick-action btn-quick-primary" aria-label="Criar novo usuário">
+            <i class="bi bi-person-plus" aria-hidden="true"></i>
+            <span>Novo Usuário</span>
+        </button>
+        <button onclick="location.href='/backend/agendamento/criar'" class="btn-quick-action btn-quick-success" aria-label="Criar novo agendamento">
+            <i class="bi bi-calendar-plus" aria-hidden="true"></i>
+            <span>Novo Agendamento</span>
+        </button>
+        <button onclick="location.href='/backend/orcamento/criar'" class="btn-quick-action btn-quick-info" aria-label="Criar novo orçamento">
+            <i class="bi bi-file-earmark-plus" aria-hidden="true"></i>
+            <span>Novo Orçamento</span>
+        </button>
     </div>
 
     <!-- Cards de Métricas Premium -->
@@ -160,6 +177,153 @@
                 </div>
             </div>
         </a>
+
+        <!-- Card Receita Mensal -->
+        <a href="/backend/orcamento/listar" class="metric-card-link-premium">
+            <div class="metric-card-premium card-revenue">
+                <div class="metric-blob-premium"></div>
+                <div class="metric-header-premium">
+                    <div class="metric-info-premium">
+                        <span class="metric-label-premium">Receita Mensal</span>
+                        <h2 class="metric-value-premium">
+                            R$ <?php
+                                // Calcular receita mensal (soma de orçamentos aprovados do mês)
+                                $receitaMensal = $estatisticas['receita']['total'] ?? 0;
+                                echo number_format($receitaMensal, 2, ',', '.');
+                            ?>
+                        </h2>
+                    </div>
+                    <div class="metric-icon-premium icon-revenue">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
+                </div>
+                <div class="metric-footer-premium">
+                    <?php
+                        $receitaTrend = $estatisticas['receita']['tendencia'] ?? 'neutral';
+                        $receitaPercent = $estatisticas['receita']['percentual'] ?? 0;
+                        $trendIcon = $receitaTrend === 'up' ? 'arrow-up' : ($receitaTrend === 'down' ? 'arrow-down' : 'dash');
+                        $trendSign = $receitaTrend === 'up' ? '+' : ($receitaTrend === 'down' ? '-' : '');
+                    ?>
+                    <div class="metric-trend-premium trend-<?= $receitaTrend ?>">
+                        <i class="bi bi-<?= $trendIcon ?>"></i>
+                        <span><?= abs($receitaPercent) ?>%</span>
+                    </div>
+                    <span class="metric-comparison-premium">
+                        <?= $trendSign ?><?= abs($receitaPercent) ?>% vs mês anterior
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Calendário e Agenda Section -->
+    <div class="dashboard-grid-admin">
+        <!-- Agenda do Dia -->
+        <div class="agenda-card-admin">
+            <div class="card-header-admin">
+                <div>
+                    <h3 class="card-title-admin">
+                        <i class="bi bi-list-check"></i>
+                        Agenda de Hoje
+                    </h3>
+                    <p class="card-subtitle-admin">Agendamentos para hoje</p>
+                </div>
+            </div>
+            <div class="card-body-admin">
+                <?php if (!empty($agendamentosHoje) && is_array($agendamentosHoje)): ?>
+                    <div class="agenda-list-admin">
+                        <?php foreach($agendamentosHoje as $ag): ?>
+                            <?php
+                                $hora = date('H:i', strtotime($ag['data_solicitada']));
+                                $status = $ag['status_agendamento'] ?? 'pendente';
+                                $statusClass = $status === 'realizada' ? 'success' : 
+                                             ($status === 'agendada' ? 'primary' : 'warning');
+                            ?>
+                            <div class="agenda-item-admin">
+                                <div class="agenda-time-admin"><?= htmlspecialchars($hora) ?></div>
+                                <div class="agenda-details-admin">
+                                    <div class="agenda-client-admin"><?= htmlspecialchars($ag['nome_cliente']) ?></div>
+                                    <div class="agenda-status-admin">
+                                        <span class="badge badge-<?= $statusClass ?>">
+                                            <?= htmlspecialchars(ucfirst($status)) ?>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="agenda-actions-admin">
+                                    <button class="btn-action-admin btn-primary" 
+                                            title="Ver detalhes" 
+                                            aria-label="Ver detalhes do agendamento de <?= htmlspecialchars($ag['nome_cliente']) ?>"
+                                            onclick="window.location.href='/backend/agendamento/ver/<?= $ag['id_agendamento'] ?>'">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-state-admin">
+                        <i class="bi bi-calendar-x"></i>
+                        <p>Nenhum agendamento para hoje</p>
+                        <small>Aproveite para planejar as próximas atividades!</small>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Calendário Semanal -->
+        <div class="calendar-card-admin">
+            <div class="card-header-admin">
+                <div>
+                    <h3 class="card-title-admin">
+                        <i class="bi bi-calendar-week"></i>
+                        Calendário Semanal
+                    </h3>
+                    <p class="card-subtitle-admin">Próximos 7 dias</p>
+                </div>
+            </div>
+            <div class="card-body-admin">
+                <?php if (!empty($calendarioSemanal) && is_array($calendarioSemanal)): ?>
+                    <div class="calendar-week-admin">
+                        <?php foreach($calendarioSemanal as $data => $info): ?>
+                            <?php
+                                $isToday = $data === date('Y-m-d');
+                                $countAgend = count($info['agendamentos']);
+                                // Encode agendamentos as JSON for JavaScript
+                                $agendamentosJson = htmlspecialchars(json_encode($info['agendamentos']), ENT_QUOTES, 'UTF-8');
+                            ?>
+                            <div class="calendar-day-admin <?= $isToday ? 'day-today' : '' ?> clickable-day-admin" 
+                                 data-date="<?= htmlspecialchars($data) ?>"
+                                 data-count="<?= $countAgend ?>"
+                                 data-agendamentos='<?= $agendamentosJson ?>'
+                                 role="button"
+                                 tabindex="0"
+                                 aria-label="<?= htmlspecialchars($info['diaSemana']) ?>, <?= htmlspecialchars($info['dia']) ?> - <?= $countAgend ?> agendamento(s)"
+                                 onclick="showDayDetailsAdmin(this, '<?= htmlspecialchars($info['diaSemana']) ?>', '<?= htmlspecialchars($info['dia']) ?>')">
+                                <div class="day-header-admin">
+                                    <span class="day-name-admin"><?= htmlspecialchars($info['diaSemana']) ?></span>
+                                    <span class="day-number-admin"><?= htmlspecialchars($info['dia']) ?></span>
+                                </div>
+                                <div class="day-content-admin">
+                                    <?php if ($countAgend > 0): ?>
+                                        <div class="day-badge-admin">
+                                            <i class="bi bi-circle-fill"></i>
+                                            <?= $countAgend ?> <?= $countAgend === 1 ? 'agendamento' : 'agendamentos' ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <span class="day-empty-admin">Livre</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-state-admin">
+                        <i class="bi bi-calendar-x"></i>
+                        <p>Nenhum dado de calendário disponível</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <!-- Seção de Gráficos -->
@@ -934,3 +1098,116 @@ if (typeof Chart !== 'undefined') {
         flex-direction: row;
     }
 }
+</style>
+
+<!-- Modal for Day Details (Admin) -->
+<div class="modal fade" id="dayDetailsModalAdmin" tabindex="-1" aria-labelledby="dayDetailsModalAdminLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dayDetailsModalAdminLabel">
+                    <i class="bi bi-calendar-day"></i>
+                    Agendamentos - <span id="modalDateAdmin"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" id="modalAgendamentosAdmin">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/backend/agendamento/criar'">
+                    <i class="bi bi-plus-circle"></i> Novo Agendamento
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show day details in modal (Admin)
+function showDayDetailsAdmin(element, dayName, dayNumber) {
+    const modal = new bootstrap.Modal(document.getElementById('dayDetailsModalAdmin'));
+    const modalDate = document.getElementById('modalDateAdmin');
+    const modalBody = document.getElementById('modalAgendamentosAdmin');
+    
+    // Set modal title
+    modalDate.textContent = `${dayName}, ${dayNumber}`;
+    
+    // Get agendamentos from data attribute
+    const agendamentosData = element.getAttribute('data-agendamentos');
+    let agendamentos = [];
+    
+    try {
+        agendamentos = JSON.parse(agendamentosData);
+    } catch (e) {
+        console.error('Erro ao parsear agendamentos:', e);
+        agendamentos = [];
+    }
+    
+    // Show modal
+    modal.show();
+    
+    // Display agendamentos
+    if (agendamentos && agendamentos.length > 0) {
+        let html = '<div class="list-group">';
+        agendamentos.forEach(ag => {
+            // Extract time from data_solicitada
+            let hora = 'N/A';
+            if (ag.data_solicitada) {
+                const dateObj = new Date(ag.data_solicitada);
+                hora = dateObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+            }
+            
+            const status = ag.status_agendamento || 'pendente';
+            const statusClass = status === 'realizada' ? 'success' : 
+                               (status === 'agendada' ? 'primary' : 'warning');
+            
+            html += `
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">${ag.nome_cliente || 'Cliente não informado'}</h6>
+                            <p class="mb-1 text-muted small">
+                                <i class="bi bi-clock"></i> ${hora}
+                            </p>
+                        </div>
+                        <span class="badge bg-${statusClass}">${status}</span>
+                    </div>
+                    <div class="mt-2">
+                        <a href="/backend/agendamento/ver/${ag.id_agendamento}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i> Ver detalhes
+                        </a>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        modalBody.innerHTML = html;
+    } else {
+        modalBody.innerHTML = `
+            <div class="text-center py-4">
+                <i class="bi bi-calendar-x" style="font-size: 3rem; color: var(--color-text-muted);"></i>
+                <p class="mt-3 text-muted">Nenhum agendamento para este dia</p>
+            </div>
+        `;
+    }
+}
+
+// Keyboard navigation for calendar days (Admin)
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarDays = document.querySelectorAll('.clickable-day-admin');
+    calendarDays.forEach(day => {
+        day.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+});
+</script>
