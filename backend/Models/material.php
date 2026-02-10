@@ -116,6 +116,7 @@ class Material {
 
     // ✅ INSERIR
     public function inserirMaterial($nome_material, $qtd_material, $descricao_material, $id_servico) {
+        
         $sql = 'INSERT INTO tbl_material (nome_material, qtd_material, descricao_material, id_servico) 
                 VALUES (:nome_material, :qtd_material, :descricao_material, :id_servico)';
         $stmt = $this->db->prepare($sql);
