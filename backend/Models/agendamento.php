@@ -250,7 +250,10 @@ class Agendamento
                     ag.data_solicitada,
                     ag.status_agendamento,
                     ag.criado_em,
-                    COALESCE(SUM(orc.valor_orcamento), 0) AS total_agendamento,
+                    CASE 
+                        WHEN COUNT(orc.id_orcamento) > 0 THEN COALESCE(SUM(orc.valor_orcamento), 0)
+                        ELSE ag.total_agendamento 
+                    END AS total_agendamento,
                     GROUP_CONCAT(DISTINCT orc.descricao_orcamento SEPARATOR "|||") AS descricoes_orcamentos
                 FROM tbl_agendamento AS ag
                 INNER JOIN tbl_usuario AS usu ON ag.id_cliente = usu.id_usuario
