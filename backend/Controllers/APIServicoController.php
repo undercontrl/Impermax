@@ -15,7 +15,7 @@ class APIServicoController{
     }
     
     public function getServicos($pagina=0){
-         $this->chaveAPI->ValidaToken();
+        $this->chaveAPI->ValidaToken();
         //condição ternaria é igual if else
         $registros_por_pagina = $pagina===0 ? 200 : 5;
         $pagina = $pagina===0 ? 1 : (int)$pagina;

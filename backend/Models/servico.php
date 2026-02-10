@@ -116,7 +116,7 @@ public function buscarServicoPorID(int $id) {
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();
         $offset = ($pagina - 1) * $por_pagina;
-        $dataQuery = "SELECT * FROM `tbl_servico` ORDER BY id_servico DESC LIMIT :limit OFFSET :offset";
+        $dataQuery = "SELECT * FROM `tbl_servico` ORDER BY id_servico ASC LIMIT :limit OFFSET :offset";
         $dataStmt = $this->db->prepare($dataQuery);
         $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
         $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
