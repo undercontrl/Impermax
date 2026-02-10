@@ -45,8 +45,8 @@ class Rotas
         '/api/usuarios' => 'APIUsuarioController@getUsuarios',
         '/api/servico-sync/{pagina}' => 'APIServicoController@getServicos',
         '/api/servico-sync' => 'APIServicoController@getServicos',
-        '/api/agendamentos/{pagina}' => 'AgendamentoController@getAgendamentos',
-        '/api/agendamentos' => 'AgendamentoController@getAgendamentos',
+        '/api/agendamentos/{pagina}' => 'APIAgendamentoController@getAgendamentos',
+        '/api/agendamentos' => 'APIAgendamentoController@getAgendamentos',
         "api/avaliacoes" => "PublicApiController@getAvaliacoes",
         "api/servicos" => "PublicApiController@getServicos",
         "api/projetos" => "PublicProjetoController@getProjetos",
@@ -197,6 +197,7 @@ class Rotas
         '/api/usuarios' => 'APIUsuarioController@salvarUsuario',
         '/api/servico-sync' => 'APIServicoController@salvarServico',
         '/api/materiais' => 'APIMaterialController@salvarMaterial',
+        '/api/agendamentos' => 'APIAgendamentoController@salvarAgendamento',
         //agendamentos
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",
         "/agendamento/atualizar/{id}" => "AgendamentoController@atualizarAgendamento",

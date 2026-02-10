@@ -331,7 +331,11 @@ class Agendamento
         $statement->bindParam(':total_agendamento', $total_agendamento);
         $statement->bindParam(':status_agendamento', $status_agendamento);
         $statement->bindParam(':criado', $dataAtual);
-        return $statement->execute();
+        
+        if ($statement->execute()) {
+            return $this->db->lastInsertId();
+        }
+        return false;
     }
     
     function atualizarAgendamento(int $id, $id_cliente, $data_solicitada, $total_agendamento, $status_agendamento)
