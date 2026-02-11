@@ -197,6 +197,7 @@ class Rotas
         '/api/usuarios' => 'APIUsuarioController@salvarUsuario',
         '/api/servico-sync' => 'APIServicoController@salvarServico',
         '/api/materiais' => 'APIMaterialController@salvarMaterial',
+        '/api/pagamentos' => 'APIPagamentoController@salvarPagamento',
         '/api/agendamentos' => 'APIAgendamentoController@salvarAgendamento',
         //agendamentos
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",

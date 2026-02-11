@@ -258,7 +258,11 @@ class Pagamento {
         $stmt->bindParam(':status_pagamento', $status_pagamento);
         $stmt->bindParam(':data_pagamento', $data_pagamento);
         $stmt->bindParam(':criado', $dataAtual);
-        return $stmt->execute();
+        
+        if ($stmt->execute()) {
+            return $this->db->lastInsertId();
+        }
+        return false;
     }
 
     /**
