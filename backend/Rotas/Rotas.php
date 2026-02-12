@@ -57,6 +57,8 @@ class Rotas
         '/api/materiais' => 'APIMaterialController@getMateriais',
         '/api/orcamentos/{pagina}' => 'APIOrcamentoController@getOrcamentos',
         '/api/orcamentos' => 'APIOrcamentoController@getOrcamentos',
+        '/api/enderecos/{pagina}' => 'APIEnderecoController@getEnderecos',
+        '/api/enderecos' => 'APIEnderecoController@getEnderecos',
 
        // ============================
        //     OUTROS CONTROLLERS
@@ -202,6 +204,7 @@ class Rotas
         '/api/pagamentos' => 'APIPagamentoController@salvarPagamento',
         '/api/agendamentos' => 'APIAgendamentoController@salvarAgendamento',
         '/api/orcamentos' => 'APIOrcamentoController@salvarOrcamento',
+        '/api/enderecos' => 'APIEnderecoController@salvarEndereco',
         //agendamentos
         "/agendamento/salvar" => "AgendamentoController@salvarAgendamento",
         "/agendamento/atualizar/{id}" => "AgendamentoController@atualizarAgendamento",
