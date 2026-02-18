@@ -47,7 +47,7 @@
             </div>
 
             <!-- Formulário de Confirmação -->
-            <form action="/backend/agendamento/deletar" method="POST" class="delete-form">
+            <form action="/backend/agendamento/deletar/<?= $id_agendamento ?>" method="POST" class="delete-form">
                 <input type="hidden" name="id_agendamento" value="<?= $id_agendamento ?>">
                 
                 <!-- Checkbox de Confirmação -->

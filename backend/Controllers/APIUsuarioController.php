@@ -40,24 +40,64 @@ class APIUsuarioController{
             echo json_encode(['status' => 'error', 'message' => 'Nenhum item recebido no usuario.']);
             exit;
         }
-        $novoPedidoId = $this->usuarioModel->inserirUsuario(
-            $usuario["nome_usuario"],
-             $usuario["email_usuario"],
-            $usuario["senha_usuario"],
-            $usuario["tipo_usuario"],
-            $usuario["status_usuario"],
 
-        );
-        if ($novoPedidoId) {
-            http_response_code(201);
-            echo json_encode([
-                'staus' => 'success', 'message' => 'cadastrado com sucesso!', 'id_pedido' => $novoPedidoId
-            ]);
+        // Se tiver ID, decide entre Excluir ou Atualizar
+        if (isset($usuario['id_usuario'])) {
+             // Se o payload indicar exclusão (excluido_em preenchido), deleta (Soft Delete)
+             if (isset($usuario['excluido_em']) && !empty($usuario['excluido_em'])) {
+                $sucesso = $this->usuarioModel->deletarUsuario($usuario['id_usuario']);
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Usuário excluído com sucesso!', 
+                        'id_usuario' => $usuario['id_usuario']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao excluir o usuário.']);
+                }
+            } else {
+                // Caso contrário, é um UPDATE
+                $sucesso = $this->usuarioModel->atualizarUsuario(
+                    (int)$usuario['id_usuario'],
+                    $usuario["nome_usuario"],
+                    $usuario["email_usuario"],
+                    $usuario["senha_usuario"] ?? '',
+                    $usuario["tipo_usuario"],
+                    $usuario["status_usuario"]
+                );
+
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Usuário atualizado com sucesso!', 
+                        'id_usuario' => $usuario['id_usuario']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o usuário.']);
+                }
+            }
         } else {
-            http_response_code(500);
-            echo json_encode([
-                'staus' => 'error', 'message' => 'Ocorreu um erro ao processar o seu produto']);
-
+            $novoUsuarioId = $this->usuarioModel->inserirUsuario(
+                $usuario["nome_usuario"],
+                $usuario["email_usuario"],
+                $usuario["senha_usuario"],
+                $usuario["tipo_usuario"],
+                $usuario["status_usuario"],
+            );
+            if ($novoUsuarioId) {
+                http_response_code(201);
+                echo json_encode([
+                    'status' => 'success', 'message' => 'cadastrado com sucesso!', 'id_usuario' => $novoUsuarioId
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'status' => 'error', 'message' => 'Ocorreu um erro ao processar o seu usuário']);
+            }
         }
     }
 

@@ -86,18 +86,22 @@ public function inserirServico($nome, $descricao, $valor) {
         return $stmt->execute();
     }
 
-public function atualizarServico($id, $nome, $descricao, $valor) {
+public function atualizarServico($id, $nome, $descricao, $valor, $status) {
+        $dataAtual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_servico 
                 SET nome_servico = :nome,
                     descricao_servico = :descricao,
                     valor_base_servico = :valor,
-                    atualizado_em = NOW()
+                    status_servico = :status,
+                    atualizado_em = :atual
                 WHERE id_servico = :id AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':descricao', $descricao);
         $stmt->bindParam(':valor', $valor);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':atual', $dataAtual);
         return $stmt->execute();
     }
 

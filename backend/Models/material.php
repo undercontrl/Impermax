@@ -116,18 +116,15 @@ class Material {
 
     // ✅ INSERIR
     public function inserirMaterial($nome_material, $qtd_material, $descricao_material, $id_servico) {
-        
         $sql = 'INSERT INTO tbl_material (nome_material, qtd_material, descricao_material, id_servico) 
                 VALUES (:nome_material, :qtd_material, :descricao_material, :id_servico)';
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nome_material', $nome_material);
-        $stmt->bindParam(':qtd_material', $qtd_material, PDO::PARAM_INT);
+        $stmt->bindParam(':qtd_material', $qtd_material);
         $stmt->bindParam(':descricao_material', $descricao_material);
         $stmt->bindValue(':id_servico', $id_servico ?: null, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            return $this->db->lastInsertId();
-        }
-        return false;
+        $stmt->execute();
+        return $this->db->lastInsertId();
     }
 
     // ✅ ATUALIZAR
@@ -143,7 +140,7 @@ class Material {
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':nome_material', $nome_material);
-        $stmt->bindParam(':qtd_material', $qtd_material, PDO::PARAM_INT);
+        $stmt->bindParam(':qtd_material', $qtd_material);
         $stmt->bindParam(':descricao_material', $descricao_material);
         $stmt->bindValue(':id_servico', $id_servico ?: null, PDO::PARAM_INT);
         $stmt->bindParam(':atual', $dataAtual);

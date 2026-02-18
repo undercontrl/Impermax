@@ -40,22 +40,44 @@ class APIAgendamentoController{
             exit;
         }
 
-        // Se tiver ID, deleta (Soft Delete). Senão, insere.
+        // Se tiver ID, decide entre Excluir ou Atualizar
         if (isset($agendamento['id_agendamento'])) {
-            $sucesso = $this->agendamentoModel->excluirAgendamento($agendamento['id_agendamento']);
-            if ($sucesso) {
-                http_response_code(200);
-                echo json_encode([
-                    'status' => 'success', 
-                    'message' => 'Agendamento excluído com sucesso!', 
-                    'id_agendamento' => $agendamento['id_agendamento']
-                ]);
+            // Se o payload indicar exclusão (excluido_em preenchido), deleta (Soft Delete)
+            if (isset($agendamento['excluido_em']) && !empty($agendamento['excluido_em'])) {
+                $sucesso = $this->agendamentoModel->excluirAgendamento($agendamento['id_agendamento']);
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Agendamento excluído com sucesso!', 
+                        'id_agendamento' => $agendamento['id_agendamento']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao excluir o agendamento.']);
+                }
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'status' => 'error', 
-                    'message' => 'Erro ao excluir o agendamento.'
-                ]);
+                // Caso contrário, é um UPDATE
+                // Campos necessários para atualizarAgendamento: id, id_cliente, data_solicitada, total_agendamento, status_agendamento
+                $sucesso = $this->agendamentoModel->atualizarAgendamento(
+                    (int)$agendamento['id_agendamento'],
+                    $agendamento['id_cliente'],
+                    $agendamento['data_solicitada'],
+                    $agendamento['total_agendamento'],
+                    $agendamento['status_agendamento']
+                );
+
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Agendamento atualizado com sucesso!', 
+                        'id_agendamento' => $agendamento['id_agendamento']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o agendamento.']);
+                }
             }
         } else {
             // Campos: id_cliente, data_solicitada, total_agendamento, status_agendamento
@@ -67,6 +89,19 @@ class APIAgendamentoController{
             );
             
             if ($novoAgendamentoId) {
+                // Salvar orçamentos vinculados se existirem no payload
+                if (!empty($agendamento['orcamentos'])) {
+                    $db = Database::getInstance();
+                    foreach ($agendamento['orcamentos'] as $id_orcamento) {
+                        $sql = "INSERT INTO tbl_agendamento_orcamento (id_agendamento, id_orcamento) 
+                                VALUES (:id_agendamento, :id_orcamento)";
+                        $stmt = $db->prepare($sql);
+                        $stmt->bindParam(':id_agendamento', $novoAgendamentoId);
+                        $stmt->bindParam(':id_orcamento', $id_orcamento);
+                        $stmt->execute();
+                    }
+                }
+
                 http_response_code(201);
                 echo json_encode([
                     'status' => 'success', 
