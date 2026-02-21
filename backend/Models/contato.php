@@ -154,8 +154,8 @@ public function excluirContato($id)
     public function salvar($dados)
 {
     $sql = "INSERT INTO tbl_contato 
-            (nome_contato, telefone_contato, email_contato, assunto_contato, status_contato, data_envio)
-            VALUES (:nome, :telefone, :email, :assunto, 'Novo', NOW())";
+            (nome_contato, telefone_contato, email_contato, assunto_contato, status_contato, data_envio, criado_em)
+            VALUES (:nome, :telefone, :email, :assunto, 'Novo', NOW(), NOW())";
 
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $dados['nome']);

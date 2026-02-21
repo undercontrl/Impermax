@@ -37,7 +37,8 @@ class EmailService{
             return $this->mailer->send();
 
         } catch (Exception $e) {
-            var_dump($e);exit;
+            error_log("PHPMailer Error: " . $e->getMessage());
+            return false;
         }
     }
 }

@@ -17,131 +17,163 @@ class PublicContatoController
         $this->emailNotification = new EmailNotification();
     }
 
-   public function enviar()
-{
-    // === RATE LIMIT POR IP (3 ENVIO POR DIA) ===
-    $ip = $this->getClientIp();
-    $rateLimitFile = __DIR__ . '/storage/rate_limit.json';
-    $today = date('Y-m-d'); // Dia atual em UTC
+    public function enviar()
+    {
+        try {
+            // === RATE LIMIT POR IP (3 ENVIO POR DIA) ===
+            $ip = $this->getClientIp();
+            $rateLimitFile = __DIR__ . '/storage/rate_limit.json';
+            $today = date('Y-m-d');
 
-    // Garantir diretório
-    $storageDir = dirname($rateLimitFile);
-    if (!is_dir($storageDir)) {
-        mkdir($storageDir, 0755, true);
-    }
+            // Garantir diretório
+            $storageDir = dirname($rateLimitFile);
+            if (!is_dir($storageDir)) {
+                mkdir($storageDir, 0755, true);
+            }
 
-    // Carregar dados
-    $rateData = $this->loadRateLimitData($rateLimitFile);
+            // Carregar dados
+            $rateData = $this->loadRateLimitData($rateLimitFile);
 
-    // === LIMPEZA DE DADOS ANTIGOS ===
-    foreach ($rateData as $ipKey => $entry) {
-        if ($entry['date'] !== $today) {
-            unset($rateData[$ipKey]);
-        }
-    }
+            // === LIMPEZA DE DADOS ANTIGOS ===
+            foreach ($rateData as $ipKey => $entry) {
+                if ($entry['date'] !== $today) {
+                    unset($rateData[$ipKey]);
+                }
+            }
 
-    // detectar se é requisição AJAX (fetch)
-    $isAjax = false;
-    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-        $isAjax = true;
-    } elseif (!empty($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false) {
-        $isAjax = true;
-    }
+            // detectar se é requisição AJAX (fetch)
+            $isAjax = false;
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+                $isAjax = true;
+            } elseif (!empty($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false) {
+                $isAjax = true;
+            }
 
-    // === VERIFICAR LIMITE ===
-    $currentCount = $rateData[$ip]['count'] ?? 0;
+            // === VERIFICAR HONEYPOT ===
+            if (!empty($_POST['website'])) {
+                if ($isAjax) {
+                    http_response_code(400);
+                    echo json_encode(['status' => 'error', 'message' => 'Spam detectado.'], JSON_UNESCAPED_UNICODE);
+                    exit;
+                }
+                header("Location: /");
+                exit;
+            }
 
-    if ($currentCount >= 3) {
-        $payload = ['type' => 'error', 'message' => 'Limite diário excedido (3 envios). Tente novamente amanhã.'];
-        if ($isAjax) {
-            http_response_code(429);
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(['status' => 'error', 'message' => $payload['message']], JSON_UNESCAPED_UNICODE);
+            // === VERIFICAR LIMITE ===
+            $currentCount = $rateData[$ip]['count'] ?? 0;
+
+            if ($currentCount >= 3) {
+                $message = 'Limite diário excedido (3 envios). Tente novamente amanhã.';
+                if ($isAjax) {
+                    http_response_code(429);
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['status' => 'error', 'message' => $message], JSON_UNESCAPED_UNICODE);
+                    exit;
+                }
+
+                $_SESSION['flash'] = ['type' => 'error', 'message' => $message];
+                header("Location: /");
+                exit;
+            }
+
+            // === CSRF ===
+            $tokenFormulario = $_POST['csrf_token'] ?? '';
+            $tokenSessao = $this->secao->get('csrf_token');
+            if (empty($tokenFormulario) || $tokenFormulario !== $tokenSessao) {
+                $message = 'Token CSRF inválido ou expirado. Recarregue a página.';
+                if ($isAjax) {
+                    http_response_code(400);
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['status' => 'error', 'message' => $message], JSON_UNESCAPED_UNICODE);
+                    exit;
+                }
+
+                $_SESSION['flash'] = ['type' => 'error', 'message' => $message];
+                header("Location: /");
+                exit;
+            }
+
+            // === DADOS E VALIDAÇÃO ===
+            $nome = trim($_POST['nome'] ?? '');
+            $telefone = preg_replace('/\D/', '', $_POST['telefone'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $servico = $_POST['servico'] ?? '';
+
+            if (empty($nome) || empty($telefone) || empty($email) || empty($servico)) {
+                $message = 'Preencha todos os campos obrigatórios.';
+                if ($isAjax) {
+                    http_response_code(400);
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['status' => 'error', 'message' => $message], JSON_UNESCAPED_UNICODE);
+                    exit;
+                }
+                $_SESSION['flash'] = ['type' => 'error', 'message' => $message];
+                header("Location: /");
+                exit;
+            }
+
+            $servicos = [
+                'residencial' => 'Imp. Residencial',
+                'comercial'   => 'Imp. Comercial',
+                'telhado'     => 'Imp. Telhado',
+                'laje'        => 'Imp. Laje'
+            ];
+            $assunto = $servicos[$servico] ?? $servico;
+
+            // === SALVAR NO BANCO ===
+            $sucesso = $this->model->salvar([
+                'nome' => $nome,
+                'telefone' => $telefone,
+                'email' => $email,
+                'assunto' => $assunto,
+            ]);
+
+            // === ATUALIZAR RATE LIMIT APENAS SE SALVOU COM SUCESSO ===
+            if ($sucesso) {
+                $rateData[$ip] = [
+                    'count' => $currentCount + 1,
+                    'date' => $today
+                ];
+
+                $this->saveRateLimitData($rateLimitFile, $rateData);
+
+                // Enviar notificação por e-mail (falha aqui não deve impedir o sucesso do form)
+                try {
+                    $this->emailNotification->contatoRecebido($email, $nome);
+                } catch (\Exception $e) {
+                    error_log("Erro ao enviar e-mail de notificação: " . $e->getMessage());
+                }
+
+                if ($isAjax) {
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['status' => 'success', 'message' => 'Orçamento solicitado com sucesso!'], JSON_UNESCAPED_UNICODE);
+                    exit;
+                }
+
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Orçamento solicitado com sucesso!'];
+            } else {
+                throw new \Exception("Falha ao salvar contato no banco de dados.");
+            }
+
+            header("Location: /");
+            exit;
+
+        } catch (\Exception $e) {
+            error_log("Erro no envio de contato: " . $e->getMessage());
+            
+            if ($isAjax) {
+                http_response_code(500);
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode(['status' => 'error', 'message' => 'Ocorreu um erro interno. Tente novamente mais tarde.'], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Ocorreu um erro interno.'];
+            header("Location: /");
             exit;
         }
-
-        $_SESSION['flash'] = $payload;
-        header("Location: /");
-        exit;
     }
-
-    // === CSRF ===
-    $tokenFormulario = $_POST['csrf_token'] ?? '';
-    $tokenSessao = $this->secao->get('csrf_token');
-    if (empty($tokenFormulario) || $tokenFormulario !== $tokenSessao) {
-        $payload = ['type' => 'error', 'message' => 'Token CSRF inválido.'];
-        if ($isAjax) {
-            http_response_code(400);
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(['status' => 'error', 'message' => $payload['message']], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-
-        $_SESSION['flash'] = $payload;
-        header("Location: /");
-        exit;
-    }
-
-    // === DADOS E VALIDAÇÃO ===
-    $nome = trim($_POST['nome'] ?? '');
-    $telefone = preg_replace('/\D/', '', $_POST['telefone'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $servico = $_POST['servico'] ?? '';
-
-    if (empty($nome) || empty($telefone) || empty($email) || empty($servico)) {
-        $_SESSION['flash'] = ['type' => 'error', 'message' => 'Preencha todos os campos.'];
-        header("Location: /");
-        exit;
-    }
-
-    $servicos = [
-        'residencial' => 'Impermeabilização Residencial',
-        'comercial'   => 'Impermeabilização Comercial',
-        'telhado'     => 'Impermeabilização de Telhado',
-        'laje'        => 'Impermeabilização de Laje'
-    ];
-    $assunto = $servicos[$servico] ?? $servico;
-
-    // === SALVAR NO BANCO ===
-    $sucesso = $this->model->salvar([
-        'nome' => $nome,
-        'telefone' => $telefone,
-        'email' => $email,
-        'assunto' => $assunto,
-    ]);
-
-    // === ATUALIZAR RATE LIMIT APENAS SE SALVOU COM SUCESSO ===
-    if ($sucesso) {
-        $rateData[$ip] = [
-            'count' => $currentCount + 1,
-            'date' => $today
-        ];
-
-        // SALVAR COM BLOQUEIO E ESCRITA ATÔMICA
-        $this->saveRateLimitData($rateLimitFile, $rateData);
-
-        if ($isAjax) {
-            header('Content-Type: application/json; charset=utf-8');
-            $this->emailNotification->contatoRecebido($email, $nome);
-            echo json_encode(['status' => 'success', 'message' => 'Orçamento solicitado com sucesso!'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-
-        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Orçamento solicitado com sucesso!'];
-    } else {
-        if ($isAjax) {
-            http_response_code(500);
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar.'], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-
-        $_SESSION['flash'] = ['type' => 'error', 'message' => 'Erro ao enviar.'];
-    }
-
-    header("Location: /");
-    exit;
-}
 
 // ==================== MÉTODOS AUXILIARES CORRIGIDOS ====================
 
