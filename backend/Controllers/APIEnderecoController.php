@@ -40,27 +40,49 @@ class APIEnderecoController{
             exit;
         }
 
-        // Se tiver ID, deleta. Senão, insere.
+        // Se tiver ID, decide entre Excluir ou Atualizar
         if (isset($endereco['id_endereco'])) {
-            $sucesso = $this->enderecoModel->excluirEndereco($endereco['id_endereco']);
-            if ($sucesso) {
-                http_response_code(200);
-                echo json_encode([
-                    'status' => 'success', 
-                    'message' => 'Endereço excluído com sucesso!', 
-                    'id_endereco' => $endereco['id_endereco']
-                ]);
+            // Se o payload indicar exclusão (excluido_em preenchido), deleta (Soft Delete)
+            if (isset($endereco['excluido_em']) && !empty($endereco['excluido_em'])) {
+                $sucesso = $this->enderecoModel->excluirEndereco($endereco['id_endereco']);
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Endereço excluído com sucesso!', 
+                        'id_endereco' => $endereco['id_endereco']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao excluir o endereço.']);
+                }
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'status' => 'error', 
-                    'message' => 'Erro ao excluir o endereço.'
-                ]);
+                // Caso contrário, é um UPDATE
+                $sucesso = $this->enderecoModel->atualizarEndereco(
+                    (int)$endereco['id_endereco'],
+                    $endereco['cep_endereco'], 
+                    $endereco['logadouro_endereco'], 
+                    $endereco['numero_endereco'], 
+                    $endereco['complemento_endereco'], 
+                    $endereco['bairro_endereco'], 
+                    $endereco['cidade_endereco'], 
+                    $endereco['uf_endereco']
+                );
+
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Endereço atualizado com sucesso!', 
+                        'id_endereco' => $endereco['id_endereco']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o endereço.']);
+                }
             }
         } else {
             // function inserirEndereco($id_usuario, $cep_endereco, $logadouro_endereco, $numero_endereco, $complemento_endereco, $bairro_endereco, $cidade_endereco, $uf_endereco)
-            // Validar campos obrigatórios se necessário, ou passar null/vazio conforme lógica
-            
             $id_usuario = $endereco['id_usuario'] ?? null;
             $cep_endereco = $endereco['cep_endereco'] ?? null;
             $logadouro_endereco = $endereco['logadouro_endereco'] ?? null;

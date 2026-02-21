@@ -1014,12 +1014,22 @@ class Agendamento
 
     // API paa proteção 
 
-         public function paginacaoAPI(int $pagina = 1, int $por_pagina = 10): array{
+        public function paginacaoAPI(int $pagina = 1, int $por_pagina = 10): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_agendamento`";
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();
         $offset = ($pagina - 1) * $por_pagina;
-        $dataQuery = "SELECT * FROM `tbl_agendamento` LIMIT :limit OFFSET :offset";
+
+        $dataQuery = "SELECT 
+                        ag.*,
+                        GROUP_CONCAT(ao.id_orcamento) as orcamentos_ids,
+                        GROUP_CONCAT(orc.descricao_orcamento SEPARATOR '|||') as orcamentos_descricoes
+                      FROM `tbl_agendamento` as ag
+                      LEFT JOIN tbl_agendamento_orcamento as ao ON ao.id_agendamento = ag.id_agendamento
+                      LEFT JOIN tbl_orcamento as orc ON orc.id_orcamento = ao.id_orcamento
+                      GROUP BY ag.id_agendamento
+                      LIMIT :limit OFFSET :offset";
+
         $dataStmt = $this->db->prepare($dataQuery);
         $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
         $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);

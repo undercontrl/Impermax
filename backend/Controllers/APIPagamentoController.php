@@ -38,33 +38,73 @@ class APIPagamentoController{
             exit;
         }
 
-        // Se tiver ID, deleta. Senão, insere.
+        // [DEBUG] Log payload para depuração de sincronia
+        error_log("[PagamentoSync] Payload recebido: " . print_r($pagamento, true));
+
+        // Se tiver ID, decide entre Excluir ou Atualizar
         if (isset($pagamento['id_pagamento'])) {
-            $sucesso = $this->pagamentoModel->excluirPagamento($pagamento['id_pagamento']);
-            if ($sucesso) {
-                http_response_code(200);
-                echo json_encode([
-                    'status' => 'success', 
-                    'message' => 'Pagamento excluído com sucesso!', 
-                    'id_pagamento' => $pagamento['id_pagamento']
-                ]);
+            error_log("[PagamentoSync] Tentando UPDATE para ID: " . $pagamento['id_pagamento']);
+            // Se o payload indicar exclusão (excluido_em preenchido), deleta (Soft Delete)
+            if (isset($pagamento['excluido_em']) && !empty($pagamento['excluido_em'])) {
+                error_log("[PagamentoSync] Operação: DELETE");
+                $sucesso = $this->pagamentoModel->deletarPagamentoInterno($pagamento['id_pagamento']);
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Pagamento excluído com sucesso!', 
+                        'id_pagamento' => $pagamento['id_pagamento']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao excluir o pagamento.']);
+                }
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'status' => 'error', 
-                    'message' => 'Erro ao excluir o pagamento.'
-                ]);
+                // Caso contrário, é um UPDATE
+                error_log("[PagamentoSync] Operação: UPDATE. Dados: " . 
+                    "ID: " . $pagamento['id_pagamento'] . 
+                    ", Cliente: " . ($pagamento['id_cliente'] ?? 'NULL') . 
+                    ", Total: " . ($pagamento['total_devedor'] ?? '0') . 
+                    ", Status: " . ($pagamento['status_pagamento'] ?? 'pendente')
+                );
+
+                $sucesso = $this->pagamentoModel->atualizarPagamento(
+                    (int)$pagamento['id_pagamento'],
+                    $pagamento['id_cliente'],
+                    $pagamento['total_devedor'],
+                    $pagamento['dinheiro'],
+                    $pagamento['credito'],
+                    $pagamento['debito'],
+                    $pagamento['pix'],
+                    $pagamento['status_pagamento'] ?? 'aberto',
+                    $pagamento['data_pagamento']
+                );
+
+                if ($sucesso) {
+                    error_log("[PagamentoSync] UPDATE realizado com sucesso para ID: " . $pagamento['id_pagamento']);
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Pagamento atualizado com sucesso!', 
+                        'id_pagamento' => $pagamento['id_pagamento']
+                    ]);
+                } else {
+                    error_log("[PagamentoSync] Erro ao atualizar pagamento ID: " . $pagamento['id_pagamento']);
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o pagamento.']);
+                }
             }
         } else {
-            $novoPagamentoId = $this->pagamentoModel->inserirPagamento(
-                $pagamento["id_cliente"],
-                $pagamento["total_devedor"],
-                $pagamento["dinheiro"],
-                $pagamento["credito"],
-                $pagamento["debito"],
-                $pagamento["pix"],
-                $pagamento["status_pagamento"],
-                $pagamento["data_pagamento"]
+            error_log("[PagamentoSync] Operação: INSERT");
+            $novoPagamentoId = $this->pagamentoModel->inserirPagamentoAPI(
+                $pagamento['id_cliente'],
+                $pagamento['total_devedor'],
+                $pagamento['dinheiro'],
+                $pagamento['credito'],
+                $pagamento['debito'],
+                $pagamento['pix'],
+                $pagamento['status_pagamento'] ?? 'aberto',
+                $pagamento['data_pagamento']
             );
             
             if ($novoPagamentoId) {

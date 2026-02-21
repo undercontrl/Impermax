@@ -40,22 +40,45 @@ class APIOrcamentoController{
             exit;
         }
 
-        // Se tiver ID, deleta (Soft Delete). Senão, insere.
+        // Se tiver ID, decide entre Excluir ou Atualizar
         if (isset($orcamento['id_orcamento'])) {
-            $sucesso = $this->orcamentoModel->excluirOrcamento($orcamento['id_orcamento']);
-            if ($sucesso) {
-                http_response_code(200);
-                echo json_encode([
-                    'status' => 'success', 
-                    'message' => 'Orcamento excluído com sucesso!', 
-                    'id_orcamento' => $orcamento['id_orcamento']
-                ]);
+            // Se o payload indicar exclusão (excluido_em preenchido), deleta (Soft Delete)
+            if (isset($orcamento['excluido_em']) && !empty($orcamento['excluido_em'])) {
+                $sucesso = $this->orcamentoModel->excluirOrcamento($orcamento['id_orcamento']);
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Orcamento excluído com sucesso!', 
+                        'id_orcamento' => $orcamento['id_orcamento']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao excluir o orcamento.']);
+                }
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'status' => 'error', 
-                    'message' => 'Erro ao excluir o orcamento.'
-                ]);
+                // Caso contrário, é um UPDATE
+                $sucesso = $this->orcamentoModel->atualizarOrcamento(
+                    (int)$orcamento['id_orcamento'],
+                    $orcamento['id_cliente'], 
+                    $orcamento['descricao_orcamento'], 
+                    $orcamento['status_orcamento'], 
+                    $orcamento['data_orcamento'],
+                    $orcamento['valor_orcamento'],
+                    $orcamento['total_item_orcamento']
+                );
+
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Orcamento atualizado com sucesso!', 
+                        'id_orcamento' => $orcamento['id_orcamento']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o orcamento.']);
+                }
             }
         } else {
             // Campos: id_cliente, descricao_orcamento, status_orcamento, data_orcamento, valor_orcamento, total_item_orcamento

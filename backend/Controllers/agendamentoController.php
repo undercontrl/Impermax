@@ -275,9 +275,16 @@ class AgendamentoController
     }
 
     // Deletar agendamento (soft delete)
-    public function deletarAgendamento()
+    public function deletarAgendamento($id = null)
     {
-        $ok = $this->agendamento->excluirAgendamento($_POST["id_agendamento"]);
+        $id = (int) ($id ?: $_POST["id_agendamento"] ?? 0);
+
+        if ($id <= 0) {
+            Redirect::redirecionarComMensagem("agendamento/listar", "error", "ID de agendamento inválido!");
+            return;
+        }
+
+        $ok = $this->agendamento->excluirAgendamento($id);
 
         if ($ok) {
             Redirect::redirecionarComMensagem("agendamento/listar", "success", "Agendamento excluído com sucesso!");

@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -502,12 +507,18 @@
             </div>
 
             <!-- Mensagens -->
-            <?php if (isset($_SESSION['flash_message'])): ?>
-                <div class="alert alert-<?= $_SESSION['flash_type'] ?? 'info' ?>">
-                    <i class="bi bi-<?= $_SESSION['flash_type'] === 'success' ? 'check-circle' : 'exclamation-triangle' ?>-fill"></i>
-                    <span><?= $_SESSION['flash_message'] ?></span>
+            <?php
+            $flashMsg = null;
+            if (isset($_SESSION['flash'])) {
+                $flashMsg = $_SESSION['flash'];
+                unset($_SESSION['flash']);
+            }
+            ?>
+            <?php if ($flashMsg): ?>
+                <div class="alert alert-<?= htmlspecialchars($flashMsg['type'] ?? 'info') ?>">
+                    <i class="bi bi-<?= ($flashMsg['type'] ?? '') === 'success' ? 'check-circle' : 'exclamation-triangle' ?>-fill"></i>
+                    <span><?= htmlspecialchars($flashMsg['mensagem'] ?? '') ?></span>
                 </div>
-                <?php unset($_SESSION['flash_message'], $_SESSION['flash_type']); ?>
             <?php endif; ?>
 
             <!-- Formulário -->

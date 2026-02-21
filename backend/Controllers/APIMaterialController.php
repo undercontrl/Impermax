@@ -40,25 +40,51 @@ class APIMaterialController{
             exit;
         }
 
-        // Se tiver ID, deleta. Senão, insere.
+        // Se tiver ID, decide entre Excluir ou Atualizar
         if (isset($material['id_material'])) {
-            $sucesso = $this->materialModel->excluirMaterial($material['id_material']);
-            if ($sucesso) {
-                http_response_code(200);
-                echo json_encode([
-                    'status' => 'success', 
-                    'message' => 'Material excluído com sucesso!', 
-                    'id_material' => $material['id_material']
-                ]);
+            // Se o payload indicar exclusão (excluido_em preenchido), deleta (Soft Delete)
+            if (isset($material['excluido_em']) && !empty($material['excluido_em'])) {
+                $sucesso = $this->materialModel->excluirMaterial($material['id_material']);
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Material excluído com sucesso!', 
+                        'id_material' => $material['id_material']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao excluir o material.']);
+                }
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'status' => 'error', 
-                    'message' => 'Erro ao excluir o material.'
-                ]);
+                // Caso contrário, é um UPDATE
+                $sucesso = $this->materialModel->atualizarMaterial(
+                    (int)$material['id_material'],
+                    $material['nome_material'],
+                    $material['qtd_material'],
+                    $material['descricao_material'],
+                    $material['id_servico']
+                );
+
+                if ($sucesso) {
+                    http_response_code(200);
+                    echo json_encode([
+                        'status' => 'success', 
+                        'message' => 'Material atualizado com sucesso!', 
+                        'id_material' => $material['id_material']
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar the material.']);
+                }
             }
         } else {
-            $novoMaterialId =  $this->materialModel->inserirMaterial($material['nome_material'], $material['qtd_material'], $material['descricao_material'], $material['id_servico']);
+            $novoMaterialId =  $this->materialModel->inserirMaterial(
+                $material['nome_material'], 
+                $material['qtd_material'], 
+                $material['descricao_material'], 
+                $material['id_servico']
+            );
             
             if ($novoMaterialId) {
                 http_response_code(201);
