@@ -84,3 +84,7 @@ header {
     color: var(--cor-de-fundo-primaria);
     font-weight: 750;
 }
+
+.hamburger-menu {
+    display: none;
+}

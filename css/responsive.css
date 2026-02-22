@@ -402,22 +402,25 @@
         margin-top: 0 !important;
         padding: 40px 20px !important;
         position: relative !important;
+        z-index: 2;
+        background-color: white !important;
     }
 
     .parallax-projetos,
     .parallax-servicos {
         top: 0 !important;
-        height: 320px !important;
-        min-height: 320px !important;
+        height: 350px !important;
+        min-height: 350px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        padding-top: 90px !important;
-        /* Fixed clearance for header */
+        padding-top: 140px !important;
+        /* Full header clearance */
         background-attachment: scroll !important;
         background-position: center !important;
         box-sizing: border-box !important;
+        z-index: 1;
     }
 
     .titulo-projetos,
@@ -425,12 +428,13 @@
         font-size: 2.2rem !important;
         color: white !important;
         margin: 0 !important;
+        padding: 0 20px !important;
         position: static !important;
-        /* Remove absolute/relative offsets */
         transform: none !important;
         text-align: center !important;
         width: 100% !important;
         display: block !important;
+        line-height: 1.2 !important;
     }
 
     .grid-projetos {
