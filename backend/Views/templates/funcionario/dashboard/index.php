@@ -1031,7 +1031,8 @@ if (document.getElementById('chartStatus')) {
 @media (max-width: 768px) {
     .header-content-func {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 0.75rem;
     }
     
     .header-actions-func {
@@ -1053,61 +1054,48 @@ if (document.getElementById('chartStatus')) {
     }
     
     .calendar-week-func {
-        grid-template-columns: repeat(7, 1fr);
-        gap: 0.25rem;
+        display: flex;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding-bottom: 0.75rem;
+        -webkit-overflow-scrolling: touch;
     }
     
     .calendar-day-func {
-        padding: 0.75rem 0.25rem;
+        min-width: 85px;
+        flex: 0 0 auto;
     }
     
-    .day-name-func {
-        font-size: 0.625rem;
-    }
-    
-    .day-number-func {
-        font-size: 1.125rem;
-    }
-    
-    .day-badge-func {
-        font-size: 0.625rem;
-        padding: 0.125rem 0.25rem;
-    }
-    
-    .title-func {
-        font-size: 1.5rem;
-    }
-    
-    .metric-value-func {
-        font-size: 1.75rem;
-    }
-}
-
-@media (max-width: 480px) {
     .agenda-item-func {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1.25rem;
     }
     
     .agenda-time-func {
         flex-direction: row;
         min-width: auto;
     }
+
+    .agenda-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+        gap: 0.5rem;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .btn-action {
+        width: 100% !important;
+        height: 44px !important;
+        justify-content: center;
+    }
     
     .upcoming-item-func {
         flex-direction: column;
         align-items: flex-start;
-    }
-    
-    .calendar-week-func {
-        display: flex;
-        overflow-x: auto;
-        gap: 0.5rem;
-        padding-bottom: 0.5rem;
-    }
-    
-    .calendar-day-func {
-        min-width: 80px;
+        padding: 1rem;
     }
 }
 

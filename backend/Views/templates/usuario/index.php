@@ -1081,6 +1081,44 @@
             flex-wrap: wrap;
         }
     }
+
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.8125rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            font-size: 1.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+        }
+
+        .bulk-actions-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .bulk-actions-buttons {
+            width: 100%;
+        }
+
+        .btn-bulk-action {
+            width: 100%;
+            justify-content: center;
+        }
+    }
 </style>
 
 <script>

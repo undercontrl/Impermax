@@ -1507,7 +1507,8 @@
     @media (max-width: 768px) {
         .page-header-content {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 1rem;
         }
 
         .btn-action-primary {
@@ -1522,6 +1523,7 @@
 
         .filters-group {
             flex-direction: column;
+            gap: 0.75rem;
         }
 
         .search-box {
@@ -1535,30 +1537,32 @@
 
         .quick-stats {
             grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         .table-footer {
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
             text-align: center;
-        }
-
-        .action-buttons {
-            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .bulk-actions-bar {
             flex-direction: column;
             gap: 1rem;
+            padding: 1.25rem;
         }
 
         .bulk-actions-buttons {
             width: 100%;
-            justify-content: stretch;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .btn-bulk-action {
-            flex: 1;
+            width: 100%;
+            justify-content: center;
         }
 
         .agendamentos-grid {
@@ -1566,7 +1570,47 @@
         }
 
         .card-actions {
-            grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+            gap: 0.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.8125rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            font-size: 1.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+        }
+
+        .bulk-actions-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .bulk-actions-buttons {
+            width: 100%;
+        }
+
+        .btn-bulk-action {
+            width: 100%;
+            justify-content: center;
         }
     }
 </style>

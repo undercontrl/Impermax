@@ -1079,7 +1079,8 @@
     @media (max-width: 768px) {
         .page-header-content {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 1rem;
         }
 
         .btn-action-primary {
@@ -1090,10 +1091,12 @@
         .filters-section {
             flex-direction: column;
             align-items: stretch;
+            gap: 1.25rem;
         }
 
         .filters-group {
             flex-direction: column;
+            gap: 0.75rem;
         }
 
         .search-box {
@@ -1107,16 +1110,38 @@
 
         .quick-stats {
             grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         .table-footer {
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
             text-align: center;
+            gap: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 1.5rem;
         }
 
-        .action-buttons {
-            flex-wrap: wrap;
+        .page-subtitle {
+            font-size: 0.8125rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            font-size: 1.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
         }
     }
 </style>

@@ -471,28 +471,46 @@
     }
 
     @media (max-width: 768px) {
+        .page-header-content {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1.25rem;
+        }
+
         .content-grid {
             grid-template-columns: 1fr;
         }
 
         .header-actions {
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
         .btn-action {
-            flex: 1;
+            width: 100%;
             justify-content: center;
         }
 
         .client-profile {
             flex-direction: column;
             text-align: center;
+            gap: 1.25rem;
         }
 
         .info-row {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
             gap: 0.5rem;
+        }
+
+        .status-badge-view {
+            padding: 1.25rem;
+        }
+
+        .status-text {
+            font-size: 1.15rem;
         }
     }
 </style>

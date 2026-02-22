@@ -1080,15 +1080,23 @@ if (typeof Chart !== 'undefined') {
     }
 
     .dashboard-title-premium {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
     }
 
     .metric-value-premium {
-        font-size: 1.875rem;
+        font-size: 1.75rem;
+    }
+
+    .header-content-premium {
+        gap: 1rem;
     }
 }
 
 @media (max-width: 480px) {
+    .dashboard-header-premium {
+        margin-bottom: 1.5rem;
+    }
+
     .chart-legend-premium {
         flex-direction: column;
         gap: 0.5rem;
@@ -1096,6 +1104,10 @@ if (typeof Chart !== 'undefined') {
 
     .user-cell-premium {
         flex-direction: row;
+    }
+
+    .metrics-grid-premium {
+        gap: 1rem;
     }
 }
 </style>

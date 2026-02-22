@@ -143,7 +143,13 @@ if (in_array($currentPath, $rotasPublicas)) {
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
+            width: 100%;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        html {
+            overflow-x: hidden;
+            width: 100%;
         }
 
         /* ==================== SIDEBAR ==================== */
@@ -803,6 +809,58 @@ if (in_array($currentPath, $rotasPublicas)) {
             opacity: 1;
         }
 
+        /* ==================== BOTÕES MOBILE ==================== */
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-size: 1.5rem;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn:hover {
+            background: #f1f5f9;
+            color: var(--cor-acento);
+        }
+
+        .mobile-close-btn {
+            display: none;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .mobile-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Responsive overrides for mobile buttons */
+        @media (max-width: 768px) {
+            .mobile-close-btn {
+                display: flex;
+            }
+        }
+
         /* ==================== RESPONSIVIDADE ==================== */
         @media (max-width: 1024px) {
             :root {
@@ -842,6 +900,14 @@ if (in_array($currentPath, $rotasPublicas)) {
 
             .topbar-title {
                 font-size: 1.125rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 150px;
+            }
+
+            .topbar-left {
+                gap: 0.75rem;
             }
 
             .breadcrumb-custom {
@@ -966,24 +1032,30 @@ if (in_array($currentPath, $rotasPublicas)) {
             }
         }
 
-        .mobile-menu-btn {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: transparent;
-            border: none;
-            color: #64748b;
-            font-size: 1.5rem;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
+        @media (max-width: 480px) {
+            /* Fixes for iPhone 12 Proportions */
+            .content {
+                padding: 1rem 0.75rem;
+            }
 
-        .mobile-menu-btn:hover {
-            background: #f1f5f9;
-            color: var(--cor-acento);
+            .topbar {
+                padding: 0 0.75rem;
+            }
+
+            .topbar-title {
+                font-size: 1rem;
+                max-width: 120px;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+            }
+
+            .user-menu {
+                padding: 0.25rem 0.5rem;
+                gap: 0.5rem;
+            }
         }
 
         /* ==================== ANIMAÇÕES ==================== */
@@ -1012,6 +1084,10 @@ if (in_array($currentPath, $rotasPublicas)) {
             <a href="/../../index.php">
                 <img src="/assets/icons/impermax-LOGO.svg" alt="Impermax Logo">
             </a>
+            <!-- Botão fechar (visível apenas no mobile) -->
+            <button class="mobile-close-btn" onclick="toggleSidebar()" aria-label="Fechar menu">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
 
         <div class="sidebar-nav">

@@ -386,7 +386,8 @@
 
         .page-header-content {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 1rem;
         }
 
         .btn-action-secondary {
@@ -395,11 +396,20 @@
         }
 
         .form-actions {
-            flex-direction: column;
+            flex-direction: column-reverse;
+            gap: 0.75rem;
         }
 
         .btn {
             width: 100%;
+        }
+
+        .qty-input-wrapper {
+            padding: 0.75rem;
+        }
+
+        .qty-input {
+            font-size: 1.25rem;
         }
     }
 </style>

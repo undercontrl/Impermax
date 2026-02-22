@@ -464,7 +464,8 @@
     @media (max-width: 768px) {
         .page-header-content {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 1rem;
         }
 
         .form-row {
@@ -477,6 +478,7 @@
 
         .form-actions {
             flex-direction: column-reverse;
+            gap: 0.75rem;
         }
 
         .btn-primary,

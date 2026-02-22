@@ -305,6 +305,10 @@
     }
 
     @media (max-width: 768px) {
+        .view-header {
+            padding: 1.5rem;
+        }
+
         .view-header h1 {
             font-size: 1.5rem;
         }
@@ -312,6 +316,14 @@
         .avatar-section {
             flex-direction: column;
             text-align: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
         }
 
         .info-grid {
@@ -320,11 +332,18 @@
 
         .action-buttons {
             flex-direction: column;
+            padding: 1rem;
         }
 
         .btn {
             width: 100%;
             justify-content: center;
+        }
+        
+        .status-badge-large,
+        .tipo-badge-large {
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
         }
     }
 

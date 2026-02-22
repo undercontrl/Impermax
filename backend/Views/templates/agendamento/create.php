@@ -709,6 +709,12 @@
 
     /* Responsivo */
     @media (max-width: 768px) {
+        .page-header-content {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
         .form-grid {
             grid-template-columns: 1fr;
         }
@@ -719,10 +725,16 @@
 
         .status-selector {
             grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .status-card {
+            padding: 1.25rem 0.75rem;
         }
 
         .form-actions {
             flex-direction: column-reverse;
+            gap: 0.75rem;
         }
 
         .btn-primary,

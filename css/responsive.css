@@ -49,8 +49,8 @@
         flex-wrap: nowrap !important;
         justify-content: space-between !important;
         align-items: center !important;
-        padding: 8px 15px !important;
-        gap: 10px;
+        padding: 5px 10px !important;
+        gap: 5px;
     }
 
     .span-header {
@@ -58,7 +58,8 @@
         white-space: nowrap;
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
+        padding: 5px !important;
     }
 
     .icon {
@@ -71,7 +72,9 @@
         gap: 8px !important;
         margin: 0 !important;
         padding: 0 !important;
-        justify-content: flex-end !important;
+        justify-content: center !important;
+        /* Center to avoid being cut off on the right */
+        flex-shrink: 0;
     }
 
     .icon-redes {
@@ -392,30 +395,42 @@
     }
 
     /* RESET PROJECTS */
-    .projetos {
+    .projetos,
+    .services.container {
         height: auto !important;
         top: 0 !important;
-        padding: 120px 20px 40px 20px !important;
-        /* Increased top padding for header clearance */
-        margin-bottom: 0 !important;
-        /* Remove bottom margin to reduce white space */
-    }
-
-    .parallax-projetos {
-        top: 0 !important;
-        min-height: 300px;
-        height: auto !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 80px 20px !important;
-        /* Add padding for better spacing */
-    }
-
-    .titulo-projetos {
-        top: 0 !important;
-        font-size: 40px !important;
         margin-top: 0 !important;
+        padding: 40px 20px !important;
+        position: relative !important;
+    }
+
+    .parallax-projetos,
+    .parallax-servicos {
+        top: 0 !important;
+        height: 320px !important;
+        min-height: 320px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding-top: 90px !important;
+        /* Fixed clearance for header */
+        background-attachment: scroll !important;
+        background-position: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .titulo-projetos,
+    .titulo-servicos {
+        font-size: 2.2rem !important;
+        color: white !important;
+        margin: 0 !important;
+        position: static !important;
+        /* Remove absolute/relative offsets */
+        transform: none !important;
+        text-align: center !important;
+        width: 100% !important;
+        display: block !important;
     }
 
     .grid-projetos {
@@ -531,12 +546,21 @@
 
 /* --- Mobile (Max 480px) --- */
 @media (max-width: 480px) {
-    .span-header {
-        font-size: 12px;
-    }
-
     .titulo-hero {
         font-size: 24px !important;
+    }
+
+    .span-header:nth-child(2) {
+        display: none !important;
+        /* Hide email on mobile to save space for icons */
+    }
+
+    .header-secundario {
+        padding: 5px !important;
+    }
+
+    .container-header-secundario {
+        gap: 4px !important;
     }
 
     .card-servico {
