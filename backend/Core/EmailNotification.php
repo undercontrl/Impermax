@@ -9,7 +9,7 @@ class EmailNotification {
     
     public function __construct() {
         $this->emailService = new EmailService();
-        $this->baseUrl = 'http://localhost:5050/'; // Alterar URL posteriormente quando a gente tiver o site e etc sabe -- possivelmente a imagem vai funcionar quando mudar pro site de vdd
+        $this->baseUrl = 'https://aleimpermax.com.br/'; 
         $this->logoUrl = $this->baseUrl . 'assets/icons/impermax-LOGO.svg'; 
     }
 

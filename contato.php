@@ -16,6 +16,7 @@ $secao->set('csrf_token', $codigoToken);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impermax Impermeabilização</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contato-refactor.css">
     <link rel="icon" type="images/png" href="assets/icons/water.png">
 </head>
 <body>
@@ -52,22 +53,29 @@ $secao->set('csrf_token', $codigoToken);
             <li><a href="#contato">CONTATO</a></li>
         </ul>
     </nav>
+   </header>
 
-        <main>
-            <section class="parallax-contato">
-                <div class="bloco-contato">
-                    <div id="caixa-orcamento2">
-                        <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
-                        <form action="backend/enviar-contato" method="POST" id="form-contato-topo3">
-                        <!-- CSRF TOKEN -->
+    <main>
+        <!-- 1. Top Banner Section -->
+        <section class="parallax-contato-banner">
+            <h1 class="titulo-contato-banner">Contato</h1>
+        </section>
+
+        <!-- 2. Main Content Section -->
+        <section class="secao-contato-conteudo" id="contato">
+            <div class="bloco-contato-refactor">
+                
+                <!-- Form Block -->
+                <div class="caixa-orcamento-contato">
+                    <h3>ENTRE EM CONTATO E FAÇA O SEU ORÇAMENTO!</h3>
+                    <form action="backend/enviar-contato" method="POST" id="form-contato-topo">
                         <input type="hidden" name="csrf_token" value="<?= $codigoToken; ?>">
- 
-                        <!-- HONEYPOT (escondido) -->
                         <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
- 
+                        
                         <input type="text" name="nome" placeholder="Nome" required>
                         <input type="tel" name="telefone" placeholder="Telefone" required>
                         <input type="email" name="email" placeholder="E-mail" required>
+                        
                         <select name="servico" required>
                             <option value="">Escolha o tipo de serviço</option>
                             <option value="residencial">Impermeabilização Residencial</option>
@@ -76,24 +84,27 @@ $secao->set('csrf_token', $codigoToken);
                             <option value="laje">Impermeabilização de Laje</option>
                         </select>
                         <button type="submit">Enviar solicitação de orçamento</button>
-                        </form>
-                    <div id="mensagem-flash-topo3"></div>
-                    </div>
-                    <div class="whatsapp-contato">
-                        <h2>Prefere falar direto pelo WhatsApp?</h2>
-                        <p>Se preferir um contato direto e imediato, fale com um dos nossos especialistas pelo WhatsApp. Estamos prontos para esclarecer dúvidas, apresentar soluções e enviar orçamentos sob medida.</p>
-                        <p>📞 <strong>Alessandro Custódio</strong><br>+55 11 99973-4979</p>
-                        <p>📞 <strong>Lucas Guimarães</strong><br>+55 11 99380-5951</p>
-                        <p>Entre em contato e tenha um atendimento ágil, profissional e sem compromisso!</p>
-                    </div>
+                    </form>
+                    <div id="mensagem-flash-topo"></div>
                 </div>
-            </section>
-            
-        </main>
+
+                <!-- WhatsApp Block -->
+                <div class="whatsapp-contato-refactor">
+                    <h2>Prefere falar direto pelo WhatsApp?</h2>
+                    <p>Se preferir um contato direto e imediato, fale com um dos nossos especialistas pelo WhatsApp. Estamos prontos para esclarecer dúvidas, apresentar soluções e enviar orçamentos sob medida.</p>
+                    <p>📞 <strong>Alessandro Custódio</strong><br>+55 11 99973-4979</p>
+                    <p>📞 <strong>Lucas Guimarães</strong><br>+55 11 99380-5951</p>
+                    <p>Entre em contato e tenha um atendimento ágil, profissional e sem compromisso!</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
     <footer id="footer-impermax">
         <div class="footer-conteudo">
             <div class="logo-footer">
-                <a href="index.html">
+                <a href="index.php">
                     <img src="assets/icons/impermax-LOGO.svg" alt="Impermax Logo" class="logo-footer-img">
                 </a>
             </div>
@@ -107,8 +118,6 @@ $secao->set('csrf_token', $codigoToken);
         <div class="rodape-final">Ctrl+Ari+Malu | Todos os Direitos Reservados | © 2025</div>
     </footer>
 
-    <div class="menu-overlay" id="menu-overlay"></div>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hamburgerBtn = document.getElementById('hamburger-btn');
@@ -147,8 +156,8 @@ $secao->set('csrf_token', $codigoToken);
             }
         });
     </script>
-
+    
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/formulario.js"></script>
-    </body>
-    </html>
+</body>
+</html>

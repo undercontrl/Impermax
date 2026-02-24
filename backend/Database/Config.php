@@ -11,10 +11,10 @@ class Config
   'driver' => 'mysql',
   'mysql' => 
   array (
-    'host' => '69.6.213.160',
-    'db_name' => 'hg6c6727_time3_ti29',
-    'username' => 'hg6c6727_time3_ti29',
-    'password' => 'zG6$X$BGa?DL',
+    'host' => 'localhost',
+    'db_name' => 'mari2398_impermax',
+    'username' => 'mari2398_impermax',
+    'password' => 'aDCY+viJ}hgr',
     'charset' => 'utf8',
     'port' =>  '3306',
   ),

@@ -135,11 +135,11 @@
     .breadcrumb-item + .breadcrumb-item::before {
         content: "›";
         padding: 0 0.5rem;
-        color: #94a3b8;
+        color: var(--text-tertiary);
     }
 
     .breadcrumb-item a {
-        color: #64748b;
+        color: var(--text-secondary);
         text-decoration: none;
         transition: color 0.2s;
     }
@@ -149,7 +149,7 @@
     }
 
     .breadcrumb-item.active {
-        color: #1e293b;
+        color: var(--text-primary);
         font-weight: 500;
     }
 
@@ -162,11 +162,11 @@
     }
 
     .delete-card {
-        background: white;
+        background: var(--card-bg);
         border-radius: 16px;
         padding: 3rem;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        border: 1px solid #f1f5f9;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
         text-align: center;
         width: 100%;
         animation: slideUp 0.3s ease;
@@ -214,29 +214,29 @@
     .delete-title {
         font-size: 1.875rem;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--text-primary);
         margin: 0 0 1rem 0;
     }
 
     .delete-message {
         font-size: 1rem;
-        color: #64748b;
+        color: var(--text-secondary);
         margin: 0 0 1.5rem 0;
         line-height: 1.6;
     }
 
     .delete-message strong {
-        color: var(--cor-danger);
+        color: var(--danger-color);
         font-weight: 700;
     }
 
     .delete-warning {
-        background: #fef3c7;
-        border-left: 4px solid #f59e0b;
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid var(--warning-color);
         padding: 1rem 1.25rem;
         border-radius: 8px;
         font-size: 0.875rem;
-        color: #92400e;
+        color: var(--warning-color);
         text-align: left;
         margin: 0 0 2rem 0;
         display: flex;
@@ -253,17 +253,18 @@
 
     /* Detalhes do Endereço */
     .delete-details {
-        background: #f8fafc;
+        background: var(--bg-tertiary);
         border-radius: 10px;
         padding: 1.5rem;
         margin-bottom: 2rem;
         text-align: left;
+        border: 1px solid var(--border-color);
     }
 
     .details-title {
         font-size: 0.9375rem;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--text-primary);
         margin: 0 0 1rem 0;
         display: flex;
         align-items: center;
@@ -271,7 +272,7 @@
     }
 
     .details-title i {
-        color: var(--cor-acento);
+        color: var(--accent-color);
     }
 
     .details-grid {
@@ -289,7 +290,7 @@
     .detail-label {
         font-size: 0.8125rem;
         font-weight: 500;
-        color: #64748b;
+        color: var(--text-tertiary);
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
@@ -297,7 +298,7 @@
     .detail-value {
         font-size: 0.9375rem;
         font-weight: 600;
-        color: #1e293b;
+        color: var(--text-primary);
     }
 
     /* Checkbox de Confirmação */
@@ -312,30 +313,30 @@
         cursor: pointer;
         text-align: left;
         padding: 1rem;
-        border: 2px solid #e2e8f0;
+        border: 2px solid var(--border-color);
         border-radius: 10px;
         transition: all 0.2s;
     }
 
     .checkbox-label:hover {
-        border-color: var(--cor-danger);
-        background: #fef2f2;
+        border-color: var(--danger-color);
+        background: var(--bg-tertiary);
     }
 
     .checkbox-label input[type="checkbox"] {
         width: 20px;
         height: 20px;
-        border: 2px solid #cbd5e1;
+        border: 2px solid var(--border-color);
         border-radius: 4px;
         cursor: pointer;
         flex-shrink: 0;
         margin-top: 0.125rem;
-        accent-color: var(--cor-danger);
+        accent-color: var(--danger-color);
     }
 
     .checkbox-text {
         font-size: 0.875rem;
-        color: #334155;
+        color: var(--text-primary);
         line-height: 1.5;
     }
 
@@ -364,9 +365,9 @@
     }
 
     .btn-cancel {
-        background: white;
-        color: #64748b;
-        border: 1px solid #e2e8f0;
+        background: var(--card-bg);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
     }
 
     .btn-cancel:hover {
@@ -375,9 +376,9 @@
     }
 
     .btn-delete {
-        background: linear-gradient(135deg, var(--cor-danger), #dc2626);
+        background: linear-gradient(135deg, var(--danger-color), #dc2626);
         color: white;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        box-shadow: 0 4px 12px var(--shadow-color);
     }
 
     .btn-delete:hover:not(:disabled) {

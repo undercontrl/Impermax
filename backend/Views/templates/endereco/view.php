@@ -29,25 +29,27 @@
     }
 
     .view-content {
-        background: white;
+        background: var(--card-bg);
         border-radius: 0 0 16px 16px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-md);
         overflow: hidden;
+        border: 1px solid var(--border-color);
+        border-top: none;
     }
 
     .map-section {
-        background: #f9fafb;
+        background: var(--bg-tertiary);
         padding: 2rem;
-        border-bottom: 2px solid #e5e7eb;
+        border-bottom: 2px solid var(--border-color);
         text-align: center;
     }
 
     .map-placeholder {
-        background: white;
-        border: 2px dashed #d1d5db;
+        background: var(--card-bg);
+        border: 2px dashed var(--border-color);
         border-radius: 12px;
         padding: 3rem;
-        color: #6b7280;
+        color: var(--text-tertiary);
     }
 
     .map-placeholder i {
@@ -64,10 +66,10 @@
     }
 
     .info-card {
-        background: #f9fafb;
+        background: var(--bg-tertiary);
         padding: 1.5rem;
         border-radius: 12px;
-        border: 2px solid #e5e7eb;
+        border: 2px solid var(--border-color);
     }
 
     .info-card-header {
@@ -76,7 +78,7 @@
         gap: 0.75rem;
         margin-bottom: 1.25rem;
         padding-bottom: 1rem;
-        border-bottom: 2px solid #e5e7eb;
+        border-bottom: 2px solid var(--border-color);
     }
 
     .info-icon {
@@ -94,7 +96,7 @@
     .info-card-title {
         font-size: 1.1rem;
         font-weight: 700;
-        color: #1f2937;
+        color: var(--text-primary);
         margin: 0;
     }
 
@@ -112,21 +114,21 @@
     .info-label {
         font-size: 0.85rem;
         font-weight: 600;
-        color: #6b7280;
+        color: var(--text-tertiary);
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .info-value {
         font-size: 1.1rem;
-        color: #1f2937;
+        color: var(--text-primary);
         font-weight: 600;
     }
 
     .user-section {
         padding: 2rem;
-        border-bottom: 2px solid #e5e7eb;
-        background: linear-gradient(to right, #f9fafb, #ffffff);
+        border-bottom: 2px solid var(--border-color);
+        background: linear-gradient(to right, var(--bg-tertiary), var(--card-bg));
     }
 
     .user-card {
@@ -153,12 +155,12 @@
     .user-info h3 {
         font-size: 1.5rem;
         font-weight: 700;
-        color: #1f2937;
+        color: var(--text-primary);
         margin: 0 0 0.5rem 0;
     }
 
     .user-info p {
-        color: #6b7280;
+        color: var(--text-secondary);
         margin: 0.25rem 0;
         display: flex;
         align-items: center;
@@ -167,10 +169,11 @@
 
     .action-buttons {
         padding: 2rem;
-        background: #f9fafb;
+        background: var(--bg-tertiary);
         display: flex;
         gap: 1rem;
         flex-wrap: wrap;
+        border-top: 1px solid var(--border-light);
     }
 
     .btn {
@@ -199,9 +202,9 @@
     }
 
     .btn-secondary {
-        background: white;
-        color: #6b7280;
-        border: 2px solid #e5e7eb;
+        background: var(--card-bg);
+        color: var(--text-secondary);
+        border: 2px solid var(--border-color);
     }
 
     .btn-secondary:hover {
@@ -211,14 +214,14 @@
     }
 
     .btn-danger {
-        background: #ef4444;
+        background: var(--danger-color);
         color: white;
     }
 
     .btn-danger:hover {
         background: #dc2626;
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        box-shadow: 0 4px 12px var(--shadow-color);
     }
 
     @media (max-width: 768px) {

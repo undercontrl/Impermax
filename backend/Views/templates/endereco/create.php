@@ -1,7 +1,7 @@
 <style>
     .form-wrapper {
         padding: 2rem 0;
-        background: #f8f9fa;
+        background: var(--bg-primary);
         min-height: 100vh;
     }
 
@@ -28,15 +28,17 @@
     }
 
     .form-container {
-        background: white;
+        background: var(--card-bg);
         border-radius: 0 0 16px 16px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-md);
         overflow: hidden;
+        border: 1px solid var(--border-color);
+        border-top: none;
     }
 
     .form-section {
         padding: 2rem;
-        border-bottom: 2px solid #f3f4f6;
+        border-bottom: 2px solid var(--border-light);
     }
 
     .form-section:last-child {
@@ -46,7 +48,7 @@
     .section-title {
         font-size: 1.25rem;
         font-weight: 700;
-        color: #1f2937;
+        color: var(--text-primary);
         margin: 0 0 1.5rem 0;
         display: flex;
         align-items: center;
@@ -54,7 +56,7 @@
     }
 
     .section-title i {
-        color: #5f7396;
+        color: var(--accent-color);
     }
 
     .form-grid {
@@ -75,7 +77,7 @@
 
     .form-label {
         font-weight: 600;
-        color: #374151;
+        color: var(--text-primary);
         font-size: 0.95rem;
         display: flex;
         align-items: center;
@@ -90,19 +92,21 @@
     .form-select,
     .form-textarea {
         padding: 0.875rem 1rem;
-        border: 2px solid #e5e7eb;
+        border: 2px solid var(--border-color);
         border-radius: 10px;
         font-size: 0.95rem;
         transition: all 0.3s ease;
         font-family: inherit;
+        background: var(--input-bg);
+        color: var(--text-primary);
     }
 
     .form-input:focus,
     .form-select:focus,
     .form-textarea:focus {
         outline: none;
-        border-color: #5f7396;
-        box-shadow: 0 0 0 3px rgba(95, 115, 150, 0.1);
+        border-color: var(--input-focus-border);
+        box-shadow: 0 0 0 3px var(--accent-light);
     }
 
     .form-textarea {
@@ -125,7 +129,7 @@
         left: 1rem;
         top: 50%;
         transform: translateY(-50%);
-        color: #6b7280;
+        color: var(--text-tertiary);
     }
 
     .input-icon .form-input {
@@ -160,10 +164,11 @@
 
     .form-actions {
         padding: 2rem;
-        background: #f9fafb;
+        background: var(--bg-tertiary);
         display: flex;
         gap: 1rem;
         justify-content: flex-end;
+        border-top: 1px solid var(--border-light);
     }
 
     .btn {
@@ -186,26 +191,26 @@
     }
 
     .btn-primary:hover {
-        background: #4a5a75;
+        background: var(--accent-hover);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(95, 115, 150, 0.3);
+        box-shadow: 0 4px 12px var(--shadow-color);
     }
 
     .btn-secondary {
-        background: white;
-        color: #6b7280;
-        border: 2px solid #e5e7eb;
+        background: var(--card-bg);
+        color: var(--text-secondary);
+        border: 2px solid var(--border-color);
     }
 
     .btn-secondary:hover {
-        background: #f9fafb;
-        border-color: #5f7396;
-        color: #5f7396;
+        background: var(--bg-tertiary);
+        border-color: var(--accent-color);
+        color: var(--accent-color);
     }
 
     .info-box {
-        background: #eff6ff;
-        border-left: 4px solid #3b82f6;
+        background: var(--accent-light);
+        border-left: 4px solid var(--accent-color);
         padding: 1rem 1.25rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
@@ -213,7 +218,7 @@
 
     .info-box p {
         margin: 0;
-        color: #1e40af;
+        color: var(--accent-color);
         font-size: 0.95rem;
     }
 
@@ -235,15 +240,16 @@
     }
 
     .loading-spinner {
-        background: white;
+        background: var(--card-bg);
         padding: 2rem;
         border-radius: 12px;
         text-align: center;
+        border: 1px solid var(--border-color);
     }
 
     .spinner {
-        border: 4px solid #f3f4f6;
-        border-top: 4px solid #5f7396;
+        border: 4px solid var(--border-light);
+        border-top: 4px solid var(--accent-color);
         border-radius: 50%;
         width: 50px;
         height: 50px;

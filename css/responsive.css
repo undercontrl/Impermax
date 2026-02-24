@@ -196,18 +196,27 @@
         display: block;
     }
 
-    /* Ensure scrolling works on all pages */
-    html,
+    /* Ensure scrolling works on all pages - Hardened for mobile */
+    html {
+        height: auto !important;
+    }
+
     body {
         overflow-x: hidden !important;
         overflow-y: auto !important;
         height: auto !important;
-        min-height: 100vh !important;
+        min-height: 100% !important;
+        min-height: -webkit-fill-available !important;
+        position: relative !important;
+        display: block !important;
+        -webkit-overflow-scrolling: touch;
     }
 
     main {
         overflow: visible !important;
         height: auto !important;
+        min-height: auto !important;
+        display: block !important;
     }
 
     /* RESET HERO SECTON - remove absolute centering */
@@ -407,7 +416,8 @@
     }
 
     .parallax-projetos,
-    .parallax-servicos {
+    .parallax-servicos,
+    .parallax-sobre {
         top: 0 !important;
         height: 350px !important;
         min-height: 350px !important;
@@ -415,8 +425,7 @@
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        padding-top: 140px !important;
-        /* Full header clearance */
+        padding-top: 60px !important;
         background-attachment: scroll !important;
         background-position: center !important;
         box-sizing: border-box !important;
@@ -424,7 +433,8 @@
     }
 
     .titulo-projetos,
-    .titulo-servicos {
+    .titulo-servicos,
+    .titulo-sobre {
         font-size: 2.2rem !important;
         color: white !important;
         margin: 0 !important;
@@ -447,104 +457,96 @@
         padding-top: 40px !important;
     }
 
-    /* RESET CONTACT FORM - HERO */
-    #caixa-orcamento {
-        position: relative !important;
-        top: auto !important;
-        right: auto !important;
-        left: auto !important;
-        transform: none !important;
-        margin: 20px auto !important;
-        width: 100% !important;
-        max-width: 90%;
+    /* ============================================================
+       AGGRESSIVE CONTACT SECTION RESET (SCROLL & OVERLAP FIX)
+       Hits index.php (.parallax), contato.php (.parallax-contato), 
+       and other parallax banners.
+       ============================================================ */
+    .parallax,
+    .parallax-contato,
+    .parallax-sobre,
+    .parallax-servicos,
+    .parallax-projetos,
+    #contato {
         height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        display: block !important;
+        /* Force block to allow natural growth */
+        padding: 80px 20px 150px 20px !important;
+        background-attachment: scroll !important;
+        position: relative !important;
     }
 
-    /* RESET CONTACT FORM - FOOTER/CONTACT */
+    .bloco-contato {
+        display: block !important;
+        /* Change from flex to block for mobile stability */
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        overflow: visible !important;
+    }
+
+    /* Form within contact block */
+    #caixa-orcamento,
     #caixa-orcamento2 {
         position: relative !important;
-        margin-top: 20px !important;
-        left: auto !important;
-        transform: none !important;
+        margin: 0 auto 30px auto !important;
         width: 100% !important;
-        max-width: 90%;
+        max-width: 450px !important;
         height: auto !important;
-        margin: 20px auto !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        display: block !important;
+        box-sizing: border-box !important;
     }
 
-    /* WHATSAPP CONTACT SECTION - Fix text cutoff */
+    /* WhatsApp text within contact block */
     .whatsapp-contato {
         width: 100% !important;
-        margin: 20px auto !important;
-        padding: 20px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
         position: relative !important;
         top: auto !important;
         left: auto !important;
-        text-align: center;
+        text-align: center !important;
+        color: white !important;
+        display: block !important;
     }
 
     .whatsapp-contato h2 {
         font-size: 24px !important;
+        margin-top: 40px !important;
+        margin-bottom: 20px !important;
     }
 
     .whatsapp-contato p {
         font-size: 16px !important;
-        line-height: 1.5;
+        line-height: 1.6 !important;
+        margin-bottom: 20px !important;
     }
 
-    /* PARALLAX CONTACT SECTION - Fix layout */
-    .parallax {
-        height: auto !important;
-        min-height: auto !important;
-        padding: 40px 0 !important;
-        background-attachment: scroll !important;
-        /* Fixed backgrounds don't work well on mobile */
-    }
-
-    .parallax-contato {
-        height: auto !important;
-        min-height: auto !important;
-        /* Let content determine height */
-        padding: 120px 20px 60px 20px !important;
-        /* Top padding for header clearance, bottom for spacing */
-        display: flex !important;
-        align-items: flex-start !important;
-        /* Align to top instead of center */
-    }
-
-    .bloco-contato {
-        flex-direction: column !important;
-        margin-left: 0 !important;
-        /* Remove desktop margin */
-        margin-right: 0 !important;
-        padding: 20px !important;
-        gap: 30px !important;
-        align-items: center !important;
-        justify-content: center !important;
+    /* Footer correction to prevent overlaps */
+    #footer-impermax {
+        position: relative !important;
+        clear: both !important;
+        display: block !important;
         width: 100% !important;
-    }
-
-    .whatsapp-contato {
-        padding-left: 0 !important;
-        /* Remove desktop padding */
-        padding-right: 0 !important;
-        margin-top: 0 !important;
-        /* Remove desktop margin */
-        width: 100% !important;
-        max-width: 100% !important;
-        text-align: center !important;
-    }
-
-    .whatsapp-contato h2 {
-        margin-top: 0 !important;
-        /* Remove desktop margin */
-        font-size: 22px !important;
-        margin-bottom: 15px !important;
     }
 
     .footer-conteudo {
-        flex-direction: column;
-        gap: 20px;
+        flex-direction: column !important;
+        gap: 20px !important;
     }
 }
 
